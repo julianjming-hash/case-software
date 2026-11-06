@@ -1,0 +1,11 @@
+Confirm your email change
+
+Confirm the requested change from {{ .Email }} to {{ .NewEmail }}.
+
+Continue using the link below.
+
+Confirm email change: {{ .ConfirmationURL }}
+
+If you didn’t request this email, you can ignore it. Never share a verification code. If the code or link has expired, request a new one.
+
+Case · case.iatrogenic.app

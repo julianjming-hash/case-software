@@ -1,0 +1,40 @@
+/* G07 probe (CASE-209): proposed slide stage geometry and type scale. Local measurement study, not shipped CSS. */
+body.projector main.slide-band { display: grid; place-items: center; grid-template-columns: minmax(0, 1fr); container-type: size; }
+/* The slide's own size comes from the band (its container). Text sizes live on the blocks, so their cqw resolve
+   against the slide's content box: a container cannot size its own font from itself. */
+.slide-canvas { --slide-w: min(100cqw, calc(100cqh * 16 / 9)); box-sizing: border-box; aspect-ratio: 16 / 9; width: var(--slide-w); container-type: inline-size;
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: repeat(12, minmax(0, 1fr)); gap: calc(var(--slide-w) * .012); padding: calc(var(--slide-w) * .03);
+  color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); line-height: 1.35; }
+.slide-canvas p, .slide-canvas ul, .slide-canvas ol, .slide-canvas dl, .slide-canvas h2, .slide-canvas h3, .slide-canvas h4, .slide-canvas h5 { margin: 0; }
+.slide-block { min-width: 0; min-height: 0; overflow: hidden; display: grid; align-content: start; gap: .4em; font-size: 2.75cqw; }
+.slide-h1 { font-size: 4.8cqw; line-height: 1.15; }
+.slide-h2 { font-size: 3.9cqw; line-height: 1.2; }
+.slide-h3 { font-size: 3.3cqw; line-height: 1.25; }
+.slide-h4 { font-size: 3cqw; line-height: 1.3; }
+.slide-callout aside { padding: .6em .8em; border-radius: var(--radius-sm); background: var(--quiet); }
+.slide-values dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .25em 1em; }
+.slide-values dt { color: var(--ink-muted); }
+.slide-unit { margin-left: .3em; color: var(--ink-muted); }
+.slide-table-grid { border-collapse: collapse; width: 100%; table-layout: fixed; font-variant-numeric: tabular-nums; }
+.slide-table-grid caption { text-align: left; font-weight: var(--w-semibold); padding-bottom: .3em; }
+.slide-table-grid th, .slide-table-grid td { padding: .15em .5em; border-bottom: 1px solid var(--line); text-align: left; }
+.slide-table-grid .slide-end { text-align: right; }
+.slide-question { display: block; }
+/* CASE-211 B: a question shrinks to fit its slot. Every part sizes from the slot's font size, which the fit pass steps
+   down from body size to the 24 px projector floor; below the floor the slot is not ready. */
+body.projector .slide-question .card { padding: .4em .6em; border-radius: var(--radius); }
+body.projector .slide-question .decision { gap: .35em; }
+body.projector .slide-question .decision .call, body.projector .slide-question .decision h2, body.projector .slide-question .decision .tile,
+body.projector .slide-question .result ul, body.projector .slide-question .result p, body.projector .slide-question .result h2, body.projector .slide-question .eyebrow { font-size: inherit; }
+body.projector .slide-question ol.tiles { gap: .25em; }
+body.projector .slide-question .decision .tile { padding: .15em .4em; min-height: 0; }
+body.projector .slide-question .decision .tile svg.mark { width: 1.4em; height: 1.4em; }
+body.projector .slide-question .result svg.mark { width: 1.1em; height: 1.1em; }
+.slide-reflow { aspect-ratio: auto; width: 100%; display: flex; flex-direction: column; padding: var(--sp-4); }
+.slide-reflow .slide-block { font-size: var(--t-md); }
+.slide-reflow .slide-h1 { font-size: var(--t-xl); }
+.slide-reflow .slide-h2 { font-size: var(--t-lg); }
+.slide-reflow .slide-h3, .slide-reflow .slide-h4 { font-size: var(--t-md); }
+.slide-table-cards { display: grid; gap: var(--sp-2); padding: 0; list-style: none; }
+.slide-table-card { padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.slide-table-card dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .25em 1em; }

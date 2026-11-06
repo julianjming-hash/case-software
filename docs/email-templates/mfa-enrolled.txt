@@ -1,0 +1,9 @@
+A verification method was added
+
+A {{ .FactorType }} verification method was added to your Case account {{ .Email }}.
+
+Review your account security if this change was unexpected.
+
+If you didn’t make this change, contact your Case administrator immediately.
+
+Case · case.iatrogenic.app

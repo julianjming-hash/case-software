@@ -1,0 +1,1 @@
+export const HTML = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><title>Security policy fixture</title><script type="module" src="/policy.mjs"></script></head><body><main id="probe">Text only</main><button id="projector" type="button">Open projector</button></body></html>\n';

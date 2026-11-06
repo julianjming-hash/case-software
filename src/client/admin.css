@@ -1,0 +1,212 @@
+/* Shared Case working surfaces; scoped away from participant/display documents. */
+.admin-document { max-width: none; margin: 0; padding: 0; display: block; background: transparent; }
+.admin-account { max-width: var(--page-w); width: calc(100% - var(--sp-6)); margin: var(--sp-4) auto; }
+.admin-account .auth-form { max-width: var(--form-w); display: grid; gap: var(--sp-3); }
+.admin-account .auth-form.is-signed-in { display: none; }
+.admin-account:has(.auth-form.is-signed-in) { margin-block: 0; }
+.admin-account .auth-form label:not([hidden]) { display: grid; gap: var(--sp-2); }
+.admin-account .auth-form > .btn { justify-self: start; }
+.admin-account .auth-status:empty { display: none; }
+.admin-surface { max-width: var(--page-w); width: calc(100% - var(--sp-6)); margin: var(--sp-4) auto; display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: var(--sp-5); color: var(--ink); padding: 0; background: transparent; }
+.admin-nav { display: flex; flex-direction: column; align-items: stretch; gap: var(--sp-1); }
+.admin-nav button { text-align: left; border-color: transparent; }
+.admin-nav [aria-current="page"] { color: var(--petrol-ink); background: var(--petrol-tint); border-color: var(--petrol-ink); }
+.admin-work, .admin-workbench-host, .admin-list, .workspace-workbench { min-width: 0; }
+.admin-work h2, .workspace-workbench > h2 { font-size: var(--t-xl); margin: 0 0 var(--sp-3); }
+.admin-content { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); }
+.admin-content:has(.admin-drawer:not([hidden])) { grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem); }
+.admin-toolbar, .admin-actions, .admin-pagination, .workbench-scope, .workbench-tools { display: flex; flex-wrap: wrap; align-items: end; gap: var(--sp-3); margin: var(--sp-3) 0; }
+.admin-toolbar label, .workbench-tools label, .workbench-scope label { display: grid; gap: var(--sp-1); flex: 1; min-width: min(12rem, 100%); }
+.admin-account input, .admin-surface input, .admin-surface select, #adminConfirmation input { width: 100%; min-height: 44px; padding: var(--sp-2) var(--sp-3); color: var(--ink); background: var(--surface); border: 1px solid var(--field-line); border-radius: var(--radius-sm); font: inherit; }
+.admin-scroll { overflow-x: auto; }
+.admin-table { width: 100%; border-collapse: collapse; color: var(--ink); background: var(--surface); font-size: var(--t-sm); }
+.admin-table th, .admin-table td { padding: var(--sp-2); text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.admin-table th { font-weight: var(--w-semibold); }
+.admin-table button { max-width: 24rem; overflow-wrap: anywhere; text-align: left; }
+.admin-drawer { min-width: 0; align-self: start; padding: var(--sp-4); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow-wrap: anywhere; }
+.admin-drawer h3 { font-size: var(--t-lg); }
+.admin-drawer dl { display: grid; grid-template-columns: minmax(5rem, 1fr) minmax(0, 2fr); gap: var(--sp-2); font-size: var(--t-sm); }
+.admin-drawer dd { margin: 0; }
+.admin-drawer > label { display: grid; gap: var(--sp-1); margin-block: var(--sp-3); }
+.admin-drawer > .btn { margin: var(--sp-1); }
+.admin-muted { color: var(--ink-muted); }
+.admin-notice { color: var(--ink); background: var(--quiet); padding: var(--sp-3); border-radius: var(--radius-sm); }
+.admin-notice:empty { display: none; }
+#adminConfirmation, .workbench-confirmation { max-width: var(--form-w); width: calc(100% - var(--sp-6)); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+#adminConfirmation label, .workbench-confirmation label { display: grid; gap: var(--sp-2); margin-block: var(--sp-4); }
+.admin-account [hidden], .admin-surface [hidden], #adminConfirmation [hidden] { display: none; }
+.admin-surface :focus-visible, #adminConfirmation :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.workbench-rows { list-style: none; padding: 0; margin: 0; }
+.workbench-rows > li { border-bottom: 1px solid var(--line); padding-block: var(--sp-1); }
+.workbench-scope { max-width: var(--form-w); }
+.workspace-workbench > .muted { font-size: var(--t-xs); overflow-wrap: anywhere; }
+.admin-denied { grid-column: 1 / -1; display: grid; gap: var(--sp-3); max-width: var(--measure); padding: var(--sp-5) 0; }
+.admin-denied h2 { font-size: var(--t-xl); }
+.admin-denied strong { color: var(--ink); overflow-wrap: anywhere; }
+.admin-denied > .btn { justify-self: start; text-decoration: none; }
+@media (max-width: 1099px) {
+ .admin-surface { grid-template-columns: minmax(0, 1fr); }
+ .admin-nav { flex-direction: row; flex-wrap: wrap; }
+ .admin-content:has(.admin-drawer:not([hidden])) { grid-template-columns: minmax(0, 1fr); }
+ .admin-content:has(.admin-drawer:not([hidden])) > .admin-list { display: none; }
+}
+@media (forced-colors: active) { .admin-nav [aria-current="page"] { outline: 1px solid Highlight; } }
+/* CASE-339: Administration -> Invitations. */
+.admin-invite-form { display: grid; gap: var(--sp-3); max-width: 40rem; margin: var(--sp-3) 0; }
+.admin-invite-form label { display: grid; gap: var(--sp-1); }
+.admin-invite-roles { display: grid; gap: var(--sp-2); margin: 0; padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.admin-invite-form .admin-invite-role { grid-template-columns: auto minmax(0, 1fr); align-items: start; column-gap: var(--sp-2); min-height: 44px; cursor: pointer; }
+.admin-invite-role input { width: auto; min-height: 0; margin: 4px 0 0; grid-row: 1 / 3; }
+.admin-invite-role span { grid-column: 2; }
+.admin-notice[data-tone="bad"] { color: var(--alert-ink); background: var(--alert-tint); }
+.admin-invitation-list td .btn { margin: 0 var(--sp-2) var(--sp-1) 0; }
+/* Facilitator-UX A5: People, Workspaces, the confirmation dialog (prototypes/admin-people.html). */
+.admin-head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap; margin-bottom: var(--sp-2); }
+.admin-head h2 { margin: 0; }
+.admin-filters { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: end; margin: var(--sp-2) 0; }
+.admin-filters select { width: auto; min-width: 12rem; }
+.admin-card { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: var(--sp-3); margin-block: var(--sp-3); }
+.admin-card h4, .admin-card h5 { margin: 0 0 var(--sp-2); }
+.admin-danger { border-color: var(--alert-ink); }
+.admin-pill { display: inline-block; font-size: var(--t-xs); border: 1px solid var(--line); border-radius: var(--radius-pill); padding: 1px var(--sp-2); margin: 0 var(--sp-1) var(--sp-1) 0; color: var(--ink); background: var(--surface); }
+.admin-pill.owner { border-color: var(--petrol-ink); color: var(--petrol-ink); }
+.admin-pill.author { background: var(--petrol-tint); border-color: transparent; color: var(--petrol-ink); }
+.admin-pill.grant { border-style: dashed; }
+.admin-pill.ok { background: var(--petrol-tint); color: var(--petrol-ink); border-color: transparent; }
+.admin-pill.warn { background: var(--quiet); color: var(--quiet-ink); border-color: var(--line); }
+.admin-pill.bad { background: var(--alert-tint); color: var(--alert-ink); border-color: transparent; }
+.admin-access-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2); margin-block: var(--sp-2); }
+.admin-access-row select { width: auto; min-width: 11rem; }
+.admin-grants { margin: 0; padding-left: var(--sp-4); }
+.admin-add summary { cursor: pointer; color: var(--petrol-ink); margin-top: var(--sp-2); }
+.admin-policy { display: flex; gap: var(--sp-3); align-items: flex-start; margin-block: var(--sp-2); }
+.admin-policy input { width: auto; min-height: 0; margin-top: 4px; }
+.admin-policy span { display: grid; gap: 2px; }
+.admin-policy small { font-size: var(--t-xs); }
+.admin-card progress { width: 100%; height: 12px; }
+.admin-unused { margin: 0 0 var(--sp-3); padding-left: var(--sp-4); font-size: var(--t-sm); }
+.admin-create { display: grid; gap: var(--sp-3); max-width: 32rem; margin: var(--sp-3) 0; padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.admin-create label { display: grid; gap: var(--sp-1); }
+.admin-nav .btn { justify-content: flex-start; min-height: 44px; background: transparent; color: var(--ink-muted); border-color: transparent; }
+.admin-nav .btn:hover:not(:disabled) { background: var(--quiet); color: var(--ink); }
+.admin-nav .btn[aria-current="page"] { background: var(--petrol-tint); color: var(--petrol-ink); border-color: transparent; }
+.admin-work > :is(h2, section > h2), .admin-head h2, .workspace-workbench > h2 { line-height: 1.3; }
+.admin-scroll { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.admin-table th { padding: var(--sp-3) var(--sp-4); background: var(--quiet); color: var(--ink-muted); font-size: var(--t-xs); }
+.admin-table td { padding: var(--sp-3) var(--sp-4); vertical-align: middle; }
+.admin-table tr:last-child td { border-bottom: 0; }
+.admin-drawer { box-shadow: var(--shadow-1); padding: var(--sp-5); border-radius: var(--radius); }
+.admin-invite-form { gap: var(--sp-4); }
+@media (hover: hover) { .admin-table tbody tr:hover { background: var(--quiet); } }
+@media (min-width: 1100px) { .admin-surface { grid-template-columns: 11rem minmax(0, 1fr); gap: var(--sp-6); margin-top: var(--sp-5); } }
+.admin-live { margin: var(--sp-3) 0; }
+.admin-live h3 { margin: 0 0 var(--sp-2); }
+.admin-confirm { padding: var(--sp-4); display: grid; gap: var(--sp-3); }
+.admin-confirm h2 { margin: 0; font-size: var(--t-lg); }
+.admin-consequences { margin: 0; padding-left: var(--sp-4); display: grid; gap: var(--sp-2); }
+.admin-code-row { display: flex; gap: var(--sp-3); align-items: center; flex-wrap: wrap; }
+.admin-code-row input { width: 12ch; letter-spacing: .2em; font-variant-numeric: tabular-nums; }
+.admin-confirm-notice:empty { display: none; }
+.admin-confirm-actions { display: flex; gap: var(--sp-3); justify-content: space-between; flex-wrap: wrap; }
+#adminConfirmation { padding: 0; }
+/* CASE-356: compact shared toolbars and lifted, consistent administrative surfaces. */
+.admin-head, .studio-admin-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+.admin-head > .btn.primary, .studio-admin-toolbar > .btn.primary { margin-left: auto; }
+.admin-head .admin-toolbar { flex: 1; margin: 0; align-items: center; }
+.admin-head .admin-toolbar > label { flex: none; min-width: 0; }
+.admin-head .admin-toolbar > .admin-toolbar { flex: none; }
+.admin-head > h2.sr-only { margin: 0; }
+.admin-table { border: 1px solid var(--line); border-radius: var(--radius); border-collapse: separate; border-spacing: 0; box-shadow: var(--shadow-1); overflow: hidden; }
+.admin-table th { background: var(--sunken); padding: var(--sp-3) var(--sp-4); }
+.admin-table td { padding: var(--sp-3) var(--sp-4); vertical-align: middle; }
+.admin-table tbody tr:last-child td { border-bottom: 0; }
+.admin-nav { gap: var(--sp-2); }
+.admin-nav .btn { justify-content: start; min-height: 48px; }
+.admin-nav [aria-current="page"] { border-color: transparent; }
+.admin-drawer { box-shadow: var(--shadow-1); border-radius: var(--radius); padding: var(--sp-5); }
+.admin-invite-dialog { width: min(42rem, calc(100% - var(--sp-6))); max-height: calc(100dvh - var(--sp-6)); overflow-y: auto; border-radius: var(--radius); padding: var(--sp-5); }
+.admin-invite-dialog .admin-invite-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); }
+.admin-invite-dialog .admin-invite-form > * { min-width: 0; }
+.admin-invite-dialog .admin-invite-form > label { display: grid; gap: var(--sp-2); }
+.admin-invite-dialog input { min-width: 0; width: 100%; min-height: 44px; padding: var(--sp-3); border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); }
+.admin-invite-dialog input[type="radio"] { width: 20px; height: 20px; min-height: 20px; }
+.admin-invite-dialog .admin-invite-roles { margin: 0; padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.admin-invite-dialog .admin-invite-role { min-height: 44px; padding-block: var(--sp-2); }
+.admin-invite-dialog .admin-invite-role span { grid-column: 2; }
+.workbench-tools .workbench-scope { margin: 0; }
+@media (max-width: 719px) {
+  .admin-surface { grid-template-columns: minmax(0, 1fr); width: calc(100% - var(--sp-6)); gap: var(--sp-4); }
+  .admin-nav { flex-direction: row; flex-wrap: wrap; gap: var(--sp-1); }
+  .admin-nav .btn { min-height: 44px; padding-inline: var(--sp-3); }
+  .admin-head .admin-toolbar { flex-basis: 100%; }
+  .admin-head > .btn.primary { order: -1; }
+}
+@media (max-width: 719px) {
+  .admin-invitation-list { display: block; }
+  .admin-invitation-list thead { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .admin-invitation-list tbody { display: grid; }
+  .admin-invitation-list tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: var(--sp-3); border-bottom: 1px solid var(--line); }
+  .admin-invitation-list tbody td { min-width: 0; display: grid; align-content: start; gap: var(--sp-1); border: 0; padding: var(--sp-2); }
+  .admin-invitation-list tbody td:first-child, .admin-invitation-list tbody td:last-child { grid-column: 1 / -1; }
+  .admin-invitation-list tbody td::before { content: attr(data-label); color: var(--ink-muted); font-size: var(--t-xs); }
+  .admin-invitation-list tbody td:last-child { display: flex; flex-wrap: wrap; align-items: center; }
+  .admin-invitation-list tbody td:last-child::before { width: 100%; }
+}
+.admin-account.auth-splash { position: relative; max-width: none; width: 100%; min-height: calc(100dvh - var(--header-h)); margin: 0; padding: var(--sp-6) var(--sp-4); overflow: hidden; }
+.admin-signed-out .admin-surface { display: none; }
+.admin-account.auth-splash .auth-form { max-width: none; width: 100%; }
+.admin-account.auth-splash .auth-form > .btn { width: 100%; }
+.admin-account.auth-splash h1 { font-size: var(--t-2xl); }
+
+/* CASE-356: the People comparison becomes labelled records on narrow screens. */
+@media (max-width: 719px) {
+  .admin-people-table, .admin-people-table tbody { display: block; }
+  .admin-people-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .admin-people-table tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-3); padding: var(--sp-4); border-bottom: 1px solid var(--line); }
+  .admin-people-table tbody td { min-width: 0; border: 0; padding: 0; display: grid; align-content: start; justify-items: start; gap: var(--sp-2); }
+  .admin-people-table tbody td:first-child { grid-column: 1 / -1; }
+  .admin-people-table tbody td::before { content: attr(data-label); font-size: var(--t-xs); color: var(--ink-muted); }
+  .admin-people-table tbody td:last-child .admin-pill { white-space: nowrap; }
+  :is(.admin-people-table, .admin-invitation-list) caption { display: block; width: 100%; text-align: left; padding: var(--sp-3) var(--sp-4); }
+}
+
+/* Case-scoped filter controls share available toolbar space before wrapping. */
+.admin-people .admin-head > form > .shared-select-trigger.tool-button { width:44px;flex:0 0 44px;min-width:44px; }
+
+/* Stable navigation and work frame survive section changes. */
+.admin-work { min-block-size:min(24rem,70vh); }
+.admin-work > [hidden] { display:none; }
+@media(prefers-reduced-motion:no-preference){:root:not([data-motion="false"]) .admin-work>:not([hidden]){animation:admin-enter var(--dur-1) var(--ease)}}
+@keyframes admin-enter{from{opacity:.85}to{opacity:1}}
+
+/* CASE-365: section rhythm and a single rounded outer table boundary. */
+:is(.admin-people,.admin-workspaces,.admin-invitations,.workspace-workbench){display:grid;align-content:start;gap:var(--sp-4)}
+:is(.admin-people,.admin-workspaces,.admin-invitations,.workspace-workbench)>.admin-head,
+.admin-invitations>.studio-admin-toolbar,.admin-people>.supporting-note{margin:0}
+.admin-groups:empty,.admin-pagination:not(:has(:not([hidden]))){display:none}
+.admin-scroll>.admin-table{border:0;border-radius:0;box-shadow:none}
+.admin-table :is(caption,thead,tbody,tr,th,td){border-radius:0}
+.admin-table caption{text-align:start;padding:var(--sp-3) var(--sp-4);color:var(--ink-muted);border-bottom:1px solid var(--line)}
+.admin-scroll{overflow:auto}
+
+/* CASE-372: all workbench tools share a row; disclosures extend below their trigger. */
+.workbench-tools { align-items: start; }
+.workbench-tools label.tool-field:not([hidden]) { display:inline-flex;gap:0;flex:none;min-width:0; }
+
+/* CASE-373: record readers use one shared modal, retaining their bounded list behind the overlay. */
+.admin-record-dialog { width: min(64rem, calc(100% - 32px)); height: min(52rem, calc(100dvh - 32px)); max-height: calc(100dvh - 32px); box-sizing: border-box; margin: auto; padding: var(--sp-5); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-1); overflow: auto; overflow-wrap: anywhere; }
+.admin-record-dialog::backdrop { background: color-mix(in srgb, var(--ground) 72%, transparent); backdrop-filter: blur(4px); }
+.admin-record-navigation { position: sticky; top: 0; z-index: var(--z-raised); background: var(--surface); display: flex; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-4); }
+.admin-record-navigation > :last-child { margin-left: auto; }
+.admin-record-navigation .btn { width: 44px; height: 44px; min-height: 44px; padding: 0; }
+.admin-record-dialog h3 { margin: 0 0 var(--sp-3); font-size: var(--t-lg); }
+.admin-record-dialog dl { display: grid; grid-template-columns: minmax(7rem, 1fr) minmax(0, 2fr); gap: var(--sp-2); }
+.admin-record-dialog dd { margin: 0; }
+.admin-record-dialog .admin-card { margin-block: var(--sp-4); }
+.workspace-name-editor label { display: grid; gap: var(--sp-2); }
+.workspace-name-editor input { width: 100%; box-sizing: border-box; }
+.workspace-name-editor > .btn { display: block; margin-left: auto; margin-top: var(--sp-3); }
+.single-action-row { cursor: pointer; }
+.single-action-row:hover, .single-action-row:focus-within { background: var(--quiet); }
+.single-action-row > td > .btn { background: transparent; box-shadow: none; }
+@media (max-width: 599px) { .admin-record-dialog { padding: var(--sp-3); } }

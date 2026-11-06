@@ -1,0 +1,14 @@
+Your Case verification code
+
+Use this code in the Case window where you requested it.
+
+Your verification code is:
+{{ .Token }}
+
+Or sign in with this link: {{ .ConfirmationURL }}
+
+If you didn’t request this email, you can ignore it. Never share a verification code. If the code or link has expired, request a new one.
+
+Case · case.iatrogenic.app
+
+@case.iatrogenic.app #{{ .Token }}

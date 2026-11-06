@@ -1,0 +1,1462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case surface mockups</title>
+<meta name="description" content="Case surface design proposal: participant, facilitator, projector, admin and authoring mockups built on the proposed design system. Synthetic content, local state only.">
+<link rel="stylesheet" href="design/tokens.css">
+<link rel="stylesheet" href="design/case-ui.css">
+<script type="module" src="design/mosaic.mjs"></script>
+<style>
+  /* Gallery chrome only. Product surfaces use design/case-ui.css. */
+  body { background: var(--sunken); }
+  .g { display: grid; grid-template-columns: 264px minmax(0, 1fr); min-height: 100vh; }
+  .g-nav { position: sticky; top: 0; height: 100vh; overflow: auto; padding: var(--sp-4); background: var(--nav-bg); border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: var(--sp-3); }
+  .g-nav .role { margin: var(--sp-4) var(--sp-2) var(--sp-1); }
+  .g-nav button.s { display: flex; align-items: center; gap: var(--sp-2); width: 100%; min-height: 34px; padding: 4px var(--sp-2); border: 0; border-radius: 6px; background: none; color: var(--ink-muted); font-size: var(--t-sm); font-weight: var(--w-medium); text-align: left; }
+  .g-nav button.s:hover { background: var(--quiet); color: var(--ink); }
+  .g-nav button.s[aria-current="true"] { background: var(--petrol-tint); color: var(--petrol-ink); }
+  .g-nav .dot { flex: none; width: 8px; height: 8px; border-radius: 2px; }
+  .dot.live { background: var(--ok); } .dot.source { background: var(--ph-locked); } .dot.proposed { background: var(--private); }
+  .g-main { min-width: 0; padding: var(--sp-5) var(--sp-6) var(--sp-8); display: flex; flex-direction: column; gap: var(--sp-4); }
+  .g-top { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; }
+  .g-top h1 { font-size: var(--t-xl); }
+  .prov { display: inline-flex; align-items: center; gap: var(--sp-2); font-size: var(--t-xs); font-weight: var(--w-semibold); color: var(--ink-muted); }
+  .frame { position: relative; margin: 0 auto; background: var(--ground); box-shadow: var(--shadow-2); overflow: hidden; }
+  .frame.desktop { width: 100%; max-width: 1440px; min-height: 720px; border-radius: var(--radius); border: 1px solid var(--line); }
+  .frame.phone { flex: none; width: 390px; height: 800px; min-height: 0; max-height: 800px; border-radius: 40px; border: 10px solid #0d1214; overflow: auto; }
+  .frame.phone.tall { height: auto; min-height: 800px; }
+  .frame.projector { width: 100%; max-width: 1440px; aspect-ratio: 16 / 9; border-radius: 6px; border: 8px solid #0d1214; }
+  .frame.projector .scaler { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+  /* The mockup emulates a 1920×1080 projector viewport, so viewport-relative projector tokens are pinned here. */
+  .scaler .projector { --projector-code: 164px; --projector-qr: 340px; }
+  .frame .content > .app, .frame .content > .phone, .frame .content > .console { min-height: 100%; }
+  .frame > .content { min-height: inherit; height: 100%; }
+  .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--sp-5); max-width: 1440px; margin: var(--sp-2) auto 0; width: 100%; padding: var(--sp-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .notes h2 { font-size: var(--t-sm); margin-bottom: var(--sp-2); }
+  .notes p, .notes li { font-size: var(--t-sm); color: var(--ink-muted); }
+  .notes ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; }
+  .notes code { font-family: var(--mono); font-size: .9em; }
+  .overlay-scrim { position: absolute; inset: 0; background: rgba(13, 18, 20, .45); display: flex; z-index: var(--z-overlay); }
+  .overlay-scrim.right { justify-content: flex-end; }
+  .overlay-scrim.center { align-items: center; justify-content: center; padding: var(--sp-5); }
+  .present .g { grid-template-columns: 1fr; } .present .g-nav, .present .g-top, .present .notes { display: none; } .present .g-main { padding: 0; }
+  .present .frame { max-width: none; border: 0; border-radius: 0; box-shadow: none; }
+  .present .frame.projector { width: 100vw; height: 100vh; aspect-ratio: auto; }
+  @media (max-width: 900px) { .g { grid-template-columns: 1fr; } .g-nav { position: static; height: auto; } .g-main { padding: var(--sp-4); } .frame.phone { width: 100%; max-width: 390px; } }
+</style>
+</head>
+<body>
+<div class="g">
+  <nav class="g-nav" aria-label="Mockup states">
+    <div class="row between"><span class="wordmark"><svg class="tessera" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="7" height="7" rx="1"/><rect class="t2" x="9" y="0" width="7" height="7" rx="1"/><rect class="t3" x="0" y="9" width="7" height="7" rx="1"/><rect x="9" y="9" width="7" height="7" rx="1"/></svg>CASE</span><a class="small" href="design-system.html">Design system</a></div>
+    <div class="segmented" role="group" aria-label="Appearance"><button data-set-theme="light">Light</button><button data-set-theme="dark">Dark</button><button data-set-theme="auto">Auto</button></div>
+    <div class="stack stack-sm xs muted">
+      <span class="prov"><i class="dot live"></i>Observed in the live room, restyled</span>
+      <span class="prov"><i class="dot source"></i>From source, not seen live</span>
+      <span class="prov"><i class="dot proposed"></i>Proposed: needs new production work</span>
+    </div>
+    <div id="nav-list"></div>
+  </nav>
+  <main class="g-main">
+    <div class="g-top">
+      <div class="stack stack-sm"><h1 id="s-title"></h1><span class="prov" id="s-prov"></span></div>
+      <div class="row">
+        <div class="segmented" role="group" aria-label="Frame" id="frame-switch"><button data-frame="desktop">Desktop</button><button data-frame="phone">Phone</button><button data-frame="projector">Projector</button></div>
+        <a class="btn quiet" id="present-link" href="#">Present</a>
+      </div>
+    </div>
+    <div class="frame" id="frame"><div class="content" id="content"></div></div>
+    <section class="notes" id="notes" aria-label="Design notes for this state"></section>
+  </main>
+</div>
+
+<!-- ═════════════════════════ PARTICIPANT ═════════════════════════ -->
+<template id="t-home">
+  <div class="app" style="min-height:760px">
+    <header class="app-bar" data-bar="public"></header>
+    <div class="splash grow" style="display:flex;align-items:center;min-height:696px">
+      <div class="splash-art"><div data-mosaic='{"descriptor":{"v":1,"stops":6,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":0,"ends":0},{"stop":2,"strands":[{"rejoin":3}],"resets":1,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0},{"stop":4,"strands":[{"rejoin":5}],"resets":0,"ends":0}]},"seed":"case-brand","group":"neutral","focus":[0.46,0.04,0.98,0.96],"motion":["assemble","shimmer"]}'></div></div>
+      <form class="splash-panel stack stack-lg" style="margin-left:clamp(24px,7vw,120px);width:min(100% - 48px, 440px);padding:var(--sp-6)" onsubmit="return false">
+        <div class="stack stack-sm">
+          <h1 style="font-size:var(--t-3xl)">Join your room</h1>
+          <p class="muted">Enter the code shown on the projector.</p>
+        </div>
+        <div class="field">
+          <label for="h-code">Room code</label>
+          <input id="h-code" class="code-input" data-code-input inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="9" aria-describedby="h-code-hint">
+          <p class="hint" id="h-code-hint" data-code-hint>Six characters. Spaces and hyphens are fine.</p>
+        </div>
+        <button class="btn primary lg block" data-go="join">Continue</button>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="t-home-phone">
+  <div class="app" style="min-height:780px">
+    <header class="app-bar" data-bar="public"></header>
+    <div class="splash grow" style="padding:var(--sp-4);min-height:716px">
+      <div class="splash-art"><div data-mosaic='{"descriptor":{"v":1,"stops":6,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":0,"ends":0},{"stop":2,"strands":[{"rejoin":3}],"resets":1,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0},{"stop":4,"strands":[{"rejoin":5}],"resets":0,"ends":0}]},"seed":"case-brand","group":"neutral","aspect":0.5,"focus":[0.02,0.48,0.98,0.98],"motion":["assemble","shimmer"]}'></div></div>
+      <form class="splash-panel stack" style="padding:var(--sp-5)" onsubmit="return false">
+        <h1 style="font-size:var(--t-2xl)">Join your room</h1>
+        <p class="muted small">Enter the code shown on the projector.</p>
+        <div class="field">
+          <label for="hp-code">Room code</label>
+          <input id="hp-code" class="code-input" data-code-input inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="9" style="font-size:28px;width:100%">
+          <p class="hint" data-code-hint>Six characters. Spaces and hyphens are fine.</p>
+        </div>
+        <button class="btn primary lg block" data-go="join">Continue</button>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="t-code-error">
+  <div class="app" style="min-height:780px">
+    <header class="app-bar" data-bar="public"></header>
+    <div class="splash grow" style="padding:var(--sp-4);min-height:716px">
+      <div class="splash-art"><div data-mosaic='{"descriptor":{"v":1,"stops":6,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":0,"ends":0},{"stop":2,"strands":[{"rejoin":3}],"resets":1,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0},{"stop":4,"strands":[{"rejoin":5}],"resets":0,"ends":0}]},"seed":"case-brand","group":"neutral","aspect":0.5,"focus":[0.02,0.48,0.98,0.98],"motion":["assemble","shimmer"]}'></div></div>
+      <form class="splash-panel stack" style="padding:var(--sp-5)" onsubmit="return false">
+        <h1 style="font-size:var(--t-2xl)">Join your room</h1>
+        <div class="field">
+          <label for="he-code">Room code</label>
+          <input id="he-code" class="code-input" value="A7K2N9" aria-invalid="true" aria-describedby="he-err" style="font-size:28px;width:100%">
+          <p class="error" id="he-err" role="alert"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>That code isn't right · check it against the projector</p>
+        </div>
+        <button class="btn primary lg block">Continue</button>
+        <hr>
+        <div class="stack stack-sm small">
+          <p class="label-caps">Other refusals use the same slot</p>
+          <p>This room is not accepting new participants</p>
+          <p>This room is full</p>
+          <p>Couldn't reach the room · check your connection and try again</p>
+          <p class="muted xs">Shipped strings from <code>phone.mjs</code>. Shown here for review only, not stacked in the product.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="t-menu">
+  <div class="app" style="min-height:760px;position:relative">
+    <header class="app-bar" data-bar="public"></header>
+    <div class="splash grow" style="display:flex;align-items:center;min-height:696px">
+      <div class="splash-art"><div data-mosaic='{"descriptor":{"v":1,"stops":6,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":0,"ends":0},{"stop":2,"strands":[{"rejoin":3}],"resets":1,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0},{"stop":4,"strands":[{"rejoin":5}],"resets":0,"ends":0}]},"seed":"case-brand","group":"neutral","focus":[0.46,0.04,0.98,0.96],"motion":["assemble","shimmer"]}'></div></div>
+      <div class="splash-panel" style="margin-left:clamp(24px,7vw,120px);width:440px;height:360px"></div>
+    </div>
+    <div class="overlay-scrim right">
+      <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="menu-h">
+        <div class="row between"><h2 id="menu-h" style="font-size:var(--t-lg)">Menu</h2><button class="menu-btn" aria-label="Close menu"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+        <nav class="stack stack-sm" aria-label="Main">
+          <a href="#" aria-current="page">Join a room</a>
+          <a href="#" data-go="signin">Facilitator sign in <span class="xs muted">Cases, rooms, admin</span></a>
+          <a href="#" data-go="help">Help</a>
+          <a href="#" data-go="privacy">Privacy</a>
+        </nav>
+        <hr>
+        <fieldset class="stack stack-sm" style="border:0;padding:0;margin:0">
+          <legend class="small" style="font-weight:600;margin-bottom:var(--sp-2)">Appearance</legend>
+          <div class="choice-cards">
+            <label><input type="radio" name="appearance" value="light"><span class="theme-swatch light"></span>Light</label>
+            <label><input type="radio" name="appearance" value="dark"><span class="theme-swatch dark"></span>Dark</label>
+            <label><input type="radio" name="appearance" value="auto"><span class="theme-swatch"></span>Auto</label>
+          </div>
+          <p class="xs muted">Saved on this device only.</p>
+        </fieldset>
+        <hr>
+        <div class="stack stack-sm small">
+          <p class="label-caps">When signed in</p>
+          <p class="muted">The menu adds the account (<span class="mono">j…@hospital.org</span> · Sign out), <strong>Your cases</strong>, and <strong>Administration</strong> only for entitled accounts. The root stays participant-first.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</template>
+
+<template id="t-join">
+  <div class="app">
+    <header class="app-bar" data-bar="public"></header>
+    <div class="splash" style="padding:var(--sp-4) var(--sp-4) var(--sp-8)">
+      <div class="splash-art"><div data-mosaic='{"descriptor":{"v":1,"stops":6,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":0,"ends":0},{"stop":2,"strands":[{"rejoin":3}],"resets":1,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0},{"stop":4,"strands":[{"rejoin":5}],"resets":0,"ends":0}]},"seed":"case-brand","group":"neutral","aspect":0.45,"focus":[0.02,0.7,0.98,0.99],"motion":["assemble","shimmer"]}'></div></div>
+      <form class="splash-panel stack" style="padding:var(--sp-5)" onsubmit="return false">
+        <div class="row between"><span class="small muted">Room <span class="room-code">A7K<span class="gap"></span>2M9</span></span><button class="btn tertiary" type="button" data-go="home-phone">Change</button></div>
+        <h1 style="font-size:var(--t-2xl)">Join the case</h1>
+        <div class="field">
+          <label for="j-name">Your name</label>
+          <input id="j-name" class="input" value="Robin" maxlength="20" aria-describedby="j-name-hint">
+          <div class="row between"><p class="hint" id="j-name-hint">Do not enter patient details.</p><span class="counter">5 of 20</span></div>
+        </div>
+        <div class="row nowrap" style="--gap:var(--sp-4)">
+          <img class="avatar" src="../public/avatars/shadows-05-teal.svg" width="56" height="56" alt="Your avatar">
+          <div class="stack stack-sm grow"><span class="small" style="font-weight:600">Your avatar</span><span class="xs muted">Picked at random. You can change it now or later.</span></div>
+        </div>
+        <details class="disclose">
+          <summary>Change avatar</summary>
+          <fieldset style="border:0;padding:0;margin:0" class="stack stack-sm">
+            <legend class="sr-only">Choose an avatar</legend>
+            <div class="avatar-grid" style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px" data-avatar-grid></div>
+            <button class="btn quiet" type="button">Randomise</button>
+          </fieldset>
+        </details>
+        <p class="small muted">Your name and avatar appear on the projector in the lobby.</p>
+        <button class="btn primary lg block" data-go="waiting">Join case</button>
+        <a class="small" href="#" data-go="privacy" style="align-self:center">Privacy</a>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="t-waiting">
+  <div class="app">
+    <header class="app-bar" data-bar="public"></header>
+    <div class="splash" style="padding:var(--sp-4);min-height:716px;display:flex;flex-direction:column;justify-content:flex-start">
+      <div class="splash-art"><div data-mosaic='{"descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"mvc","group":"petrol","aspect":0.5,"focus":[0.04,0.36,0.96,0.96],"motion":["assemble","shimmer"]}'></div></div>
+      <div class="splash-panel stack" style="padding:var(--sp-5)" role="status">
+        <div class="row nowrap" style="--gap:var(--sp-3)">
+          <img class="avatar" src="../public/avatars/shadows-05-teal.svg" width="48" height="48" alt="">
+          <div class="stack stack-sm grow"><span style="font-weight:600">You're in, Robin</span><span class="pill" data-phase="reveal" style="align-self:flex-start">Waiting to start</span></div>
+        </div>
+        <p>The case starts when the facilitator is ready. Keep this page open.</p>
+        <details class="disclose small"><summary>Change name or avatar</summary><p class="muted xs" style="padding-bottom:var(--sp-2)">Opens the existing name and avatar editor.</p></details>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- phone room: shared bar -->
+<template id="t-material">
+  <div class="phone">
+    <div class="phone-bar" data-pbar="Live surface" data-phase="reveal"></div>
+    <div class="phone-main">
+      <article class="stack">
+        <h1>Primary survey</h1>
+        <p>He talks, but only in short phrases. His right chest barely moves, is silent to the stethoscope and booms when percussed; the trachea sits slightly to the left and his neck veins are full despite the blood loss.</p>
+        <div class="vitals"><div><span>HR</span><strong>134</strong></div><div><span>BP</span><strong>78/50</strong></div><div><span>RR</span><strong>38</strong></div><div><span>SpO₂</span><strong>86%</strong></div><div><span>Temp</span><strong>35.4</strong></div><div><span>GCS</span><strong>14</strong></div></div>
+        <h2 style="font-size:var(--t-md)">Findings</h2>
+        <ul class="small" style="margin:0;padding-left:1.2em"><li>Airway patent, short phrases</li><li>Right chest: poor movement, absent air entry, hyperresonant</li><li>Left chest clear</li><li>Radial pulse weak and fast</li></ul>
+      </article>
+      <section class="stack stack-sm"><h2 style="font-size:var(--t-sm)">Timeline</h2><div class="timeline"><button><span>Earlier</span>Arrival</button><button aria-current="step"><span>Live</span>Primary survey</button></div></section>
+    </div>
+  </div>
+</template>
+
+<template id="t-decision">
+  <div class="phone">
+    <div class="phone-bar" data-pbar="Team decision" data-phase="open"></div>
+    <div class="phone-main">
+      <details class="disclose situation small"><summary>Situation: Primary survey</summary><p>He talks, but only in short phrases. His right chest barely moves…</p></details>
+      <form class="stack" onsubmit="return false">
+        <div class="row between"><span class="label-caps">Team decision</span><span class="small muted mono">0:58</span></div>
+        <h1>What is the next decisive intervention?</h1>
+        <div class="stack stack-sm" role="radiogroup" aria-label="Options">
+          <label class="option" data-mk="0"><input type="radio" name="d1"><span data-mark="0"></span>Chest X-ray before decompression<span class="check"></span></label>
+          <label class="option" data-mk="1"><input type="radio" name="d1"><span data-mark="1"></span>RSI and intubate before decompression<span class="check"></span></label>
+          <label class="option" data-mk="2"><input type="radio" name="d1" checked><span data-mark="2"></span>Needle decompression, right chest<span class="check"></span></label>
+          <label class="option" data-mk="3"><input type="radio" name="d1"><span data-mark="3"></span>Finger thoracostomy, right chest<span class="check"></span></label>
+        </div>
+        <button class="btn primary lg block" data-go="saved">Send answer</button>
+        <p class="hint small muted">You can change it until responses lock.</p>
+      </form>
+      <section class="stack stack-sm"><h2 style="font-size:var(--t-sm)">Timeline</h2><div class="timeline"><button><span>Earlier</span>Arrival</button><button aria-current="step"><span>Live</span>Primary survey</button></div></section>
+    </div>
+  </div>
+</template>
+
+<template id="t-decision-multi">
+  <div class="phone">
+    <div class="phone-bar" data-pbar="Team decision" data-phase="open"></div>
+    <div class="phone-main">
+      <details class="disclose situation small"><summary>Situation: Reassessment</summary></details>
+      <form class="stack" onsubmit="return false">
+        <span class="label-caps">Team decision</span>
+        <h1>Which findings support tension physiology?</h1>
+        <p class="small muted">Choose all that apply</p>
+        <div class="stack stack-sm">
+          <label class="option multi" data-mk="0"><input type="checkbox" checked><span data-mark="0"></span>Tracheal deviation away from the affected side<span class="check"></span></label>
+          <label class="option multi" data-mk="1"><input type="checkbox" checked><span data-mark="1"></span>Distended neck veins with hypotension<span class="check"></span></label>
+          <label class="option multi" data-mk="2"><input type="checkbox"><span data-mark="2"></span>Bilateral equal air entry<span class="check"></span></label>
+          <label class="option multi" data-mk="3"><input type="checkbox"><span data-mark="3"></span>Rising SpO₂ on oxygen<span class="check"></span></label>
+        </div>
+        <button class="btn primary lg block">Send answer</button>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="t-decision-rank">
+  <div class="phone">
+    <div class="phone-bar" data-pbar="Team decision" data-phase="open"></div>
+    <div class="phone-main">
+      <form class="stack" onsubmit="return false">
+        <span class="label-caps">Team decision</span>
+        <h1>Put the next three actions in order</h1>
+        <p class="small muted">Rank 3 options</p>
+        <ol class="stack stack-sm" style="margin:0;padding:0;list-style:none" aria-label="Your order">
+          <li class="option static" data-mk="2"><span class="mono small" style="width:1.2em">1</span><span data-mark="2"></span><span class="grow">Needle decompression</span><button class="btn icon quiet" aria-label="Move Needle decompression down">↓</button><button class="btn icon quiet" aria-label="Remove Needle decompression">×</button></li>
+          <li class="option static" data-mk="3"><span class="mono small" style="width:1.2em">2</span><span data-mark="3"></span><span class="grow">Finger thoracostomy</span><button class="btn icon quiet" aria-label="Move Finger thoracostomy up">↑</button><button class="btn icon quiet" aria-label="Remove Finger thoracostomy">×</button></li>
+        </ol>
+        <p class="small muted">Add 1 option below, then put them in order.</p>
+        <div class="stack stack-sm">
+          <button class="option static" data-mk="0" style="text-align:left"><span data-mark="0"></span><span class="grow">Chest X-ray</span><span class="small" style="color:var(--petrol-ink);font-weight:600">Add</span></button>
+          <button class="option static" data-mk="1" style="text-align:left"><span data-mark="1"></span><span class="grow">Intercostal catheter</span><span class="small" style="color:var(--petrol-ink);font-weight:600">Add</span></button>
+        </div>
+        <button class="btn primary lg block" disabled>Send answer</button>
+        <p class="hint small muted">Every move is a named button. Dragging is optional, never required.</p>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="t-decision-text">
+  <div class="phone">
+    <div class="phone-bar" data-pbar="Team decision" data-phase="open"></div>
+    <div class="phone-main">
+      <form class="stack" onsubmit="return false">
+        <span class="label-caps">Team decision</span>
+        <h1>What would make you change your plan?</h1>
+        <div class="field">
+          <label for="ft">Your answer</label>
+          <textarea id="ft" class="input" rows="5">A drop in BP after decompression would</textarea>
+          <div class="row between"><span class="hint">Answers stay with the facilitator.</span><span class="counter">38 of 240</span></div>
+        </div>
+        <button class="btn primary lg block">Send answer</button>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template id="t-saved">
+  <div class="phone">
+    <div class="phone-bar" data-pbar="Team decision" data-phase="open"></div>
+    <div class="phone-main">
+      <details class="disclose situation small"><summary>Situation: Primary survey</summary></details>
+      <div class="stack">
+        <div class="row between"><span class="label-caps">Team decision</span><span class="small muted mono">0:41</span></div>
+        <h1>What is the next decisive intervention?</h1>
+        <div class="stack stack-sm">
+          <div class="option static" data-mk="0" style="opacity:.55"><span data-mark="0"></span>Chest X-ray before decompression</div>
+          <div class="option static" data-mk="1" style="opacity:.55"><span data-mark="1"></span>RSI and intubate before decompression</div>
+          <div class="option static" data-mk="2" style="box-shadow:inset 0 0 0 2px var(--ink);border-color:var(--ink)"><span data-mark="2"></span>Needle decompression, right chest<span class="check" style="background:var(--ink);border-color:var(--ink);box-shadow:inset 0 0 0 4px var(--surface)"></span></div>
+          <div class="option static" data-mk="3" style="opacity:.55"><span data-mark="3"></span>Finger thoracostomy, right chest</div>
+        </div>
+        <p class="receipt ok" role="status"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Answer saved · you can change it until responses lock</p>
+        <button class="btn block" data-go="decision">Change answer</button>
+      </div>
+      <div class="stack stack-sm" style="padding-top:var(--sp-4);border-top:1px dashed var(--line)">
+        <p class="label-caps">Other receipts in the same slot</p>
+        <p class="receipt wait"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>Waiting for connection · your answer will send automatically</p>
+        <p class="receipt neutral"><svg class="ic" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/></svg>Updating · checking the room…</p>
+        <p class="receipt bad"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>Answer not saved · check your choice and try again</p>
+        <p class="receipt neutral"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>Round cancelled · the facilitator will open a new round</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="t-locked">
+  <div class="phone">
+    <div class="phone-bar" data-pbar="Voting locked" data-phase="locked"></div>
+    <div class="phone-main">
+      <div class="stack">
+        <p class="receipt neutral" role="status"><svg class="ic" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="9" rx="2"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>Voting locked · your last saved answer stands</p>
+        <h1>Awaiting the next shared surface</h1>
+        <div class="stack stack-sm"><span class="small muted">Your answer (locked)</span><div class="option static" data-mk="2"><span data-mark="2"></span>Needle decompression, right chest</div></div>
+        <p class="small muted">Nothing changes on this phone until the facilitator reveals what happens. Choosing a route stays private until then.</p>
+      </div>
+      <div class="stack stack-sm" style="padding-top:var(--sp-4);border-top:1px dashed var(--line)">
+        <p class="label-caps">No answer variant</p>
+        <p class="receipt neutral"><svg class="ic" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="9" rx="2"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>Voting locked · no answer was recorded from this phone</p>
+      </div>
+      <section class="stack stack-sm"><h2 style="font-size:var(--t-sm)">Timeline</h2><div class="timeline"><button><span>Earlier</span>Arrival</button><button aria-current="step"><span>Live</span>Primary survey</button></div></section>
+    </div>
+  </div>
+</template>
+
+<template id="t-paused">
+  <div class="phone">
+    <div class="phone-bar" data-pbar="Discussion pause" data-phase="paused"></div>
+    <div class="phone-main">
+      <div class="banner pause" role="status"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></svg>Paused · the facilitator will resume the room</div>
+      <h1>Primary survey</h1>
+      <p class="receipt neutral"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></svg>Paused · your answer is held</p>
+      <div class="option static" data-mk="2"><span data-mark="2"></span>Needle decompression, right chest</div>
+    </div>
+  </div>
+</template>
+
+<template id="t-result">
+  <div class="phone">
+    <div class="phone-bar" data-pbar="Live surface" data-phase="consequence"></div>
+    <div class="phone-main">
+      <section class="stack stack-sm" style="padding:var(--sp-4);border-radius:var(--radius);background:var(--surface);border:1px solid var(--line)">
+        <span class="label-caps">Room result</span>
+        <p>You chose <strong>Needle decompression</strong>. 3 of 5 chose the same.</p>
+        <p class="small muted">The facilitator chose the authored route <strong style="color:var(--ink)">Finger thoracostomy, 4th/5th ICS</strong>.</p>
+      </section>
+      <article class="stack">
+        <span class="pill" data-phase="consequence" style="align-self:flex-start">Shared consequence</span>
+        <h1>Finger thoracostomy: partial response</h1>
+        <p>A rush of air. His breathing eases a little, but the BP stays low.</p>
+        <div class="vitals"><div><span>HR</span><strong>122</strong></div><div><span>BP</span><strong>86/54</strong></div><div><span>SpO₂</span><strong>91%</strong></div></div>
+      </article>
+      <section class="stack stack-sm"><h2 style="font-size:var(--t-sm)">Timeline</h2><div class="timeline"><button><span>Earlier</span>Primary survey</button><button aria-current="step"><span>Shared consequence</span>Partial response</button></div></section>
+    </div>
+  </div>
+</template>
+
+<template id="t-recap">
+  <div class="phone">
+    <div class="phone-bar" data-pbar="Your private recap" data-phase="reveal"></div>
+    <div class="phone-main">
+      <header class="row nowrap" style="--gap:var(--sp-4)">
+        <div class="cover" style="width:72px;flex:none"><div data-mosaic='{"format":"canvas","descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"mvc","group":"petrol","base":160}'></div></div>
+        <div class="stack stack-sm"><h1 style="font-size:var(--t-xl)">Your private recap</h1><p class="small muted">MVC with tension pneumothorax</p></div>
+      </header>
+      <div class="stack stack-sm small">
+        <p>Only this phone can see this. Online access ends <strong>7 Oct 2026, 14:20</strong>; clearing this browser's data ends it sooner.</p>
+        <p class="muted">A downloaded PDF is your own copy and does not expire.</p>
+        <div class="row"><button class="btn primary">Download recap (PDF)</button><button class="btn quiet">Print recap</button></div>
+      </div>
+      <section class="stack">
+        <h2 style="font-size:var(--t-lg)">Your decisions</h2>
+        <article class="stack stack-sm" style="padding-bottom:var(--sp-4);border-bottom:1px solid var(--line)">
+          <span class="xs muted">Decision 1 · Round 1</span>
+          <h3 style="font-size:var(--t-md)">What is the next decisive intervention?</h3>
+          <div class="row nowrap"><span data-mark="3" data-size="22"></span><span class="small"><strong>Your answer:</strong> Finger thoracostomy, right chest</span></div>
+          <span class="tag ok" style="align-self:flex-start">Defensible</span>
+          <p class="small"><strong>Why:</strong> Authored rationale, shown in full.</p>
+          <p class="small"><strong>Recommended here:</strong> Needle decompression, right chest.</p>
+          <p class="small"><strong>The room:</strong> Followed a minority view</p>
+          <p class="small"><strong>What happened:</strong> Finger thoracostomy: partial response</p>
+        </article>
+        <article class="stack stack-sm">
+          <span class="xs muted">Decision 2 · Round 1</span>
+          <h3 style="font-size:var(--t-md)">What must the team secure next?</h3>
+          <span class="tag" style="align-self:flex-start">No answer</span>
+          <p class="small"><strong>The room:</strong> The facilitator chose a different route</p>
+          <p class="small"><strong>What happened:</strong> ICC in, structured reassessment done</p>
+        </article>
+      </section>
+      <section class="stack stack-sm"><h2 style="font-size:var(--t-lg)">The route the room took</h2><ol class="small" style="margin:0;padding-left:1.3em"><li>Finger thoracostomy: partial response</li><li>ICC in, structured reassessment done</li><li>More crystalloid: transient lift, then worse</li></ol></section>
+      <section class="stack stack-sm"><h2 style="font-size:var(--t-lg)">Key learning points</h2><p class="small muted">The authored learning points, verbatim.</p></section>
+    </div>
+  </div>
+</template>
+
+<template id="t-profile">
+  <div class="phone">
+    <div class="phone-bar" data-pbar="Team decision" data-phase="open"></div>
+    <div class="phone-main">
+      <div class="row between"><h1>Your name and avatar</h1><button class="menu-btn" aria-label="Close"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="field"><label for="pn">Your name</label><input id="pn" class="input" value="Robin" maxlength="20"><span class="counter" style="align-self:flex-end">5 of 20</span></div>
+      <div class="row" style="--gap:var(--sp-4)"><img class="avatar" src="../public/avatars/shadows-05-teal.svg" width="72" height="72" alt="Avatar preview"><span class="small muted">Shown in the lobby, and on the projector only if the facilitator shows names.</span></div>
+      <fieldset style="border:0;padding:0;margin:0" class="stack stack-sm"><legend class="small" style="font-weight:600">Avatar colour</legend><div class="row" data-colour-row></div></fieldset>
+      <fieldset style="border:0;padding:0;margin:0" class="stack stack-sm"><legend class="small" style="font-weight:600">Avatar shape</legend><div style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px" data-avatar-grid></div></fieldset>
+      <button class="btn primary lg block">Save changes</button>
+    </div>
+  </div>
+</template>
+
+<template id="t-help">
+  <div class="app">
+    <header class="app-bar" data-bar="public"></header>
+    <div class="page reading stack stack-lg">
+      <div class="stack stack-sm"><h1>Help</h1><p class="muted">Short answers, by what you are doing.</p></div>
+      <div class="tabs" role="tablist"><button role="tab" aria-selected="true">Joining</button><button role="tab">Connection</button><button role="tab">Facilitating</button><button role="tab">Projector</button><button role="tab">Shared computer</button></div>
+      <section class="stack">
+        <h2 style="font-size:var(--t-lg)">My code isn't accepted</h2>
+        <p>Check the six characters against the projector. O and 0 count as the same, as do I, L and 1. If the room shows "Joining is closed", ask the facilitator to reopen joining.</p>
+        <h2 style="font-size:var(--t-lg)">Room code or pairing code?</h2>
+        <p>A <strong>room code</strong> has six characters and is for joining. A <strong>shared-computer code</strong> has eight characters, expires after five minutes, and is only for facilitators moving a room to another computer.</p>
+        <h2 style="font-size:var(--t-lg)">Will others see my answers?</h2>
+        <p>No. The facilitator sees your answers. The room sees only anonymous totals after responses lock.</p>
+      </section>
+      <hr>
+      <p class="small muted">Do not enter patient details. <a href="#" data-go="privacy">Privacy</a></p>
+    </div>
+  </div>
+</template>
+
+<template id="t-privacy">
+  <div class="app">
+    <header class="app-bar" data-bar="public"></header>
+    <div class="page reading stack">
+      <h1>Your privacy in Case</h1>
+      <h2 style="font-size:var(--t-lg);margin-top:var(--sp-4)">What the room sees</h2>
+      <p>The facilitator sees your display name, avatar and answers. Your name and avatar appear on the projector in the lobby. During play, names appear only when the facilitator chooses Show names. Other participants do not receive your individual answers.</p>
+      <h2 style="font-size:var(--t-lg);margin-top:var(--sp-4)">How long information stays</h2>
+      <p>Names and per-person answers in the live room and session records are deleted within 25 hours after the session ends. Encrypted backups and connection logs expire within 7 days.</p>
+      <h2 style="font-size:var(--t-lg);margin-top:var(--sp-4)">Joining checks</h2>
+      <p>After repeated incorrect codes, Cloudflare Turnstile may check the join page. It does not run during play or on your recap.</p>
+      <p class="small muted" style="margin-top:var(--sp-4)">Layout preview. The shipped notice text is authoritative and must be carried over complete.</p>
+    </div>
+  </div>
+</template>
+
+<!-- ═════════════════════════ FACILITATOR ═════════════════════════ -->
+<template id="t-signin">
+  <div class="app">
+    <header class="app-bar" data-bar="public"></header>
+    <div class="page narrow stack stack-lg" style="padding-top:var(--sp-8)">
+      <div class="stack stack-sm"><h1>Facilitator sign in</h1><p class="muted">For running and managing cases. Participants never need an account.</p></div>
+      <div class="field"><label for="si-email">Email</label><input id="si-email" class="input" type="email" value="j.ming@hospital.org"></div>
+      <p class="banner info" role="status">Enter the one-time code from your email.</p>
+      <div class="field"><label for="si-otp">One-time code</label><input id="si-otp" class="input mono" inputmode="numeric" autocomplete="one-time-code" maxlength="6" style="font-size:var(--t-lg);letter-spacing:.3em;max-width:12rem"><p class="hint">Six digits. This is not a room code.</p></div>
+      <label class="row small" style="--gap:var(--sp-2)"><input type="checkbox"> Keep me signed in on this phone</label>
+      <div class="stack stack-sm"><button class="btn primary lg block" data-go="library">Sign in</button><button class="btn quiet block">Send code</button><button class="btn tertiary">Email sign-in link</button></div>
+      <p class="xs muted">The "keep me signed in" choice appears only on eligible phones and is off by default, as today. Sign-in proves identity, not administrator access.</p>
+    </div>
+  </div>
+</template>
+
+<template id="t-library">
+  <div class="app">
+    <header class="app-bar" data-bar="facilitator" data-ctx="Cases"></header>
+    <div class="page stack stack-lg">
+      <div class="page-head" style="margin:0">
+        <div class="stack stack-sm">
+          <h1>Cases</h1>
+          <div class="row small muted"><label for="ws" class="sr-only">Workspace</label><select id="ws" class="input" style="width:auto;min-height:36px;font-weight:600"><option>Teaching</option><option>Simulation fellows</option><option>Load testing (operators)</option></select><span>Showing 8 of 23 published cases</span></div>
+        </div>
+        <div class="segmented" role="group" aria-label="View"><button aria-pressed="true" data-go="library">Grid</button><button data-go="library-table">Table</button><button data-go="library-board">Board</button></div>
+      </div>
+      <div class="row" style="--gap:var(--sp-3)">
+        <div class="field grow" style="max-width:360px"><label for="q" class="sr-only">Search cases</label><input id="q" class="input" type="search" placeholder="Search title, audience or description" data-catalog-search></div>
+        <div class="segmented" role="group" aria-label="Group filter" data-group-filter><button aria-pressed="true" data-g="all">All</button><button data-g="Emergency">Emergency</button><button data-g="Critical care">Critical care</button><button data-g="Anaesthesia">Anaesthesia</button><button data-g="Ungrouped">Ungrouped</button></div>
+        <label class="row small muted" style="--gap:var(--sp-2);margin-left:auto">Sort<select class="input" style="width:auto;min-height:36px" data-catalog-sort><option value="title">Title A–Z</option><option value="recent">Recently published</option><option value="length">Length</option></select></label>
+      </div>
+      <div class="case-grid" data-catalog="grid"></div>
+      <div class="row" style="justify-content:center"><button class="btn quiet">Show more cases</button></div>
+    </div>
+  </div>
+</template>
+
+<template id="t-library-table">
+  <div class="app">
+    <header class="app-bar" data-bar="facilitator" data-ctx="Cases"></header>
+    <div class="page stack stack-lg">
+      <div class="page-head" style="margin:0">
+        <div class="stack stack-sm"><h1>Cases</h1><span class="small muted">Teaching · 8 of 23 published cases</span></div>
+        <div class="segmented" role="group" aria-label="View"><button data-go="library">Grid</button><button aria-pressed="true" data-go="library-table">Table</button><button data-go="library-board">Board</button></div>
+      </div>
+      <div style="overflow-x:auto"><table class="table" data-catalog="table">
+        <thead><tr><th style="width:56px"><span class="sr-only">Cover</span></th><th aria-sort="ascending"><button data-sort="title">Title ↑</button></th><th><button data-sort="group">Group</button></th><th class="num"><button data-sort="length">Length</button></th><th><button data-sort="audience">Audience</button></th><th><button data-sort="version">Published</button></th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+      <p class="xs muted">Sorting applies to the whole result set on the server, not just the rows loaded so far.</p>
+    </div>
+  </div>
+</template>
+
+<template id="t-library-board">
+  <div class="app">
+    <header class="app-bar" data-bar="facilitator" data-ctx="Cases"></header>
+    <div class="page stack stack-lg" style="max-width:none">
+      <div class="page-head" style="margin:0">
+        <div class="stack stack-sm"><h1>Cases</h1><span class="small muted">Teaching · 8 of 23 published cases</span></div>
+        <div class="row"><label class="row small muted" style="--gap:var(--sp-2)">Columns<select class="input" style="width:auto;min-height:36px" data-board-by><option value="group">Group</option><option value="length">Length</option><option value="audience">Audience</option></select></label><div class="segmented" role="group" aria-label="View"><button data-go="library">Grid</button><button data-go="library-table">Table</button><button aria-pressed="true" data-go="library-board">Board</button></div></div>
+      </div>
+      <div class="board" data-catalog="board"></div>
+      <p class="xs muted">Covers keep their group tint whatever the columns are. Moving a case between groups is an admin action (Admin → Cases), not a drag here.</p>
+    </div>
+  </div>
+</template>
+
+<template id="t-case-detail">
+  <div class="app">
+    <header class="app-bar" data-bar="facilitator" data-ctx="Cases"></header>
+    <div class="page">
+      <a class="small" href="#" data-go="library">← Cases</a>
+      <div class="split" style="grid-template-columns:minmax(260px,400px) minmax(0,1fr);margin-top:var(--sp-5)">
+        <div class="cover" style="border-radius:var(--radius)"><div data-mosaic='{"format":"canvas","descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"mvc","group":"petrol","label":"Abstract branching mosaic artwork"}'></div></div>
+        <div class="stack stack-lg">
+          <div class="stack stack-sm">
+            <span class="group-chip" style="--g:hsl(186 30% 70%)"><i></i>Emergency</span>
+            <h1>MVC with tension pneumothorax</h1>
+            <div class="meta"><span>15 min</span><span>Junior doctors</span><span>Emergency department</span><span>Published v3 · 2 Oct 2026</span></div>
+          </div>
+          <p style="max-width:var(--measure)">A motorcyclist arrives short of breath after a collision. The team must recognise tension physiology from the bedside findings and decompress before imaging.</p>
+          <div class="stack stack-sm"><h2 style="font-size:var(--t-md)">Learning objectives</h2><ul class="small" style="margin:0;padding-left:1.2em"><li>Recognise tension pneumothorax clinically</li><li>Prioritise decompression over confirmation</li><li>Reassess after each intervention</li></ul></div>
+          <div class="row" style="--gap:var(--sp-3)"><span class="tag ok">Pinned pilot version</span></div>
+          <div class="stack stack-sm" style="padding-top:var(--sp-4);border-top:1px solid var(--line)">
+            <div class="row"><button class="btn primary lg" data-go="console-lobby">Start room</button><button class="btn tertiary">Open in editor</button></div>
+            <p class="small muted">Starting opens the room lobby. You check the projector there before anyone joins.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- console states share a head; data attributes fill it -->
+<template id="t-console-lobby">
+  <div class="console">
+    <header class="app-bar" data-bar="console"></header>
+    <div class="console-head" data-chead='{"beat":"Lobby","phase":"reveal","pill":"Waiting to start","facts":["0 in room"]}'></div>
+    <div class="console-tabs tabs" role="tablist" data-ctabs="run" data-count="0"></div>
+    <div class="console-body">
+      <div class="col">
+        <section class="stack">
+          <span class="label-caps">Invite</span>
+          <div class="row" style="--gap:var(--sp-5)"><span class="room-code" style="font-size:56px">A7K<span class="gap"></span>2M9</span><div class="stack stack-sm small"><span class="muted">case.iatrogenic.app</span><span>Opens with <strong>Arrival</strong></span></div></div>
+          <p class="small muted">People appear in the Room tab as they join. The projector shows the code and QR.</p>
+        </section>
+      </div>
+      <div class="col">
+        <section class="notice locked stack">
+          <span class="flag small">Display check</span>
+          <h2 style="font-size:var(--t-lg)">Does the projector show only the room display?</h2>
+          <p class="small muted">Look at the room screen. It should show the join code, never this console.</p>
+          <div class="row"><button class="btn primary">Projector only · ready</button><button class="btn danger">Console visible · fix display</button></div>
+          <button class="btn tertiary" style="align-self:flex-start">Check projector again</button>
+        </section>
+      </div>
+    </div>
+    <div class="dock"><span class="dock-hint">Confirm the display check first</span><button class="btn primary" disabled>Start case</button></div>
+  </div>
+</template>
+
+<template id="t-console-live">
+  <div class="console">
+    <header class="app-bar" data-bar="console"></header>
+    <div class="console-head" data-chead='{"beat":"Primary survey","phase":"reveal","pill":"Live surface","facts":["5 in room"]}'></div>
+    <div class="console-tabs tabs" role="tablist" data-ctabs="run" data-count="5"></div>
+    <div class="console-body">
+      <div class="col">
+        <div class="zone"><span class="zone-label label-caps row" style="--gap:var(--sp-2)">Room sees</span>
+          <h2>Primary survey</h2>
+          <p>He talks, but only in short phrases. His right chest barely moves, is silent to the stethoscope and booms when percussed; the trachea sits slightly to the left and his neck veins are full despite the blood loss.</p>
+          <div class="vitals"><div><span>HR</span><strong>134</strong></div><div><span>BP</span><strong>78/50</strong></div><div><span>RR</span><strong>38</strong></div><div><span>SpO₂</span><strong>86%</strong></div></div>
+        </div>
+        <div class="row small" style="--gap:var(--sp-2)"><button class="btn quiet">Back</button><span class="tag sel">Live surface</span><button class="btn quiet" disabled>Forward</button><span class="muted">Presentation: Arrival → Primary survey</span></div>
+      </div>
+      <div class="col">
+        <div class="private zone"><span class="zone-label label-caps row" style="color:inherit;--gap:var(--sp-2)">Only you</span>
+          <p>Invite contrasting reasoning before opening the decision. Ask what single finding would change their mind.</p></div>
+        <div class="stack stack-sm"><span class="small muted">Up next</span><p style="font-weight:600">Team decision: the next decisive intervention</p></div>
+        <button class="btn" style="align-self:flex-start">Pause for discussion</button>
+      </div>
+    </div>
+    <div class="dock"><span class="dock-hint">The room is on the live surface.</span><button class="btn primary">Open responses</button></div>
+  </div>
+</template>
+
+<template id="t-console-open">
+  <div class="console">
+    <header class="app-bar" data-bar="console"></header>
+    <div class="console-head" data-chead='{"beat":"Decisive intervention","phase":"open","pill":"Team decision","facts":["Round 1","0:58 left"]}'></div>
+    <div class="console-tabs tabs" role="tablist" data-ctabs="run" data-count="5"></div>
+    <div class="console-body">
+      <div class="col">
+        <div class="zone"><span class="zone-label label-caps row" style="--gap:var(--sp-2)">Room sees</span>
+          <h2>What is the next decisive intervention?</h2>
+          <div class="stack stack-sm">
+            <div class="option static" data-mk="0"><span data-mark="0"></span>Chest X-ray before decompression</div>
+            <div class="option static" data-mk="1"><span data-mark="1"></span>RSI and intubate before decompression</div>
+            <div class="option static" data-mk="2"><span data-mark="2"></span>Needle decompression, right chest</div>
+            <div class="option static" data-mk="3"><span data-mark="3"></span>Finger thoracostomy, right chest</div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="stack stack-sm" role="status"><span class="label-caps">Responses</span><p style="font-size:var(--t-3xl);font-weight:600;line-height:1">3 <span class="muted" style="font-size:var(--t-lg);font-weight:500">of 5 answered</span></p><p class="small muted">The split stays hidden until you lock.</p></div>
+        <div class="private zone"><span class="zone-label label-caps row" style="color:inherit;--gap:var(--sp-2)">Only you</span><p>If the room converges quickly, ask a confident participant to argue for imaging first.</p></div>
+        <div class="row"><button class="btn">Pause for discussion</button><button class="btn danger">Void round</button></div>
+      </div>
+    </div>
+    <div class="dock"><span class="dock-hint">Participants can change answers until you lock.</span><button class="btn primary" data-go="console-locked">Lock responses &amp; review</button></div>
+  </div>
+</template>
+
+<template id="t-console-locked">
+  <div class="console">
+    <header class="app-bar" data-bar="console"></header>
+    <div class="console-head" data-chead='{"beat":"Decisive intervention","phase":"locked","pill":"Responses locked","facts":["Round 1","5 answers"]}'></div>
+    <div class="console-tabs tabs" role="tablist" data-ctabs="run" data-count="5"></div>
+    <div class="console-body">
+      <div class="col">
+        <div class="zone"><div class="row between"><span class="zone-label label-caps row" style="--gap:var(--sp-2)">Room sees · responses chart</span><button class="btn quiet" data-go="console-ready">Hide responses on projector</button></div>
+          <div class="results">
+            <div class="result" data-mk="2"><span data-mark="2" data-size="24"></span><span class="small">Needle decompression, right chest</span><span class="n">3</span><span class="bar"><i style="width:60%"></i></span></div>
+            <div class="result" data-mk="3"><span data-mark="3" data-size="24"></span><span class="small">Finger thoracostomy, right chest</span><span class="n">1</span><span class="bar"><i style="width:20%"></i></span></div>
+            <div class="result" data-mk="0"><span data-mark="0" data-size="24"></span><span class="small">Chest X-ray before decompression</span><span class="n">1</span><span class="bar"><i style="width:20%"></i></span></div>
+            <div class="result" data-mk="1"><span data-mark="1" data-size="24"></span><span class="small">RSI and intubate before decompression</span><span class="n">0</span><span class="bar"><i style="width:0"></i></span></div>
+          </div>
+        </div>
+        <div class="row"><button class="btn quiet">Reopen as new round</button><button class="btn quiet">Pause for discussion</button><button class="btn danger">Void round</button></div>
+      </div>
+      <div class="col">
+        <div class="stack stack-sm"><h2 style="font-size:var(--t-lg)">Choose an authored route</h2><p class="suggest">Suggested by responses: <strong style="color:var(--ink)">Immediate needle decompression</strong> · you choose the route</p></div>
+        <div class="routes" data-routes></div>
+      </div>
+    </div>
+    <div class="dock"><span class="dock-hint">Select a route above. Choosing is private; nothing changes on the projector or phones.</span><button class="btn primary" disabled>Reveal</button></div>
+  </div>
+</template>
+
+<template id="t-console-selected">
+  <div class="console">
+    <header class="app-bar" data-bar="console"></header>
+    <div class="console-head" data-chead='{"beat":"Route chosen · not yet shown to the room","phase":"locked","pill":"Responses locked","facts":["Round 1","Projector: responses chart showing"]}'></div>
+    <div class="console-tabs tabs" role="tablist" data-ctabs="run" data-count="5"></div>
+    <div class="console-body">
+      <div class="col">
+        <div class="zone"><div class="row between"><span class="zone-label label-caps row" style="--gap:var(--sp-2)">Room sees · responses chart</span><button class="btn" data-go="console-ready">Hide responses on projector</button></div>
+          <p class="small muted">The chart must be hidden before anything new is revealed.</p>
+        </div>
+      </div>
+      <div class="col"><div class="routes" data-routes data-selected="1"></div><button class="btn tertiary" style="align-self:flex-start">Back to review</button></div>
+    </div>
+    <div class="dock"><span class="dock-hint">Hide responses on projector before showing the next case context.</span><button class="btn primary" disabled>Reveal: Finger thoracostomy: partial response</button></div>
+  </div>
+</template>
+
+<template id="t-console-ready">
+  <div class="console">
+    <header class="app-bar" data-bar="console"></header>
+    <div class="console-head" data-chead='{"beat":"Route chosen · not yet shown to the room","phase":"locked","pill":"Responses locked","facts":["Round 1","Projector: chart hidden"]}'></div>
+    <div class="console-tabs tabs" role="tablist" data-ctabs="run" data-count="5"></div>
+    <div class="console-body">
+      <div class="col"><div class="zone"><div class="row between"><span class="zone-label label-caps row" style="--gap:var(--sp-2)">Room sees</span><button class="btn quiet">Show responses on projector</button></div><p>Responses locked · Facilitator reviewing</p><p class="small muted">Phones and projector look exactly as they did at lock.</p></div></div>
+      <div class="col"><div class="routes" data-routes data-selected="1"></div></div>
+    </div>
+    <div class="dock"><span class="dock-hint">Press once to arm, again within 3 seconds to show the room.</span><button class="btn primary" data-go="console-armed">Reveal: Finger thoracostomy: partial response</button></div>
+  </div>
+</template>
+
+<template id="t-console-armed">
+  <div class="console">
+    <header class="app-bar" data-bar="console"></header>
+    <div class="console-head" data-chead='{"beat":"Route chosen · not yet shown to the room","phase":"locked","pill":"Responses locked","facts":["Round 1","Projector: chart hidden"]}'></div>
+    <div class="console-tabs tabs" role="tablist" data-ctabs="run" data-count="5"></div>
+    <div class="console-body">
+      <div class="col"><div class="zone"><span class="zone-label label-caps row" style="--gap:var(--sp-2)">Room sees</span><p>Responses locked · Facilitator reviewing</p></div></div>
+      <div class="col"><div class="routes" data-routes data-selected="1"></div></div>
+    </div>
+    <div class="dock"><span class="dock-hint" role="status">Armed · press again to show the room</span><button class="btn armed" data-go="console-consequence">Show to room?</button></div>
+  </div>
+</template>
+
+<template id="t-console-consequence">
+  <div class="console">
+    <header class="app-bar" data-bar="console"></header>
+    <div class="console-head" data-chead='{"beat":"Consequence shown","phase":"consequence","pill":"Consequence","facts":["Finger thoracostomy"]}'></div>
+    <div class="console-tabs tabs" role="tablist" data-ctabs="run" data-count="5"></div>
+    <div class="console-body">
+      <div class="col">
+        <div class="zone"><span class="zone-label label-caps row" style="--gap:var(--sp-2)">Room sees</span><h2>Finger thoracostomy: partial response</h2><p>A rush of air. His breathing eases a little, but the BP stays low.</p><div class="vitals"><div><span>HR</span><strong>122</strong></div><div><span>BP</span><strong>86/54</strong><span class="chg">↑</span></div><div><span>SpO₂</span><strong>91%</strong><span class="chg">↑</span></div></div></div>
+      </div>
+      <div class="col">
+        <div class="private zone"><span class="zone-label label-caps row" style="color:inherit;--gap:var(--sp-2)">Only you</span><p>Why is the BP still low? Draw out the second problem before moving on.</p></div>
+        <p class="small muted">Show names on projector is in the Room tab.</p>
+        <button class="btn" style="align-self:flex-start">Pause for discussion</button>
+      </div>
+    </div>
+    <div class="dock"><span class="dock-hint">Next: reassessment findings.</span><button class="btn primary">Reveal next surface</button></div>
+  </div>
+</template>
+
+<template id="t-console-room">
+  <div class="console">
+    <header class="app-bar" data-bar="console"></header>
+    <div class="console-head" data-chead='{"beat":"Decisive intervention","phase":"open","pill":"Team decision","facts":["Round 1"]}'></div>
+    <div class="console-tabs tabs" role="tablist" data-ctabs="room" data-count="5"></div>
+    <div class="room-grid">
+      <section>
+        <h2>People <span class="muted">5</span></h2>
+        <div data-people></div>
+        <div class="row between small" style="padding-top:var(--sp-2)"><span>Joining is open · <span class="room-code">A7K 2M9</span></span><button class="btn quiet">Close joining</button></div>
+      </section>
+      <section>
+        <h2>Projector</h2>
+        <label class="row nowrap small" style="--gap:var(--sp-3);min-height:44px"><input type="checkbox"> <span class="grow"><strong>Show names on projector</strong><br><span class="muted">Hides the live count. Refused while a responses chart is showing.</span></span></label>
+        <div class="row"><button class="btn quiet">Open projector window</button><button class="btn quiet">Run the display check again</button><button class="btn tertiary">Open projector manually</button></div>
+        <div class="field"><label for="dpc">Display pairing code</label><div class="row nowrap"><input id="dpc" class="input mono" placeholder="8 characters" style="max-width:14rem"><button class="btn quiet">Approve display</button></div></div>
+      </section>
+      <section>
+        <h2>Use a shared computer</h2>
+        <p class="small">Run this room from a shared computer without signing your account into it. Open <strong>case.iatrogenic.app/P</strong> on that computer and enter the eight-character code it shows.</p>
+        <div class="field"><label for="pcc">Computer code</label><div class="row nowrap"><input id="pcc" class="input mono" placeholder="XXXX XXXX" maxlength="9" style="max-width:14rem"><button class="btn quiet" data-go="console-pair">Review computer</button></div><p class="hint">This device stops controlling the room once the computer takes over.</p></div>
+      </section>
+      <section>
+        <h2>Settings</h2>
+        <div class="field"><label for="tmr">Decision timer</label><div class="row nowrap"><select id="tmr" class="input" style="max-width:12rem"><option>No timer</option><option>1 minute</option><option selected>2 minutes</option><option>5 minutes</option></select><button class="btn quiet">Set timer</button></div><p class="hint">Advisory only. It never locks responses by itself.</p></div>
+      </section>
+      <section>
+        <h2>Manual room</h2>
+        <p class="small muted">If the connection fails, keep teaching from your notes and rejoin online at the next decision.</p>
+        <button class="btn quiet" style="align-self:flex-start">Enter manual room mode</button>
+      </section>
+      <section>
+        <h2>This console</h2>
+        <div class="row"><button class="btn quiet">Take over this room</button><button class="btn danger" data-go="console-end">End room</button></div>
+      </section>
+    </div>
+  </div>
+</template>
+
+<template id="t-console-pair">
+  <div class="console" style="position:relative;min-height:760px">
+    <header class="app-bar" data-bar="console"></header>
+    <div class="console-tabs tabs" role="tablist" data-ctabs="room" data-count="5" style="margin-top:var(--sp-5)"></div>
+    <div class="overlay-scrim center">
+      <div class="dialog stack" role="dialog" aria-modal="true" aria-labelledby="pair-h">
+        <h2 id="pair-h" style="font-size:var(--t-lg)">Use this computer for room A7K 2M9?</h2>
+        <dl class="kv"><dt>Code</dt><dd class="mono">P8K4 R2M7</dd><dt>Browser</dt><dd>Edge on Windows</dd><dt>Location</dt><dd>Sydney, AU (approximate)</dd><dt>Requested</dt><dd>14:02</dd><dt>Expires</dt><dd>14:07</dd></dl>
+        <div class="banner manual small">The computer gets control of this room only: no account, no library, no admin. This console stops controlling the room. Participants and the projector carry on unaffected.</div>
+        <div class="row" style="justify-content:flex-end"><button class="btn tertiary">Cancel</button><button class="btn primary">Approve room A7K 2M9</button></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="t-console-end">
+  <div class="console" style="position:relative;min-height:760px">
+    <header class="app-bar" data-bar="console"></header>
+    <div class="overlay-scrim center">
+      <div class="dialog stack" role="alertdialog" aria-modal="true" aria-labelledby="end-h">
+        <h2 id="end-h" style="font-size:var(--t-lg)">End room for everyone?</h2>
+        <p class="small">Responses and progression stop. The projector shows "Session ended". Each participant keeps a private recap on their phone for 24 hours.</p>
+        <div class="row" style="justify-content:flex-end"><button class="btn quiet">Keep teaching</button><button class="btn danger">End room</button></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template id="t-console-manual">
+  <div class="console">
+    <header class="app-bar" data-bar="console"></header>
+    <div class="banner manual" style="border-radius:0"><svg class="ic" viewBox="0 0 24 24"><path d="M4 12h16M12 4v16"/></svg>Manual room mode · facilitator-led discussion. Phones and the projector follow along; nothing you add here is projected.</div>
+    <div class="console-head" data-chead='{"beat":"Decisive intervention","phase":"paused","pill":"Facilitator-led","facts":["Manual upload pending"]}'></div>
+    <div class="console-body single">
+      <div class="col">
+        <div class="private zone"><span class="zone-label label-caps row" style="color:inherit;--gap:var(--sp-2)">Only you · your notes</span><p class="small">Spoken markers are saved on this device until you rejoin.</p></div>
+        <div class="row"><button class="btn quiet">Add spoken marker</button><button class="btn quiet">Download your notes</button><button class="btn tertiary">Follow current room without manual changes</button></div>
+      </div>
+    </div>
+    <div class="dock"><span class="dock-hint">Back online at the next decision.</span><button class="btn primary">Rejoin online at the next decision</button></div>
+  </div>
+</template>
+
+<!-- ═════════════════════════ PROJECTOR (1920×1080, scaled by the frame) ═════════════════════════ -->
+<template id="t-proj-lobby">
+  <div class="projector lobby splash">
+    <div class="splash-art"><div data-mosaic='{"descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"mvc","group":"petrol","aspect":1.7778,"base":540,"focus":[0.62,0.04,0.98,0.84],"motion":["assemble","shimmer"]}'></div></div>
+    <section class="invite splash-panel">
+      <div class="head"><span class="waiting">Waiting to start</span><h1>MVC with tension pneumothorax</h1></div>
+      <div class="qr" data-qr></div>
+      <div class="codeblock"><span class="lbl">Join on your phone</span><span class="url">case.iatrogenic.app</span><span class="room-code">A7K<span class="gap"></span>2M9</span></div>
+    </section>
+    <footer class="tray"><span class="count">0 in the room</span><span class="muted" style="flex:1;font-size:22px">Names appear here as people join.</span><span class="sound">♪ Room sound</span></footer>
+  </div>
+</template>
+
+<template id="t-proj-lobby-crowded">
+  <div class="projector lobby splash">
+    <div class="splash-art"><div data-mosaic='{"descriptor":{"v":1,"stops":9,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0},{"stop":4,"strands":[{"rejoin":5},{"rejoin":5}],"resets":1,"ends":0},{"stop":5,"strands":[{"rejoin":6},{"rejoin":6}],"resets":0,"ends":0},{"stop":6,"strands":[{"rejoin":7},{"rejoin":7}],"resets":0,"ends":0},{"stop":7,"strands":[{"rejoin":8},{"rejoin":8}],"resets":1,"ends":0}]},"seed":"long-case","group":"coral","aspect":1.7778,"base":540,"focus":[0.62,0.04,0.98,0.84],"motion":["assemble","shimmer"]}'></div></div>
+    <section class="invite splash-panel">
+      <div class="head"><span class="waiting">Waiting to start</span><h1 style="font-size:44px">Deteriorating post-operative patient on the surgical ward overnight with escalating oxygen requirement</h1></div>
+      <div class="qr" data-qr></div>
+      <div class="codeblock"><span class="lbl">Join on your phone</span><span class="url">case.iatrogenic.app</span><span class="room-code">Q4T<span class="gap"></span>9HX</span></div>
+    </section>
+    <footer class="tray"><span class="count">48 in the room</span><div class="roster" data-roster="30"></div><span class="muted" style="font-size:22px;white-space:nowrap">+ 18 more</span><span class="sound">♪ Room sound</span></footer>
+  </div>
+</template>
+
+<template id="t-proj-material">
+  <div class="projector">
+    <div class="p-top"><span class="pill" data-phase="reveal">Live surface</span><span class="case-title">MVC with tension pneumothorax</span></div>
+    <div class="p-body">
+      <div class="stack stack-lg"><h1>Primary survey</h1><p>He talks, but only in short phrases. His right chest barely moves, is silent to the stethoscope and booms when percussed; the trachea sits slightly to the left and his neck veins are full despite the blood loss.</p></div>
+      <div class="stack stack-lg">
+        <div class="vitals"><div><span>Heart rate</span><strong>134</strong></div><div><span>Blood pressure</span><strong>78/50</strong></div><div><span>Resp. rate</span><strong>38</strong></div><div><span>SpO₂</span><strong>86%</strong></div><div><span>Temp</span><strong>35.4</strong></div><div><span>GCS</span><strong>14</strong></div></div>
+        <ul class="findings"><li>Airway patent, short phrases</li><li>Right chest: poor movement, absent air entry</li><li>Hyperresonant to percussion on the right</li><li>Left chest clear</li><li class="more">+ 2 more on your phone</li></ul>
+      </div>
+    </div>
+    <footer class="p-foot" data-pfoot="open"></footer>
+  </div>
+</template>
+
+<template id="t-proj-decision">
+  <div class="projector">
+    <div class="p-top"><span class="pill" data-phase="open">Decision open</span><span>Team decision open · Choose on your phone</span><span class="mono" style="color:var(--ink)">3 of 5 answered</span><span class="case-title">MVC with tension pneumothorax</span></div>
+    <div class="p-body" style="grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)">
+      <div class="stack stack-lg">
+        <h2>Primary survey</h2>
+        <div class="vitals" style="grid-template-columns:repeat(2,1fr)"><div><span>Heart rate</span><strong>134</strong></div><div><span>Blood pressure</span><strong>78/50</strong></div><div><span>Resp. rate</span><strong>38</strong></div><div><span>SpO₂</span><strong>86%</strong></div></div>
+        <ul class="findings"><li>Trachea deviated to the left</li><li>Right chest silent, hyperresonant</li><li>Neck veins full</li></ul>
+      </div>
+      <div class="stack stack-lg">
+        <h1>What is the next decisive intervention?</h1>
+        <div class="stack" style="gap:16px">
+          <div class="option static" data-mk="0"><span data-mark="0" data-size="72"></span>Chest X-ray before decompression</div>
+          <div class="option static" data-mk="1"><span data-mark="1" data-size="72"></span>RSI and intubate before decompression</div>
+          <div class="option static" data-mk="2"><span data-mark="2" data-size="72"></span>Needle decompression, right chest</div>
+          <div class="option static" data-mk="3"><span data-mark="3" data-size="72"></span>Finger thoracostomy, right chest</div>
+        </div>
+      </div>
+    </div>
+    <footer class="p-foot" data-pfoot="open"></footer>
+  </div>
+</template>
+
+<template id="t-proj-results">
+  <div class="projector">
+    <div class="p-top"><span class="pill" data-phase="locked">Responses locked</span><span>Responses closed · 5 answered</span><span class="case-title">MVC with tension pneumothorax</span></div>
+    <div class="p-body" style="grid-template-columns:1fr">
+      <div class="stack stack-lg" style="max-width:1400px">
+        <h1>What is the next decisive intervention?</h1>
+        <div class="results" style="gap:36px">
+          <div class="result" data-mk="2"><span data-mark="2" data-size="72"></span><span class="lbl">Needle decompression, right chest</span><span class="n">3</span><span class="bar"><i style="width:60%"></i></span></div>
+          <div class="result" data-mk="3"><span data-mark="3" data-size="72"></span><span class="lbl">Finger thoracostomy, right chest</span><span class="n">1</span><span class="bar"><i style="width:20%"></i></span></div>
+          <div class="result" data-mk="0"><span data-mark="0" data-size="72"></span><span class="lbl">Chest X-ray before decompression</span><span class="n">1</span><span class="bar"><i style="width:20%"></i></span></div>
+          <div class="result" data-mk="1"><span data-mark="1" data-size="72"></span><span class="lbl">RSI and intubate before decompression</span><span class="n">0</span><span class="bar"><i style="width:0"></i></span></div>
+        </div>
+        <p class="muted" style="font-size:22px">Anonymous totals. Nobody's answer is shown by name.</p>
+      </div>
+    </div>
+    <footer class="p-foot" data-pfoot="open"></footer>
+  </div>
+</template>
+
+<template id="t-proj-reviewing">
+  <div class="projector">
+    <div class="p-top"><span class="pill" data-phase="locked">Responses locked</span><span class="case-title">MVC with tension pneumothorax</span></div>
+    <div class="p-body" style="grid-template-columns:1fr;place-items:center">
+      <div class="stack stack-lg" style="text-align:center;max-width:1100px;align-items:center">
+        <h1>What is the next decisive intervention?</h1>
+        <p class="muted" style="font-size:32px">Responses locked · Facilitator reviewing</p>
+      </div>
+    </div>
+    <footer class="p-foot" data-pfoot="open"></footer>
+  </div>
+</template>
+
+<template id="t-proj-consequence">
+  <div class="projector">
+    <div class="p-top"><span class="pill" data-phase="consequence">Consequence</span><span class="case-title">MVC with tension pneumothorax</span></div>
+    <div class="p-body">
+      <div class="stack stack-lg"><h1>Finger thoracostomy: partial response</h1><p>A rush of air. His breathing eases a little, but the blood pressure stays low.</p></div>
+      <div class="stack stack-lg"><div class="vitals"><div><span>Heart rate</span><strong>122</strong></div><div><span>Blood pressure</span><strong>86/54</strong><span class="chg">↑</span></div><div><span>SpO₂</span><strong>91%</strong><span class="chg">↑</span></div></div></div>
+    </div>
+    <footer class="p-foot" data-pfoot="closed"></footer>
+  </div>
+</template>
+
+<template id="t-proj-ended">
+  <div class="projector lobby splash">
+    <div class="splash-art"><div data-mosaic='{"descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"mvc","group":"petrol","aspect":1.7778,"base":540,"focus":[0.62,0.04,0.98,0.84],"motion":["assemble","shimmer"]}'></div></div>
+    <section class="invite splash-panel" style="grid-template-columns:1fr">
+      <div class="head"><span class="waiting" style="color:var(--ink-muted)">Session ended</span><h1>Thank you</h1><p style="font-size:30px">Your private recap is on your phone for 24 hours.</p></div>
+    </section>
+    <footer class="tray"><span class="muted" style="font-size:22px">MVC with tension pneumothorax</span></footer>
+  </div>
+</template>
+
+<!-- ═════════════════════════ ADMIN ═════════════════════════ -->
+<template id="t-admin-denied">
+  <div class="app">
+    <header class="app-bar" data-bar="facilitator" data-ctx="Administration"></header>
+    <div class="page narrow stack stack-lg" style="padding-top:var(--sp-8)">
+      <div class="stack stack-sm"><h1>This account doesn't have administrator access</h1><p class="muted">You're signed in as <strong style="color:var(--ink)">j.ming@hospital.org</strong>. Signing in again won't change this.</p></div>
+      <p class="small">If you should have access, ask the Case owner to add this address.</p>
+      <div class="row"><button class="btn primary" data-go="library">Back to cases</button><button class="btn tertiary">Sign in with another account</button></div>
+      <hr>
+      <div class="stack stack-sm small"><p class="label-caps">Distinct states</p><p><strong>Signed out:</strong> "Sign in to continue." with the sign-in form.</p><p><strong>Unavailable:</strong> "Administration is unavailable." with Refresh information.</p></div>
+    </div>
+  </div>
+</template>
+
+<template id="t-admin-facilitators">
+  <div class="app"><header class="app-bar" data-bar="admin"></header>
+    <div class="page" style="max-width:none"><div class="split" style="grid-template-columns:200px minmax(0,1fr)"><nav class="stack stack-sm" data-admin-nav="facilitators"></nav>
+      <div class="stack stack-lg">
+        <div class="page-head" style="margin:0"><h1>Facilitators</h1></div>
+        <div class="row" style="--gap:var(--sp-5);align-items:end">
+          <div class="field"><label for="af-q">Find facilitator by email</label><div class="row nowrap"><input id="af-q" class="input" type="search" style="width:280px"><button class="btn quiet">Search</button></div></div>
+          <div class="field"><label for="af-i">Invite email</label><div class="row nowrap"><input id="af-i" class="input" type="email" style="width:280px"><button class="btn">Invite facilitator</button></div></div>
+        </div>
+        <table class="table"><thead><tr><th>Email</th><th>Status</th><th>Workspaces</th><th class="num">Changed</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody>
+          <tr><td>a.taylor@hospital.org</td><td><span class="tag ok">Active</span></td><td>Teaching</td><td class="num">2 Oct</td><td class="row" style="justify-content:flex-end"><button class="btn quiet">Disable</button><button class="btn danger" data-go="admin-confirm">Soft delete</button></td></tr>
+          <tr><td>s.lee@hospital.org</td><td><span class="tag warn">Invited</span></td><td>Teaching</td><td class="num">5 Oct</td><td class="row" style="justify-content:flex-end"><button class="btn quiet">Resend invitation</button></td></tr>
+          <tr><td>m.reed@hospital.org</td><td><span class="tag">Disabled</span></td><td>Simulation fellows</td><td class="num">29 Sep</td><td class="row" style="justify-content:flex-end"><button class="btn quiet">Enable</button></td></tr>
+          <tr><td>k.ng@hospital.org</td><td><span class="tag bad">Deleted</span></td><td>—</td><td class="num">20 Sep</td><td class="row" style="justify-content:flex-end"><button class="btn quiet">Restore</button></td></tr>
+        </tbody></table>
+        <p class="xs muted">Automatic refresh pauses while you type or while a dialog is open, and after inactivity, as today.</p>
+      </div></div></div></div>
+</template>
+
+<template id="t-admin-cases">
+  <div class="app"><header class="app-bar" data-bar="admin"></header>
+    <div class="page" style="max-width:none"><div class="split" style="grid-template-columns:200px minmax(0,1fr)"><nav class="stack stack-sm" data-admin-nav="cases"></nav>
+      <div class="stack stack-lg">
+        <div class="page-head" style="margin:0"><h1>Cases</h1></div>
+        <table class="table"><thead><tr><th style="width:48px"></th><th>Title</th><th>Version</th><th>Status</th><th class="num">Revision</th><th>Group <span class="tag priv">new</span></th><th><span class="sr-only">Actions</span></th></tr></thead><tbody data-admin-cases></tbody></table>
+      </div></div></div></div>
+</template>
+
+<template id="t-admin-groups">
+  <div class="app"><header class="app-bar" data-bar="admin"></header>
+    <div class="page" style="max-width:none"><div class="split" style="grid-template-columns:200px minmax(0,1fr)"><nav class="stack stack-sm" data-admin-nav="groups"></nav>
+      <div class="split" style="grid-template-columns:minmax(0,1fr) 360px">
+        <div class="stack stack-lg">
+          <div class="page-head" style="margin:0"><div><h1>Groups</h1><p>Organise the case library. A case belongs to one group, or none. Groups never grant or remove access.</p></div></div>
+          <table class="table"><thead><tr><th style="width:56px"></th><th>Group</th><th>Tint</th><th class="num">Cases</th><th></th></tr></thead><tbody data-admin-groups></tbody></table>
+        </div>
+        <aside class="surface stack" aria-labelledby="ng-h">
+          <h2 id="ng-h" style="font-size:var(--t-lg)">New group</h2>
+          <div class="field"><label for="ng-n">Name</label><input id="ng-n" class="input" placeholder="e.g. Paediatrics"></div>
+          <div class="field"><label for="ng-d">Description <span class="muted">(optional)</span></label><textarea id="ng-d" class="input" rows="2"></textarea></div>
+          <button class="btn primary" data-go="admin-group-edit">Create group</button>
+        </aside>
+      </div></div></div></div>
+</template>
+
+<template id="t-admin-group-edit">
+  <div class="app"><header class="app-bar" data-bar="admin"></header>
+    <div class="page" style="max-width:none"><div class="split" style="grid-template-columns:200px minmax(0,1fr)"><nav class="stack stack-sm" data-admin-nav="groups"></nav>
+      <div class="stack stack-lg">
+        <a class="small" href="#" data-go="admin-groups">← Groups</a>
+        <div class="split" style="grid-template-columns:minmax(0,1fr) 420px">
+          <div class="stack stack-lg">
+            <h1>Emergency</h1>
+            <div class="field"><label for="ge-n">Name</label><input id="ge-n" class="input" value="Emergency"></div>
+            <div class="field"><label for="ge-d">Description</label><textarea id="ge-d" class="input" rows="2">Undifferentiated presentations and resuscitation.</textarea></div>
+            <fieldset class="stack stack-sm" style="border:0;padding:0;margin:0"><legend class="small" style="font-weight:600;margin-bottom:var(--sp-2)">Artwork tint</legend>
+              <div class="choice-cards" style="grid-template-columns:repeat(5,minmax(0,1fr))" data-tint-choices></div>
+              <p class="hint small muted">Changes the background of every Emergency cover. Rooms already running keep the artwork they started with.</p>
+            </fieldset>
+            <div class="row"><button class="btn primary">Save group</button><button class="btn danger" data-go="admin-archive">Archive group</button></div>
+          </div>
+          <div class="stack"><span class="small muted">Preview: same cover, both themes</span><div class="row nowrap" data-tint-preview style="--gap:var(--sp-3)"></div><span class="small muted">12 cases use this group</span></div>
+        </div>
+      </div></div></div></div>
+</template>
+
+<template id="t-admin-archive">
+  <div class="app" style="position:relative;min-height:760px"><header class="app-bar" data-bar="admin"></header>
+    <div class="overlay-scrim center">
+      <div class="dialog stack" role="alertdialog" aria-modal="true" aria-labelledby="ar-h">
+        <h2 id="ar-h" style="font-size:var(--t-lg)">Archive Emergency?</h2>
+        <p class="small">12 cases use this group. Choose where they go. Their covers change tint; no case content changes, and running rooms keep their current artwork.</p>
+        <div class="field"><label for="ar-to">Move its cases to</label><select id="ar-to" class="input"><option>Ungrouped</option><option>Critical care</option><option>Anaesthesia</option></select></div>
+        <div class="field"><label for="ar-t">Type <strong>Emergency</strong> to confirm</label><input id="ar-t" class="input"></div>
+        <div class="row" style="justify-content:flex-end"><button class="btn quiet">Cancel</button><button class="btn danger">Send verification code</button></div>
+        <p class="xs muted">Step 2 asks for the six-digit code sent to your own email, then Confirm action. This is the existing destructive-action flow.</p>
+      </div>
+    </div></div>
+</template>
+
+<template id="t-admin-rooms">
+  <div class="app"><header class="app-bar" data-bar="admin"></header>
+    <div class="page" style="max-width:none"><div class="split" style="grid-template-columns:200px minmax(0,1fr)"><nav class="stack stack-sm" data-admin-nav="rooms"></nav>
+      <div class="stack stack-lg">
+        <div class="page-head" style="margin:0"><div><h1>Live rooms</h1><p>Room status only. No answers, names or case content.</p></div></div>
+        <table class="table"><thead><tr><th>Case</th><th>Facilitator</th><th>Phase</th><th class="num">People</th><th class="num">Started</th><th></th></tr></thead><tbody>
+          <tr><td>MVC with tension pneumothorax</td><td>a.taylor@hospital.org</td><td><span class="pill" data-phase="open">Decision open</span></td><td class="num">18</td><td class="num">14:00</td><td><button class="btn danger" data-go="admin-confirm">End room</button></td></tr>
+          <tr><td>Septic shock on the ward</td><td>s.lee@hospital.org</td><td><span class="pill" data-phase="reveal">Waiting to start</span></td><td class="num">4</td><td class="num">14:20</td><td><button class="btn danger">End room</button></td></tr>
+        </tbody></table>
+      </div></div></div></div>
+</template>
+
+<template id="t-admin-audit">
+  <div class="app"><header class="app-bar" data-bar="admin"></header>
+    <div class="page" style="max-width:none"><div class="split" style="grid-template-columns:200px minmax(0,1fr) 340px"><nav class="stack stack-sm" data-admin-nav="audit"></nav>
+      <div class="stack stack-lg">
+        <div class="page-head" style="margin:0"><h1>Audit</h1></div>
+        <table class="table"><thead><tr><th class="num">Time</th><th>Actor</th><th>Action</th><th>Target</th></tr></thead><tbody>
+          <tr aria-selected="true"><td class="num">14:24</td><td>owner@hospital.org</td><td>Case withdrawn</td><td>Septic shock on the ward · v2</td></tr>
+          <tr><td class="num">14:10</td><td>owner@hospital.org</td><td>Facilitator invited</td><td>s.lee@hospital.org</td></tr>
+          <tr><td class="num">13:58</td><td>owner@hospital.org</td><td>Room ended</td><td>Room · MVC with tension pneumothorax</td></tr>
+        </tbody></table>
+      </div>
+      <aside class="surface stack" aria-label="Selected record"><h2 style="font-size:var(--t-md)">Case withdrawn</h2><dl class="kv"><dt>When</dt><dd>6 Oct 2026, 14:24</dd><dt>Actor</dt><dd>owner@hospital.org</dd><dt>Target</dt><dd>Septic shock on the ward · v2</dd><dt>Before</dt><dd>Published</dd><dt>After</dt><dd>Withdrawn</dd></dl></aside>
+    </div></div></div>
+</template>
+
+<template id="t-admin-confirm">
+  <div class="app" style="position:relative;min-height:760px"><header class="app-bar" data-bar="admin"></header>
+    <div class="overlay-scrim center">
+      <div class="dialog stack" role="alertdialog" aria-modal="true" aria-labelledby="ac-h">
+        <span class="xs muted">Step 2 of 2</span>
+        <h2 id="ac-h" style="font-size:var(--t-lg)">Verify your email code</h2>
+        <p class="small">We sent a six-digit code to <strong>owner@hospital.org</strong> to confirm: <strong>End room · MVC with tension pneumothorax</strong>.</p>
+        <div class="field"><label for="ac-c">Verification code</label><input id="ac-c" class="input mono" inputmode="numeric" maxlength="6" style="max-width:12rem;letter-spacing:.3em"></div>
+        <div class="row" style="justify-content:flex-end"><button class="btn quiet">Cancel</button><button class="btn danger">Confirm action</button></div>
+      </div>
+    </div></div>
+</template>
+
+<!-- ═════════════════════════ AUTHOR ═════════════════════════ -->
+<template id="t-editor">
+  <div class="app"><header class="app-bar" data-bar="facilitator" data-ctx="Editor"></header>
+    <div class="page"><div class="split" style="grid-template-columns:minmax(0,1fr) 360px">
+      <div class="stack stack-lg">
+        <div class="stack stack-sm"><span class="tag">Draft · v4</span><h1>Case details</h1><p class="muted small">Library information. These fields already exist in the case document; the library does not show them yet.</p></div>
+        <div class="field"><label for="ed-t">Title</label><input id="ed-t" class="input" value="MVC with tension pneumothorax" data-live-title></div>
+        <div class="field"><label for="ed-s">Summary</label><textarea id="ed-s" class="input" rows="3" data-live-summary>A motorcyclist arrives short of breath after a collision. The team must recognise tension physiology from the bedside findings and decompress before imaging.</textarea><span class="counter" style="align-self:flex-end">152 of 1200</span></div>
+        <div class="row" style="--gap:var(--sp-5);align-items:start">
+          <div class="field grow"><label for="ed-a">Audience</label><input id="ed-a" class="input" value="Junior doctors"></div>
+          <div class="field grow"><label for="ed-se">Setting</label><input id="ed-se" class="input" value="Emergency department"></div>
+        </div>
+        <fieldset class="stack stack-sm" style="border:0;padding:0;margin:0"><legend class="small" style="font-weight:600">Length</legend><div class="segmented"><button aria-pressed="true">15 min</button><button>45 min</button></div></fieldset>
+        <div class="field"><label for="ed-g">Group</label><select id="ed-g" class="input" disabled><option>Emergency</option></select><p class="hint">Set by an administrator.</p></div>
+      </div>
+      <aside class="stack">
+        <div class="cover" style="border-radius:var(--radius)"><div data-live-cover data-mosaic='{"format":"canvas","descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"mvc","group":"petrol"}'></div></div>
+        <p class="small muted">Edit the title or summary: the shade of the tesserae shifts, and the paths stay put. Editing the authored paths changes the structure. Publishing fixes this artwork to the version.</p>
+      </aside>
+    </div></div></div>
+</template>
+
+<script type="module">
+import { hydrateMarks, hydrateQr, initTheme, MARKS, normalizeCode, formatCode } from './design/kit.mjs';
+
+/* ── state registry: one row per mockup. prov: live | source | proposed ──────────────── */
+const S = [
+  // participant
+  { id: 'home', role: 'Participant', title: 'Home · join your room', frame: 'desktop', prov: 'proposed',
+    changed: ['Root becomes participant-first for everyone, signed in or not. Today "/" is facilitator sign-in plus "Your cases".', 'One large room-code field and Continue. Full-splash mosaic with the structure composed to the right of the form.'],
+    kept: ['Join semantics unchanged. /J/<code> QR links still go straight to the name step.', 'Shipped normalizeCode: try typing "a7k-2m9".'],
+    risk: ['Needs a routing change in app.mjs and a Turnstile document-boundary review (spec §4).'] },
+  { id: 'home-phone', role: 'Participant', title: 'Home · phone', frame: 'phone', prov: 'proposed',
+    changed: ['The form sits at the top; the art fills around and below it. Code and Continue fit the first viewport at 320×568.'], kept: ['Same input component as desktop.'] },
+  { id: 'code-error', role: 'Participant', title: 'Home · code refused', frame: 'phone', prov: 'source',
+    changed: ['The refusal sits under the field it refers to, with the typed value kept.'], kept: ['Exact shipped refusal strings (phone.mjs:158, 506–516).'] },
+  { id: 'menu', role: 'Participant', title: 'Menu & appearance', frame: 'desktop', prov: 'proposed',
+    changed: ['One menu for every role. Before: separate "Facilitator sign in" and "Administrator sign in" buttons. After: one sign-in entry, with Administration listed only for entitled accounts.', 'Light / Dark / Auto as labelled radio cards.'],
+    kept: ['Account sign-out moves here from the content column.'], risk: ['Appearance is new client work. The tokens already support data-theme, so the cost is a control plus pre-paint script.'] },
+  { id: 'join', role: 'Participant', title: 'Join · name and avatar', frame: 'phone', prov: 'live',
+    changed: ['Before: the code, name and all 16 avatars came before "Join case". After: the code is confirmed in one line, the avatar is preassigned with "Change avatar" folded away, and Join case sits in the first scroll.', 'Label "Display name" corrected to the shipped "Your name".'],
+    kept: ['3–20 character rules and counter, patient-details warning, Randomise, the lobby visibility line, Privacy link, Turnstile area (appears only after repeated wrong codes).'] },
+  { id: 'waiting', role: 'Participant', title: 'Waiting lobby', frame: 'phone', prov: 'live',
+    changed: ['Full-splash case artwork (topology only, approved exception) around an opaque status panel.'], kept: ['Shipped copy: "Waiting to start", "The case starts when the facilitator is ready. Keep this page open.", Change name or avatar.'], risk: ['No case title on the phone: the live lobby does not show one.'] },
+  { id: 'material', role: 'Participant', title: 'Revealed material', frame: 'phone', prov: 'live',
+    changed: ['Vitals become one ruled strip in mono numerals; findings become a list.'], kept: ['Header: avatar, name, phase pill, menu. Timeline with Earlier / Live labels.'] },
+  { id: 'decision', role: 'Participant', title: 'Decision · single choice', frame: 'phone', prov: 'live',
+    changed: ['Options are full-width tinted tiles with the shipped mark tiles; selection adds an ink ring and a check.'], kept: ['Situation disclosure, Team decision, advisory timer, Send answer, option order and marks.'] },
+  { id: 'decision-multi', role: 'Participant', title: 'Decision · multi-select', frame: 'phone', prov: 'source',
+    changed: ['Square check affordance distinguishes multi from single.'], kept: ['"Choose all that apply"; Send answer.'] },
+  { id: 'decision-rank', role: 'Participant', title: 'Decision · ranking', frame: 'phone', prov: 'source',
+    changed: ['Before (old gallery): reorder-only list. After: the shipped add-then-order model, "Add 1 option below, then put them in order."'], kept: ['Named 44 px Move and Remove buttons; drag never required.'] },
+  { id: 'decision-text', role: 'Participant', title: 'Decision · free text', frame: 'phone', prov: 'source',
+    changed: ['Counter uses the shipped "{n} of {max}" form; the max shown is illustrative.'], kept: ['Free text never projects ("answers stay with the facilitator").'] },
+  { id: 'saved', role: 'Participant', title: 'Answer saved + receipt states', frame: 'phone', prov: 'live',
+    changed: ['Receipts are one icon-and-text line in a fixed slot. Before: an invented "Know where your answer stands" page with three cards.'], kept: ['Shipped receipt strings; never "saved" before the server receipt; Change answer.'] },
+  { id: 'locked', role: 'Participant', title: 'Voting locked', frame: 'phone', prov: 'live',
+    kept: ['Own answer or "no answer was recorded from this phone"; identical through route selection (invariant: a chosen route is invisible until revealed).'] },
+  { id: 'paused', role: 'Participant', title: 'Discussion pause', frame: 'phone', prov: 'source', kept: ['"Paused · the facilitator will resume the room"; held answer.'] },
+  { id: 'result', role: 'Participant', title: 'Room result + consequence', frame: 'phone', prov: 'live',
+    kept: ['Own choice, same-choice count, facilitator\'s authored route, revealed consequence. No scores, no winners.'] },
+  { id: 'recap', role: 'Participant', title: 'Private recap', frame: 'phone', prov: 'live',
+    changed: ['Expiry names its scope: online access ends at the time; a downloaded PDF is the person\'s own copy.', 'Classification is a text tag; No answer is neutral, never styled as wrong.'],
+    kept: ['All shipped sections in order; Download recap (PDF) and Print recap.'], risk: ['Source: Download recap (PDF) currently calls window.print(). A real PDF exporter is separate work.'] },
+  { id: 'profile', role: 'Participant', title: 'Name and avatar editor', frame: 'phone', prov: 'live', kept: ['Avatar colour (8) and shape (16), Save changes with Saving… / Changes saved statuses.'] },
+  { id: 'help', role: 'Participant', title: 'Help', frame: 'desktop', prov: 'proposed', changed: ['Role tabs; explains room code vs shared-computer code.', 'The simulation disclaimer lives here once, not on every slide.'] },
+  { id: 'privacy', role: 'Participant', title: 'Privacy', frame: 'desktop', prov: 'source', kept: ['Shipped notice wording; layout only.'] },
+  // facilitator
+  { id: 'signin', role: 'Facilitator', title: 'Sign in', frame: 'desktop', prov: 'source',
+    changed: ['Before (old gallery): one "Send sign-in code" path. After: both shipped paths, Send code with One-time code + Sign in, and Email sign-in link.'],
+    kept: ['"Keep me signed in on this phone" (phone-eligible only, off by default); shipped status strings.'] },
+  { id: 'library', role: 'Facilitator', title: 'Cases · grid', frame: 'desktop', prov: 'proposed',
+    changed: ['Before: per-workspace sections of titles with full-width "Start room" buttons, "Approve a PC" and "Load testing" in the same column. After: one catalogue with a workspace picker, search, group filter, sort and three views. Cards are a single link; Start room moves to case detail.', 'Five covers per row at 1440, not two.'],
+    kept: ['Pilot-pin warnings stay on the card that has them.', 'Honest paging: "Showing 8 of 23".'],
+    risk: ['Paediatric seizure shows a summarised cover (10 decisions × 3): tally tesserae count the hidden routes, with no text label.', 'Summary, audience and duration exist in the case document but the versions RPC returns only title, version, date and hash. Exposing them is backend work.', 'Load-testing workspaces belong to operators; the picker labels them, it does not mix them in.'] },
+  { id: 'library-table', role: 'Facilitator', title: 'Cases · table', frame: 'desktop', prov: 'proposed', changed: ['Sortable headers with aria-sort; sort is server-side over the whole set.'] },
+  { id: 'library-board', role: 'Facilitator', title: 'Cases · board', frame: 'desktop', prov: 'proposed',
+    changed: ['Before: "Group" filter, "Group by" select and a Kanban button all at once. After: the board has one Columns control (Group, Length, Audience); grid and table use the group filter.'], kept: ['Covers keep the case\'s group tint in every column arrangement.'] },
+  { id: 'case-detail', role: 'Facilitator', title: 'Case detail', frame: 'desktop', prov: 'proposed',
+    changed: ['Before (old gallery): case detail → separate "Set up your room" page with a projector-topology picker that does not exist. After: Start room goes straight to the lobby, as the app does today; the display check lives there.'], kept: ['Pilot pin state; Start room authority unchanged.'] },
+  { id: 'console-lobby', role: 'Facilitator', title: 'Console · lobby', frame: 'desktop', prov: 'live',
+    changed: ['Mute same-PC projector moves from a full-width banner on every state into a header chip.', 'Display check is the visible blocker; Start case waits in the dock with its reason.'], kept: ['Start case gated by the display check; Run / Room tabs.'] },
+  { id: 'console-live', role: 'Facilitator', title: 'Console · live surface', frame: 'desktop', prov: 'live',
+    changed: ['Before: seven bordered panels including an empty "State / Next" box. After: two columns, Room sees and Only you, separated by a rule; the next action is in the dock.'], kept: ['Presentation Back / Live surface / Forward; Pause for discussion; Open responses.'] },
+  { id: 'console-open', role: 'Facilitator', title: 'Console · responses open', frame: 'desktop', prov: 'live',
+    kept: ['Answered count only; no split while open. Void round, Pause, Lock responses & review.'] },
+  { id: 'console-locked', role: 'Facilitator', title: 'Console · locked, chart showing', frame: 'desktop', prov: 'live',
+    changed: ['Routes become a ruled list instead of four tinted cards; "Select route" is a quiet button per row.'], kept: ['Suggestion line ends "you choose the route". Reopen as new round stays a new round. Hide responses on projector beside the chart it hides.'] },
+  { id: 'console-selected', role: 'Facilitator', title: 'Console · route chosen, chart still showing', frame: 'desktop', prov: 'live',
+    kept: ['Reveal is blocked while the chart shows: the dock says why, and the button that clears the block sits next to the chart.'] },
+  { id: 'console-ready', role: 'Facilitator', title: 'Console · ready to reveal', frame: 'desktop', prov: 'live', kept: ['"Reveal: {preview}" in the dock; phones and projector unchanged.'] },
+  { id: 'console-armed', role: 'Facilitator', title: 'Console · reveal armed', frame: 'desktop', prov: 'source',
+    changed: ['The armed state gets coral fill and a status line. Before: missing from the gallery.'], kept: ['Shipped two-step "Show to room?" with a 3-second window.'] },
+  { id: 'console-consequence', role: 'Facilitator', title: 'Console · consequence shown', frame: 'desktop', prov: 'live',
+    changed: ['Show names on projector moved back to the Room tab, where the app has it. Before: a checkbox on the Run tab.'] },
+  { id: 'console-room', role: 'Facilitator', title: 'Console · Room tab', frame: 'desktop', prov: 'live',
+    changed: ['"Use a shared computer" (today "Approve a PC" on the library page) joins the room it applies to, next to display pairing. Approving from inside a room preselects that room.', 'Quiet buttons keep a dense tab from turning petrol.'],
+    kept: ['People rename and remove, Close joining, Show names, display window, display check, manual open, Approve display, timer settings, Manual room, Take over, End room.'],
+    risk: ['Today approval picks from a list of your active rooms. Room-scoped entry needs a small client change; the library entry can stay until it ships.'] },
+  { id: 'console-pair', role: 'Facilitator', title: 'Shared computer confirmation', frame: 'desktop', prov: 'source',
+    kept: ['Browser, coarse location, requested and expiry shown before approval; takeover fences this console.'] },
+  { id: 'console-end', role: 'Facilitator', title: 'End room', frame: 'desktop', prov: 'source', kept: ['Explains what participants and projector see after ending.'] },
+  { id: 'console-manual', role: 'Facilitator', title: 'Manual room mode', frame: 'desktop', prov: 'source', kept: ['Shipped manual controls and banner copy.'] },
+  // projector
+  { id: 'proj-lobby', role: 'Projector', title: 'Projector · lobby', frame: 'projector', prov: 'live',
+    changed: ['Before: code wrapped onto two lines, art visible only at the edges. After: code on one line in mono at 9vw, QR at 22vh on white, art composed into the right third.'], kept: ['One case title, 3+3 code, URL, QR, roster, Room sound.'], risk: ['QR is illustrative. Scan distance and projector fit need a real device check.'] },
+  { id: 'proj-lobby-crowded', role: 'Projector', title: 'Projector · long title, 48 people', frame: 'projector', prov: 'source',
+    changed: ['Long titles step down to 44 px before the code shrinks. The roster tray caps at two rows with "+ N more".'] },
+  { id: 'proj-material', role: 'Projector', title: 'Projector · live surface', frame: 'projector', prov: 'live', kept: ['Findings overflow "+N more on your phone"; footer QR, code, roster, Room sound while joining is open.'] },
+  { id: 'proj-decision', role: 'Projector', title: 'Projector · decision open', frame: 'projector', prov: 'live',
+    changed: ['Option marks at 52 px. Before: about 12 px glyphs. Options fill the right column; the context column is condensed.'], kept: ['"Team decision open · Choose on your phone" and the answered count; no split while open.'] },
+  { id: 'proj-results', role: 'Projector', title: 'Projector · anonymous results', frame: 'projector', prov: 'live', changed: ['Labels sit above bars so long options wrap without losing alignment.'] },
+  { id: 'proj-reviewing', role: 'Projector', title: 'Projector · reviewing (chart hidden)', frame: 'projector', prov: 'live', kept: ['Identical whether or not a route has been chosen.'] },
+  { id: 'proj-consequence', role: 'Projector', title: 'Projector · consequence, joining closed', frame: 'projector', prov: 'live', kept: ['"Joining is closed" replaces the QR invitation in the footer.'] },
+  { id: 'proj-ended', role: 'Projector', title: 'Projector · session ended', frame: 'projector', prov: 'source', kept: ['Shipped copy. The observed "Connecting / Waiting" after end is a runtime bug, not designed away here.'] },
+  // admin
+  { id: 'admin-denied', role: 'Administrator', title: 'Access denied', frame: 'desktop', prov: 'live', changed: ['Separates signed-in-but-not-admin from signed out; names the account; no OTP loop.'] },
+  { id: 'admin-facilitators', role: 'Administrator', title: 'Facilitators', frame: 'desktop', prov: 'source',
+    changed: ['Before (old gallery): names, "Last active", "Suspended", a View button. After: the shipped fields and actions.'], kept: ['Find by email, Invite facilitator, Resend invitation, Enable / Disable, Soft delete, Restore.'] },
+  { id: 'admin-cases', role: 'Administrator', title: 'Cases', frame: 'desktop', prov: 'source',
+    changed: ['Adds a Group column and Change group (new). Before: a "Review" button opening the editor, which admin cannot do.'], kept: ['Withdraw / Republish with version, status and revision.'] },
+  { id: 'admin-groups', role: 'Administrator', title: 'Groups', frame: 'desktop', prov: 'proposed', risk: ['New schema, RPCs, audit events and authorization. One group per case (Julian, 2026-10-06).'] },
+  { id: 'admin-group-edit', role: 'Administrator', title: 'Group detail & tint', frame: 'desktop', prov: 'proposed', changed: ['Tint is one of ten curated choices (Julian, 2026-10-06), each pre-validated at 3:1 against every path pigment in both themes, and previewed on a real cover in both themes. No free colour picker.'] },
+  { id: 'admin-archive', role: 'Administrator', title: 'Archive group', frame: 'desktop', prov: 'proposed', kept: ['Reuses the shipped typed confirmation and email step-up.'] },
+  { id: 'admin-rooms', role: 'Administrator', title: 'Live rooms', frame: 'desktop', prov: 'source', kept: ['End room only; no answers or names.'] },
+  { id: 'admin-audit', role: 'Administrator', title: 'Audit', frame: 'desktop', prov: 'source', kept: ['Read-only Before / After.'] },
+  { id: 'admin-confirm', role: 'Administrator', title: 'Destructive step-up', frame: 'desktop', prov: 'source', kept: ['Type-to-confirm → Send verification code → six-digit code → Confirm action.'] },
+  // author
+  { id: 'editor', role: 'Author', title: 'Case details (library fields)', frame: 'desktop', prov: 'proposed',
+    changed: ['Type in the title or summary: the cover\'s shade evolves live while its paths stay put. This is the content-seed contract in action.'], kept: ['Fields are the existing case-document fields: summary ≤ 1200, audience, setting, duration 15 or 45.'], risk: ['Before (old gallery): free "Length in minutes" and "Additional groups". Both contradicted the schema or the one-group ruling.'] },
+];
+
+/* ── synthetic catalogue (titles invented; fields mirror case-document.mjs) ── */
+const GROUP_TINT = { Emergency: 'petrol', 'Critical care': 'coral', Anaesthesia: 'periwinkle', Ungrouped: 'neutral' };
+const swatchOf = (t) => { const g = CaseMosaic.GROUPS[t]; return t === 'neutral' ? 'transparent' : `hsl(${g.h} ${g.s + 14}% 72%)`; };
+const GROUP_SWATCH = new Proxy({}, { get: (_, g) => swatchOf(GROUP_TINT[g] || 'neutral') });
+const CASES = [
+  { t: 'MVC with tension pneumothorax', d: 'A motorcyclist arrives short of breath. Recognise tension physiology and decompress before imaging.', g: 'Emergency', len: 15, aud: 'Junior doctors', v: 'v3 · 2 Oct', s: 'rejoin', seed: 'mvc-tension' },
+  { t: 'Septic shock on the ward', d: 'Fluids, vasopressors and escalation when the first response falls short.', g: 'Critical care', len: 45, aud: 'Registrars', v: 'v2 · 28 Sep', s: 'diverge', seed: 'sepsis', pilot: true },
+  { t: 'Can\'t intubate, can\'t oxygenate', d: 'A rapid sequence induction goes wrong. Who calls the front-of-neck access, and when?', g: 'Anaesthesia', len: 15, aud: 'Anaesthesia trainees', v: 'v5 · 1 Oct', s: 'endings', seed: 'cico' },
+  { t: 'Upper GI bleed overnight', d: 'Haematemesis in a patient on anticoagulation. Balance reversal, transfusion and endoscopy.', g: 'Emergency', len: 45, aud: 'Mixed experience', v: 'v1 · 30 Sep', s: 'nested', seed: 'ugib' },
+  { t: 'Post-operative delirium', d: 'Agitation on day two after hip surgery. Separate cause from symptom.', g: 'Critical care', len: 15, aud: 'Nurses and doctors', v: 'v2 · 25 Sep', s: 'spine', seed: 'delirium' },
+  { t: 'Anaphylaxis in recovery', d: 'Hypotension and wheeze minutes after antibiotics. Act before the full picture is clear.', g: 'Anaesthesia', len: 15, aud: 'Recovery teams', v: 'v1 · 3 Oct', s: 'diverge', seed: 'anaphylaxis' },
+  { t: 'Paediatric seizure', d: 'A child is still seizing at ten minutes. Second-line choices and airway timing.', g: 'Emergency', len: 45, aud: 'Paediatric registrars', v: 'v3 · 20 Sep', s: 'rejoin', seed: 'peds-seizure', summarised: true },
+  { t: 'Untitled draft', d: '', g: 'Ungrouped', len: null, aud: '', v: 'v1 · 4 Oct', s: 'dense', seed: 'draft-x', unavailable: true },
+];
+// Synthetic descriptors with real-case shapes (decisions × alternatives, resets); the MVC card uses the real
+// fixture's descriptor. Covers render to canvas (Julian, 2026-10-06).
+const MVC_DESC = {"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]};
+const syn = (nd, alts, re) => ({ v: 1, stops: nd + 2, decisions: Array.from({ length: nd }, (_, i) => ({ stop: i + 1, strands: Array.from({ length: alts }, () => ({ rejoin: i + 2 })), resets: re && i % re === 0 ? 1 : 0, ends: 0 })) });
+const DESC = { mvc: MVC_DESC, sepsis: syn(6, 2, 3), cico: syn(3, 2, 1), ugib: syn(5, 2, 2), delirium: syn(3, 1, 0), anaphylaxis: syn(4, 2, 0), 'peds-seizure': syn(10, 3, 2) };
+const mosaicCfg = (c, base) => JSON.stringify({ format: 'canvas', descriptor: DESC[c.seed === 'mvc-tension' ? 'mvc' : c.seed] || syn(4, 2, 0), seed: c.seed, group: GROUP_TINT[c.g], base, content: c.t });
+const el = (tag, attrs = {}, ...kids) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) { if (k === 'class') n.className = v; else if (k === 'style') n.style.cssText = v; else n.setAttribute(k, v); } for (const k of kids) if (k != null) n.append(k); return n; };
+const coverEl = (c, base, extra = '') => c.unavailable ? el('div', { class: 'cover unavailable ' + extra }, el('span', { class: 'xs' }, 'Artwork unavailable')) : el('div', { class: 'cover ' + extra }, el('div', { 'data-mosaic': mosaicCfg(c, base) }));
+const chip = (g) => el('span', { class: 'group-chip', style: '--g:' + GROUP_SWATCH[g] }, el('i'), g);
+const meta = (c) => el('div', { class: 'meta' }, el('span', {}, c.len ? c.len + ' min' : 'Length not set'), c.aud ? el('span', {}, c.aud) : null, c.pilot ? el('span', { class: 'tag warn' }, 'Pilot not verified') : null);
+
+function catalogue(root) {
+  const grid = root.querySelector('[data-catalog="grid"]');
+  if (grid) {
+    const draw = () => {
+      const q = (root.querySelector('[data-catalog-search]')?.value || '').toLowerCase();
+      const g = root.querySelector('[data-group-filter] [aria-pressed="true"]')?.dataset.g || 'all';
+      const sort = root.querySelector('[data-catalog-sort]')?.value || 'title';
+      let list = CASES.filter((c) => (g === 'all' || c.g === g) && (!q || (c.t + c.d + c.aud).toLowerCase().includes(q)));
+      list = list.slice().sort((a, b) => sort === 'length' ? (a.len || 999) - (b.len || 999) : sort === 'recent' ? b.v.localeCompare(a.v) : a.t.localeCompare(b.t));
+      grid.replaceChildren(...list.map((c) => el('article', { class: 'case-card' }, coverEl(c, 280),
+        el('div', { class: 'stack stack-sm' }, chip(c.g), el('h3', {}, el('a', { href: '#', 'data-go': 'case-detail' }, c.t)), el('p', { class: 'desc' }, c.d || 'No description'), meta(c)))));
+      if (!list.length) grid.replaceChildren(el('p', { class: 'empty', style: 'grid-column:1/-1' }, 'No cases match. ', el('button', { class: 'btn tertiary', 'data-reset': '' }, 'Clear search and filters')));
+      CaseMosaic.paintAll(grid);
+    };
+    root.querySelector('[data-catalog-search]')?.addEventListener('input', draw);
+    root.querySelector('[data-catalog-sort]')?.addEventListener('change', draw);
+    root.querySelector('[data-group-filter]')?.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; b.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); draw(); });
+    root.addEventListener('click', (e) => { if (e.target.closest('[data-reset]')) { root.querySelector('[data-catalog-search]').value = ''; root.querySelector('[data-group-filter] [data-g="all"]').click(); } });
+    draw();
+  }
+  const table = root.querySelector('[data-catalog="table"] tbody');
+  if (table) {
+    let key = 'title', dir = 1;
+    const val = (c) => ({ title: c.t, group: c.g, length: c.len || 999, audience: c.aud || '~', version: c.v })[key];
+    const draw = () => {
+      const list = CASES.slice().sort((a, b) => (val(a) > val(b) ? 1 : val(a) < val(b) ? -1 : 0) * dir);
+      table.replaceChildren(...list.map((c) => el('tr', {}, el('td', {}, coverEl(c, 120, '')), el('td', {}, el('a', { href: '#', 'data-go': 'case-detail', style: 'font-weight:600;color:var(--ink);text-decoration:none' }, c.t), el('div', { class: 'xs muted' }, c.d)), el('td', {}, chip(c.g)), el('td', { class: 'num' }, c.len ? c.len + ' min' : '—'), el('td', {}, c.aud || '—'), el('td', {}, c.v, c.pilot ? el('div', {}, el('span', { class: 'tag warn' }, 'Pilot not verified')) : null))));
+      table.querySelectorAll('.cover').forEach((cv) => { cv.style.width = '44px'; });
+      CaseMosaic.paintAll(table);
+    };
+    root.querySelectorAll('[data-sort]').forEach((b) => b.addEventListener('click', () => {
+      const k = b.dataset.sort; dir = k === key ? -dir : 1; key = k;
+      root.querySelectorAll('th').forEach((th) => th.removeAttribute('aria-sort'));
+      root.querySelectorAll('[data-sort]').forEach((x) => { x.textContent = x.textContent.replace(/ [↑↓]$/, ''); });
+      b.closest('th').setAttribute('aria-sort', dir > 0 ? 'ascending' : 'descending'); b.textContent += dir > 0 ? ' ↑' : ' ↓'; draw();
+    }));
+    draw();
+  }
+  const board = root.querySelector('[data-catalog="board"]');
+  if (board) {
+    const draw = () => {
+      const by = root.querySelector('[data-board-by]').value;
+      const colKey = (c) => by === 'group' ? c.g : by === 'length' ? (c.len ? c.len + ' min' : 'Length not set') : (c.aud || 'Audience not set');
+      const cols = [...new Set(CASES.map(colKey))];
+      if (by === 'group') cols.sort((a, b) => (a === 'Ungrouped') - (b === 'Ungrouped'));
+      board.replaceChildren(...cols.map((k) => { const items = CASES.filter((c) => colKey(c) === k); return el('section', { class: 'board-col', 'aria-label': k }, el('header', {}, k, el('span', { class: 'muted' }, String(items.length))),
+        ...items.map((c) => el('article', { class: 'board-card' }, coverEl(c, 140), el('div', { class: 'stack stack-sm', style: 'min-width:0' }, el('h3', {}, el('a', { href: '#', 'data-go': 'case-detail' }, c.t)), el('p', { class: 'xs muted', style: 'display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden' }, c.d || 'No description'), meta(c))))); }));
+      CaseMosaic.paintAll(board);
+    };
+    root.querySelector('[data-board-by]').addEventListener('change', draw);
+    draw();
+  }
+}
+
+/* ── shared chrome inside product surfaces ── */
+const ICON_MENU = '<svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+function svgIcon(d) { const NS = 'http://www.w3.org/2000/svg'; const s = document.createElementNS(NS, 'svg'); s.setAttribute('class', 'ic'); s.setAttribute('viewBox', '0 0 24 24'); const p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); s.append(p); return s; }
+const menuBtn = () => { const b = el('button', { class: 'menu-btn', 'aria-label': 'Open menu', 'data-go': 'menu' }); b.append(svgIcon('M4 7h16M4 12h16M4 17h16')); return b; };
+const wordmark = () => { const w = el('span', { class: 'wordmark' }); const d = new DOMParser().parseFromString('<svg xmlns="http://www.w3.org/2000/svg" class="tessera" viewBox="0 0 16 16" aria-hidden="true"><rect width="7" height="7" rx="1"/><rect class="t2" x="9" width="7" height="7" rx="1"/><rect class="t3" y="9" width="7" height="7" rx="1"/><rect x="9" y="9" width="7" height="7" rx="1"/></svg>', 'image/svg+xml'); w.append(document.importNode(d.documentElement, true), 'CASE'); return w; };
+function bars(root) {
+  root.querySelectorAll('[data-bar]').forEach((h) => {
+    const kind = h.dataset.bar, ctx = h.dataset.ctx;
+    const ctxEl = el('div', { class: 'ctx' });
+    const end = el('div', { class: 'end' });
+    if (kind === 'facilitator' || kind === 'admin') {
+      ctxEl.append(el('span', { class: 'ctx-title' }, kind === 'admin' ? 'Administration' : (ctx || '')));
+      end.append(el('span', { class: 'small muted' }, 'j.ming@hospital.org'));
+    }
+    if (kind === 'console') {
+      ctxEl.append(el('div', { class: 'cover', style: 'width:32px;flex:none;border-radius:4px' }, el('div', { 'data-mosaic': JSON.stringify({ format: 'canvas', descriptor: MVC_DESC, seed: 'mvc', group: 'petrol', base: 120 }) })), el('span', { class: 'ctx-title' }, 'MVC with tension pneumothorax'));
+      end.append(el('span', { class: 'audio-chip', title: 'Mute same-PC projector' }, '♪ Projector sound: on'), el('span', { class: 'conn' }, 'Live'));
+    }
+    h.replaceChildren(wordmark(), ctxEl, end);
+    end.append(menuBtn());
+  });
+  root.querySelectorAll('[data-pbar]').forEach((b) => {
+    b.replaceChildren(el('div', { class: 'me' }, el('img', { class: 'avatar', src: '../public/avatars/shadows-05-teal.svg', width: '32', height: '32', alt: '' }), el('span', {}, 'Robin')), el('span', { class: 'pill', 'data-phase': b.dataset.phase }, b.dataset.pbar), menuBtn());
+  });
+  root.querySelectorAll('[data-chead]').forEach((h) => {
+    const c = JSON.parse(h.dataset.chead);
+    h.replaceChildren(el('div', { class: 'beat' }, el('h1', {}, c.beat), el('span', { class: 'pill', 'data-phase': c.phase }, c.pill)), el('div', { class: 'facts' }, ...c.facts.map((f) => el('span', {}, f))));
+  });
+  root.querySelectorAll('[data-ctabs]').forEach((t) => {
+    const a = el('button', { role: 'tab', 'aria-selected': String(t.dataset.ctabs === 'run'), 'data-go': 'console-live' }, 'Run');
+    const b = el('button', { role: 'tab', 'aria-selected': String(t.dataset.ctabs === 'room'), 'data-go': 'console-room' }, 'Room', el('span', { class: 'count' }, '· ' + t.dataset.count));
+    t.replaceChildren(a, b);
+  });
+  root.querySelectorAll('[data-admin-nav]').forEach((n) => {
+    const cur = n.dataset.adminNav;
+    n.replaceChildren(...[['facilitators', 'Facilitators'], ['cases', 'Cases'], ['groups', 'Groups'], ['rooms', 'Live rooms'], ['audit', 'Audit']].map(([k, label]) => el('a', { href: '#', 'data-go': 'admin-' + k, class: 'btn ' + (k === cur ? '' : 'tertiary'), style: 'justify-content:flex-start' + (k === cur ? '' : ';color:var(--ink-muted)'), 'aria-current': k === cur ? 'page' : 'false' }, label, k === 'groups' ? el('span', { class: 'tag priv', style: 'margin-left:auto' }, 'new') : null)));
+  });
+}
+
+const ROUTES = [
+  ['Sound', 'ok', 'Immediate needle decompression', 'Decompressed: partial response'],
+  ['Defensible', 'sel', 'Finger thoracostomy, 4th/5th ICS', 'Finger thoracostomy: partial response'],
+  ['Unsafe · recoverable', 'warn', 'Chest X-ray before decompression', 'Waiting for the film: deterioration, then decompression'],
+  ['Terminal · needs a checkpoint reset', 'bad', 'RSI and intubate before decompression', 'Peri-arrest after induction'],
+];
+const GLYPH = { ok: 'M5 12l5 5 9-10', sel: 'M12 4v16M4 12h16', warn: 'M12 4l9 16H3z', bad: 'M6 6l12 12M18 6L6 18' };
+function routes(root) {
+  root.querySelectorAll('[data-routes]').forEach((list) => {
+    const sel = list.dataset.selected != null ? Number(list.dataset.selected) : -1;
+    list.replaceChildren(...ROUTES.map(([cls, k, title, outcome], i) => {
+      const row = el('div', { class: 'route', 'aria-selected': String(i === sel) });
+      const c = el('span', { class: 'cls' }); c.append(svgIcon(GLYPH[k]), cls);
+      row.append(el('div', { class: 'stack stack-sm' }, c, el('h4', {}, title), el('p', { class: 'if' }, el('span', { class: 'muted' }, 'If revealed: '), outcome)),
+        i === sel ? el('span', { class: 'tag sel' }, 'Chosen · private') : el('button', { class: 'btn quiet', 'data-go': 'console-selected' }, 'Select route'),
+        el('details', { class: 'disclose small' }, el('summary', {}, 'Private note · not shown to the room'), el('p', { class: 'muted', style: 'padding:0 0 var(--sp-2) var(--sp-5)' }, 'The authored teaching note, shown in full.')));
+      return row;
+    }));
+  });
+}
+const NAMES = ['Robin', 'Kai', 'Ana', 'Theo', 'Mei', 'Sam', 'Priya', 'Jonah', 'Lea', 'Omar', 'Zoe', 'Ravi', 'Ines', 'Tom', 'Aiko', 'Ben', 'Nora', 'Luis', 'Ada', 'Finn', 'Hana', 'Ivo', 'Jade', 'Kofi', 'Lina', 'Max', 'Nia', 'Oli', 'Pia', 'Quin'];
+const COLS = ['teal', 'blue', 'wine', 'olive', 'brown', 'green', 'purple', 'charcoal'];
+const avatar = (i) => `../public/avatars/shadows-${String((i % 16) + 1).padStart(2, '0')}-${COLS[i % 8]}.svg`;
+function people(root) {
+  root.querySelectorAll('[data-people]').forEach((p) => p.replaceChildren(...NAMES.slice(0, 5).map((n, i) => el('div', { class: 'person' }, el('img', { class: 'avatar', src: avatar(i), width: '32', height: '32', alt: '' }), el('span', { class: 'grow' }, n), el('button', { class: 'btn quiet', 'aria-label': 'Rename ' + n }, 'Rename'), el('button', { class: 'btn tertiary', 'aria-label': 'Remove ' + n + ' from room' }, 'Remove')))));
+  root.querySelectorAll('[data-roster]').forEach((r) => r.replaceChildren(...NAMES.slice(0, Number(r.dataset.roster)).map((n, i) => el('span', { class: 'who' }, el('img', { src: avatar(i), width: '32', height: '32', alt: '' }), n))));
+  root.querySelectorAll('[data-avatar-grid]').forEach((g) => g.replaceChildren(...Array.from({ length: 16 }, (_, i) => el('label', { class: 'avatar-pick', style: 'display:grid;place-items:center;aspect-ratio:1;border-radius:50%;cursor:pointer;' + (i === 4 ? 'box-shadow:0 0 0 3px var(--petrol)' : '') }, el('input', { type: 'radio', name: 'av-' + Math.random(), class: 'sr-only', 'aria-label': 'Avatar ' + (i + 1) }), el('img', { src: `../public/avatars/shadows-${String(i + 1).padStart(2, '0')}-teal.svg`, width: '36', height: '36', alt: '' })))));
+  root.querySelectorAll('[data-colour-row]').forEach((r) => r.replaceChildren(...['Wine', 'Brown', 'Olive', 'Green', 'Teal', 'Blue', 'Purple', 'Charcoal'].map((c) => el('label', { class: 'tag' + (c === 'Teal' ? ' sel' : ''), style: 'min-height:32px;cursor:pointer' }, el('input', { type: 'radio', name: 'colour', class: 'sr-only' }), c))));
+  root.querySelectorAll('[data-pfoot]').forEach((f) => {
+    const open = f.dataset.pfoot === 'open';
+    const kids = open
+      ? [el('div', { class: 'qr', 'data-qr': '' }), el('div', { class: 'join' }, el('span', { class: 'url' }, 'case.iatrogenic.app'), el('span', { class: 'room-code' }, 'A7K 2M9'))]
+      : [el('div', { class: 'join' }, el('span', { style: 'font-size:26px;font-weight:600' }, 'Joining is closed'))];
+    f.replaceChildren(...kids, el('div', { class: 'roster' }, ...NAMES.slice(0, 5).map((n, i) => el('span', { class: 'who anon' }, el('img', { src: avatar(i), width: '36', height: '36', alt: 'Participant' })))), el('span', { class: 'sound' }, '♪ Room sound'));
+  });
+}
+function admin(root) {
+  const cases = root.querySelector('[data-admin-cases]');
+  if (cases) cases.replaceChildren(...CASES.slice(0, 6).map((c, i) => el('tr', {}, el('td', {}, coverEl(c, 100)), el('td', {}, c.t), el('td', {}, c.v.split(' ·')[0]), el('td', {}, el('span', { class: 'tag ' + (i === 1 ? 'bad' : 'ok') }, i === 1 ? 'Withdrawn' : 'Published')), el('td', { class: 'num' }, String(3 + i)), el('td', {}, chip(c.g)), el('td', { class: 'row', style: 'justify-content:flex-end;flex-wrap:nowrap' }, el('button', { class: 'btn quiet' }, 'Change group'), i === 1 ? el('button', { class: 'btn quiet' }, 'Republish') : el('button', { class: 'btn danger', 'data-go': 'admin-confirm' }, 'Withdraw')))));
+  cases?.querySelectorAll('.cover').forEach((cv) => { cv.style.width = '36px'; });
+  const groups = root.querySelector('[data-admin-groups]');
+  if (groups) groups.replaceChildren(...[['Emergency', 'petrol', 12], ['Critical care', 'coral', 8], ['Anaesthesia', 'periwinkle', 5], ['Paediatrics', 'sage', 4], ['Ungrouped', 'neutral', 3]].map(([n, t, k]) => el('tr', {}, el('td', {}, el('div', { class: 'cover', style: 'width:40px' }, el('div', { 'data-mosaic': JSON.stringify({ format: 'canvas', descriptor: syn(4, 2, 0), seed: 'g-' + n, group: t, base: 100 }) }))), el('td', { style: 'font-weight:600' }, n), el('td', { class: 'small muted' }, n === 'Ungrouped' ? '—' : t[0].toUpperCase() + t.slice(1)), el('td', { class: 'num' }, String(k)), el('td', {}, n === 'Ungrouped' ? el('span', { class: 'xs muted' }, 'Built in') : el('button', { class: 'btn quiet', 'data-go': 'admin-group-edit' }, 'Edit')))));
+  const tints = root.querySelector('[data-tint-choices]');
+  if (tints) tints.replaceChildren(...Object.entries(CaseMosaic.GROUPS).map(([t, g]) => el('label', {}, el('input', { type: 'radio', name: 'tint', value: t, ...(t === 'petrol' ? { checked: '' } : {}) }), el('div', { class: 'cover', style: 'width:100%' }, el('div', { 'data-mosaic': JSON.stringify({ format: 'canvas', descriptor: MVC_DESC, seed: 'mvc', group: t, base: 120 }) })), g.name)));
+  const prev = root.querySelector('[data-tint-preview]');
+  if (prev) {
+    const draw = () => { const t = root.querySelector('input[name="tint"]:checked')?.value || 'petrol';
+      prev.replaceChildren(...['light', 'dark'].map((th) => { const o = CaseMosaic.render({ descriptor: MVC_DESC, seed: 'mvc', group: t, theme: th, width: 300, height: 300 }); const d = el('div', { class: 'cover', style: 'width:50%' }); const doc = new DOMParser().parseFromString(o.svg, 'image/svg+xml'); d.append(document.importNode(doc.documentElement, true)); return el('figure', { style: 'margin:0;flex:1' }, d, el('figcaption', { class: 'xs muted', style: 'margin-top:4px' }, th === 'light' ? 'Light' : 'Dark')); })); prev.querySelectorAll('.cover').forEach((c) => { c.style.width = '100%'; }); };
+    root.addEventListener('change', (e) => { if (e.target.name === 'tint') draw(); }); draw();
+  }
+}
+function interactions(root) {
+  root.querySelectorAll('[data-mk]').forEach((n) => { n.style.setProperty('--mk', `var(--mark-${MARKS[Number(n.dataset.mk)].colour})`); });
+  root.querySelectorAll('[data-code-input]').forEach((inp) => {
+    const hint = inp.closest('.field').querySelector('[data-code-hint]');
+    inp.addEventListener('input', () => { const raw = inp.value.replace(/[\s-]/g, ''); const n = normalizeCode(inp.value, 6); hint.textContent = !raw ? 'Six characters. Spaces and hyphens are fine.' : n ? 'Room ' + formatCode(n) + ' · press Continue' : raw.length < 6 ? raw.length + ' of 6 characters' : 'That is not a room code'; });
+  });
+  const title = root.querySelector('[data-live-title]'), summary = root.querySelector('[data-live-summary]'), cover = root.querySelector('[data-live-cover]');
+  if (cover) { const upd = () => { const cfg = JSON.parse(cover.getAttribute('data-mosaic')); cfg.content = title.value + '\n' + summary.value; cover.setAttribute('data-mosaic', JSON.stringify(cfg)); CaseMosaic.paint(cover); }; title.addEventListener('input', upd); summary.addEventListener('input', upd); }
+}
+
+/* ── gallery shell ── */
+const params = new URLSearchParams(location.search);
+const present = params.get('present') === '1';
+if (present) document.documentElement.classList.add('present');
+const content = document.getElementById('content'), frame = document.getElementById('frame');
+let current = null, frameOverride = null;
+const PROV = { live: ['live', 'Observed in the live room, restyled'], source: ['source', 'From source, not seen live'], proposed: ['proposed', 'Proposed: needs new production work'] };
+
+function nav() {
+  const host = document.getElementById('nav-list'); let role = null;
+  for (const s of S) {
+    if (s.role !== role) { role = s.role; host.append(el('p', { class: 'label-caps role' }, role)); }
+    host.append(el('button', { class: 's', 'data-go': s.id }, el('i', { class: 'dot ' + s.prov }), s.title));
+  }
+}
+function scaleProjector() {
+  const sc = frame.querySelector('.scaler');
+  if (!sc) { frame.style.height = ''; return; }
+  const w = frame.clientWidth;
+  const h = present ? innerHeight : Math.round(w * 9 / 16);
+  if (!present) frame.style.height = (h + 16) + 'px';   // + 2 × 8px frame border
+  const k = Math.min(w / 1920, (present ? innerHeight : h) / 1080);
+  sc.style.transform = `scale(${k})`;
+}
+function show(id, push = true) {
+  const s = S.find((x) => x.id === id) || S[0]; current = s;
+  const fr = frameOverride || s.frame;
+  frame.className = 'frame ' + fr;
+  const tpl = document.getElementById('t-' + s.id).content.cloneNode(true);
+  if (fr === 'projector' && s.frame === 'projector') { const sc = el('div', { class: 'scaler' }); sc.append(tpl); content.replaceChildren(sc); } else content.replaceChildren(tpl);
+  bars(content); routes(content); people(content); catalogue(content); admin(content); interactions(content);
+  hydrateMarks(content); hydrateQr(content);
+  requestAnimationFrame(() => { scaleProjector(); CaseMosaic.paintAll(content); });
+  document.getElementById('s-title').textContent = s.role + ' · ' + s.title;
+  const p = PROV[s.prov]; const prov = document.getElementById('s-prov'); prov.replaceChildren(el('i', { class: 'dot ' + p[0] }), p[1]);
+  document.querySelectorAll('.g-nav button.s').forEach((b) => b.setAttribute('aria-current', String(b.dataset.go === s.id)));
+  document.querySelectorAll('#frame-switch button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.frame === fr)));
+  const notes = document.getElementById('notes'); notes.replaceChildren();
+  const block = (h, items) => { if (!items || !items.length) return; notes.append(el('div', {}, el('h2', {}, h), el('ul', {}, ...items.map((t) => el('li', {}, t))))); };
+  block('What changed (before → after)', s.changed); block('Kept exactly', s.kept); block('Risks and dependencies', s.risk);
+  if (!notes.children.length) notes.append(el('p', {}, 'No change from the live behaviour; restyled with the system only.'));
+  document.getElementById('present-link').href = '?present=1&state=' + s.id + (frameOverride ? '&frame=' + frameOverride : '');
+  if (push) history.replaceState(null, '', '?' + (present ? 'present=1&' : '') + 'state=' + s.id + (frameOverride ? '&frame=' + frameOverride : ''));
+  content.scrollTop = 0;
+}
+// Living mosaic: a tap anywhere on an arrival or lobby surface sends a ripple through its art. Covers are canvas and stay still.
+content.addEventListener('pointerdown', (e) => { const sp = e.target.closest('.splash'); const art = sp && sp.querySelector('.splash-art > [data-mosaic]'); if (art) CaseMosaic.ripple(art, e.clientX, e.clientY); });
+document.addEventListener('click', (e) => {
+  const go = e.target.closest('[data-go]');
+  if (go) { e.preventDefault(); frameOverride = null; show(go.dataset.go); return; }
+  const f = e.target.closest('[data-frame]');
+  if (f) { frameOverride = f.dataset.frame === current.frame ? null : f.dataset.frame; show(current.id); }
+});
+addEventListener('resize', scaleProjector);
+initTheme(); nav();
+frameOverride = params.get('frame');
+show(params.get('state') || 'home', false);
+</script>
+</body>
+</html>

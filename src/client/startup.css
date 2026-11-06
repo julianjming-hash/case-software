@@ -1,0 +1,28 @@
+/* Static, public first paint. A mounted surface immediately replaces this section;
+   no renderer, motion, private data or minimum dwell is needed. */
+main.startup-splash:has(> .startup-panel) {
+  min-height: 100dvh; max-width: none; margin: 0; padding: var(--sp-5);
+  display: grid; place-items: center; background: var(--ground);
+}
+.startup-panel { display: grid; justify-items: center; gap: var(--sp-4); width: min(100%, 28rem); text-align: center; }
+.startup-panel h1 { font-size: var(--t-3xl); letter-spacing: .14em; }
+.startup-panel > p { color: var(--ink-muted); }
+.startup-mark { width: 3rem; height: 3rem; fill: var(--petrol); }
+.startup-mark rect:nth-child(2) { fill: var(--ink-muted); }
+.startup-mark rect:nth-child(3) { fill: var(--ink); }
+.startup-mark rect:nth-child(4) { fill: var(--petrol-deep); }
+.startup-help { width: 100%; color: var(--ink-muted); font-size: var(--t-sm); }
+/* Native details remains operable without JavaScript; the visible action names its state. */
+.startup-help summary { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); min-height: 44px; box-sizing: border-box; cursor: pointer; padding: var(--sp-2); list-style: none; text-align: left; }
+.startup-help summary::marker { content: ""; }
+.startup-help summary::-webkit-details-marker { display: none; }
+.startup-help summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.startup-help-action { flex: none; color: var(--petrol-ink); font-weight: var(--w-semibold); }
+.startup-help-hide, .startup-help[open] .startup-help-show { display: none; }
+.startup-help[open] .startup-help-hide { display: inline; }
+.startup-help p { margin: var(--sp-2) 0; }
+.startup-help a { display: inline-block; padding: var(--sp-2); }
+.startup-panel noscript p { max-width: 40ch; }
+/* With JavaScript disabled there is guidance rather than a perpetual loading promise. */
+.startup-panel noscript:has(> p) { display: block; }
+main.startup-splash:has(noscript > p) #startupStatus { display: none; }

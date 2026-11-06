@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case · Network check</title>
+<link rel="stylesheet" href="lib/tokens.css">
+<style>
+  /* The network self-test (spec red team 2, P1-4). Run it on the hospital PC and a phone on the hospital
+     Wi-Fi before the first session. It needs no room and sends no personal data. */
+  main { max-width: 760px; margin: 6vh auto; padding: 28px 32px; display: grid; gap: 16px; }
+  h1, h2, p { margin: 0; }
+  h1 { font: 500 32px/1.1 var(--sans); letter-spacing: -.03em; }
+  .lead { font-size: 18px; line-height: 1.45; }
+  .muted { color: var(--ink-muted); }
+  ol.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  ol.checks li { display: grid; grid-template-columns: 28px 1fr; gap: 4px 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+  ol.checks .mark { font-weight: 800; font-size: 18px; text-align: center; }
+  ol.checks h2 { font-size: 17px; }
+  ol.checks .result { grid-column: 2; font-size: 15px; line-height: 1.4; }
+  li[data-state="pass"] { border-color: var(--ok); }
+  li[data-state="warn"] { border-color: var(--manual); }
+  li[data-state="fail"] { border-color: var(--alert); }
+  .summary { font-size: 18px; font-weight: 600; }
+  #run { justify-self: start; }
+  .nomodule { margin: 16px; padding: 12px 14px; border: 2px solid var(--alert); border-radius: var(--radius-sm); background: var(--alert-tint); color: var(--alert); font-weight: 700; }
+</style>
+<script nomodule>document.addEventListener('DOMContentLoaded', function () { var p = document.createElement('p'); p.className = 'nomodule'; p.textContent = 'Case needs a current browser. Open this page in Microsoft Edge or Google Chrome.'; document.body.insertBefore(p, document.body.firstChild); });</script>
+</head>
+<body>
+<main class="panel" aria-labelledby="checkH">
+  <p class="eyebrow">Before your first session</p>
+  <h1 id="checkH">Network check</h1>
+  <p class="lead">Run this on the computer that will drive the projector, and on a phone using the hospital Wi-Fi. It takes about 90 seconds. It does not join a room and sends no personal data.</p>
+  <button type="button" class="btn primary" id="run">Run the check</button>
+  <ol class="checks" id="checks" aria-live="polite"></ol>
+  <p class="summary" id="summary" role="status"></p>
+  <p class="muted">If live updates are blocked, Case still works through a slower fallback. To ask your IT team for a fix, send them the Case IT note.</p>
+</main>
+<script type="module">
+// Text only: every result line is set with textContent.
+import { apiOrigin } from '../../src/client/transport.mjs';
+import { keepScreenAwake } from './lib/device.mjs';
+
+const params = new URLSearchParams(location.search);
+let base;
+try { base = `${apiOrigin(params.get('api') || location.origin)}/api/v1/check`; } catch { base = `${location.origin}/api/v1/check`; }
+const HOLD_MS = Math.max(5_000, Math.min(60_000, Number(params.get('hold')) || 60_000)); // ?hold= shortens it for tests only
+const LONG_WAIT_S = Math.max(1, Math.min(20, Number(params.get('wait')) || 20));
+const $ = (id) => document.getElementById(id);
+
+const rows = {};
+function row(key, title) {
+  const li = document.createElement('li');
+  const mark = document.createElement('span'); mark.className = 'mark'; mark.setAttribute('aria-hidden', 'true'); mark.textContent = '…';
+  const h = document.createElement('h2'); h.textContent = title;
+  const r = document.createElement('p'); r.className = 'result'; r.textContent = 'Waiting…';
+  li.append(mark, h, r);
+  $('checks').append(li);
+  rows[key] = { li, mark, r };
+}
+function set(key, state, text) {
+  const x = rows[key];
+  x.li.dataset.state = state;
+  x.mark.textContent = { pass: '✓', warn: '!', fail: '✕', run: '…' }[state];
+  x.r.textContent = text;
+}
+
+async function timed(url, timeoutMs) {
+  const t0 = performance.now();
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer', signal: ctl.signal });
+    await res.json().catch(() => null);
+    return { ok: res.ok, status: res.status, ms: Math.round(performance.now() - t0) };
+  } catch { return { ok: false, status: 0, ms: Math.round(performance.now() - t0) }; } finally { clearTimeout(timer); }
+}
+
+async function latency() {
+  set('latency', 'run', 'Measuring…');
+  const times = [];
+  for (let i = 0; i < 5; i++) { const r = await timed(`${base}/poll?wait=0`, 10_000); if (!r.ok) return set('latency', 'fail', r.status === 429 ? 'Too many checks from this network just now. Wait a minute and run it again.' : 'Case could not be reached from here. Check that case.iatrogenic.app is not blocked.'); times.push(r.ms); }
+  times.sort((a, b) => a - b);
+  const median = times[2];
+  set('latency', median <= 300 ? 'pass' : 'warn', median <= 300 ? `Typical round trip ${median} ms. Good.` : `Typical round trip ${median} ms. Slow, but sessions still work; answers may take a moment to show.`);
+  return true;
+}
+
+async function longPoll() {
+  set('poll', 'run', `Holding one request open for ${LONG_WAIT_S} seconds…`);
+  const r = await timed(`${base}/poll?wait=${LONG_WAIT_S}`, (LONG_WAIT_S + 15) * 1000);
+  if (r.ok && r.ms >= LONG_WAIT_S * 1000 - 500) {
+    set('poll', 'pass', 'Held requests work. This is the fallback Case uses when live updates are blocked.');
+    return true;
+  }
+  set('poll', 'fail', 'A held request was cut off. Case will fall back to checking every few seconds, which works but is slower.');
+  return false;
+}
+
+function socket() {
+  return new Promise((resolve) => {
+    set('ws', 'run', `Keeping a live connection open for ${Math.round(HOLD_MS / 1000)} seconds…`);
+    let ws;
+    try { ws = new WebSocket(`${base.replace(/^http/, 'ws')}/ws`); } catch { set('ws', 'fail', 'Live updates are blocked here. Case will use the slower fallback, which works.'); resolve(false); return; }
+    let opened = 0; let lastEcho = 0; let n = 0; let done = false;
+    const finish = (ok, text, state = ok ? 'pass' : 'fail') => { if (done) return; done = true; clearInterval(tick); try { ws.close(1000); } catch { /* gone */ } set('ws', state, text); resolve(ok); };
+    const tick = setInterval(() => {
+      if (!opened) return;
+      const now = Date.now();
+      if (now - opened >= HOLD_MS) return finish(true, `Live updates work and stayed connected for ${Math.round((now - opened) / 1000)} seconds.`);
+      if (now - lastEcho > 15_000) return finish(false, `Live updates stopped after ${Math.round((now - opened) / 1000)} seconds. Case will notice this and use the slower fallback, which works.`, 'warn');
+      try { ws.send(`check-${++n}`); } catch { /* closing */ }
+    }, 5_000);
+    ws.addEventListener('open', () => { opened = lastEcho = Date.now(); try { ws.send('check-0'); } catch { /* closing */ } });
+    ws.addEventListener('message', () => { lastEcho = Date.now(); });
+    ws.addEventListener('close', () => {
+      if (!opened) finish(false, 'Live updates are blocked here (often a web filter or proxy). Case will use the slower fallback, which works.');
+      else finish(false, `Live updates were cut off after ${Math.round((Date.now() - opened) / 1000)} seconds. Case will notice this and use the slower fallback, which works.`, 'warn');
+    });
+    setTimeout(() => { if (!opened) { finish(false, 'Live updates did not connect. Case will use the slower fallback, which works.'); } }, 10_000);
+  });
+}
+
+$('run').addEventListener('click', async () => {
+  $('run').disabled = true;
+  $('checks').replaceChildren();
+  $('summary').textContent = 'Checking…';
+  row('latency', 'Reaching Case');
+  row('ws', 'Live updates (WebSocket)');
+  row('poll', 'Fallback updates (held requests)');
+  const reach = await latency();
+  if (!reach) { set('ws', 'fail', 'Not tried: Case could not be reached.'); set('poll', 'fail', 'Not tried: Case could not be reached.'); $('summary').textContent = 'Case cannot be reached from this network.'; $('run').disabled = false; return; }
+  const [ws, lp] = await Promise.all([socket(), longPoll()]);
+  $('summary').textContent = ws ? 'Ready: this network supports live updates.' : lp ? 'Ready: Case will use its fallback on this network. It works; updates can lag by a second or two.' : 'Usable, but slow: Case will check for updates every few seconds here. Consider mobile data.';
+  $('run').disabled = false;
+});
+keepScreenAwake();
+window.caseCheck = { base, HOLD_MS }; // for scripted checks; carries nothing personal
+</script>
+</body>
+</html>

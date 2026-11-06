@@ -1,0 +1,6 @@
+/* Layout uses the shared Case bands and colors; no new design tokens. */
+body { color: var(--ink); background: var(--ground); }
+main { max-width: 760px; margin: 6vh auto; padding: var(--sp-5); display: grid; gap: var(--sp-4); color: var(--ink); background: var(--surface); }
+h1, h2, p { margin: 0; }
+dialog { z-index: var(--z-overlay); max-width: 480px; border: 1px solid var(--line); border-radius: var(--radius-lg); padding: var(--sp-5); color: var(--ink); background: var(--surface); }
+dialog p { margin: var(--sp-4) 0; }

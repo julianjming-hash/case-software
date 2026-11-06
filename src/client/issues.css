@@ -1,0 +1,18 @@
+/* Beta issues reuse Case tokens, dialog, form, row and button anatomy. */
+.issue-trigger{min-width:44px;min-height:44px;flex-shrink:0;}
+.issues-dialog{width:min(42rem,calc(100vw - 2rem));max-height:calc(100dvh - 2rem);overflow:auto;box-sizing:border-box;}
+.issues-content{display:flex;flex-direction:column;gap:var(--sp-4);min-width:0;}
+.issues-content label{display:flex;flex-direction:column;gap:var(--sp-2);}
+.issues-content input,.issues-content textarea,.issues-content select{width:100%;box-sizing:border-box;min-width:0;}
+.issues-content input[type=checkbox],.issues-content input[type=radio]{width:auto;align-self:flex-start;}
+.issues-content textarea{min-height:6rem;resize:vertical;}
+.issues-content p,.issues-content pre,.issues-row{overflow-wrap:anywhere;white-space:pre-wrap;}
+.issues-content img{display:block;max-width:100%;height:auto;}
+.issues-status{color:var(--ink-muted);}
+.issues-actions,.issues-files{display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:center;}
+.issues-queue{display:flex;flex-direction:column;gap:var(--sp-3);min-width:0;}
+.issues-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--sp-3);width:100%;text-align:left;padding:var(--sp-4);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);color:var(--ink);font:inherit;cursor:pointer;}
+.issues-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(13rem,100%),1fr));gap:var(--sp-3);}
+
+.issues-choices{display:flex;flex-wrap:wrap;gap:var(--sp-3);border:1px solid var(--line);border-radius:var(--radius);padding:var(--sp-3);}
+.issues-choices label{flex-direction:row;align-items:center;}

@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case projector</title>
+<link rel="stylesheet" href="lib/tokens.css">
+<style>
+  /* Projector display (SCREENS.md "Projector display"). A 1920 x 1080 canvas read from about 8 m; it
+     scales with the viewport (the lab frames it at 1280 x 720) but body text never goes below
+     --projector-body (24px, CASE-083). One spatial grid (CASE-113):
+       top row    orientation: case title, phase pill and layers, answered count, timer
+       left       information: the scene card, then vitals, findings and investigations tiles
+       right      the decision options as stacked tiles, or the findings when no decision is open
+       bottom     [QR] | [URL / join code] | [In the room chips] | [sound chip]
+     Colour by zone, phase and priority only (CASE-114). */
+  :root {
+    --p-label: max(18px, calc(1.05vw * var(--s, 1)));
+    --p-body: max(var(--projector-body), calc(1.3vw * var(--s, 1)));
+    --p-scene: max(var(--projector-body), calc(1.46vw * var(--s, 1)));
+    --p-h1: max(var(--projector-body), calc(1.9vw * var(--s, 1)));
+    --p-h2: max(var(--projector-body), calc(1.56vw * var(--s, 1)));
+    --p-vital: max(var(--projector-body), calc(1.88vw * var(--s, 1)));
+    --p-gap: max(8px, calc(1.25vw * var(--sp, 1)));
+    --p-pad: max(10px, calc(1.05vw * var(--sp, 1)));
+    --edge: 2.5vw;
+  }
+  html, body { height: 100%; overflow: hidden; }
+  body { font-size: var(--p-body); line-height: 1.35; }
+  .screen { height: 100vh; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+  svg.ic { width: 1em; height: 1em; stroke-width: 2; }
+  .eyebrow { font-size: var(--p-label); letter-spacing: .1em; }
+
+  /* ── top row: orientation (petrol-tinted zone) ── */
+  .top { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 2vw; align-items: center; padding: 1.4vh var(--edge); background: var(--nav-bg); border-bottom: 1px solid var(--nav-line); color: var(--nav-ink); }
+  .top .title { min-width: 0; display: grid; gap: .1em; }
+  .top .title .case { margin: 0; font-size: var(--p-body); font-weight: var(--w-semibold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #banners { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5em; align-items: center; }
+  .top .pill { font-size: var(--p-label); padding: .3em .85em; }
+  .layer { display: inline-flex; align-items: center; gap: .45em; padding: .3em .8em; border-radius: var(--radius-pill); font-size: var(--p-label); font-weight: var(--w-semibold); }
+  .layer.manual { background: var(--manual-tint); color: var(--manual-ink); }
+  .layer.replay { background: var(--surface); color: var(--ink); border: 1px dashed var(--field-line); }
+  .layer.lost { background: var(--alert-tint); color: var(--alert-ink); }
+  .meta { display: flex; gap: 1.6vw; align-items: center; font-size: var(--p-body); white-space: nowrap; }
+  .meta .count, .meta .timer { display: inline-flex; gap: .4em; align-items: center; font-weight: var(--w-medium); }
+  .meta .num { font-family: var(--mono); font-weight: var(--w-semibold); font-variant-numeric: tabular-nums; }
+  .meta:empty { display: none; }
+
+  /* ── the two columns ── */
+  main { --s: 1; --sp: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(0, 1fr); gap: var(--p-gap); padding: var(--p-gap) var(--edge); }
+  main.single { grid-template-columns: minmax(0, 1fr); }
+  .col { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: var(--p-gap); }
+  .card { padding: var(--p-pad) calc(var(--p-pad) * 1.3); border-radius: var(--radius-lg); }
+  .card > .eyebrow { margin-bottom: .35em; }
+
+  /* scene card: the one prose card (CASE-116) */
+  .scene h1 { margin: 0; font-size: var(--p-h1); font-weight: var(--w-semibold); }
+  .scene .prose { margin: calc(.45em * var(--sp)) 0 0; font-size: var(--p-scene); line-height: calc(1.3 + .12 * var(--sp)); max-width: 62ch; text-wrap: pretty; }
+  .scene[data-kind="consequence"], .scene[data-kind="terminal"] { box-shadow: inset 6px 0 0 var(--ph-consequence), var(--shadow-1); }
+
+  /* vitals strip: one cell per observation, value in mono, trend arrow + earlier value (CASE-090) */
+  ul.vitals { margin: 0; padding: calc(var(--p-pad) * .7) calc(var(--p-pad) * 1.3); list-style: none; display: flex; flex-wrap: wrap; gap: calc(var(--p-pad) * .5) calc(var(--p-pad) * 1.9); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-1); }
+  ul.vitals li { display: grid; gap: .05em; align-content: start; min-width: 0; }
+  ul.vitals .vl { font-size: var(--p-label); font-weight: var(--w-semibold); color: var(--ink-muted); white-space: nowrap; }
+  ul.vitals .vrow { display: flex; align-items: baseline; gap: .25em; white-space: nowrap; }
+  ul.vitals .vv { font: var(--w-semibold) var(--p-vital)/1.1 var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+  ul.vitals .vu { font-size: var(--p-label); color: var(--ink-muted); }
+  ul.vitals .va { font: var(--w-medium) var(--p-label)/1.2 var(--mono); color: var(--ink); white-space: nowrap; }
+
+  /* findings and investigations tiles */
+  .tiles2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22vw), 1fr)); gap: calc(var(--p-gap) * .6); align-items: start; }
+  .find ul { margin: 0; padding: 0 0 0 1.1em; display: grid; gap: calc(.3em * var(--sp)); font-size: var(--p-body); line-height: 1.3; }
+  .findings ul { font-size: var(--p-find, var(--p-body)); }
+  .findings li.more { list-style: none; margin-left: -1.1em; font-weight: var(--w-semibold); color: var(--petrol-ink); }
+  .find li { text-wrap: pretty; }
+  .find li::marker { color: var(--petrol); }
+  .find.cols2 ul { display: block; columns: 2; column-gap: 2vw; }
+  .find.cols2 li { break-inside: avoid; margin-bottom: calc(.3em * var(--sp)); }
+
+  /* decision column: the option colours live here and nowhere else (CASE-114) */
+  .decision { display: flex; flex-direction: column; gap: calc(var(--p-gap) * .7); min-height: 0; box-shadow: inset 0 6px 0 var(--ph, var(--petrol)), var(--shadow-1); }
+  .decision .call { display: flex; flex-wrap: wrap; align-items: center; gap: .4em .6em; margin: 0; font-size: var(--p-label); font-weight: var(--w-semibold); color: var(--ph-ink, var(--ink)); }
+  .decision h2 { margin: 0; font-size: var(--p-h2); font-weight: var(--w-semibold); line-height: 1.25; text-wrap: pretty; }
+  ol.tiles { margin: 0; padding: 0; list-style: none; display: grid; gap: calc(var(--p-gap) * .5); }
+  .tile { display: flex; align-items: center; gap: .7em; min-width: 0; padding: calc(var(--p-pad) * .65) calc(var(--p-pad) * .9); font-size: max(var(--projector-body), calc(1.46vw * var(--s))); font-weight: var(--w-medium); line-height: 1.25; }
+  .tile svg.mark { width: 1.75em; height: 1.75em; flex: none; }
+  .tile .lbl { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .tile .tag { font-size: var(--p-label); padding: .15em .7em; }
+  .tile.dim { background: var(--sunken); border-style: dashed; color: var(--ink-muted); }
+  .tile.dim svg.mark { opacity: .5; }
+
+  /* room result (after the reveal) */
+  .result ul { margin: 0; padding: 0; list-style: none; display: grid; gap: calc(.35em * var(--sp)); font-size: var(--p-body); }
+  .result li { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(2em, 4em) 2.4em; gap: .6em; align-items: center; line-height: 1.2; }
+  .result svg.mark { width: 1.3em; height: 1.3em; }
+  .result .bar { display: block; height: .55em; background: var(--sunken); border-radius: var(--radius-pill); overflow: hidden; }
+  .result .bar i { display: block; height: 100%; background: var(--petrol); border-radius: var(--radius-pill); }
+  .result .n { font-family: var(--mono); font-weight: var(--w-semibold); text-align: right; font-variant-numeric: tabular-nums; }
+  .result p { margin: .5em 0 0; font-size: var(--p-label); color: var(--ink-muted); font-weight: var(--w-medium); }
+
+
+  .result li.ranking-result { grid-template-columns: auto minmax(0, 1fr); }
+  .result li.ranking-result .positions { grid-column: 2; display: flex; flex-wrap: wrap; gap: .35em .8em; }
+  .result .positions li { display: block; font-family: var(--mono); color: var(--ink); background: var(--surface); }
+
+  /* lobby and the end */
+  .lobby-left { justify-content: center; }
+  .lobby-left .check { margin: 0; font-size: var(--p-h2); font-weight: var(--w-semibold); letter-spacing: .04em; color: var(--ink-muted); }
+  .lobby-left h1 { margin: 0; font-size: max(32px, calc(2.6vw * var(--s))); font-weight: var(--w-semibold); line-height: 1.12; letter-spacing: -.015em; }
+  .status-line { margin: 0; color: var(--ink-muted); font-weight: var(--w-medium); }
+  .joinpanel { justify-self: center; align-self: center; display: grid; justify-items: center; gap: .55em; padding: calc(var(--p-pad) * 1.4) calc(var(--p-pad) * 2); text-align: center; background: var(--nav-bg); border-color: var(--nav-line); }
+  .joinpanel h2 { margin: 0; font-size: var(--p-h2); font-weight: var(--w-semibold); }
+  .joinpanel .qrcard { padding: 14px; background: var(--qr-card); border-radius: var(--radius); box-shadow: var(--shadow-1); line-height: 0; }
+  .joinpanel .qrcard svg { display: block; width: clamp(180px, 17vw, 340px); height: auto; }
+  .joinpanel .url { font: var(--w-medium) var(--p-body) var(--mono); overflow-wrap: anywhere; }
+  .joinpanel .code-label { font-size: var(--p-label); font-weight: var(--w-semibold); color: var(--ink-muted); letter-spacing: .08em; text-transform: uppercase; margin-top: .2em; }
+  .joinpanel .code { font: var(--w-semibold) max(44px, calc(3.6vw * var(--s)))/1 var(--mono); letter-spacing: .08em; white-space: nowrap; }
+  .endcard { box-shadow: inset 0 6px 0 var(--ph-reveal), var(--shadow-1); }
+  .endcard h2 { margin: 0; font-size: var(--p-h2); font-weight: var(--w-semibold); }
+  .endcard p { margin: .4em 0 0; color: var(--ink-muted); }
+  .waiting-note { margin: auto; color: var(--ink-muted); font-size: var(--p-h2); font-weight: var(--w-medium); }
+
+  /* ── bottom row (CASE-113): [QR] | [URL / code] | [In the room] | [sound] ── */
+  footer { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 1.6vw; align-items: center; padding: 1.1vh var(--edge); background: var(--nav-bg); border-top: 1px solid var(--nav-line); color: var(--nav-ink); min-height: 6vh; }
+  footer .qrcell { padding: 6px; background: var(--qr-card); border-radius: var(--radius-sm); box-shadow: var(--shadow-1); line-height: 0; }
+  footer .qrcell svg { display: block; width: clamp(80px, 6.2vw, 132px); height: auto; }
+  footer .route { display: grid; gap: .15em; }
+  footer .route .url { font: var(--w-medium) var(--p-body)/1.2 var(--mono); white-space: nowrap; }
+  footer .route .code { display: flex; align-items: baseline; gap: .45em; white-space: nowrap; }
+  footer .route .code .k { font-size: var(--p-label); font-weight: var(--w-semibold); color: var(--ink-muted); letter-spacing: .08em; text-transform: uppercase; }
+  footer .route .code b { font: var(--w-semibold) max(28px, 1.9vw)/1.1 var(--mono); letter-spacing: .08em; }
+  footer .closed { font-weight: var(--w-medium); color: var(--ink-muted); white-space: nowrap; }
+  footer.noroute { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .names { min-width: 0; display: flex; align-items: center; gap: .8em; }
+  .names h2 { flex: none; margin: 0; font-size: var(--p-label); font-weight: var(--w-semibold); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); white-space: nowrap; }
+  .names ul { flex: 1; min-width: 0; margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: nowrap; gap: .5em; overflow: hidden; }
+  .chip { flex: none; display: inline-flex; align-items: center; gap: .4em; max-width: 12em; padding: 4px .8em 4px 4px; border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--nav-line); font-size: var(--p-label); font-weight: var(--w-medium); }
+  .chip[hidden] { display: none; }
+  .chip .nm { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .chip.anonymous { padding-right: 4px; }
+  .chip.more { padding: 4px .8em; font-family: var(--mono); font-weight: var(--w-semibold); min-height: 42px; }
+  .names .count { font-weight: var(--w-medium); white-space: nowrap; }
+  .sound { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border-radius: 50%; border: 1px solid var(--nav-line); background: var(--surface); color: var(--nav-ink); }
+  .sound svg.ic { width: 22px; height: 22px; }
+  .sound[aria-pressed="true"] { background: var(--petrol-tint); color: var(--petrol-ink); border-color: var(--petrol); }
+  .conn { display: inline-flex; align-items: center; gap: .4em; font-size: var(--p-label); font-weight: var(--w-semibold); }
+  @media (forced-colors: active) { .layer, .tile, .chip, .sound, ul.vitals li { border: 1px solid CanvasText; } }
+
+.chip.arrival-new, .arrival-note.arrival-new { animation: lobby-arrival 1.5s ease-out; }
+@keyframes lobby-arrival { from { transform: translateY(6px); } to { transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .chip.arrival-new, .arrival-note.arrival-new { animation: none; } }
+.arrival-note { font-size: var(--p-label); font-weight: var(--w-semibold); white-space: nowrap; }
+.rank-table-card h2 { margin: .2em 0; font-size: var(--p-body); line-height: 1.1; }
+.rank-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: var(--p-body); line-height: 1.1; }
+.rank-table th, .rank-table td { padding: 3px 4px; border-bottom: 1px solid var(--field-line); color: var(--ink); background: var(--surface); }
+.rank-table th:first-child { width: 62%; text-align: left; overflow-wrap: anywhere; font-weight: var(--w-medium); }
+.rank-table th:not(:first-child) { font-size: var(--p-label); font-weight: var(--w-semibold); }
+.rank-table td { text-align: center; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.ranked-result { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: max(2px, calc(8px * var(--sp, 1))); }
+.ranked-result > :not(.ranked-columns) { flex-shrink: 0; }
+.ranked-result h2 { margin: 0; font-size: max(24px, calc(26px * var(--s, 1))); line-height: 1.15; overflow-wrap: anywhere; }
+.ranked-columns { flex: 1; min-height: min-content; display: grid; grid-template-columns: repeat(var(--ranked-columns), minmax(0, 1fr)); gap: 16px; }
+.ranked-column { min-width: 0; min-height: min-content; display: grid; grid-template-rows: minmax(min-content, 1fr) auto; gap: 8px; }
+.ranked-order { min-height: min-content; margin: 0; padding: 0; list-style: none; display: grid; grid-template-rows: repeat(var(--ranked-positions), minmax(min-content, 1fr)); gap: 8px; }
+.result li.ranked-tile { min-width: 0; display: grid; grid-template-columns: 32px 40px minmax(0, 1fr); gap: 12px; padding: 10px; align-items: center; line-height: 1.15; }
+.ranked-label, .ranked-rank { font-size: max(24px, calc(26px * var(--s, 1))); font-weight: var(--w-medium); }
+.ranked-label { min-width: 0; overflow-wrap: anywhere; }
+.ranked-rank { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: center; }
+.result .ranked-tile svg.mark { width: 40px; height: 40px; }
+.result p.ranked-total { margin: 0; font-size: 32px; line-height: 1.1; font-weight: var(--w-semibold); color: var(--ink); text-align: center; font-variant-numeric: tabular-nums; }
+.result p.ranked-overall, .result p.ranked-empty { margin: 0; font-size: 24px; line-height: 1.15; color: var(--ink); }
+.result p.ranked-meaning, .result p.ranked-continuation, .result p.ranked-group-page, .result p.ranked-residual { margin: 0; line-height: 1.15; }
+/* CASE-276: each contribution has its own enclosed chip, with stable reading order. */
+.text-result { border: 0; background: transparent; box-shadow: none; padding: 0; }
+.text-chips { display: grid; grid-template-columns: repeat(var(--response-columns), minmax(0, 1fr)); gap: clamp(16px, 1.6vw, 32px); margin-block: .7em; align-items: stretch; }
+.text-answer { margin: 0; padding: .3em .5em; border: 1px solid var(--field-line); border-radius: var(--radius-lg); background: var(--petrol-tint); color: var(--ink); font-size: max(24px, var(--p-body)); line-height: 1.3; overflow-wrap: anywhere; white-space: normal; }
+.text-result h2 { font-size: var(--p-h2); line-height: 1.2; margin: .25em 0; }
+</style>
+<script nomodule>document.addEventListener('DOMContentLoaded', function () { var p = document.createElement('p'); p.className = 'nomodule'; p.textContent = 'Case needs a current browser. Open this page in Microsoft Edge or Google Chrome.'; document.body.insertBefore(p, document.body.firstChild); });</script>
+</head>
+<body>
+<div class="sr-only" id="announce" aria-live="polite" aria-atomic="true"></div>
+<div class="sr-only" id="timerStatus" role="status"></div>
+<div class="screen">
+  <header class="top" id="top"></header>
+  <main id="main" aria-label="Projector"></main>
+  <footer id="foot"></footer>
+</div>
+
+<script type="module">
+import { connect, LAB, LOCAL_CHANNEL, CHANNEL } from './lib/link.mjs';
+import { qrSvg } from './lib/qr.mjs';
+import { joinUrl, qrPayload } from '../../src/shared/urls.mjs';
+import { formatCode } from '../../src/shared/ids.mjs';
+import { markSvg, markFor } from './lib/marks.mjs';
+import { avatarEl } from './lib/avatar.mjs';
+import { timerRemainingS as remainingOf, timerWords, TIMER_ANNOUNCE_AT } from '../../src/shared/timer.mjs';
+import { registerShell, keepScreenAwake, announceProjector } from './lib/device.mjs';
+import { realRoom } from './lib/link.mjs';
+import { arrivalFeedback } from '../../src/client/lobby-arrivals.mjs';
+import { renderResponseResult } from '../../src/client/projector-result.mjs';
+
+const params = new URLSearchParams(location.search);
+const topology = params.get('topology') === 'same-pc' ? 'same-pc' : 'separate';
+const label = topology === 'same-pc' ? 'Projector (same PC)' : 'Projector (separate)';
+const link = connect({ role: 'display', label, topology });
+registerShell({ real: Boolean(realRoom()) });
+keepScreenAwake(); // a projector that dims or sleeps mid-case loses the room (spec red team 2, P1-3)
+
+// ── state ──
+let server = null;          // latest server snapshot { epoch, revision, view }
+let local = null;           // latest local_snapshot (same-PC manual mode) { epoch, revision, view }
+let status = 'connecting';  // link status
+let lastContact = Date.now();
+let lostNotice = false;
+let soundOn = false;
+
+let arrivalPrevious = null, arrivalIndices = [], arrivalTimer = null, arrivalOverflow = false;
+const arrivalStatus = document.createElement('div');
+arrivalStatus.className = 'arrival-status sr-only'; arrivalStatus.setAttribute('role', 'status');
+arrivalStatus.setAttribute('aria-live', 'polite'); arrivalStatus.setAttribute('aria-atomic', 'true');
+document.body.append(arrivalStatus);
+function noteArrivals(view) {
+  const cue = view ? arrivalFeedback(arrivalPrevious, view, { reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches }) : null;
+  arrivalPrevious = view;
+  if (view?.phase !== 'waiting') { arrivalStatus.textContent = ''; arrivalIndices = []; arrivalOverflow = false; clearTimeout(arrivalTimer); return; }
+  arrivalStatus.dataset.arrivals = String(view.arrivalCount ?? 0);
+  if (!cue) return;
+  arrivalStatus.textContent = `${cue.count} joined`;
+  arrivalIndices = cue.indices; arrivalOverflow = cue.overflow > 0 && !matchMedia('(prefers-reduced-motion: reduce)').matches; clearTimeout(arrivalTimer);
+  arrivalTimer = setTimeout(() => { arrivalIndices = []; arrivalOverflow = false; render(); }, 1500);
+}
+
+
+const $ = (id) => document.getElementById(id);
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+const SVGNS = 'http://www.w3.org/2000/svg';
+const ICONS = {
+  phone: 'M8 2.5h8a1.5 1.5 0 0 1 1.5 1.5v16a1.5 1.5 0 0 1-1.5 1.5H8A1.5 1.5 0 0 1 6.5 20V4A1.5 1.5 0 0 1 8 2.5zM11 18h2',
+  lock: 'M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 0 1 7 0v3',
+  pause: 'M8 5v14M16 5v14',
+  speech: 'M4 5h16v11H10l-5 4v-4H4z',
+  rewind: 'M11 6l-7 6 7 6zM20 6l-7 6 7 6z',
+  offline: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM5.6 5.6l12.8 12.8',
+  arc: 'M12 3a9 9 0 1 0 9 9',
+  clock: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2',
+  people: 'M9 11a3.2 3.2 0 1 0 0-6.4A3.2 3.2 0 0 0 9 11zM3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M16 5.3a3 3 0 0 1 0 5.4M18 14.5c1.8.8 3 2.6 3 5.5',
+  sound: 'M4 9v6h4l5 4V5L8 9zM16.5 9a4 4 0 0 1 0 6',
+  mute: 'M4 9v6h4l5 4V5L8 9zM17 9l4 6M21 9l-4 6',
+};
+function icon(name) {
+  const s = document.createElementNS(SVGNS, 'svg');
+  s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('class', 'ic'); s.setAttribute('aria-hidden', 'true');
+  const p = document.createElementNS(SVGNS, 'path'); p.setAttribute('d', ICONS[name]); s.append(p);
+  return s;
+}
+
+/** Names reach the screen cleaned of control and bidi characters (SCREENS.md Projector display). */
+const cleanName = (n) => String(n ?? '').replace(/[\p{Cc}​-‏‪-‮⁦-⁩؜﻿]/gu, '').replace(/\s+/g, ' ').trim().slice(0, 40);
+
+// ── what to render: the server snapshot, or the console's local view (same PC, manual mode) ──
+function current() {
+  if (topology === 'same-pc' && local && local.epoch >= (server?.epoch ?? 0)) return { view: local.view, from: 'local' };
+  return server ? { view: server.view, from: 'server' } : { view: null, from: 'none' };
+}
+
+link.on('snapshot', (snap) => {
+  server = snap;
+  lastContact = Date.now();
+  // A server snapshot with a higher epoch supersedes the console's manual segment (recovery done).
+  if (local && snap.epoch > local.epoch) local = null;
+  noteArrivals(current().view); render();
+});
+link.on('status', (s) => { status = s; if (s === 'online') lastContact = Date.now(); render(); });
+
+// Contact watch: every frame addressed to this window (pong, snapshot, receipt) counts as contact. The
+// lab's link only reports `lost` after DEAD_AFTER_MS, so the display watches the channel itself to apply
+// the 15 s (lab: DISPLAY_LOST_MS) rule to "no snapshot or pong".
+const watch = new BroadcastChannel(CHANNEL);
+watch.onmessage = ({ data: m }) => {
+  if (m?.k === 'down' && m.clientId === link.clientId) {
+    lastContact = Date.now();
+    if (lostNotice && m.raw !== undefined) { lostNotice = false; render(); }
+  }
+};
+
+// Same-PC topology only: follow the console locally. A separate display never listens here.
+if (topology === 'same-pc') {
+  const lc = new BroadcastChannel(LOCAL_CHANNEL);
+  announceProjector(lc); // the console opened this window with noopener: it learns it is open from this hello
+  lc.onmessage = ({ data: m }) => {
+    if (m?.t === 'local_snapshot' && m.view) {
+      if (!local || m.epoch > local.epoch || (m.epoch === local.epoch && m.revision >= local.revision)) {
+        local = { epoch: m.epoch, revision: m.revision, displayRevision: m.displayRevision, view: m.view };
+        noteArrivals(current().view);
+        render();
+      }
+    } else if (m?.t === 'local_end') { local = null; render(); }
+    else if (m?.t === 'show_projector') showProjectorWord(); // dual-display check (CASE-034)
+  };
+}
+
+// The display check: the word `Projector` fills this screen for a moment, so the facilitator can
+// see which physical screen is the projector (and that the console is not duplicated onto it).
+function showProjectorWord() {
+  let o = document.getElementById('projectorCheck');
+  if (!o) {
+    o = document.createElement('div');
+    o.id = 'projectorCheck';
+    o.setAttribute('role', 'status');
+    o.style.cssText = 'position:fixed;inset:0;z-index:var(--z-overlay);display:grid;place-items:center;background:var(--surface);color:var(--ink);font:600 clamp(64px,14vw,220px)/1 var(--sans);letter-spacing:-.03em';
+    o.textContent = 'Projector';
+    document.body.append(o);
+  }
+  o.hidden = false;
+  clearTimeout(showProjectorWord.t);
+  showProjectorWord.t = setTimeout(() => { o.hidden = true; }, 6000);
+}
+
+setInterval(() => {
+  if (topology === 'separate') {
+    const stale = Date.now() - lastContact > LAB.DISPLAY_LOST_MS;
+    if (stale !== lostNotice) { lostNotice = stale; render(); }
+  }
+  tickTimer();
+}, 500);
+
+// ── advisory timer: text only, announced politely at 60 s, 10 s and 0 only. ONE rounding with the
+// console and the phones (src/shared/timer.mjs; walkthrough bug 3). ──
+let timerKey = null; const announced = new Set();
+const timerRemainingS = (t) => remainingOf(t, Date.now());
+function tickTimer() {
+  const { view } = current();
+  const line = document.getElementById('timerLine');
+  if (!line || !view?.timer) return;
+  const rem = timerRemainingS(view.timer);
+  const txt = timerWords(rem);
+  if (line.textContent !== txt) line.textContent = txt;
+  const key = view.timer.endsAt ?? `p${view.timer.remainingS}`;
+  if (key !== timerKey) { timerKey = key; announced.clear(); }
+  for (const mark of [...TIMER_ANNOUNCE_AT].reverse()) {
+    if (rem <= mark && !announced.has(mark)) {
+      announced.add(mark);
+      if (mark === 60 && (announced.has(10) || announced.has(0))) continue;
+      $('timerStatus').textContent = timerWords(mark);
+      break;
+    }
+  }
+}
+
+// ── phase state (CASE-114): one accent on the pill; the label is short, the call to action sits in the
+// decision column. A consequence is a revealed route's surface. ──
+function phaseOf(view) {
+  if (!view) return null;
+  switch (view.phase) {
+    case 'waiting': return ['reveal', 'Waiting to start'];
+    case 'decision_open': return view.manual ? ['locked', 'Facilitator-led'] : ['open', 'Decision open'];
+    case 'reviewing': return ['locked', view.manual ? 'Facilitator-led' : 'Responses locked'];
+    case 'paused': return ['paused', 'Discussion pause'];
+    case 'teaching': return ['consequence', 'Teaching point'];
+    case 'ended': return ['reveal', 'Session ended'];
+    default: return ['consequence', 'terminal'].includes(view.surface?.timelineKind) ? ['consequence', 'Consequence'] : ['reveal', 'Revealed'];
+  }
+}
+
+// ── top row ──
+function layer(cls, ic, text) { const b = el('span', `layer ${cls}`); b.append(icon(ic), el('span', null, text)); return b; }
+function renderTop(view, from) {
+  const title = el('div', 'title');
+  title.append(el('p', 'eyebrow', 'Case'));
+  if (view?.caseTitle && view.phase !== 'waiting') title.append(el('p', 'case', view.caseTitle));
+  // Room status: the phase pill and the layers (manual, replay, lost), icon plus text, never colour alone.
+  const box = el('section'); box.id = 'banners'; box.setAttribute('aria-label', 'Room status');
+  const ph = phaseOf(view);
+  if (ph) { const p = el('span', 'pill', ph[1]); p.dataset.phase = ph[0]; box.append(p); }
+  if (topology === 'separate' && lostNotice) box.append(layer('lost', 'offline', 'Connection lost · follow the facilitator'));
+  if (view?.replay) box.append(layer('replay', 'rewind', 'Presentation replay · phones remain on live surface'));
+  if (view?.manual) box.append(layer('manual', 'speech', 'Manual room mode · facilitator-led discussion'));
+  const meta = el('div', 'meta');
+  if (view?.phase === 'decision_open' && !view.manual) {
+    const n = view.counts?.responded;
+    if (Number.isInteger(n)) { const c = el('span', 'count'); c.append(icon('people'), el('span', 'num', `${n} of ${view.counts.participants}`), ' answered'); meta.append(c); }
+    if (view.timer) { const t = el('span', 'timer'); const w = el('span', null, timerWords(timerRemainingS(view.timer))); w.id = 'timerLine'; t.append(icon('clock'), w); meta.append(t); }
+  }
+  // Connection state (SCREENS.md Connection states): nothing while live; a same-PC window following the
+  // console locally has the console as its authority, so no indicator either.
+  if (from !== 'local' && (status === 'connecting' || status === 'lost')) { const c = el('span', 'conn'); c.append(icon('arc'), status === 'lost' ? 'Reconnecting…' : 'Connecting…'); meta.append(c); }
+  $('top').replaceChildren(title, box, meta);
+}
+
+// ── information column ──
+/** The vitals strip: label, value, unit, trend arrow and the earlier value (CASE-090). */
+function renderVitals(obs) {
+  if (!obs?.length) return null;
+  const ul = el('ul', 'vitals');
+  ul.setAttribute('aria-label', 'Vitals');
+  for (const o of obs) {
+    const li = el('li');
+    const value = String(o.value ?? '');
+    const say = `${o.label} ${value}${o.unit ? ' ' + o.unit : ''}${o.trend ? `, ${o.trend} from ${o.previous}` : ''}`;
+    li.append(el('span', 'sr-only', say));
+    const row = el('span', 'vrow'); row.setAttribute('aria-hidden', 'true');
+    row.append(el('span', 'vv', value));
+    if (o.unit) row.append(el('span', 'vu', o.unit));
+    const lbl = el('span', 'vl', o.label); lbl.setAttribute('aria-hidden', 'true');
+    li.append(lbl, row);
+    if (o.trend) { const a = el('span', 'va', `${o.trend === 'up' ? '↑' : '↓'} ${o.previous}`); a.setAttribute('aria-hidden', 'true'); li.append(a); } // earlier value (CASE-090)
+    ul.append(li);
+  }
+  return ul;
+}
+function listTile(cls, title, items) {
+  if (!items?.length) return null;
+  const box = el('section', `card find ${cls}`);
+  box.setAttribute('aria-label', title);
+  box.append(el('p', 'eyebrow', title));
+  const ul = el('ul');
+  for (const t of items) ul.append(el('li', null, t));
+  box.append(ul);
+  return box;
+}
+function sceneCard(s) {
+  const card = el('section', 'card scene');
+  card.setAttribute('aria-label', 'Live surface');
+  card.dataset.kind = s.timelineKind ?? 'live';
+  card.append(el('h1', null, s.title));
+  if (s.scene) card.append(el('p', 'prose', s.scene));
+  return card;
+}
+function findingsTiles(s, { investigations = true } = {}) {
+  const f = listTile('findings', 'Findings', s.points);
+  const i = investigations ? listTile('investigations', 'Investigations', s.investigations) : null;
+  if (!f && !i) return null;
+  const wrap = el('div', 'tiles2');
+  wrap.append(...[f, i].filter(Boolean));
+  return wrap;
+}
+
+/** The options as stacked tiles in the one authored order, each with its shape + colour mark and full text. */
+function renderTiles(decision) {
+  const opts = decision.interaction?.options ?? [];
+  if (!opts.length) return null; // free text: the prompt only
+  const ol = el('ol', 'tiles');
+  ol.setAttribute('aria-label', 'Options');
+  opts.forEach((o, i) => {
+    const m = markFor(i);
+    const li = el('li', 'tile opt-tile' + (o.explored || o.disabled ? ' dim' : ''));
+    li.style.setProperty('--mk', m.fill);
+    li.append(markSvg(i, { size: 48, decorative: false }), el('span', 'lbl', o.label));
+    if (o.explored) li.append(el('span', 'tag', 'Explored'));
+    ol.append(li);
+  });
+  return ol;
+}
+function decisionColumn(view) {
+  const d = view.decision;
+  const box = el('section', 'card decision');
+  box.setAttribute('aria-label', 'Team decision');
+  box.dataset.phase = phaseOf(view)[0];
+  const call = el('p', 'call');
+  if (view.manual) call.append(icon('speech'), 'Facilitator-led discussion');
+  else if (view.phase === 'decision_open') call.append(icon('phone'), 'Prompt');
+  else if (view.phase === 'reviewing') call.append(icon('lock'), 'Responses locked · Facilitator reviewing');
+  else if (view.phase === 'paused') call.append(icon('pause'), 'Paused · answers are held');
+  box.append(call, el('h2', null, d.prompt));
+  const t = renderTiles(d);
+  if (t) box.append(t);
+  return box;
+}
+
+/** Room-result copy (CASE-080, CASE-104): counts always shown; a tie reads as a split; multi-select and
+ *  ranking say what was counted; closed free text uses anonymous pages (CASE-275). */
+function renderResult(view) {
+  return renderResponseResult(view, { el, markSvg });
+}
+
+function renderLobby(view) {
+  const left = el('div', 'col lobby-left');
+  if (topology === 'same-pc') left.append(el('p', 'check', 'Projector'));
+  left.append(el('h1', null, view.caseTitle));
+  left.append(el('p', 'status-line', `${view.counts.participants} in the room · Waiting to start`));
+  const panel = el('section', 'card joinpanel');
+  panel.setAttribute('aria-label', 'Join');
+  if (view.joiningClosed) { panel.append(el('h2', null, 'Joining is closed')); return [left, panel]; }
+  const url = joinUrl(view.joinCode);
+  panel.append(el('h2', null, 'Join on your phone'));
+  const q = el('div', 'qrcard'); q.append(qrSvg(qrPayload(url), { margin: 2 }));
+  q.firstChild.setAttribute('aria-label', `QR code for ${url.replace('https://', '')}`);
+  panel.append(q, el('div', 'url', url.replace(/^https:\/\//, '')), el('div', 'code-label', 'Room code'), el('div', 'code', formatCode(view.joinCode)));
+  return [left, panel];
+}
+
+/**
+ * Lay the main grid out (CASE-113). `place` says where the findings and investigations tiles go:
+ * 'right' (no decision open: the right column carries them), 'left' (under the vitals) or 'none'
+ * (only for a surface without an open decision). An open decision keeps Findings (CASE-134).
+ */
+function renderMain(view, layout) {
+  const { vitals: vPlace = 'left', tiles: place = 'right', investigations = true } = layout ?? {};
+  const main = $('main');
+  main.className = '';
+  if (!view) { main.className = 'single'; main.replaceChildren(el('h1', 'waiting-note', 'Waiting for the room…')); return; } // every state has a level-one heading (axe)
+  if (view.phase === 'waiting') { main.replaceChildren(...renderLobby(view)); return; }
+  if (['ranking', 'free_text'].includes(view.responseResult?.type) && !view.replay) {
+    const column = el('div', 'col'); column.append(el('h1', 'sr-only', view.caseTitle ?? 'Case'), renderResult(view));
+    main.className = 'single'; main.replaceChildren(column); return;
+  }
+  const s = view.surface;
+  const left = el('div', 'col');
+  const right = el('div', 'col');
+  if (s) left.append(sceneCard(s));
+  else left.append(el('h1', 'sr-only', view.caseTitle ?? 'Case'));
+  const vit = s ? renderVitals(s.observations) : null;
+  if (vit && vPlace === 'left') left.append(vit);
+  const tiles = s ? findingsTiles(s, { investigations }) : null;
+  if (view.phase === 'ended') {
+    const end = el('section', 'card endcard');
+    end.append(el('h2', null, 'Session ended'), el('p', null, 'Thank you · your private recap is on your phone for 24 hours'));
+    right.append(end);
+  } else if (view.responseResult) right.append(renderResult(view));
+  else if (view.decision) right.append(decisionColumn(view));
+  else {
+    const r = (view.phase === 'live' || view.phase === 'teaching') ? renderResult(view) : null;
+    if (r) right.append(r);
+  }
+  if (vit && vPlace === 'right') right.append(vit);
+  if (tiles && place === 'right') right.append(tiles);
+  if (tiles && place === 'left') left.append(tiles);
+  if (!right.childElementCount) { main.className = 'single'; main.replaceChildren(left); return; }
+  main.replaceChildren(left, right);
+}
+/** Where the vitals and the tiles go, in order of preference, for this view. */
+function placements(view) {
+  if (!view || view.phase === 'waiting') return [{}];
+  if (view.decision && view.phase !== 'ended') return [{ tiles: 'left' }, { tiles: 'left', investigations: false }];
+  return [{ tiles: 'right' }, { tiles: 'left' }, { vitals: 'right', tiles: 'right' }, { vitals: 'right', tiles: 'left' }, { vitals: 'right', tiles: 'none' }, { tiles: 'none' }];
+}
+
+// ── bottom row ──
+function renderFooter(view) {
+  const kids = [];
+  const joinable = view && view.joinCode && !view.joiningClosed && view.phase !== 'ended' && view.phase !== 'waiting';
+  if (joinable) {
+    const url = joinUrl(view.joinCode);
+    const q = el('div', 'qrcell'); q.append(qrSvg(qrPayload(url), { margin: 2 }));
+    q.firstChild.setAttribute('aria-label', `QR code for ${url.replace('https://', '')}`);
+    const route = el('div', 'route');
+    const code = el('div', 'code'); code.append(el('span', 'k', 'Code'), el('b', null, formatCode(view.joinCode)));
+    route.append(el('div', 'url', url.replace(/^https:\/\//, '')), code);
+    kids.push(q, route);
+  } else if (view && view.joiningClosed && view.phase !== 'ended') kids.push(el('span', 'closed', 'Joining is closed'));
+  else kids.push(el('span'));
+  $('foot').className = joinable ? '' : 'noroute';
+  kids.push(renderNames(view));
+  const snd = el('button', 'sound'); snd.type = 'button';
+  snd.setAttribute('aria-pressed', String(soundOn));
+  snd.setAttribute('aria-label', 'Room sound');
+  snd.append(icon(soundOn ? 'sound' : 'mute'));
+  snd.onclick = () => { soundOn = !soundOn; render(); };
+  kids.push(snd);
+  $('foot').replaceChildren(...kids);
+}
+
+/** `In the room`: avatar-only chips until Show names, then avatar + name (CASE-133). */
+function renderNames(view) {
+  const box = el('section', 'names');
+  if (!view) return box;
+  box.setAttribute('aria-labelledby', 'namesH');
+  const hd = el('h2', null, 'In the room'); hd.id = 'namesH';
+  box.append(hd);
+  const ul = el('ul');
+  const showingNames = Array.isArray(view.names);
+  const named = showingNames ? view.names.map((n) => (typeof n === 'string' ? { name: n, avatarId: null } : n)).map((n) => ({ ...n, name: cleanName(n.name) })).filter((n) => n.name) : [];
+  const avatars = showingNames ? named : (Array.isArray(view.avatars) ? view.avatars : Array.from({ length: view.counts?.participants ?? 0 }, () => null)).map((avatarId) => ({ avatarId }));
+  for (const [index, n] of avatars.entries()) {
+    const li = el('li', `chip${showingNames ? '' : ' anonymous'}`);
+    if (view.phase === 'waiting' && arrivalIndices.includes(index)) li.classList.add('arrival-new');
+    if (!showingNames) li.setAttribute('aria-label', 'Participant');
+    li.append(avatarEl(n.avatarId, { size: 32, name: showingNames ? n.name : '' }));
+    if (showingNames) li.append(el('span', 'nm', n.name));
+    ul.append(li);
+  }
+  ul.dataset.unnamed = String(showingNames ? Math.max(0, (view.counts?.participants ?? 0) - named.length) : Math.max(0, (view.counts?.participants ?? 0) - avatars.length));
+  box.append(ul);
+  if (view.phase === 'waiting' && arrivalStatus.textContent) box.append(el('span', `arrival-note${arrivalOverflow ? ' arrival-new' : ''}`, arrivalStatus.textContent));
+  return box;
+}
+/** Chips that do not fit on the one line become `+N`; the hidden names stay out of the page (no title). */
+function fitNames() {
+  const ul = $('foot').querySelector('.names ul');
+  if (!ul) return;
+  const chips = [...ul.querySelectorAll('li.chip:not(.more)')];
+  const extra = Number(ul.dataset.unnamed || 0);
+  const more = el('li', 'chip more');
+  const place = (n) => { more.textContent = `+${n}`; more.setAttribute('aria-label', `and ${n} more`); if (!more.isConnected) ul.append(more); };
+  if (extra) place(extra);
+  let hiddenN = 0;
+  for (let i = chips.length - 1; i >= 0 && ul.scrollWidth > ul.clientWidth + 1; i--) {
+    if (chips[i].classList.contains('arrival-new')) $('foot').querySelector('.arrival-note')?.classList.add('arrival-new');
+    chips[i].hidden = true; hiddenN += 1; place(hiddenN + extra);
+  }
+}
+
+// Fit at any size without scrolling. During a decision, Findings shrink first to an 18px floor;
+// spacing and other type follow, then Investigations yield and Findings truncate with a count.
+function fit(view) {
+  const m = $('main');
+  const ok = () => [...m.querySelectorAll('.col')].every((c) => c.scrollHeight <= c.clientHeight + 1) && m.scrollWidth <= m.clientWidth + 1;
+  const set = (s, sp, findSize) => { document.documentElement.style.setProperty('--s', s); m.style.setProperty('--s', s); m.style.setProperty('--sp', sp); m.style.setProperty('--p-find', `${findSize}px`); };
+  const decision = Boolean(view?.decision && view.phase !== 'ended');
+  const stages = [];
+  if (decision) for (const f of [24, 22, 20, 18]) stages.push([1, 1, f]);
+  for (const sp of [1, .8, .6, .45]) stages.push([1, sp, decision ? 18 : 24]);
+  for (const s of [.94, .88, .82, .76, .7]) stages.push([s, .45, decision ? 18 : 24]);
+  for (const sp of [.3, .15, 0]) stages.push([.7, sp, decision ? 18 : 24]);
+  const run = () => { for (const st of stages) { set(...st); if (ok()) return true; } return false; };
+  const order = placements(view);
+  const spill = () => Math.max(0, ...[...m.querySelectorAll('.col')].map((c) => c.scrollHeight - c.clientHeight));
+  let fitted = false, best = null;
+  for (const [i, layout] of order.entries()) {
+    if (i) renderMain(view, layout);
+    if ((fitted = run())) break;
+    if (!best || spill() < best.spill) best = { layout, spill: spill() };
+  }
+  if (!fitted && best && best.layout !== order.at(-1)) { renderMain(view, best.layout); run(); }
+  if (!fitted && decision) {
+    const list = m.querySelector('.findings ul');
+    if (list) {
+      const items = [...list.children];
+      const more = el('li', 'more');
+      list.append(more);
+      for (let n = 1; n <= items.length; n++) {
+        items[items.length - n].hidden = true;
+        more.textContent = `+${n} more on your phone`;
+        if (ok()) { fitted = true; break; }
+      }
+    }
+  }
+  m.dataset.overflow = String(!fitted); // lab check: text never scrolls
+}
+window.addEventListener('resize', () => render());
+
+let lastKey = null, lastSurfaceId = null, lastGroupSignature = null;
+function announceIfChanged(view) {
+  const groupSignature = view?.surface ? JSON.stringify([view.surface.scene, view.surface.assetIds, view.surface.observations, view.surface.points, view.surface.investigations]) : null;
+  const key = view ? [view.phase, view.surface?.surfaceId, groupSignature, view.manual, view.replay, view.decision?.prompt, view.decision?.status, view.lastResult ? 'r' : ''].join('|') : 'none';
+  if (key === lastKey) return;
+  const newGroup = Boolean(view?.surface && lastSurfaceId === view.surface.surfaceId && lastGroupSignature !== null && groupSignature !== lastGroupSignature);
+  lastKey = key;
+  lastSurfaceId = view?.surface?.surfaceId ?? null;
+  lastGroupSignature = groupSignature;
+  if (!view) return;
+  const say = newGroup ? `New material shared. ${view.surface.title}`
+    : view.phase === 'waiting' ? `${view.caseTitle}. Waiting to start`
+    : view.phase === 'decision_open' ? 'Team decision open. Choose on your phone'
+    : view.phase === 'reviewing' ? (view.manual ? 'Manual room mode. Facilitator-led discussion' : 'Responses locked. Facilitator reviewing')
+    : view.phase === 'paused' ? 'Discussion pause'
+    : view.phase === 'ended' ? 'Session ended'
+    : `${view.surface?.title ?? ''}`;
+  $('announce').textContent = say;
+}
+
+function render() {
+  const hadFocus = document.activeElement?.classList?.contains('sound');
+  const { view, from } = current();
+  renderTop(view, from);
+  renderMain(view, placements(view)[0]);
+  renderFooter(view);
+  announceIfChanged(view);
+  fit(view);
+  fitNames();
+  if (hadFocus) $('foot').querySelector('.sound')?.focus();
+  document.title = 'Case projector';
+  document.documentElement.dataset.topology = topology;
+  document.documentElement.dataset.source = from;
+}
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+/* Shared select and menu surfaces use the same device theme as their enclosing document. */
+.shared-select-trigger { display: inline-flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; max-width: 100%; min-height: 44px; padding: var(--sp-2) var(--sp-3); border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; text-align: left; }
+.shared-select-trigger::after { content: none; }
+.shared-select-trigger[aria-expanded="true"] { border-color: var(--petrol); box-shadow: var(--shadow-1); }
+.shared-popup { position: fixed; inset: var(--popup-top) auto var(--popup-bottom) var(--popup-left); width: var(--popup-width); max-height: var(--popup-height); margin: 0; padding: 4px; overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-2); z-index: var(--z-sticky); }
+.shared-select-options [role="option"] { display: flex; align-items: center; min-height: 44px; padding: 8px 12px; box-sizing: border-box; cursor: pointer; border-radius: 4px; overflow-wrap: anywhere; }
+.shared-select-options [role="option"]:not([aria-disabled="true"]):hover { background: var(--quiet); }
+.shared-select-options [role="option"].active { outline: 2px solid var(--focus); outline-offset: -2px; background: var(--quiet); }
+.shared-select-options [aria-selected="true"] { font-weight: 650; }
+.shared-select-options [aria-selected="true"]::after { content: '✓'; margin-left: auto; padding-left: 12px; }
+.shared-select-options [aria-disabled="true"] { color: var(--ink-muted); cursor: default; }
+.shared-select-trigger:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.shared-select-value { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.shared-select-options [role="option"] { gap: var(--sp-2); }
+.shared-choice-copy { display: grid; gap: 2px; min-width: 0; flex: 1; }
+.shared-choice-description { color: var(--ink-muted); font-size: var(--t-xs); line-height: 1.5; }
+.shared-choice-group-title { padding: var(--sp-2) var(--sp-3); color: var(--ink-muted); font-size: var(--t-xs); font-weight: var(--w-semibold); }
+.shared-select-options [role="group"] + [role="group"] { margin-top: var(--sp-1); border-top: 1px solid var(--line); }
+.shared-choice-icon { flex: none; }
+.shared-choice-dot { display: inline-flex; flex: none; }
+.shared-choice-dot::before { content: ''; width: 8px; height: 8px; border-radius: var(--radius-pill); background: var(--ink-muted); }
+.shared-choice-dot[data-tone="ok"]::before { background: var(--ok-ink); }
+.shared-choice-dot[data-tone="warn"]::before { background: var(--manual-ink); }
+.shared-choice-dot[data-tone="bad"]::before { background: var(--alert-ink); }
+.shared-choice-dot[data-tone="private"]::before { background: var(--private-ink); }
+.device-preferences { display: grid; gap: var(--sp-4); }
+.device-preferences h3, .device-audio legend { font-size: var(--t-sm); font-weight: var(--w-semibold); }
+.device-audio { display: grid; gap: var(--sp-3); border: 0; border-top: 1px solid var(--line); margin: 0; padding: var(--sp-3) 0 0; }
+.device-audio legend { padding-top: var(--sp-3); }
+.device-level { display: grid; grid-template-columns: 1fr auto; gap: var(--sp-2); }
+.device-level input { grid-column: 1 / -1; min-height: 44px; width: 100%; accent-color: var(--petrol); }
+.device-level output { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.device-general { display: grid; gap: var(--sp-2); }
+.device-general label, fieldset.appearance > label { display: flex; align-items: center; gap: var(--sp-2); min-height: 44px; }
+
+/* CASE-359: compact tools keep equal geometry; full rich values stay in their choice popup. */
+.btn.icon-button,.btn.tool-button,.shared-select-trigger.tool-button { box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;min-width:44px;max-width:44px;height:44px;min-height:44px;padding:0;border-radius:var(--radius-sm);gap:0;line-height:1;position:relative;background:var(--quiet);color:var(--quiet-ink);border:1px solid transparent; }
+.shared-select-trigger.tool-button::after { content:none; }
+.ui-icon { width:18px;height:18px;flex:none; }
+.tool-button[data-active=true]::before { content:'';position:absolute;right:5px;top:5px;width:5px;height:5px;border-radius:var(--radius-xs);background:currentColor; }
+
+label.tool-field { display:inline-flex;flex:none;min-width:0;font-size:0;gap:0; }
+.tool-field > .shared-select-trigger { font-size:var(--t-sm); }
+
+/* Native switch semantics and 44px hit targets; the track is intentionally smaller. */
+.device-toggle { display:flex;align-items:center;gap:var(--sp-3);min-height:44px; }
+.device-toggle input { appearance:none;position:relative;flex:none;width:44px;height:44px;margin:0;cursor:pointer;background:transparent;border:0; }
+.device-toggle input::before { content:'';position:absolute;inset:10px 2px;border:1px solid var(--field-line);border-radius:var(--radius-pill);background:var(--quiet); }
+.device-toggle input::after { content:'';position:absolute;top:13px;left:5px;width:18px;height:18px;border-radius:var(--radius-pill);background:var(--ink-muted); }
+.device-toggle input:checked::before { background:var(--petrol);border-color:var(--petrol); }
+.device-toggle input:checked::after { transform:translateX(16px);background:var(--surface); }
+.device-toggle input:focus-visible { outline:2px solid var(--focus);outline-offset:2px;border-radius:var(--radius-sm); }

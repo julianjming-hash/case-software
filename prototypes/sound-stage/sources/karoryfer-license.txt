@@ -1,0 +1,5 @@
+Karoryfer Samples licence evidence, checked 2026-11-01.
+Source: https://shop.karoryfer.com/pages/free-samples
+The current publisher statement dedicates its free sample libraries to CC0, except Marie Ork.
+This subset uses only Shinyguitar and Swagbass. Old downloads may contain the earlier licence.
+The current publisher statement governs the CC0 source selection recorded in manifest.json.

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Administration · Case</title><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" type="image/svg+xml" href="../public/icons/case.svg">
+<script src="../src/client/appearance-boot.mjs"></script>
+<link rel="stylesheet" href="../src/client/tokens.css"><link rel="stylesheet" href="../src/client/shell.css"><link rel="stylesheet" href="../src/client/startup.css"><link rel="stylesheet" href="../src/client/console.css"><link rel="stylesheet" href="../src/client/projector.css"><link rel="stylesheet" href="../src/client/pair-display.css"><link rel="stylesheet" href="../src/client/phone.css"><link rel="stylesheet" href="../src/client/feedback.css"><link rel="stylesheet" href="../src/client/privacy.css"><link rel="stylesheet" href="../src/client/site.css"><link rel="stylesheet" href="../src/client/groups.css"><link rel="stylesheet" href="../src/client/shared-controls.css">  <link rel="stylesheet" href="../src/client/case-map.css">
+</head>
+<body>
+<main class="startup-splash" aria-labelledby="surfaceTitle">
+<section class="startup-panel">
+<svg class="startup-mark" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1" y="1" width="6" height="6" rx="1"></rect><rect x="9" y="1" width="6" height="6" rx="1"></rect><rect x="1" y="9" width="6" height="6" rx="1"></rect><rect x="9" y="9" width="6" height="6" rx="1"></rect></svg>
+<h1 id="surfaceTitle">Case</h1>
+<p id="startupStatus" role="status">Opening Case…</p>
+<noscript><p>Case needs JavaScript. Enable it, then reload this page. Open the page in your browser if you are using an in-app preview.</p></noscript>
+<details class="startup-help"><summary><span>Trouble opening Case?</span> <span class="startup-help-action"><span class="startup-help-show">Show</span><span class="startup-help-hide">Hide</span></span></summary><p>Check your connection, then reload this page. If Case was just updated, reloading fetches the new version.</p><a href="/check">Network check</a></details>
+</section>
+</main>
+<dialog id="updateDialog" aria-labelledby="updateTitle">
+<h2 id="updateTitle">A new version of Case is available</h2>
+<p>Reload when you are ready. Reloading clears the case held in memory.</p>
+<button type="button" class="btn primary" id="updateAccept">Reload Case</button>
+<button type="button" class="btn" id="updateLater">Later</button>
+</dialog>
+<script type="module" src="../src/client/app.mjs"></script></body></html>

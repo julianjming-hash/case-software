@@ -1,0 +1,1027 @@
+{
+  "version": 6,
+  "stage": "fluid-150-intensity-awaiting-owner-audition",
+  "licence": "CC0-1.0",
+  "source": "scripts/sound/render-library.mjs",
+  "masteringTool": "ffmpeg version 7.1 Copyright (c) 2000-2024 the FFmpeg developers",
+  "codec": "MP3 192 kbit/s stereo; original pitches rendered at each authored tempo, no playback-rate pitch shift",
+  "tracks": [
+    {
+      "id": "atlas-current",
+      "name": "Atlas · Current",
+      "family": "Atlas",
+      "kind": "decision",
+      "style": 4,
+      "tonic": 43,
+      "key": "G major",
+      "voice": "marimba",
+      "bpm": 106,
+      "bars": 8,
+      "meter": 4,
+      "description": "The original marimba atmosphere, with a bass-led lift, answering wooden phrases and a tighter final percussion weave.",
+      "loopS": 18.113197278911564,
+      "assets": {
+        "low": {
+          "file": "assets/atlas-current-low-cb945943f1c81dd99e4be73eb965dd31cdaca9c1abf78015a2933548eeaf84c4.mp3",
+          "sha256": "cb945943f1c81dd99e4be73eb965dd31cdaca9c1abf78015a2933548eeaf84c4",
+          "bytes": 436392,
+          "format": "audio/mpeg",
+          "durationS": 18.113197278911564,
+          "loopS": 18.113197278911564,
+          "leadInS": 0,
+          "integratedLufs": -25.3,
+          "truePeakDbtp": -6.21,
+          "targetLufs": -25
+        },
+        "mid": {
+          "file": "assets/atlas-current-mid-9f7ad4e46a7eac3d219e2b6054efee9c34e1a69e22bf937c2d093fc21283da5f.mp3",
+          "sha256": "9f7ad4e46a7eac3d219e2b6054efee9c34e1a69e22bf937c2d093fc21283da5f",
+          "bytes": 436392,
+          "format": "audio/mpeg",
+          "durationS": 18.113197278911564,
+          "loopS": 18.113197278911564,
+          "leadInS": 0,
+          "integratedLufs": -24.29,
+          "truePeakDbtp": -6.13,
+          "targetLufs": -24
+        },
+        "peak": {
+          "file": "assets/atlas-current-peak-cebe1f598cd3916bad1af609da29f837fcbb1f4f441d900588f51a219513884a.mp3",
+          "sha256": "cebe1f598cd3916bad1af609da29f837fcbb1f4f441d900588f51a219513884a",
+          "bytes": 436392,
+          "format": "audio/mpeg",
+          "durationS": 18.113197278911564,
+          "loopS": 18.113197278911564,
+          "leadInS": 0,
+          "integratedLufs": -23.28,
+          "truePeakDbtp": -6.64,
+          "targetLufs": -23
+        },
+        "zero": {
+          "file": "assets/atlas-current-zero-92f315e86446e4fb4f2cafee919b0b1bd7d54ffd460455e9768fb883cf6d930c.mp3",
+          "sha256": "92f315e86446e4fb4f2cafee919b0b1bd7d54ffd460455e9768fb883cf6d930c",
+          "bytes": 97845,
+          "format": "audio/mpeg",
+          "durationS": 4,
+          "loopS": null,
+          "leadInS": 0,
+          "integratedLufs": -23.3,
+          "truePeakDbtp": -8.7,
+          "targetLufs": -21.5,
+          "attackSkipS": 0
+        }
+      },
+      "boosts": [
+        {
+          "id": "atlas-current-boost-125",
+          "name": "Atlas · Current",
+          "family": "Atlas",
+          "kind": "decision",
+          "style": 4,
+          "tonic": 43,
+          "key": "G major",
+          "voice": "marimba",
+          "bpm": 112.36,
+          "bars": 8,
+          "meter": 4,
+          "description": "The original marimba atmosphere, with a bass-led lift, answering wooden phrases and a tighter final percussion weave.",
+          "drive": 1.25,
+          "tempoFactor": 1.06,
+          "baseId": "atlas-current",
+          "loopS": 17.087936507936508,
+          "assets": {
+            "low": {
+              "file": "assets/atlas-current-boost-125-low-812e8df2648badca0eb5b359f1fda40462c9e1adb2e67c2dd47368648ba0305e.mp3",
+              "sha256": "812e8df2648badca0eb5b359f1fda40462c9e1adb2e67c2dd47368648ba0305e",
+              "bytes": 411941,
+              "format": "audio/mpeg",
+              "durationS": 17.087936507936508,
+              "loopS": 17.087936507936508,
+              "leadInS": 0,
+              "integratedLufs": -25.28,
+              "truePeakDbtp": -7.11,
+              "targetLufs": -25
+            },
+            "mid": {
+              "file": "assets/atlas-current-boost-125-mid-a85cb11989987d441b616044dd143ed350851d65cdf3b9311596707015db9459.mp3",
+              "sha256": "a85cb11989987d441b616044dd143ed350851d65cdf3b9311596707015db9459",
+              "bytes": 411941,
+              "format": "audio/mpeg",
+              "durationS": 17.087936507936508,
+              "loopS": 17.087936507936508,
+              "leadInS": 0,
+              "integratedLufs": -23.87,
+              "truePeakDbtp": -6.24,
+              "targetLufs": -23.5875
+            },
+            "peak": {
+              "file": "assets/atlas-current-boost-125-peak-961c384f1503c3eed117eba68ebf327f89849f39456f256b27a6d7b918d4485c.mp3",
+              "sha256": "961c384f1503c3eed117eba68ebf327f89849f39456f256b27a6d7b918d4485c",
+              "bytes": 411941,
+              "format": "audio/mpeg",
+              "durationS": 17.087936507936508,
+              "loopS": 17.087936507936508,
+              "leadInS": 0,
+              "integratedLufs": -22.53,
+              "truePeakDbtp": -6.23,
+              "targetLufs": -22.25
+            },
+            "zero": {
+              "file": "assets/atlas-current-zero-92f315e86446e4fb4f2cafee919b0b1bd7d54ffd460455e9768fb883cf6d930c.mp3",
+              "sha256": "92f315e86446e4fb4f2cafee919b0b1bd7d54ffd460455e9768fb883cf6d930c",
+              "bytes": 97845,
+              "format": "audio/mpeg",
+              "durationS": 4,
+              "loopS": null,
+              "leadInS": 0,
+              "integratedLufs": -23.3,
+              "truePeakDbtp": -8.7,
+              "targetLufs": -21.5,
+              "attackSkipS": 0
+            }
+          }
+        },
+        {
+          "id": "atlas-current-boost-150",
+          "name": "Atlas · Current",
+          "family": "Atlas",
+          "kind": "decision",
+          "style": 4,
+          "tonic": 43,
+          "key": "G major",
+          "voice": "marimba",
+          "bpm": 118.72,
+          "bars": 8,
+          "meter": 4,
+          "description": "The original marimba atmosphere, with a bass-led lift, answering wooden phrases and a tighter final percussion weave.",
+          "drive": 1.5,
+          "tempoFactor": 1.12,
+          "baseId": "atlas-current",
+          "loopS": 16.17251700680272,
+          "assets": {
+            "low": {
+              "file": "assets/atlas-current-boost-150-low-26cf0461e3477fc6e0f89382b5db86b1528dbfaf9e2281852022195eec257d60.mp3",
+              "sha256": "26cf0461e3477fc6e0f89382b5db86b1528dbfaf9e2281852022195eec257d60",
+              "bytes": 389999,
+              "format": "audio/mpeg",
+              "durationS": 16.17251700680272,
+              "loopS": 16.17251700680272,
+              "leadInS": 0,
+              "integratedLufs": -25.27,
+              "truePeakDbtp": -8.45,
+              "targetLufs": -25
+            },
+            "mid": {
+              "file": "assets/atlas-current-boost-150-mid-820005fd6ec67e9b4521f686eb54158cfc5642cfaff56d4249ca55eb2288eb40.mp3",
+              "sha256": "820005fd6ec67e9b4521f686eb54158cfc5642cfaff56d4249ca55eb2288eb40",
+              "bytes": 389999,
+              "format": "audio/mpeg",
+              "durationS": 16.17251700680272,
+              "loopS": 16.17251700680272,
+              "leadInS": 0,
+              "integratedLufs": -23.46,
+              "truePeakDbtp": -6.98,
+              "targetLufs": -23.175
+            },
+            "peak": {
+              "file": "assets/atlas-current-boost-150-peak-f038e79d9f90972aae7747467a17f4ff9749b1d624f9bf36d6cb64729c2ba483.mp3",
+              "sha256": "f038e79d9f90972aae7747467a17f4ff9749b1d624f9bf36d6cb64729c2ba483",
+              "bytes": 389999,
+              "format": "audio/mpeg",
+              "durationS": 16.17251700680272,
+              "loopS": 16.17251700680272,
+              "leadInS": 0,
+              "integratedLufs": -21.77,
+              "truePeakDbtp": -6.64,
+              "targetLufs": -21.5
+            },
+            "zero": {
+              "file": "assets/atlas-current-zero-92f315e86446e4fb4f2cafee919b0b1bd7d54ffd460455e9768fb883cf6d930c.mp3",
+              "sha256": "92f315e86446e4fb4f2cafee919b0b1bd7d54ffd460455e9768fb883cf6d930c",
+              "bytes": 97845,
+              "format": "audio/mpeg",
+              "durationS": 4,
+              "loopS": null,
+              "leadInS": 0,
+              "integratedLufs": -23.3,
+              "truePeakDbtp": -8.7,
+              "targetLufs": -21.5,
+              "attackSkipS": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "atlas-crossing",
+      "name": "Atlas · Crossing",
+      "family": "Atlas",
+      "kind": "decision",
+      "style": 4,
+      "tonic": 40,
+      "key": "E minor",
+      "mode": "minor",
+      "voice": "marimba",
+      "bpm": 106,
+      "bars": 8,
+      "meter": 4,
+      "variation": 71,
+      "harmony": [
+        [
+          0,
+          [
+            0,
+            3,
+            7,
+            10
+          ]
+        ],
+        [
+          5,
+          [
+            5,
+            8,
+            12,
+            15
+          ]
+        ],
+        [
+          10,
+          [
+            10,
+            14,
+            17,
+            21
+          ]
+        ],
+        [
+          7,
+          [
+            7,
+            11,
+            14,
+            17
+          ]
+        ]
+      ],
+      "description": "A second Atlas direction in E minor. A darker harmonic pull and interlocking answers build tension within the same wooden palette.",
+      "loopS": 18.113197278911564,
+      "assets": {
+        "low": {
+          "file": "assets/atlas-crossing-low-d865b7357044f3f58f5d7726529399c0bf8103a19c487bd3d1113aed68b87778.mp3",
+          "sha256": "d865b7357044f3f58f5d7726529399c0bf8103a19c487bd3d1113aed68b87778",
+          "bytes": 436392,
+          "format": "audio/mpeg",
+          "durationS": 18.113197278911564,
+          "loopS": 18.113197278911564,
+          "leadInS": 0,
+          "integratedLufs": -25.3,
+          "truePeakDbtp": -6.35,
+          "targetLufs": -25
+        },
+        "mid": {
+          "file": "assets/atlas-crossing-mid-697797131e2d3ca4e6784740c65ff350b35fba8d1ece3da1ee6488824cbc6ae8.mp3",
+          "sha256": "697797131e2d3ca4e6784740c65ff350b35fba8d1ece3da1ee6488824cbc6ae8",
+          "bytes": 436392,
+          "format": "audio/mpeg",
+          "durationS": 18.113197278911564,
+          "loopS": 18.113197278911564,
+          "leadInS": 0,
+          "integratedLufs": -24.29,
+          "truePeakDbtp": -6.63,
+          "targetLufs": -24
+        },
+        "peak": {
+          "file": "assets/atlas-crossing-peak-ca67c84b2bd761b92a4eadacabd8b2451b7fb11a39027e0e3191cf2046fdbd2b.mp3",
+          "sha256": "ca67c84b2bd761b92a4eadacabd8b2451b7fb11a39027e0e3191cf2046fdbd2b",
+          "bytes": 436392,
+          "format": "audio/mpeg",
+          "durationS": 18.113197278911564,
+          "loopS": 18.113197278911564,
+          "leadInS": 0,
+          "integratedLufs": -23.28,
+          "truePeakDbtp": -6.37,
+          "targetLufs": -23
+        },
+        "zero": {
+          "file": "assets/atlas-crossing-zero-5dc67dfe9fa7b7d6fe14cbd27997a73bd292237ae1b3875b71521c20b370c6e5.mp3",
+          "sha256": "5dc67dfe9fa7b7d6fe14cbd27997a73bd292237ae1b3875b71521c20b370c6e5",
+          "bytes": 97845,
+          "format": "audio/mpeg",
+          "durationS": 4,
+          "loopS": null,
+          "leadInS": 0,
+          "integratedLufs": -23.29,
+          "truePeakDbtp": -7.05,
+          "targetLufs": -21.5,
+          "attackSkipS": 0
+        }
+      },
+      "boosts": [
+        {
+          "id": "atlas-crossing-boost-125",
+          "name": "Atlas · Crossing",
+          "family": "Atlas",
+          "kind": "decision",
+          "style": 4,
+          "tonic": 40,
+          "key": "E minor",
+          "mode": "minor",
+          "voice": "marimba",
+          "bpm": 112.36,
+          "bars": 8,
+          "meter": 4,
+          "variation": 71,
+          "harmony": [
+            [
+              0,
+              [
+                0,
+                3,
+                7,
+                10
+              ]
+            ],
+            [
+              5,
+              [
+                5,
+                8,
+                12,
+                15
+              ]
+            ],
+            [
+              10,
+              [
+                10,
+                14,
+                17,
+                21
+              ]
+            ],
+            [
+              7,
+              [
+                7,
+                11,
+                14,
+                17
+              ]
+            ]
+          ],
+          "description": "A second Atlas direction in E minor. A darker harmonic pull and interlocking answers build tension within the same wooden palette.",
+          "drive": 1.25,
+          "tempoFactor": 1.06,
+          "baseId": "atlas-crossing",
+          "loopS": 17.087936507936508,
+          "assets": {
+            "low": {
+              "file": "assets/atlas-crossing-boost-125-low-9a49002c4c9f7907d3eb3739f2eb3d74c657078b3d76bc9e7060d97e999dc6f9.mp3",
+              "sha256": "9a49002c4c9f7907d3eb3739f2eb3d74c657078b3d76bc9e7060d97e999dc6f9",
+              "bytes": 411941,
+              "format": "audio/mpeg",
+              "durationS": 17.087936507936508,
+              "loopS": 17.087936507936508,
+              "leadInS": 0,
+              "integratedLufs": -25.28,
+              "truePeakDbtp": -7.02,
+              "targetLufs": -25
+            },
+            "mid": {
+              "file": "assets/atlas-crossing-boost-125-mid-b2e488de0719ce9874b3de761926ad631f76ba44c09a80c78ced28bd7f8d9c36.mp3",
+              "sha256": "b2e488de0719ce9874b3de761926ad631f76ba44c09a80c78ced28bd7f8d9c36",
+              "bytes": 411941,
+              "format": "audio/mpeg",
+              "durationS": 17.087936507936508,
+              "loopS": 17.087936507936508,
+              "leadInS": 0,
+              "integratedLufs": -23.86,
+              "truePeakDbtp": -6.27,
+              "targetLufs": -23.5875
+            },
+            "peak": {
+              "file": "assets/atlas-crossing-boost-125-peak-5eeb8f5298355e0cef9d274121ed079472306d0f582756251b60d88abd4b4fd7.mp3",
+              "sha256": "5eeb8f5298355e0cef9d274121ed079472306d0f582756251b60d88abd4b4fd7",
+              "bytes": 411941,
+              "format": "audio/mpeg",
+              "durationS": 17.087936507936508,
+              "loopS": 17.087936507936508,
+              "leadInS": 0,
+              "integratedLufs": -22.53,
+              "truePeakDbtp": -5.61,
+              "targetLufs": -22.25
+            },
+            "zero": {
+              "file": "assets/atlas-crossing-zero-5dc67dfe9fa7b7d6fe14cbd27997a73bd292237ae1b3875b71521c20b370c6e5.mp3",
+              "sha256": "5dc67dfe9fa7b7d6fe14cbd27997a73bd292237ae1b3875b71521c20b370c6e5",
+              "bytes": 97845,
+              "format": "audio/mpeg",
+              "durationS": 4,
+              "loopS": null,
+              "leadInS": 0,
+              "integratedLufs": -23.29,
+              "truePeakDbtp": -7.05,
+              "targetLufs": -21.5,
+              "attackSkipS": 0
+            }
+          }
+        },
+        {
+          "id": "atlas-crossing-boost-150",
+          "name": "Atlas · Crossing",
+          "family": "Atlas",
+          "kind": "decision",
+          "style": 4,
+          "tonic": 40,
+          "key": "E minor",
+          "mode": "minor",
+          "voice": "marimba",
+          "bpm": 118.72,
+          "bars": 8,
+          "meter": 4,
+          "variation": 71,
+          "harmony": [
+            [
+              0,
+              [
+                0,
+                3,
+                7,
+                10
+              ]
+            ],
+            [
+              5,
+              [
+                5,
+                8,
+                12,
+                15
+              ]
+            ],
+            [
+              10,
+              [
+                10,
+                14,
+                17,
+                21
+              ]
+            ],
+            [
+              7,
+              [
+                7,
+                11,
+                14,
+                17
+              ]
+            ]
+          ],
+          "description": "A second Atlas direction in E minor. A darker harmonic pull and interlocking answers build tension within the same wooden palette.",
+          "drive": 1.5,
+          "tempoFactor": 1.12,
+          "baseId": "atlas-crossing",
+          "loopS": 16.17251700680272,
+          "assets": {
+            "low": {
+              "file": "assets/atlas-crossing-boost-150-low-7ad3333d09ed9d1a7ef03c8dfbc1e8c2d5a72c88eb66fd26360fb60f1efcce1c.mp3",
+              "sha256": "7ad3333d09ed9d1a7ef03c8dfbc1e8c2d5a72c88eb66fd26360fb60f1efcce1c",
+              "bytes": 389999,
+              "format": "audio/mpeg",
+              "durationS": 16.17251700680272,
+              "loopS": 16.17251700680272,
+              "leadInS": 0,
+              "integratedLufs": -25.28,
+              "truePeakDbtp": -8.08,
+              "targetLufs": -25
+            },
+            "mid": {
+              "file": "assets/atlas-crossing-boost-150-mid-29e4ddb7e3e01572c08c226901d3429eda1a71e72de29fa8e09c98b10c18c316.mp3",
+              "sha256": "29e4ddb7e3e01572c08c226901d3429eda1a71e72de29fa8e09c98b10c18c316",
+              "bytes": 389999,
+              "format": "audio/mpeg",
+              "durationS": 16.17251700680272,
+              "loopS": 16.17251700680272,
+              "leadInS": 0,
+              "integratedLufs": -23.45,
+              "truePeakDbtp": -6.76,
+              "targetLufs": -23.175
+            },
+            "peak": {
+              "file": "assets/atlas-crossing-boost-150-peak-23194edd1c8e1e39a495b25aeec8b93d9234c6ee04e252d0003ee95701f8c9fe.mp3",
+              "sha256": "23194edd1c8e1e39a495b25aeec8b93d9234c6ee04e252d0003ee95701f8c9fe",
+              "bytes": 389999,
+              "format": "audio/mpeg",
+              "durationS": 16.17251700680272,
+              "loopS": 16.17251700680272,
+              "leadInS": 0,
+              "integratedLufs": -21.77,
+              "truePeakDbtp": -6.41,
+              "targetLufs": -21.5
+            },
+            "zero": {
+              "file": "assets/atlas-crossing-zero-5dc67dfe9fa7b7d6fe14cbd27997a73bd292237ae1b3875b71521c20b370c6e5.mp3",
+              "sha256": "5dc67dfe9fa7b7d6fe14cbd27997a73bd292237ae1b3875b71521c20b370c6e5",
+              "bytes": 97845,
+              "format": "audio/mpeg",
+              "durationS": 4,
+              "loopS": null,
+              "leadInS": 0,
+              "integratedLufs": -23.29,
+              "truePeakDbtp": -7.05,
+              "targetLufs": -21.5,
+              "attackSkipS": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "side-street-developed",
+      "name": "Side Street",
+      "family": "Side Street",
+      "kind": "decision",
+      "style": 1,
+      "tonic": 45,
+      "key": "A minor",
+      "voice": "nylon",
+      "bpm": 112,
+      "bars": 14,
+      "meter": 4,
+      "warm": true,
+      "noLead": true,
+      "description": "Lower archtop voicings, softened upper strings and a more present recorded bass. The groove gains percussion detail toward the finish.",
+      "loopS": 30,
+      "assets": {
+        "low": {
+          "file": "assets/side-street-developed-low-7fe3c9829cf995d949d43ac5b37d513ef8dfbbce24ccfe557e2b8a5a4023a50b.mp3",
+          "sha256": "7fe3c9829cf995d949d43ac5b37d513ef8dfbbce24ccfe557e2b8a5a4023a50b",
+          "bytes": 721649,
+          "format": "audio/mpeg",
+          "durationS": 30,
+          "loopS": 30,
+          "leadInS": 0,
+          "integratedLufs": -25.29,
+          "truePeakDbtp": -9.01,
+          "targetLufs": -25
+        },
+        "mid": {
+          "file": "assets/side-street-developed-mid-de0dcb7e66ba9e4fd6619e20825ae3974eeda7f589a7ba9f5dd006484a860b2d.mp3",
+          "sha256": "de0dcb7e66ba9e4fd6619e20825ae3974eeda7f589a7ba9f5dd006484a860b2d",
+          "bytes": 721649,
+          "format": "audio/mpeg",
+          "durationS": 30,
+          "loopS": 30,
+          "leadInS": 0,
+          "integratedLufs": -24.3,
+          "truePeakDbtp": -8.55,
+          "targetLufs": -24
+        },
+        "peak": {
+          "file": "assets/side-street-developed-peak-d73e98899c4415c3c643177d7632fa293b5864bd4ee961faf66a0f931256b424.mp3",
+          "sha256": "d73e98899c4415c3c643177d7632fa293b5864bd4ee961faf66a0f931256b424",
+          "bytes": 721649,
+          "format": "audio/mpeg",
+          "durationS": 30,
+          "loopS": 30,
+          "leadInS": 0,
+          "integratedLufs": -23.29,
+          "truePeakDbtp": -7.59,
+          "targetLufs": -23
+        },
+        "zero": {
+          "file": "assets/side-street-developed-zero-9d889e11dffb6b1529b2955387bd694768972b0d2b1f48f0701e154ec6167913.mp3",
+          "sha256": "9d889e11dffb6b1529b2955387bd694768972b0d2b1f48f0701e154ec6167913",
+          "bytes": 97845,
+          "format": "audio/mpeg",
+          "durationS": 4,
+          "loopS": null,
+          "leadInS": 0,
+          "integratedLufs": -23.08,
+          "truePeakDbtp": -9.2,
+          "targetLufs": -21.5,
+          "attackSkipS": 0
+        }
+      },
+      "boosts": [
+        {
+          "id": "side-street-developed-boost-125",
+          "name": "Side Street",
+          "family": "Side Street",
+          "kind": "decision",
+          "style": 1,
+          "tonic": 45,
+          "key": "A minor",
+          "voice": "nylon",
+          "bpm": 118.72,
+          "bars": 14,
+          "meter": 4,
+          "warm": true,
+          "noLead": true,
+          "description": "Lower archtop voicings, softened upper strings and a more present recorded bass. The groove gains percussion detail toward the finish.",
+          "drive": 1.25,
+          "tempoFactor": 1.06,
+          "baseId": "side-street-developed",
+          "loopS": 28.3018820861678,
+          "assets": {
+            "low": {
+              "file": "assets/side-street-developed-boost-125-low-2f7c95edee525343b08144694db99929e8117b9a661a4d3c6a87c39d41527dc4.mp3",
+              "sha256": "2f7c95edee525343b08144694db99929e8117b9a661a4d3c6a87c39d41527dc4",
+              "bytes": 680898,
+              "format": "audio/mpeg",
+              "durationS": 28.3018820861678,
+              "loopS": 28.3018820861678,
+              "leadInS": 0,
+              "integratedLufs": -25.28,
+              "truePeakDbtp": -10.52,
+              "targetLufs": -25
+            },
+            "mid": {
+              "file": "assets/side-street-developed-boost-125-mid-28f0a3ff872bd7893a0c315b086e20ef95ca2bd5713d5de95143c7bafb46d6db.mp3",
+              "sha256": "28f0a3ff872bd7893a0c315b086e20ef95ca2bd5713d5de95143c7bafb46d6db",
+              "bytes": 680898,
+              "format": "audio/mpeg",
+              "durationS": 28.3018820861678,
+              "loopS": 28.3018820861678,
+              "leadInS": 0,
+              "integratedLufs": -23.86,
+              "truePeakDbtp": -9.39,
+              "targetLufs": -23.5875
+            },
+            "peak": {
+              "file": "assets/side-street-developed-boost-125-peak-601f692d04fac9258f9a6c1268d5a32794c8c7c6f0af8289ac17e109d2cd3fd4.mp3",
+              "sha256": "601f692d04fac9258f9a6c1268d5a32794c8c7c6f0af8289ac17e109d2cd3fd4",
+              "bytes": 680898,
+              "format": "audio/mpeg",
+              "durationS": 28.3018820861678,
+              "loopS": 28.3018820861678,
+              "leadInS": 0,
+              "integratedLufs": -22.53,
+              "truePeakDbtp": -8.16,
+              "targetLufs": -22.25
+            },
+            "zero": {
+              "file": "assets/side-street-developed-zero-9d889e11dffb6b1529b2955387bd694768972b0d2b1f48f0701e154ec6167913.mp3",
+              "sha256": "9d889e11dffb6b1529b2955387bd694768972b0d2b1f48f0701e154ec6167913",
+              "bytes": 97845,
+              "format": "audio/mpeg",
+              "durationS": 4,
+              "loopS": null,
+              "leadInS": 0,
+              "integratedLufs": -23.08,
+              "truePeakDbtp": -9.2,
+              "targetLufs": -21.5,
+              "attackSkipS": 0
+            }
+          }
+        },
+        {
+          "id": "side-street-developed-boost-150",
+          "name": "Side Street",
+          "family": "Side Street",
+          "kind": "decision",
+          "style": 1,
+          "tonic": 45,
+          "key": "A minor",
+          "voice": "nylon",
+          "bpm": 125.44,
+          "bars": 14,
+          "meter": 4,
+          "warm": true,
+          "noLead": true,
+          "description": "Lower archtop voicings, softened upper strings and a more present recorded bass. The groove gains percussion detail toward the finish.",
+          "drive": 1.5,
+          "tempoFactor": 1.12,
+          "baseId": "side-street-developed",
+          "loopS": 26.785714285714285,
+          "assets": {
+            "low": {
+              "file": "assets/side-street-developed-boost-150-low-e386b81efec10118cf7fc669040424a9c13fe1aa020486f469ab83569dd823ba.mp3",
+              "sha256": "e386b81efec10118cf7fc669040424a9c13fe1aa020486f469ab83569dd823ba",
+              "bytes": 644536,
+              "format": "audio/mpeg",
+              "durationS": 26.785714285714285,
+              "loopS": 26.785714285714285,
+              "leadInS": 0,
+              "integratedLufs": -25.27,
+              "truePeakDbtp": -12.36,
+              "targetLufs": -25
+            },
+            "mid": {
+              "file": "assets/side-street-developed-boost-150-mid-7d2d09136856da88bf825a500f9a09b9817f88c53955c2f2474677475ce40bf2.mp3",
+              "sha256": "7d2d09136856da88bf825a500f9a09b9817f88c53955c2f2474677475ce40bf2",
+              "bytes": 644536,
+              "format": "audio/mpeg",
+              "durationS": 26.785714285714285,
+              "loopS": 26.785714285714285,
+              "leadInS": 0,
+              "integratedLufs": -23.44,
+              "truePeakDbtp": -10.48,
+              "targetLufs": -23.175
+            },
+            "peak": {
+              "file": "assets/side-street-developed-boost-150-peak-019207a44c94185c30c6741b62cc4d2e2a8a17e2882832d2ab11e7f85884d4e1.mp3",
+              "sha256": "019207a44c94185c30c6741b62cc4d2e2a8a17e2882832d2ab11e7f85884d4e1",
+              "bytes": 644536,
+              "format": "audio/mpeg",
+              "durationS": 26.785714285714285,
+              "loopS": 26.785714285714285,
+              "leadInS": 0,
+              "integratedLufs": -21.77,
+              "truePeakDbtp": -9.04,
+              "targetLufs": -21.5
+            },
+            "zero": {
+              "file": "assets/side-street-developed-zero-9d889e11dffb6b1529b2955387bd694768972b0d2b1f48f0701e154ec6167913.mp3",
+              "sha256": "9d889e11dffb6b1529b2955387bd694768972b0d2b1f48f0701e154ec6167913",
+              "bytes": 97845,
+              "format": "audio/mpeg",
+              "durationS": 4,
+              "loopS": null,
+              "leadInS": 0,
+              "integratedLufs": -23.08,
+              "truePeakDbtp": -9.2,
+              "targetLufs": -21.5,
+              "attackSkipS": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "night-platform-developed",
+      "name": "Night Platform",
+      "family": "Night Platform",
+      "kind": "decision",
+      "style": 2,
+      "tonic": 41,
+      "key": "F minor",
+      "voice": "keys",
+      "bpm": 126,
+      "bars": 8,
+      "meter": 4,
+      "description": "The kept two-step pace, opening from a lean pocket into denser hats, chord answers and short same-kit turnarounds.",
+      "loopS": 15.238095238095237,
+      "assets": {
+        "low": {
+          "file": "assets/night-platform-developed-low-2c3ef2dcf7de715a01253562eaa897039a913b1e8daf9f003ca525f724af6420.mp3",
+          "sha256": "2c3ef2dcf7de715a01253562eaa897039a913b1e8daf9f003ca525f724af6420",
+          "bytes": 367429,
+          "format": "audio/mpeg",
+          "durationS": 15.238095238095237,
+          "loopS": 15.238095238095237,
+          "leadInS": 0,
+          "integratedLufs": -25.28,
+          "truePeakDbtp": -10.13,
+          "targetLufs": -25
+        },
+        "mid": {
+          "file": "assets/night-platform-developed-mid-8b80d9fb701548ff40937f5bda47eebeec354c7ddb0cb7d671616df5bface2ad.mp3",
+          "sha256": "8b80d9fb701548ff40937f5bda47eebeec354c7ddb0cb7d671616df5bface2ad",
+          "bytes": 367429,
+          "format": "audio/mpeg",
+          "durationS": 15.238095238095237,
+          "loopS": 15.238095238095237,
+          "leadInS": 0,
+          "integratedLufs": -24.28,
+          "truePeakDbtp": -9.24,
+          "targetLufs": -24
+        },
+        "peak": {
+          "file": "assets/night-platform-developed-peak-dc5ba9ae564faa2b31b245183fb79056f0ec8abd149a67374c03ec999a8f0e27.mp3",
+          "sha256": "dc5ba9ae564faa2b31b245183fb79056f0ec8abd149a67374c03ec999a8f0e27",
+          "bytes": 367429,
+          "format": "audio/mpeg",
+          "durationS": 15.238095238095237,
+          "loopS": 15.238095238095237,
+          "leadInS": 0,
+          "integratedLufs": -23.29,
+          "truePeakDbtp": -8.25,
+          "targetLufs": -23
+        },
+        "zero": {
+          "file": "assets/night-platform-developed-zero-ad01866dacae3023e9b02c8963cacf8ad01471e7467afa6ec8230ef7e6823773.mp3",
+          "sha256": "ad01866dacae3023e9b02c8963cacf8ad01471e7467afa6ec8230ef7e6823773",
+          "bytes": 97845,
+          "format": "audio/mpeg",
+          "durationS": 4,
+          "loopS": null,
+          "leadInS": 0,
+          "integratedLufs": -22.17,
+          "truePeakDbtp": -9.81,
+          "targetLufs": -21.5,
+          "attackSkipS": 0
+        }
+      },
+      "boosts": [
+        {
+          "id": "night-platform-developed-boost-125",
+          "name": "Night Platform",
+          "family": "Night Platform",
+          "kind": "decision",
+          "style": 2,
+          "tonic": 41,
+          "key": "F minor",
+          "voice": "keys",
+          "bpm": 133.56,
+          "bars": 8,
+          "meter": 4,
+          "description": "The kept two-step pace, opening from a lean pocket into denser hats, chord answers and short same-kit turnarounds.",
+          "drive": 1.25,
+          "tempoFactor": 1.06,
+          "baseId": "night-platform-developed",
+          "loopS": 14.375555555555556,
+          "assets": {
+            "low": {
+              "file": "assets/night-platform-developed-boost-125-low-da65758329c6d8b79596b40213f466a7e7c3ff95f8f8361e991f422474e76d00.mp3",
+              "sha256": "da65758329c6d8b79596b40213f466a7e7c3ff95f8f8361e991f422474e76d00",
+              "bytes": 346740,
+              "format": "audio/mpeg",
+              "durationS": 14.375555555555556,
+              "loopS": 14.375555555555556,
+              "leadInS": 0,
+              "integratedLufs": -25.28,
+              "truePeakDbtp": -11.52,
+              "targetLufs": -25
+            },
+            "mid": {
+              "file": "assets/night-platform-developed-boost-125-mid-8784eb7f6da04ec7154d654dc4297ebd3afde0531b224781346c5b22d42e8dbe.mp3",
+              "sha256": "8784eb7f6da04ec7154d654dc4297ebd3afde0531b224781346c5b22d42e8dbe",
+              "bytes": 346740,
+              "format": "audio/mpeg",
+              "durationS": 14.375555555555556,
+              "loopS": 14.375555555555556,
+              "leadInS": 0,
+              "integratedLufs": -23.87,
+              "truePeakDbtp": -9.91,
+              "targetLufs": -23.5875
+            },
+            "peak": {
+              "file": "assets/night-platform-developed-boost-125-peak-4d79e300b288a4910d17c0c2051d43577de899751472c3545bd6fa7c74ac8db5.mp3",
+              "sha256": "4d79e300b288a4910d17c0c2051d43577de899751472c3545bd6fa7c74ac8db5",
+              "bytes": 346740,
+              "format": "audio/mpeg",
+              "durationS": 14.375555555555556,
+              "loopS": 14.375555555555556,
+              "leadInS": 0,
+              "integratedLufs": -22.53,
+              "truePeakDbtp": -8.57,
+              "targetLufs": -22.25
+            },
+            "zero": {
+              "file": "assets/night-platform-developed-zero-ad01866dacae3023e9b02c8963cacf8ad01471e7467afa6ec8230ef7e6823773.mp3",
+              "sha256": "ad01866dacae3023e9b02c8963cacf8ad01471e7467afa6ec8230ef7e6823773",
+              "bytes": 97845,
+              "format": "audio/mpeg",
+              "durationS": 4,
+              "loopS": null,
+              "leadInS": 0,
+              "integratedLufs": -22.17,
+              "truePeakDbtp": -9.81,
+              "targetLufs": -21.5,
+              "attackSkipS": 0
+            }
+          }
+        },
+        {
+          "id": "night-platform-developed-boost-150",
+          "name": "Night Platform",
+          "family": "Night Platform",
+          "kind": "decision",
+          "style": 2,
+          "tonic": 41,
+          "key": "F minor",
+          "voice": "keys",
+          "bpm": 141.12,
+          "bars": 8,
+          "meter": 4,
+          "description": "The kept two-step pace, opening from a lean pocket into denser hats, chord answers and short same-kit turnarounds.",
+          "drive": 1.5,
+          "tempoFactor": 1.12,
+          "baseId": "night-platform-developed",
+          "loopS": 13.605442176870747,
+          "assets": {
+            "low": {
+              "file": "assets/night-platform-developed-boost-150-low-b0df1324d021d9c85edbba4b4cebd22998d4e42496144e81efdcd0e75eb5caba.mp3",
+              "sha256": "b0df1324d021d9c85edbba4b4cebd22998d4e42496144e81efdcd0e75eb5caba",
+              "bytes": 327932,
+              "format": "audio/mpeg",
+              "durationS": 13.605442176870747,
+              "loopS": 13.605442176870747,
+              "leadInS": 0,
+              "integratedLufs": -25.28,
+              "truePeakDbtp": -13.04,
+              "targetLufs": -25
+            },
+            "mid": {
+              "file": "assets/night-platform-developed-boost-150-mid-995c958d69fa9fe47fcdfaa90beb8f47cad0867a10bfb693f182370a610eda22.mp3",
+              "sha256": "995c958d69fa9fe47fcdfaa90beb8f47cad0867a10bfb693f182370a610eda22",
+              "bytes": 327932,
+              "format": "audio/mpeg",
+              "durationS": 13.605442176870747,
+              "loopS": 13.605442176870747,
+              "leadInS": 0,
+              "integratedLufs": -23.45,
+              "truePeakDbtp": -11.24,
+              "targetLufs": -23.175
+            },
+            "peak": {
+              "file": "assets/night-platform-developed-boost-150-peak-35548a8b721208922379e3cc4745c6d2ce2feb5b30d4d7d96df20001b93d61fd.mp3",
+              "sha256": "35548a8b721208922379e3cc4745c6d2ce2feb5b30d4d7d96df20001b93d61fd",
+              "bytes": 327932,
+              "format": "audio/mpeg",
+              "durationS": 13.605442176870747,
+              "loopS": 13.605442176870747,
+              "leadInS": 0,
+              "integratedLufs": -21.77,
+              "truePeakDbtp": -9.56,
+              "targetLufs": -21.5
+            },
+            "zero": {
+              "file": "assets/night-platform-developed-zero-ad01866dacae3023e9b02c8963cacf8ad01471e7467afa6ec8230ef7e6823773.mp3",
+              "sha256": "ad01866dacae3023e9b02c8963cacf8ad01471e7467afa6ec8230ef7e6823773",
+              "bytes": 97845,
+              "format": "audio/mpeg",
+              "durationS": 4,
+              "loopS": null,
+              "leadInS": 0,
+              "integratedLufs": -22.17,
+              "truePeakDbtp": -9.81,
+              "targetLufs": -21.5,
+              "attackSkipS": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "atlas-arrival",
+      "name": "Atlas · Arrival",
+      "family": "Atlas",
+      "kind": "lobby",
+      "style": 4,
+      "tonic": 43,
+      "key": "G major",
+      "voice": "marimba",
+      "bpm": 88,
+      "bars": 8,
+      "meter": 4,
+      "quiet": true,
+      "energy": 0,
+      "noLead": true,
+      "description": "A spacious arrival bed: slow marimba, a soft low anchor and sparse hand percussion, with no countdown build.",
+      "loopS": 21.818185941043083,
+      "assets": {
+        "low": {
+          "file": "assets/atlas-arrival-low-632f2d13a0d69331f3e8e196c0e6bb847dee234309f1500c30a531735c4558f3.mp3",
+          "sha256": "632f2d13a0d69331f3e8e196c0e6bb847dee234309f1500c30a531735c4558f3",
+          "bytes": 525417,
+          "format": "audio/mpeg",
+          "durationS": 21.818185941043083,
+          "loopS": 21.818185941043083,
+          "leadInS": 0,
+          "integratedLufs": -26.26,
+          "truePeakDbtp": -6.92,
+          "targetLufs": -26
+        }
+      }
+    },
+    {
+      "id": "side-street-afterglow",
+      "name": "Side Street · Afterglow",
+      "family": "Side Street",
+      "kind": "debrief",
+      "style": 1,
+      "tonic": 45,
+      "key": "A minor",
+      "voice": "nylon",
+      "bpm": 82,
+      "bars": 14,
+      "meter": 4,
+      "warm": true,
+      "quiet": true,
+      "noLead": true,
+      "energy": 0,
+      "description": "A warm, unhurried guitar-and-bass bed for debrief and wrap-up. Stable energy and room for discussion.",
+      "loopS": 40.97560090702948,
+      "assets": {
+        "low": {
+          "file": "assets/side-street-afterglow-low-da298473333ff35a009f402a85453ecf02ef369d81ee4e9950aa4930624c65bc.mp3",
+          "sha256": "da298473333ff35a009f402a85453ecf02ef369d81ee4e9950aa4930624c65bc",
+          "bytes": 984963,
+          "format": "audio/mpeg",
+          "durationS": 40.97560090702948,
+          "loopS": 40.97560090702948,
+          "leadInS": 0,
+          "integratedLufs": -26.27,
+          "truePeakDbtp": -9.62,
+          "targetLufs": -26
+        }
+      }
+    }
+  ],
+  "uniqueAssetCount": 42,
+  "totalBytes": 18599304
+}

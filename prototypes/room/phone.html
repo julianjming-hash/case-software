@@ -1,0 +1,1183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Case, participant phone</title>
+<link rel="stylesheet" href="lib/tokens.css">
+<style>
+  /* Participant phone (stage C). Rendering rule: every string from the case or from a participant is
+     placed with textContent / createTextNode. Nothing here ever assigns innerHTML.
+     The spatial grid (CASE-113), stacked for a phone: the orientation band on top (Case, the phase pill,
+     who you are), then the information (scene card, vitals, findings, investigations), then the decision. */
+  html { -webkit-text-size-adjust: 100%; scroll-padding-top: 72px; scroll-padding-bottom: 96px; } /* the sticky header and the fixed Live surface bar never hide the focused control (WCAG 2.4.11) */
+  [hidden] { display: none !important; }
+  body { min-height: 100vh; font-size: var(--t-md); }
+  #app { max-width: 520px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+  .top { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--nav-line); background: var(--nav-bg); color: var(--nav-ink); position: sticky; top: 0; z-index: var(--z-sticky); }
+  .top .who { flex: 1; min-width: 0; display: flex; align-items: center; gap: var(--sp-2); }
+  .top .who-text { min-width: 0; }
+  .top .brand { margin: 0; font-size: var(--t-xs); font-weight: var(--w-semibold); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-muted); }
+  .top .name { margin: 0; font-weight: var(--w-semibold); font-size: var(--t-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .top .pill svg { flex: none; }
+  .iconbtn { min-width: 44px; min-height: 44px; border: 1px solid var(--nav-line); background: var(--surface); color: var(--nav-ink); border-radius: 50%; display: grid; place-items: center; }
+  .conn { margin: var(--sp-2) var(--sp-4) 0; }
+  .conn .banner { font-size: var(--t-sm); }
+  .conn .banner.lost { background: var(--alert-tint); color: var(--alert-ink); }
+  .conn .banner.wait { background: var(--sunken); color: var(--ink); }
+  .note { margin: var(--sp-2) var(--sp-4) 0; min-height: 0; font-size: var(--t-sm); font-weight: var(--w-semibold); color: var(--petrol-ink); }
+  .note:empty { display: none; }
+  #menu { margin: var(--sp-2) var(--sp-4) 0; padding: var(--sp-4); }
+  main { flex: 1; padding: var(--sp-4) var(--sp-4) var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-3); }
+  main.pad-bar { padding-bottom: 96px; }
+  main:focus { outline: none; }
+  main > :empty { display: none; }
+  h1, h2, h3, h4 { margin: 0; }
+  h1 { font-size: var(--t-xl); }
+  h2 { font-size: var(--t-lg); }
+  h3 { font-size: var(--t-md); }
+  h4 { font-size: var(--t-md); font-weight: var(--w-semibold); }
+  [tabindex="-1"]:focus { outline: none; }
+  [tabindex="-1"]:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  p { margin: 0; }
+  .card { padding: var(--sp-4); display: grid; gap: var(--sp-3); }
+  .card.flat { box-shadow: none; }
+  .small { font-size: var(--t-sm); }
+  .join-footer { display: flex; justify-content: center; }
+  .join-footer a { min-height: 44px; display: inline-flex; align-items: center; padding: 0 var(--sp-3); color: var(--petrol-ink); font-size: var(--t-sm); font-weight: var(--w-medium); }
+
+  /* information: one scene card, then bento tiles (CASE-116, CASE-117) */
+  .scene { gap: var(--sp-2); }
+  .scene .prose { font-size: var(--t-md); line-height: 1.55; }
+  .scene[data-kind="consequence"], .scene[data-kind="terminal"] { box-shadow: inset 4px 0 0 var(--ph-consequence), var(--shadow-1); }
+  .tile { padding: var(--sp-3) var(--sp-4); gap: var(--sp-2); }
+  .points { margin: 0; padding-left: 20px; display: grid; gap: 6px; line-height: 1.45; font-size: var(--t-md); }
+  .points li { overflow-wrap: anywhere; padding-left: 2px; }
+  .points li::marker { color: var(--petrol); }
+  .vitals { list-style: none; margin: 0; padding: var(--sp-3) var(--sp-4); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-3) var(--sp-2); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .vitals li { display: grid; align-content: start; min-width: 0; }
+  .vitals .vl { font-size: var(--t-xs); font-weight: var(--w-semibold); color: var(--ink-muted); overflow-wrap: anywhere; }
+  .vitals .vv { font: var(--w-semibold) var(--t-lg)/1.15 var(--mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .vitals .vu { display: inline-block; font-size: var(--t-xs); font-weight: var(--w-regular); color: var(--ink-muted); margin-left: 3px; font-family: var(--sans); white-space: nowrap; }
+  .vitals .arrow { font: var(--w-medium) var(--t-xs)/1.3 var(--mono); }
+  details.ctx { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  details.ctx summary { min-height: 48px; display: flex; align-items: center; gap: var(--sp-2); padding: 0 var(--sp-4); font-weight: var(--w-semibold); cursor: pointer; }
+  details.ctx .inner { padding: 0 var(--sp-4) var(--sp-4); display: grid; gap: var(--sp-3); }
+
+  /* forms */
+  label.field, .field-label { display: block; font-weight: var(--w-semibold); font-size: var(--t-sm); margin-bottom: 6px; }
+  input[type=text], textarea { width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font-size: 16px; }
+  textarea { min-height: 112px; resize: vertical; }
+  input[aria-invalid=true] { border-color: var(--alert); border-width: 2px; }
+  .code-input { font: var(--w-semibold) 26px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; text-align: center; }
+  .counter { font-size: var(--t-xs); color: var(--ink-muted); text-align: right; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .btn { min-height: 48px; font-size: var(--t-md); }
+  .btn.small { min-height: 44px; font-size: var(--t-sm); padding: 6px 12px; }
+  .stack { display: grid; gap: var(--sp-3); }
+  .err { color: var(--alert-ink); font-weight: var(--w-semibold); font-size: var(--t-sm); margin-top: 6px; display: flex; gap: 8px; align-items: flex-start; }
+  .err:empty { display: none; }
+  .idwarn { margin-top: 6px; padding: 8px 10px; border-radius: var(--radius-sm); background: var(--manual-tint); color: var(--manual-ink); font-size: var(--t-sm); font-weight: var(--w-medium); }
+  .idwarn:empty { display: none; }
+  fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+  fieldset:disabled .opt { opacity: .75; }
+  legend { padding: 0; font-size: var(--t-lg); font-weight: var(--w-semibold); line-height: 1.3; margin-bottom: var(--sp-3); }
+  .hint { font-size: var(--t-sm); color: var(--ink-muted); margin: 0 0 8px; }
+
+  /* avatar picker (CASE-119): a radio group of 16 vendored drawings, each with a spoken label */
+  .avatars { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-2); }
+  .av { position: relative; display: grid; place-items: center; aspect-ratio: 1; border: 2px solid transparent; border-radius: var(--radius); background: var(--sunken); cursor: pointer; }
+  .av input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: inherit; }
+  .av img { width: 78%; height: auto; border-radius: 50%; pointer-events: none; }
+  .av:has(input:checked) { border-color: var(--petrol); background: var(--petrol-tint); }
+  .av:has(input:checked)::after { content: "\2713" / ""; position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: var(--petrol); color: var(--on-petrol); font-size: 12px; font-weight: var(--w-bold); line-height: 1; }
+  .av:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .preview { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3); border-radius: var(--radius); background: var(--nav-bg); }
+  .preview .nm { font-weight: var(--w-semibold); overflow-wrap: anywhere; }
+
+  /* option tiles: the decision zone carries the option colours (CASE-114): mark + full text + a checked indicator */
+  .opts { display: grid; gap: var(--sp-2); }
+  .opt { position: relative; display: grid; grid-template-columns: 36px 1fr 26px; gap: var(--sp-3); align-items: center; min-height: 60px; padding: 10px 12px; cursor: pointer; }
+  .opt input { position: absolute; opacity: 0; width: 100%; height: 100%; inset: 0; margin: 0; cursor: inherit; }
+  .opt:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .opt .mk { display: grid; }
+  .opt .lbl { overflow-wrap: anywhere; line-height: 1.35; font-weight: var(--w-medium); }
+  .opt .ind { width: 24px; height: 24px; border: 2px solid var(--field-line); border-radius: 50%; display: grid; place-items: center; color: transparent; background: var(--surface); }
+  .opt.multi .ind { border-radius: 6px; }
+  .opt:has(input:checked) { border: 2px solid var(--ink); padding: 9px 11px; background: color-mix(in srgb, var(--mk) 22%, var(--surface)); }
+  .opt:has(input:checked) .ind { background: var(--ink); border-color: var(--ink); color: var(--surface); }
+  .opt:has(input:checked) .lbl { font-weight: var(--w-semibold); }
+  .opt.locked { background: var(--sunken); border-style: dashed; cursor: not-allowed; color: var(--ink-muted); }
+  .opt.locked .mk { opacity: .45; }
+  .opt.locked .ind { display: none; }
+  .opt .tag { grid-column: 2 / -1; justify-self: start; }
+  .opt .xnote { grid-column: 2 / -1; }
+  .xnote { font-size: var(--t-xs); color: var(--ink-muted); }
+  .mk-line { display: inline-flex; gap: 8px; align-items: center; vertical-align: middle; }
+  .mk-line svg { flex: none; }
+  .mk-wrap { display: inline-flex; gap: 4px; vertical-align: middle; margin-right: 6px; }
+  .chose { display: flex; gap: 10px; align-items: center; font-weight: var(--w-semibold); overflow-wrap: anywhere; }
+  .chose .mk-wrap { margin: 0; flex: none; }
+
+  /* ranking */
+  .rank { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 8px; }
+  .rank li { --mk: var(--petrol); border: 2px solid var(--petrol); background: color-mix(in srgb, var(--mk) 14%, var(--surface)); border-radius: var(--radius); padding: 8px 12px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px; }
+  .rank .top-row { display: flex; gap: 10px; align-items: center; }
+  .rank .pos { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--petrol); color: var(--on-petrol); font-weight: var(--w-semibold); display: grid; place-items: center; font-size: var(--t-sm); }
+  .rank .top-row .lbl { min-width: 0; }
+  .rank .row-btns { display: grid; grid-template-columns: repeat(3, 44px); gap: 4px; align-items: center; }
+  .rank-move { min-width: 44px; min-height: 44px; padding: 4px; font-size: var(--t-lg); }
+  .avail { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .avail li { --mk: var(--ink-muted); display: flex; gap: 10px; align-items: center; min-height: 56px; padding: 6px 6px 6px 12px; border: 1px solid color-mix(in srgb, var(--mk) 35%, var(--line)); border-radius: var(--radius); background: color-mix(in srgb, var(--mk) 12%, var(--surface)); }
+  .avail li > .lbl { flex: 1; min-width: 0; }
+  .avail li.locked { background: var(--sunken); border-style: dashed; }
+  .avail li.locked .mk, .rank li.locked .mk { opacity: .45; }
+  .empty-rank { padding: 12px; border: 1px dashed var(--field-line); border-radius: var(--radius-sm); color: var(--ink-muted); margin-bottom: 10px; }
+
+  /* receipts */
+  .receipts { display: grid; gap: 6px; }
+  .receipts:not(:has(.t:not(:empty))) { display: none; }
+  .card > p:empty { display: none; }
+  .rcpt { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--sunken); font-weight: var(--w-medium); font-size: var(--t-sm); }
+  .rcpt:has(.t:empty) { display: none; }
+  .rcpt .t { flex: 1; }
+  .rcpt svg { flex: none; margin-top: 2px; }
+  .rcpt.alert { background: var(--alert-tint); color: var(--alert-ink); }
+  .rcpt.ok { background: var(--ok-tint); color: var(--ok-ink); }
+  .rcpt.info { background: var(--petrol-tint); color: var(--petrol-ink); }
+  .rcpt.pause { background: var(--ph-paused-tint); color: var(--ph-paused-ink); }
+  .saved-line { font-weight: var(--w-semibold); overflow-wrap: anywhere; }
+  .timer-line { font-size: var(--t-sm); color: var(--ink-muted); display: inline-flex; gap: 6px; align-items: center; }
+  .timer-line:empty { display: none; }
+  .decision { box-shadow: inset 0 4px 0 var(--ph, var(--petrol)), var(--shadow-1); }
+
+  /* timeline */
+  .tl h3 { margin-bottom: 8px; font-size: var(--t-sm); color: var(--ink-muted); letter-spacing: .08em; text-transform: uppercase; }
+  .strip { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x proximity; padding: 2px 2px 8px; margin: 0 -16px; padding-inline: 16px; list-style: none; }
+  .strip li { scroll-snap-align: start; flex: 0 0 62%; }
+  .strip button { width: 100%; min-height: 64px; text-align: left; padding: 8px 12px; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius-sm); display: grid; gap: 2px; }
+  .strip button[aria-current=true] { border: 2px solid var(--petrol); padding: 7px 11px; background: var(--petrol-tint); }
+  .strip .n { font-size: var(--t-xs); font-weight: var(--w-semibold); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); }
+  .strip .t { font-weight: var(--w-medium); font-size: var(--t-sm); overflow-wrap: anywhere; }
+  .bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-dock); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--surface); border-top: 1px solid var(--line); box-shadow: var(--shadow-2); }
+  .bar .inner { max-width: 520px; margin: 0 auto; }
+  .bar[hidden] { display: none; }
+
+  /* result + recap */
+  .result { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: var(--sp-4); display: grid; gap: 6px; }
+  .ranking-result { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); color: var(--ink); background: var(--surface); }
+  .ranking-result ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2); font-variant-numeric: tabular-nums; }
+  .recap-round { border-top: 1px solid var(--line); padding-top: 12px; display: grid; gap: 6px; }
+  .recap-round p { overflow-wrap: anywhere; }
+  .cls { display: inline-flex; gap: 6px; align-items: center; font-weight: var(--w-semibold); }
+  ul.plain, ol.plain { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+  .sr-only-live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  .spin { animation: spin 1s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (forced-colors: active) {
+    .opt:has(input:checked), .rank li, .strip button[aria-current=true], .av:has(input:checked) { border-width: 3px; border-color: Highlight; }
+    .opt.locked, .avail li.locked { border: 2px dashed GrayText; }
+    .rcpt, .tag { border: 1px solid CanvasText; }
+  }
+  @media print {
+    .top, .conn, .note, .bar, #menu, .noprint, .strip, .tl { display: none !important; }
+    body { background: #fff; }
+  }
+</style>
+<script nomodule>document.addEventListener('DOMContentLoaded', function () { var p = document.createElement('p'); p.className = 'nomodule'; p.textContent = 'Case needs a current browser. Open this page in Microsoft Edge or Google Chrome.'; document.body.insertBefore(p, document.body.firstChild); });</script>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div class="who">
+      <span id="whoAv"></span>
+      <div class="who-text">
+        <p class="brand">Case</p>
+        <p class="name" id="who">Join a room</p>
+      </div>
+    </div>
+    <span id="phaseChip" class="pill" hidden></span>
+    <button type="button" class="iconbtn" id="menuBtn" aria-expanded="false" aria-controls="menu" aria-label="Menu" hidden>
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="fill:none"><circle cx="4" cy="10" r="1.8" fill="currentColor"/><circle cx="10" cy="10" r="1.8" fill="currentColor"/><circle cx="16" cy="10" r="1.8" fill="currentColor"/></svg>
+    </button>
+  </header>
+  <div class="conn" id="conn" role="status" aria-live="polite"></div>
+  <div id="menu" class="panel" hidden></div>
+  <p class="note" id="note" role="status" aria-live="polite"></p>
+  <main id="main"></main>
+  <p class="sr-only-live" id="announce" role="status" aria-live="polite"></p>
+  <div class="bar" id="liveBar" hidden><div class="inner"><button type="button" class="btn primary block" id="liveBtn">Live surface</button></div></div>
+</div>
+
+<script type="module">
+import { connect, realRoom } from './lib/link.mjs';
+import { registerShell } from './lib/device.mjs';
+import { normalizeCode, JOIN_CODE_LENGTH, uuidv7 } from '../../src/shared/ids.mjs';
+import { WIRE_VERSION } from '../../src/shared/wire.mjs';
+import { markSvg, markFor } from './lib/marks.mjs';
+import { timerRemainingS, timerWords, TIMER_ANNOUNCE_AT } from '../../src/shared/timer.mjs';
+import { identifierWarning } from '../../src/shared/identifiers.mjs';
+import { NAME_MAX, NAME_PROBLEM_TEXT, displayNameProblem, normaliseDisplayName } from '../../src/shared/participant.mjs';
+import { avatarEl } from './lib/avatar.mjs';
+import { h } from './lib/dom.mjs';
+import { customAvatarPicker, joinAvatarPicker } from './lib/avatar-picker.mjs';
+import { rankingMoveControl, rankingRemoveControl } from '../../src/client/phone-ranking.mjs';
+import { responseSummary } from '../../src/client/response-summary.mjs';
+import { attachRoomCodeMask } from './lib/join-code.mjs';
+import { publicTimelineEntry } from '../../src/client/presentation-nav.mjs';
+
+// ───────────────────────── tiny DOM helpers (text only) ─────────────────────────
+const SVGNS = 'http://www.w3.org/2000/svg';
+
+const S_ = (d, extra = {}) => ['path', { d, fill: 'none', stroke: 'currentColor', 'stroke-width': 1.7, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', ...extra }];
+const ICONS = {
+  spinner: [['circle', { cx: 8, cy: 8, r: 6, fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-opacity': .25 }], S_('M8 2a6 6 0 0 1 6 6', { 'stroke-width': 2 })],
+  hourglass: [S_('M4 2h8M4 14h8M5 2c0 4 3 4 3 6s-3 2-3 6M11 2c0 4-3 4-3 6s3 2 3 6')],
+  eye: [S_('M1 8s3-5 7-5 7 5 7 5-3 5-7 5-7-5-7-5z'), ['circle', { cx: 8, cy: 8, r: 2, fill: 'currentColor' }]],
+  people: [['circle', { cx: 8, cy: 5, r: 2.5, fill: 'none', stroke: 'currentColor', 'stroke-width': 1.7 }], S_('M3 14c0-3 2-5 5-5s5 2 5 5')],
+  lock: [['rect', { x: 3, y: 7, width: 10, height: 7, rx: 1.5, fill: 'none', stroke: 'currentColor', 'stroke-width': 1.7 }], S_('M5 7V5a3 3 0 0 1 6 0v2')],
+  book: [S_('M2 3h5a1 1 0 0 1 1 1v9a1 1 0 0 0-1-1H2zM14 3H9a1 1 0 0 0-1 1v9a1 1 0 0 1 1-1h5z')],
+  pause: [['rect', { x: 4, y: 3, width: 3, height: 10, fill: 'currentColor' }], ['rect', { x: 9, y: 3, width: 3, height: 10, fill: 'currentColor' }]],
+  flag: [S_('M3 14V2M3 3h9l-2 3 2 3H3')],
+  wifioff: [S_('M1 6a10 10 0 0 1 14 0M4 9a6 6 0 0 1 8 0M7 12a2 2 0 0 1 2 0M2 2l12 12')],
+  check: [S_('M3 8.5l3 3 7-7', { 'stroke-width': 2 })],
+  info: [['circle', { cx: 8, cy: 8, r: 6.5, fill: 'none', stroke: 'currentColor', 'stroke-width': 1.7 }], S_('M8 7v4M8 4.8v.2')],
+  alert: [S_('M8 2l7 12H1z'), S_('M8 6.5v3.2M8 11.8v.2')],
+  tag: [S_('M2 2h6l6 6-6 6-6-6z'), ['circle', { cx: 5.5, cy: 5.5, r: 1, fill: 'currentColor' }]],
+  // classification set (SCREENS.md Accessibility)
+  sound: [['circle', { cx: 8, cy: 8, r: 7, fill: 'currentColor' }], S_('M4.5 8.2l2.4 2.4 4.6-4.8', { stroke: '#fff', 'stroke-width': 2 })],
+  defensible: [['circle', { cx: 8, cy: 8, r: 6.5, fill: 'none', stroke: 'currentColor', 'stroke-width': 1.7 }], S_('M4.8 8.2l2.2 2.2 4.2-4.4')],
+  'context-dependent': [S_('M8 14V8M8 8L3.5 3M8 8l4.5-5')],
+  unsafe: [S_('M8 2l7 12H1z'), S_('M8 6.5v3.2M8 11.8v.2')],
+  'terminal-unsafe': [S_('M5 1h6l4 4v6l-4 4H5l-4-4V5z'), S_('M5 8h6', { 'stroke-width': 2 })],
+  'discussion-prompt': [S_('M2 3h12v8H7l-3 3v-3H2z')],
+};
+function icon(name, size = 16, cls = '') {
+  const svg = document.createElementNS(SVGNS, 'svg');
+  svg.setAttribute('width', size); svg.setAttribute('height', size); svg.setAttribute('viewBox', '0 0 16 16');
+  svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('focusable', 'false');
+  if (cls) svg.setAttribute('class', cls);
+  for (const [tag, attrs] of ICONS[name] || []) {
+    const n = document.createElementNS(SVGNS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    svg.append(n);
+  }
+  return svg;
+}
+const $ = (id) => document.getElementById(id);
+const clean = (s) => String(s ?? '').normalize('NFC').replace(/[\u0000-\u001f\u007f-\u009f‪-‮⁦-⁩﻿]/g, ' ').replace(/\s+/g, ' ').trim();
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+/** A soft, never blocking, warning under a text field when it looks like a patient identifier (RT2 P2). */
+function idWarn(input, id) {
+  const p = h('p', { class: 'idwarn', id, role: 'status', 'aria-live': 'polite' });
+  const upd = () => { const w = identifierWarning(input.value); if (p.textContent !== w) p.textContent = w; };
+  input.addEventListener('input', upd);
+  const prior = input.getAttribute('aria-describedby');
+  input.setAttribute('aria-describedby', `${prior ? `${prior} ` : ''}${id}`);
+  return { p, upd };
+}
+
+// ───────────────────────── exact copy (docs/SCREENS.md) ─────────────────────────
+const C = {
+  sending: 'Sending…',
+  saved: 'Answer saved · you can change it until responses lock',
+  savedDup: 'Answer saved · already received',
+  lockedSaved: 'Voting locked · your last saved answer stands',
+  lockedNone: 'Voting locked · no answer was recorded from this phone',
+  held: 'Paused · your answer is held',
+  updating: 'Updating · checking the room…',
+  rejected: 'Answer not saved · check your choice and try again',
+  voided: 'Round cancelled · the facilitator will open a new round',
+  manualRoom: 'Facilitator-led discussion · answers are off for now',
+  removed: 'You were removed from this room',
+  ended: 'This room has ended',
+  waiting: 'Waiting for connection · your answer will send automatically',
+  invalidCode: "That code isn't right · check it against the projector",
+  closed: 'This room is not accepting new participants',
+};
+const CLASS_LABEL = {
+  sound: 'Sound', defensible: 'Defensible', 'context-dependent': 'Context-dependent',
+  unsafe: 'Unsafe · recoverable', 'terminal-unsafe': 'Terminal · needs a checkpoint reset', 'discussion-prompt': 'Discussion prompt',
+};
+// The phase pill (CASE-114): open green, locked amber, reveal petrol, consequence coral, paused slate.
+const PHASE_CHIP = {
+  waiting: ['Waiting to start', 'hourglass', 'reveal'], live: ['Live surface', 'eye', 'reveal'], decision_open: ['Team decision', 'people', 'open'],
+  reviewing: ['Voting locked', 'lock', 'locked'], teaching: ['Teaching point', 'book', 'consequence'], paused: ['Discussion pause', 'pause', 'paused'], ended: ['Your private recap', 'flag', 'reveal'],
+};
+const HOW_CHOSEN = {
+  majority: 'The facilitator followed the majority view', minority: 'The facilitator followed the minority view', override: 'The facilitator chose a different route',
+};
+const TEAM_CHOICE = {
+  majority: 'Followed the majority view', minority: 'Followed a minority view', override: 'The facilitator chose a different route', manual_room: 'Chosen in the room, without phone votes',
+};
+
+// ───────────────────────── connection ─────────────────────────
+const PRIVACY_RETURN_SEARCH = 'case:privacy-return-search'; // routing only; never a code, name or token
+function safePrivacyReturnSearch(search) {
+  if (!search.startsWith('?')) return '';
+  const q = new URLSearchParams(search);
+  const keys = [...q.keys()];
+  if (keys.length !== new Set(keys).size || keys.some((key) => !['api', 'scale', 'slot'].includes(key))) return '';
+  if (q.has('slot') && !/^[A-Za-z0-9]{1,6}$/.test(q.get('slot'))) return '';
+  if (q.has('api') && !realRoom(search)) return '';
+  return search;
+}
+if (!location.search) {
+  let saved = '';
+  try { saved = sessionStorage.getItem(PRIVACY_RETURN_SEARCH) || ''; sessionStorage.removeItem(PRIVACY_RETURN_SEARCH); } catch { /* private browsing can deny storage */ }
+  const search = safePrivacyReturnSearch(saved);
+  if (search) history.replaceState(null, '', search); // restore this tab's original query before connecting
+}
+const params = new URLSearchParams(location.search);
+const rawSlot = params.get('slot') || 'A';
+const slot = /^[A-Za-z0-9]{1,6}$/.test(rawSlot) ? rawSlot : 'A';
+const JOIN_CODE_DRAFT = `case:join-code-draft:${slot}`; // a public room code only; no token or name
+const link = connect({ role: 'participant', slot, label: `Phone ${slot}` });
+registerShell({ real: Boolean(realRoom()) });
+
+const S = {
+  mode: null, view: null, snap: null, conn: link.status, everOnline: false, removed: false,
+  browseIndex: null, liveKey: undefined, phaseKey: undefined, note: '', joinedHere: false,
+};
+const main = $('main');
+const el = {}; // persistent room containers
+
+link.on('snapshot', (snap) => { S.snap = snap; S.view = snap.view; render(); });
+link.on('status', (st) => { S.conn = st; if (st === 'online') S.everOnline = true; renderConn(); if (S.mode === 'room') refreshDecision(); });
+link.on('welcome', () => { S.everOnline = true; });
+link.on('error', (e) => {
+  if (e === 'removed') { S.removed = true; render(); }
+  if (e === 'unauthorised') { S.view = null; S.snap = null; render(); }
+});
+document.addEventListener('visibilitychange', () => { if (!document.hidden && S.mode === 'room') refreshDecision(); });
+
+// ───────────────────────── mode switching ─────────────────────────
+function pickMode() {
+  const v = S.view;
+  if (S.removed || v?.you?.removed) return 'removed';
+  if (v?.you) return 'room';
+  if (link.hasToken) return 'connecting';
+  return 'join';
+}
+
+function render() {
+  const mode = pickMode();
+  if (mode !== S.mode) {
+    const first = S.mode === null;
+    S.mode = mode;
+    mountMode(mode);
+    if (!first) queueMicrotask(() => focusIfLost());
+  }
+  renderHeader();
+  renderConn();
+  if (mode === 'room') updateRoom();
+}
+
+function mountMode(mode) {
+  main.replaceChildren();
+  for (const k of Object.keys(el)) delete el[k];
+  resetDecision();
+  $('liveBar').hidden = true;
+  main.classList.remove('pad-bar');
+  if (mode === 'join') main.append(buildJoin());
+  else if (mode === 'removed') main.append(h('section', { class: 'card', 'aria-labelledby': 'mh' }, h('h1', { id: 'mh', tabindex: '-1', text: C.removed })));
+  else if (mode === 'connecting') main.append(h('section', { class: 'card', 'aria-labelledby': 'mh' }, h('h1', { id: 'mh', tabindex: '-1', text: 'Checking the room…' }), h('p', { class: 'muted', text: 'Your place in the room is saved on this phone.' })));
+  else if (mode === 'room') buildRoomShell();
+}
+
+function focusIfLost() {
+  const a = document.activeElement;
+  if (a && a !== document.body && a.isConnected) return;
+  const t = main.querySelector('[data-focus-heading]') || main.querySelector('h1, h2');
+  t?.focus({ preventScroll: true });
+}
+function typingNow() {
+  const a = document.activeElement;
+  return !!a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT') && a.isConnected;
+}
+function say(text) { const a = $('announce'); a.textContent = ''; setTimeout(() => { a.textContent = text; }, 30); }
+
+// ───────────────────────── header, connection chip, menu ─────────────────────────
+function renderHeader() {
+  const v = S.view;
+  const who = $('who');
+  const mode = S.mode;
+  who.textContent = mode === 'room' ? (v.you.name || "You're in") : mode === 'join' ? 'Join a room' : mode === 'removed' ? 'Case' : 'Case room';
+  const av = mode === 'room' ? `${v.you.avatarId ?? ''}|${v.you.name ?? ''}` : '';
+  if ($('whoAv').dataset.k !== av) { $('whoAv').dataset.k = av; $('whoAv').replaceChildren(...(av ? [avatarEl(v.you.avatarId, { size: 32, name: v.you.name })] : [])); }
+  const chip = $('phaseChip');
+  if (mode === 'room' && PHASE_CHIP[v.phase]) {
+    const [text, ic, ph] = PHASE_CHIP[v.phase];
+    chip.hidden = false;
+    chip.dataset.phase = ph;
+    if (chip.dataset.k !== text) { chip.dataset.k = text; chip.replaceChildren(icon(ic), document.createTextNode(text)); }
+  } else chip.hidden = true;
+  $('menuBtn').hidden = !(mode === 'room' && v.phase !== 'waiting' && v.phase !== 'ended');
+  if ($('menuBtn').hidden) closeMenu();
+}
+function renderConn() {
+  const box = $('conn');
+  let kind = null, text = '';
+  if (S.mode === 'room' || S.mode === 'connecting') {
+    if (S.conn === 'lost') { kind = 'lost'; text = 'Connection lost · follow the room'; }
+    else if (S.conn !== 'online') { kind = 'wait'; text = S.everOnline ? 'Reconnecting…' : 'Connecting…'; }
+  }
+  const sig = `${kind}|${text}`;
+  if (box.dataset.sig === sig) return;
+  box.dataset.sig = sig;
+  box.replaceChildren();
+  if (!kind) return;
+  box.append(h('div', { class: `banner ${kind}` }, icon(kind === 'lost' ? 'wifioff' : 'spinner', 18, kind === 'wait' ? 'spin' : ''), h('span', { text })));
+}
+
+let renameCtl = null;
+$('menuBtn').addEventListener('click', () => {
+  const m = $('menu');
+  if (m.hidden) openMenu(); else closeMenu(true);
+});
+function openMenu() {
+  const m = $('menu');
+  m.hidden = false;
+  $('menuBtn').setAttribute('aria-expanded', 'true');
+  if (!m.firstChild) { renameCtl = buildRename('menu'); m.append(h('h2', { style: 'font-size:var(--t-md);margin-bottom:8px', text: 'Your name and avatar' }), renameCtl.root); }
+  renameCtl.sync();
+  renameCtl.input.focus();
+}
+function closeMenu(returnFocus) {
+  const m = $('menu');
+  if (m.hidden) return;
+  m.hidden = true;
+  $('menuBtn').setAttribute('aria-expanded', 'false');
+  if (returnFocus) $('menuBtn').focus();
+}
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(true); });
+
+/**
+ * The name field (CASE-119): required, 3–20 letters, numbers, spaces, hyphens or apostrophes; duplicates
+ * allowed. Checked as you type once you have typed, and again on submit; the server checks it too.
+ */
+function nameField(prefix, { value = '' } = {}) {
+  const input = h('input', { type: 'text', id: `${prefix}-name`, maxlength: String(NAME_MAX + 10), autocomplete: 'nickname', autocapitalize: 'words', enterkeyhint: 'done', required: '', 'aria-describedby': `${prefix}-count ${prefix}-nerr` });
+  input.value = value;
+  const count = h('p', { class: 'counter', id: `${prefix}-count`, text: `${[...value].length} of ${NAME_MAX}` });
+  const err = h('p', { class: 'err', id: `${prefix}-nerr`, role: 'status', 'aria-live': 'polite' });
+  const warn = idWarn(input, `${prefix}-warn`);
+  let touched = false;
+  const problem = () => displayNameProblem(input.value);
+  const show = (force) => {
+    const pr = problem();
+    const on = pr && (touched || force);
+    err.replaceChildren(...(on ? [icon('alert', 16), document.createTextNode(NAME_PROBLEM_TEXT[pr])] : []));
+    if (on) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+    return !pr;
+  };
+  input.addEventListener('input', () => { count.textContent = `${[...input.value.trim()].length} of ${NAME_MAX}`; if (touched) show(); });
+  input.addEventListener('blur', () => { if (input.value.trim()) { touched = true; show(); } });
+  const root = h('div', {}, h('label', { class: 'field', for: `${prefix}-name`, text: 'Your name' }), input, count, err, warn.p);
+  return {
+    root, input, valid: () => show(true), value: () => normaliseDisplayName(input.value),
+    set(v) { input.value = v ?? ''; count.textContent = `${[...input.value].length} of ${NAME_MAX}`; touched = false; show(); warn.upd(); },
+  };
+}
+
+/** Change of name or avatar (lobby inline and header menu): `Save changes` (CASE-121). Epoch-fenced, so a stale_epoch is retried once. */
+
+function buildRename(prefix) {
+  const name = nameField(prefix);
+  const pick = customAvatarPicker(prefix);
+  const msg = h('p', { class: 'small', id: `${prefix}-msg`, role: 'status', 'aria-live': 'polite' });
+  const btn = h('button', { type: 'submit', class: 'btn block', text: 'Save changes' });
+  let dirty = false;
+  name.input.addEventListener('input', () => { dirty = true; });
+  pick.onPick(() => { dirty = true; });
+  const root = h('form', { class: 'stack', novalidate: '' }, name.root, pick.root, btn, msg);
+  root.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    if (!name.valid()) { name.input.focus(); return; }
+    if (!pick.valid()) return;
+    const body = { displayName: name.value(), avatarId: pick.value() };
+    btn.disabled = true;
+    msg.textContent = S.conn === 'online' ? 'Saving…' : 'Waiting for connection · your changes will send automatically';
+    let rb = await link.send('rename', body);
+    if (rb.receipt === 'stale_epoch') { await sleep(700); rb = await link.send('rename', body); }
+    btn.disabled = false;
+    if (rb.receipt === 'accepted' || rb.receipt === 'already_accepted') {
+      msg.textContent = 'Changes saved'; dirty = false;
+      // Rename is quiet for phones; the server receipt confirms this phone's own saved appearance.
+      if (S.view?.you) { S.view.you.name = body.displayName; S.view.you.avatarId = body.avatarId; render(); }
+      root.closest('details')?.removeAttribute('open');
+    }
+    else if (rb.reason === 'unknown_participant') { S.removed = true; render(); }
+    else msg.textContent = 'Not saved · check your name and try again';
+  });
+  return {
+    root, input: name.input,
+    sync() { if (!dirty && !root.contains(document.activeElement)) { name.set(S.view?.you?.name ?? ''); pick.set(S.view?.you?.avatarId ?? null); } },
+  };
+}
+
+// ───────────────────────── join flow ─────────────────────────
+// Code and required name, then Join case. Optional avatar choice receives a valid random default;
+// the server still validates every submitted avatar. There is no nameless join.
+function buildJoin() {
+  let savedCode = '';
+  try { savedCode = sessionStorage.getItem(JOIN_CODE_DRAFT) || ''; } catch { /* private browsing can deny storage */ }
+  const code = h('input', { type: 'text', id: 'jcode', class: 'code-input', inputmode: 'text', autocomplete: 'off', autocapitalize: 'characters', autocorrect: 'off', spellcheck: 'false', maxlength: String(JOIN_CODE_LENGTH), minlength: String(JOIN_CODE_LENGTH), placeholder: '______', enterkeyhint: 'next', required: '', 'aria-describedby': 'jcode-hint jcode-err' });
+  const codeHint = h('p', { class: 'hint', id: 'jcode-hint' });
+  attachRoomCodeMask(code, codeHint, params.get('code') || savedCode);
+  const codeErr = h('p', { class: 'err', id: 'jcode-err', role: 'alert' });
+  const name = nameField('j');
+  name.root.append(h('p', { class: 'hint', text: 'Do not enter patient details.' }));
+  const pick = joinAvatarPicker('j');
+  const preview = h('div', { class: 'preview', 'aria-hidden': 'true' });
+  const updPreview = () => {
+    const nm = name.value(), id = pick.value();
+    preview.hidden = !nm && !id;
+    preview.replaceChildren(avatarEl(id, { size: 40, name: nm }), h('span', { class: 'nm', text: nm || 'Your name' }));
+  };
+  name.input.addEventListener('input', updPreview);
+  pick.onPick(updPreview);
+  updPreview();
+  const joinErr = h('p', { class: 'err', id: 'jerr', role: 'alert' });
+  const joinBtn = h('button', { type: 'submit', class: 'btn primary block lg', text: 'Join case' });
+  const status = h('p', { class: 'small muted', role: 'status', 'aria-live': 'polite' });
+  const privacy = h('a', { href: 'privacy.html', text: 'Privacy' });
+  privacy.addEventListener('click', () => {
+    try {
+      sessionStorage.setItem(JOIN_CODE_DRAFT, code.value);
+      sessionStorage.setItem(PRIVACY_RETURN_SEARCH, safePrivacyReturnSearch(location.search));
+    } catch { /* the link still works */ }
+  });
+  const form = h('form', { class: 'card', novalidate: '', 'aria-labelledby': 'mh' },
+    h('h1', { id: 'mh', tabindex: '-1', 'data-focus-heading': '', text: 'Join the case' }),
+    h('div', {}, h('label', { class: 'field', for: 'jcode', text: 'Room code' }), code, codeHint, codeErr),
+    name.root, pick.root, preview,
+    joinErr, status, h('p', { class: 'hint', text: 'Your name and avatar appear on the projector in the lobby.' }), joinBtn,
+    h('footer', { class: 'join-footer' }, privacy));
+
+  async function go() {
+    codeErr.textContent = ''; joinErr.textContent = ''; code.removeAttribute('aria-invalid');
+    const norm = normalizeCode(code.value, JOIN_CODE_LENGTH);
+    if (!norm) { code.setAttribute('aria-invalid', 'true'); codeErr.replaceChildren(icon('alert', 16), document.createTextNode(C.invalidCode)); code.focus(); return; }
+    if (!name.valid()) { name.input.focus(); return; }
+    if (!pick.valid()) return;
+    joinBtn.disabled = true;
+    status.textContent = 'Joining…';
+    const res = await link.join(norm, name.value(), pick.ensureSelected());
+    if (res.ok) { try { sessionStorage.removeItem(JOIN_CODE_DRAFT); } catch { /* no stored draft */ } status.textContent = 'Joined · checking the room…'; render(); return; }
+    joinBtn.disabled = false;
+    status.textContent = '';
+    const e = res.error;
+    if (e === 'unknown_code' || e === 'bad_code') { code.setAttribute('aria-invalid', 'true'); codeErr.replaceChildren(icon('alert', 16), document.createTextNode(C.invalidCode)); code.focus(); }
+    else if (e === 'bad_display_name' || e === 'unsafe_characters') { joinErr.textContent = NAME_PROBLEM_TEXT.characters; name.input.focus(); }
+    else if (e === 'bad_avatar') joinErr.textContent = 'Choose an avatar';
+    else if (e === 'joining_closed') joinErr.textContent = C.closed;
+    else if (e === 'room_full') joinErr.textContent = 'This room is full';
+    else if (e === 'removed') { S.removed = true; render(); }
+    else if (e === 'network') joinErr.textContent = "Couldn't reach the room · check your connection and try again";
+    else joinErr.textContent = "Couldn't join · check the code and try again";
+  }
+  form.addEventListener('submit', (ev) => { ev.preventDefault(); go(); });
+  return form;
+}
+
+// ───────────────────────── room shell ─────────────────────────
+function buildRoomShell() {
+  // Every room state has a level-one heading (axe page-has-heading-one); the lobby brings its own.
+  el.title = h('h1', { class: 'sr-only', text: 'Case room' });
+  el.banners = h('div', { class: 'stack' });
+  el.browse = h('div', { class: 'stack' });
+  el.lobby = h('section', { class: 'card', hidden: '' });
+  el.surface = h('section', { class: 'stack' });
+  el.decision = h('section', { class: 'card', hidden: '' });
+  el.result = h('div', {});
+  el.recap = h('section', { class: 'card', hidden: '' });
+  el.tl = h('section', { class: 'tl', 'aria-labelledby': 'tlh' });
+  main.append(el.title, el.banners, el.browse, el.lobby, el.surface, el.decision, el.result, el.recap, el.tl);
+  S.liveKey = undefined; S.phaseKey = undefined; S.browseIndex = null; S.note = '';
+}
+function setSection(node, sig, build) {
+  if (node._sig === sig) return false;
+  node._sig = sig;
+  node.replaceChildren(...[].concat(build() ?? []));
+  return true;
+}
+
+function updateRoom() {
+  const v = S.view;
+  const live = v.liveSurface;
+  const groupKey = (entry) => JSON.stringify([entry?.scene, entry?.assetIds, entry?.observations, entry?.points, entry?.investigations]);
+  const liveKey = live ? `${live.surfaceId}@${live.at}:${groupKey(live)}` : '';
+  const dKey = `${v.decision?.roundId ?? ''}|${v.decision?.status ?? ''}`;
+  const phaseKey = `${v.phase}|${dKey}`;
+  const liveChanged = S.liveKey !== undefined && liveKey !== S.liveKey;
+  const phaseChanged = S.phaseKey !== undefined && phaseKey !== S.phaseKey;
+  if (liveChanged) {
+    S.browseIndex = null; // the next shared reveal auto-advances every phone back to live
+    S.note = v.phase === 'decision_open' ? 'Team decision open' : (v.phase === 'live' || v.phase === 'teaching') ? 'New material shared' : '';
+    if (S.note) say(S.note);
+  } else if (phaseChanged) S.note = '';
+  S.liveKey = liveKey;
+  S.phaseKey = phaseKey;
+
+  const selected = publicTimelineEntry(v.timeline, S.browseIndex);
+  const browsing = selected.browsing;
+  if (!browsing) S.browseIndex = null;
+  const entry = browsing ? selected.entry : live;
+
+  const noteShown = browsing ? '' : S.note;
+  if ($('note').textContent !== noteShown) $('note').textContent = noteShown;
+  $('liveBar').hidden = !browsing;
+  main.classList.toggle('pad-bar', browsing);
+  el.browse.replaceChildren();
+  if (browsing) el.browse.append(h('div', { class: 'banner info', role: 'note' }, icon('info', 18), h('span', { text: 'Earlier material · read-only' })));
+
+  const lobby = v.phase === 'waiting';
+  el.lobby.hidden = !lobby;
+  el.title.hidden = lobby;
+  if (lobby) updateLobby(v);
+
+  const ended = v.phase === 'ended';
+  const decisionShown = !!v.decision && !browsing;
+
+  // banners: manual, pause, cancelled round
+  const cancelled = v.lastRound?.status === 'abandoned' && !v.decision && !ended && !lobby;
+  const held = v.decision?.status === 'held';
+  const bsig = JSON.stringify([browsing, v.manual, v.phase, held, cancelled]);
+  const bchanged = setSection(el.banners, bsig, () => {
+    if (browsing || lobby) return [];
+    const out = [];
+    if (v.manual) out.push(h('div', { class: 'banner manual', role: 'note' }, icon('people', 18), h('span', { text: 'Facilitator-led discussion · phone answers are off for now' })));
+    if (v.phase === 'paused') out.push(h('div', { class: 'stack' }, h('h2', { id: 'pauseH', tabindex: '-1', 'data-focus-heading': '', text: 'Discussion pause' }), held ? null : h('div', { class: 'banner pause', role: 'note' }, icon('pause', 18), h('span', { text: 'Paused · the facilitator will resume the room' }))));
+    if (cancelled) out.push(h('div', { class: 'banner alert', role: 'note' }, icon('alert', 18), h('span', { text: C.voided })));
+    if (v.phase === 'reviewing' && v.manual) out.push(h('p', { class: 'muted small', text: 'Facilitator-led discussion · phone answers are off for now' }));
+    return out;
+  });
+  if (bchanged && cancelled) say(C.voided);
+
+  // surface
+  const showSurface = !!entry && !lobby && !(ended && !browsing);
+  const ssig = JSON.stringify([showSurface, entry?.surfaceId, entry?.at, groupKey(entry), browsing, v.phase, decisionShown]);
+  setSection(el.surface, ssig, () => (showSurface ? buildSurface(entry, { browsing, phase: v.phase, collapse: !browsing && (decisionShown || (v.phase === 'reviewing' && !!v.decision)) }) : []));
+
+  // decision card
+  if (!ended) updateDecision(v, decisionShown); else { resetDecision(); el.decision.hidden = true; }
+
+  // room result (CASE-080)
+  const rsig = JSON.stringify([browsing, v.lastResult, v.decision?.roundId, ended]);
+  setSection(el.result, rsig, () => (!browsing && !ended && v.lastResult && !v.decision ? buildResult(v.lastResult) : []));
+
+  // recap
+  el.recap.hidden = !(ended && !browsing);
+  setSection(el.recap, JSON.stringify([ended, browsing, v.recap]), () => (ended && !browsing ? buildRecap(v) : []));
+
+  // timeline
+  const tsig = JSON.stringify([v.timeline.map((e) => [e.surfaceId, e.at, e.timelineKind, e.manual]), live?.surfaceId, S.browseIndex]);
+  const hadFocus = el.tl.contains(document.activeElement) ? document.activeElement?.dataset?.entryIndex : null;
+  if (setSection(el.tl, tsig, () => buildTimeline(v)) && hadFocus) el.tl.querySelector(`button[data-entry-index="${CSS.escape(hadFocus)}"]`)?.focus({ preventScroll: true });
+
+  // focus: never steal it from someone who is typing
+  if (phaseChanged || liveChanged) {
+    if (!typingNow()) {
+      const a = document.activeElement;
+      const lost = !a || a === document.body || !a.isConnected;
+      if (lost) {
+        const t = (decisionShown && el.decision.querySelector('[data-focus-heading]')) || main.querySelector('[data-focus-heading]');
+        t?.focus({ preventScroll: true });
+      }
+    }
+  }
+  renderHeader();
+}
+
+// ───────────────────────── surfaces, results, timeline, lobby ─────────────────────────
+function buildSurface(entry, { browsing, phase, collapse }) {
+  const parts = [];
+  if (entry.manual) parts.push(h('div', { class: 'banner manual', role: 'note' }, icon('people', 18), h('span', { text: 'Facilitator-led discussion' })));
+  const heading = h('h2', { id: 'surfH', tabindex: '-1', 'data-focus-heading': browsing || !collapse ? '' : null, text: entry.title });
+  const obs = entry.observations?.length ? buildVitals(entry.observations) : null;
+  const tile = (title, items) => (items?.length ? h('section', { class: 'card tile', 'aria-label': title }, h('p', { class: 'eyebrow', text: title }), h('ul', { class: 'points' }, items.map((t) => h('li', { text: t })))) : null);
+  const findings = tile('Findings', entry.points);
+  const inv = tile('Investigations', entry.investigations);
+  if (collapse) {
+    // A decision is open: the situation folds away under the decision (it is one tap away).
+    parts.push(h('details', { class: 'ctx' }, h('summary', {}, icon('eye', 16), h('span', { text: `Situation: ${entry.title}` })), h('div', { class: 'inner' }, entry.scene ? h('p', { class: 'small', text: entry.scene }) : null, obs, findings, inv)));
+  } else {
+    // One scene card (CASE-116), then the bento tiles (CASE-117), stacked.
+    parts.push(h('section', { class: 'card scene', 'data-kind': entry.timelineKind ?? 'live', 'aria-labelledby': 'surfH' }, heading, entry.scene ? h('p', { class: 'prose', text: entry.scene }) : null,
+      phase === 'teaching' && !browsing ? h('p', { class: 'banner info', text: 'Read this, then discuss with the room' }) : null), obs, findings, inv);
+  }
+  return parts.filter(Boolean);
+}
+
+/** Vitals (CASE-090): label, value and unit, then the arrow and the value the room last saw. Arrow = direction only, never a good/bad colour. */
+function buildVitals(list) {
+  const fmt = (o) => `${o.label} ${o.value}${o.unit ? (/^[%°]/.test(o.unit) ? '' : ' ') + o.unit : ''}`;
+  return h('ul', { class: 'vitals', 'aria-label': 'Observations' }, list.map((o) => {
+    const arrow = o.trend === 'up' ? '↑' : o.trend === 'down' ? '↓' : null;
+    const spoken = arrow ? `${fmt(o)}, ${o.trend} from ${o.previous}` : fmt(o);
+    return h('li', {},
+      h('span', { class: 'vl', 'aria-hidden': 'true', text: o.label }),
+      h('span', { class: 'vv', 'aria-hidden': 'true' }, String(o.value ?? ''), o.unit ? h('span', { class: 'vu', text: o.unit }) : null),
+      arrow ? h('span', { class: 'arrow', 'aria-hidden': 'true', text: `${arrow} ${o.previous}` }) : null,
+      h('span', { class: 'sr-only', text: spoken }));
+  }));
+}
+
+// Option marks by position in the one authored order (CASE-088). Recap rounds carry `optionIds`;
+// the remembered lists are a fallback for older snapshots.
+const seenOptions = new Map();
+function rememberOptions(decisionId, ids) { if (decisionId && ids?.length) seenOptions.set(decisionId, ids); }
+
+function buildResult(r) {
+  // Room-result copy (CASE-080, CASE-104): a tie reads as a split; multi-select and ranking say what
+  // was counted; free text is shown anonymously on the projector, not repeated in this summary (CASE-275).
+  rememberOptions(r.decisionId, r.counts.map((c) => c.optionId));
+  const mine = (r.yourOptionIds ?? []).map((id) => r.counts.findIndex((c) => c.optionId === id)).filter((i) => i >= 0);
+  const first = mine.length ? r.counts[mine[0]] : null;
+  let line;
+  if (!r.countMeaning) line = r.youAnswered ? 'Your answer was submitted for room discussion' : 'You did not answer this one';
+  else if (!r.yourAnswer) line = r.total ? 'You did not answer this one' : 'No one answered this one';
+  else if (r.countMeaning === 'selected') line = `You selected ${r.yourAnswer} · ${r.total} answered`;
+  else if (r.countMeaning === 'ranked_first') line = first ? `You ranked ${first.label} first · ${first.count} of ${r.total} did the same` : `You ranked ${r.yourAnswer}`;
+  else line = first ? `You chose ${r.yourAnswer} · ${first.count} of ${r.total} chose the same` : `You chose ${r.yourAnswer} · ${r.total} answered`;
+  const how = !r.total ? 'The facilitator chose the route' : r.split ? 'The room was split · The facilitator chose the route' : HOW_CHOSEN[r.howChosen] ?? '';
+  const marks = r.countMeaning === 'ranked_first' ? mine.slice(0, 1) : mine;
+  const ranking = r.rankCount && r.counts.every(row => Array.isArray(row.positionCounts))
+    ? responseSummary({ ...r, type: 'ranking' }).rows : [];
+  return h('section', { class: 'result', 'aria-label': 'Room result' },
+    h('p', { class: 'eyebrow', text: 'Room result' }),
+    h('p', { class: 'chose' }, marks.length ? h('span', { class: 'mk-wrap' }, marks.map((i) => markSvg(i, { size: 28, decorative: false }))) : null, h('span', { text: line })),
+    h('p', { class: 'small muted', text: how }),
+    ranking.length ? h('ul', { class: 'ranking-result', 'aria-label': 'Counts by ranking position' }, ranking.map(row =>
+      h('li', {}, h('strong', { text: row.label }), h('ul', {}, row.positions.map(position => h('li', { text: position.words })))))) : null);
+}
+
+function buildTimeline(v) {
+  const tl = v.timeline;
+  if (!tl.length) return [];
+  const label = (e, index) => (index === tl.length - 1 ? 'Live' : e.timelineKind === 'consequence' ? 'Shared consequence' : e.timelineKind === 'terminal' ? 'Teaching point' : 'Earlier');
+  return [
+    h('h3', { id: 'tlh', text: 'Timeline' }),
+    h('ul', { class: 'strip', 'aria-label': 'Swipe through shared material' }, tl.map((e, i) => {
+      const isLive = i === tl.length - 1;
+      const current = isLive ? S.browseIndex === null : S.browseIndex === i;
+      return h('li', {}, h('button', {
+        type: 'button', 'data-entry-index': String(i), 'aria-current': current ? 'true' : null,
+        onclick: () => { S.browseIndex = isLive ? null : i; updateRoom(); scrollTo({ top: 0 }); },
+      }, h('span', { class: 'n', text: `${i + 1} · ${label(e, i)}${e.manual ? ' · Facilitator-led discussion' : ''}` }), h('span', { class: 't', text: e.title })));
+    })),
+  ];
+}
+$('liveBtn').addEventListener('click', () => { S.browseIndex = null; updateRoom(); scrollTo({ top: 0 }); $('main').querySelector('[data-focus-heading]')?.focus({ preventScroll: true }); });
+
+function updateLobby(v) {
+  if (!el.lobby._built) {
+    el.lobby._built = true;
+    el.lobby._line = h('p', { id: 'lobbyLine', class: 'nm' });
+    el.lobby._av = h('span');
+    el.lobby._rename = buildRename('lobby');
+    el.lobby.append(h('h1', { id: 'lobbyH', tabindex: '-1', 'data-focus-heading': '', text: 'Waiting to start' }),
+      h('p', { class: 'muted small', text: 'The case starts when the facilitator is ready. Keep this page open.' }),
+      h('div', { class: 'preview' }, el.lobby._av, el.lobby._line),
+      h('details', { class: 'ctx' }, h('summary', {}, h('span', { text: 'Change name or avatar' })), h('div', { class: 'inner' }, el.lobby._rename.root)));
+  }
+  const t = v.you.name ? `You're in as ${v.you.name}` : "You're in";
+  if (el.lobby._line.textContent !== t) el.lobby._line.textContent = t;
+  const k = `${v.you.avatarId}|${v.you.name}`;
+  if (el.lobby._av.dataset.k !== k) { el.lobby._av.dataset.k = k; el.lobby._av.replaceChildren(avatarEl(v.you.avatarId, { size: 40, name: v.you.name })); }
+  el.lobby._rename.sync();
+}
+
+// ───────────────────────── recap ─────────────────────────
+function recapMarks(d) {
+  const ids = d.optionIds ?? seenOptions.get(d.decisionId);
+  const r = d.yourResponse;
+  const mine = r?.option_id ? [r.option_id] : r?.option_ids ?? [];
+  const idxs = ids ? mine.map((id) => ids.indexOf(id)).filter((i) => i >= 0) : [];
+  return idxs.length ? h('span', { class: 'mk-wrap' }, idxs.map((i) => markSvg(i, { size: 26, decorative: false }))) : null;
+}
+
+function buildRecap(v) {
+  const r = v.recap;
+  if (!r) return [h('h2', { id: 'recH', tabindex: '-1', 'data-focus-heading': '', text: 'Your private recap' }), h('p', { class: 'muted', text: 'No recap is available for this phone.' })];
+  const exp = r.expiresAt ? new Date(r.expiresAt) : null;
+  const out = [
+    h('h2', { id: 'recH', tabindex: '-1', 'data-focus-heading': '', text: 'Your private recap' }),
+    h('p', { class: 'muted small', text: r.caseTitle }),
+    h('p', { text: 'Kept for 24 hours, then deleted. This phone keeps access until then, even if you close the browser; clearing its data loses it.' }),
+    exp && !Number.isNaN(+exp) ? h('p', { class: 'small muted', text: `Expires ${exp.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}` }) : null,
+    h('div', { class: 'noprint' }, h('button', { type: 'button', class: 'btn block', onclick: () => window.print(), text: 'Print recap' })),
+    h('h3', { text: 'Your decisions' }),
+  ];
+  if (!r.rounds.length) out.push(h('p', { class: 'muted', text: 'No decisions were recorded in this room.' }));
+  for (const d of r.rounds) {
+    out.push(h('article', { class: 'recap-round' },
+      h('h4', { text: d.prompt }),
+      h('p', { class: 'small muted', text: `Round ${d.roundNo}` }),
+      h('p', { class: 'chose' }, recapMarks(d), h('span', { text: d.yourAnswer ? `Your answer: ${d.yourAnswer}` : 'No answer' })),
+      d.yourClassification ? h('p', { class: 'cls' }, icon(d.yourClassification, 18), CLASS_LABEL[d.yourClassification] ?? d.yourClassification) : null,
+      d.why ? h('p', { text: `Why: ${d.why}` }) : null,
+      d.doDifferently ? h('p', { text: d.doDifferently }) : null,
+      d.teamChoice ? h('p', { text: `The room: ${TEAM_CHOICE[d.teamChoice] ?? d.teamChoice}` }) : null,
+      d.whatHappened ? h('p', { text: `What happened: ${d.whatHappened}` }) : null));
+  }
+  if (r.teamPath?.length) out.push(h('h3', { text: 'The route the room took' }), h('ol', { class: 'plain' }, r.teamPath.map((t) => h('li', { text: t }))));
+  out.push(h('h3', { text: 'Key learning points' }), r.learningPoints?.length ? h('ul', { class: 'plain' }, r.learningPoints.map((t) => h('li', { text: t }))) : h('p', { class: 'muted', text: 'None recorded.' }));
+  return out;
+}
+
+// ───────────────────────── decision card + answer lifecycle ─────────────────────────
+const dec = { roundId: null, layout: null, draft: null, pend: null, accepted: null, msg: null, locked: false, refs: null };
+
+function resetDecision() {
+  dec.roundId = null; dec.layout = null; dec.draft = null; dec.pend = null; dec.accepted = null; dec.msg = null; dec.locked = false; dec.refs = null;
+  if (el.decision) { el.decision.replaceChildren(); }
+}
+const ok = (text) => ({ kind: 'ok', text });
+const alertMsg = (text) => ({ kind: 'alert', text });
+
+function optionsOf(d) { return d.interaction.options; }
+function enabledOptions(d) { return optionsOf(d).filter((o) => !o.disabled && !o.explored); }
+function labelOfResponse(d, resp) {
+  if (!resp) return null;
+  const l = (id) => optionsOf(d).find((o) => o.id === id)?.label ?? id;
+  if (resp.option_id) return l(resp.option_id);
+  if (resp.option_ids) return resp.option_ids.map(l).join(', ');
+  if (resp.order) return resp.order.map(l).join(' → ');
+  return resp.text ?? null;
+}
+function draftFrom(d, resp) {
+  const t = d.interaction.type;
+  const en = new Set(enabledOptions(d).map((o) => o.id));
+  if (t === 'single_choice') return { option_id: resp?.option_id && en.has(resp.option_id) ? resp.option_id : null };
+  if (t === 'multi_select') return { option_ids: (resp?.option_ids ?? []).filter((x) => en.has(x)) };
+  if (t === 'ranking') {
+    if (resp?.order) return { order: resp.order.filter((x) => en.has(x)) };
+    return { order: d.interaction.rankCount ? [] : enabledOptions(d).map((o) => o.id) };
+  }
+  return { text: resp?.text ?? '' };
+}
+function responseFromDraft(d) {
+  const t = d.interaction.type;
+  if (t === 'single_choice') return dec.draft.option_id ? { option_id: dec.draft.option_id } : null;
+  if (t === 'multi_select') return dec.draft.option_ids.length ? { option_ids: [...dec.draft.option_ids] } : null;
+  if (t === 'ranking') {
+    const need = d.interaction.rankCount ?? enabledOptions(d).length;
+    return dec.draft.order.length === need && need > 0 ? { order: [...dec.draft.order] } : null;
+  }
+  const text = clean(dec.draft.text);
+  return text && text.length <= (d.interaction.maxLength ?? 280) ? { text } : null;
+}
+function sameResponse(a, b) {
+  if (!a || !b) return false;
+  const norm = (r) => (r.option_ids ? { option_ids: [...r.option_ids].sort() } : r);
+  return JSON.stringify(norm(a)) === JSON.stringify(norm(b));
+}
+function savedOf(d) { return dec.accepted?.roundId === d.roundId ? dec.accepted.response : d.yourResponse; }
+
+function updateDecision(v, show) {
+  const d = v.decision;
+  if (!d) { if (dec.roundId) resetDecision(); el.decision.hidden = true; return; }
+  rememberOptions(d.decisionId, optionsOf(d).map((o) => o.id));
+  if (d.roundId !== dec.roundId) {
+    resetDecision();
+    dec.roundId = d.roundId;
+    dec.draft = draftFrom(d, d.yourResponse);
+    if (d.yourResponse) dec.msg = ok(C.saved);
+  }
+  el.decision.hidden = !show;
+  reconcilePending(v);
+  const layout = d.status === 'locked' || dec.locked ? 'locked' : 'edit';
+  if (layout !== dec.layout || !dec.refs) { dec.layout = layout; buildCard(d, layout); }
+  refreshCard(d);
+}
+function refreshDecision() { if (S.view?.decision && dec.refs) { reconcilePending(S.view); refreshCard(S.view.decision); } }
+
+function buildCard(d, layout) {
+  const box = el.decision;
+  const refs = { type: d.interaction.type };
+  dec.refs = refs;
+  const heading = d.roundNo > 1 ? `Responses reopened · round ${d.roundNo}` : 'Team decision';
+  refs.rcpt = h('div', { class: 'rcpt', role: 'status', 'aria-live': 'polite' }, h('span', { class: 'ic' }), h('span', { class: 't' }));
+  refs.rcptAlert = h('div', { class: 'rcpt alert', role: 'alert' }, h('span', { class: 'ic' }, icon('alert', 16)), h('span', { class: 't' }));
+  const receipts = h('div', { class: 'receipts' }, refs.rcpt, refs.rcptAlert);
+  refs.timer = h('p', { class: 'timer-line' });
+  box.classList.add('decision');
+  box.dataset.phase = layout === 'locked' ? 'locked' : 'open';
+  const hEl = h('h2', { id: 'decH', class: 'eyebrow', tabindex: '-1', 'data-focus-heading': '', text: layout === 'locked' ? 'Team decision' : heading });
+
+  if (layout === 'locked') {
+    refs.saved = h('p', { class: 'saved-line' });
+    box.replaceChildren(hEl, h('p', { style: 'font-size:var(--t-lg);font-weight:var(--w-semibold);line-height:1.3;overflow-wrap:anywhere', text: d.prompt }),
+      h('div', { class: 'banner pause', role: 'note' }, icon('lock', 18), h('span', { text: 'Voting locked · Awaiting the next shared surface' })),
+      refs.saved, receipts);
+    return;
+  }
+
+  const t = d.interaction.type;
+  const fs = h('fieldset', {}, h('legend', { id: 'promptL', text: d.prompt }));
+  refs.fs = fs;
+  const hintTxt = t === 'multi_select' ? 'Choose all that apply' : t === 'ranking' ? `Rank ${d.interaction.rankCount ?? enabledOptions(d).length} options` : null;
+  if (hintTxt) fs.append(h('p', { class: 'hint', id: 'hintP', text: hintTxt }));
+  if (t === 'single_choice' || t === 'multi_select') fs.append(buildChoiceList(d, t));
+  else if (t === 'ranking') { refs.rankMount = h('div'); fs.append(refs.rankMount); refs.live = h('p', { class: 'sr-only-live', role: 'status', 'aria-live': 'polite' }); fs.append(refs.live); renderRanking(d); }
+  else fs.append(buildFreeText(d));
+
+  refs.saved = h('p', { class: 'saved-line' });
+  refs.hint = h('p', { class: 'small muted', id: 'sendHint' });
+  refs.send = h('button', { type: 'button', class: 'btn primary block', 'aria-describedby': 'sendHint', onclick: onSend });
+  box.replaceChildren(hEl, refs.timer, fs, refs.saved, receipts, refs.send, refs.hint);
+}
+
+function optionRow(o, i, input, multi) {
+  const locked = o.disabled || o.explored;
+  const tag = o.explored ? h('span', { class: 'tag' }, icon('lock', 12), 'Explored') : o.disabled ? h('span', { class: 'tag' }, icon('lock', 12), 'Not available') : null;
+  const row = h('label', { class: `opt opt-tile${locked ? ' locked' : ''}${multi ? ' multi' : ''}` }, input,
+    h('span', { class: 'mk' }, markSvg(i, { size: 36, decorative: true })),
+    h('span', { class: 'lbl' }, h('span', { class: 'sr-only', text: markFor(i).name + ': ' }), o.label),
+    h('span', { class: 'ind' }, icon('check', 16)),
+    tag, o.explored ? h('span', { class: 'xnote', text: 'The room has already seen where this leads' }) : null);
+  row.style.setProperty('--mk', markFor(i).fill);
+  return row;
+}
+function buildChoiceList(d, t) {
+  const list = h('div', { class: 'opts' });
+  const name = `o-${d.roundId}`;
+  for (const [i, o] of optionsOf(d).entries()) {
+    const locked = o.disabled || o.explored;
+    const input = h('input', { type: t === 'single_choice' ? 'radio' : 'checkbox', name, value: o.id, disabled: locked ? '' : null });
+    if (!locked) {
+      input.checked = t === 'single_choice' ? dec.draft.option_id === o.id : dec.draft.option_ids.includes(o.id);
+      input.addEventListener('change', () => {
+        if (t === 'single_choice') dec.draft.option_id = o.id;
+        else dec.draft.option_ids = input.checked ? [...dec.draft.option_ids, o.id] : dec.draft.option_ids.filter((x) => x !== o.id);
+        refreshCard(S.view.decision);
+      });
+    }
+    list.append(optionRow(o, i, input, t === 'multi_select'));
+  }
+  return list;
+}
+function buildFreeText(d) {
+  const max = d.interaction.maxLength ?? 280;
+  const ta = h('textarea', { id: 'ftext', maxlength: String(max), 'aria-labelledby': 'promptL', 'aria-describedby': 'fcount fpublic', autocomplete: 'off', rows: '4' });
+  ta.value = dec.draft.text;
+  const count = h('p', { class: 'counter', id: 'fcount', text: `${ta.value.length} of ${max}` });
+  ta.addEventListener('input', () => { dec.draft.text = ta.value; count.textContent = `${ta.value.length} of ${max}`; refreshCard(S.view.decision); });
+  const warn = idWarn(ta, 'ftext-warn');
+  warn.upd();
+  return h('div', {}, ta, count, h('p', { id: 'fpublic', text: 'Responses are shown to the room without names after responses close. Do not include identifying details.' }), warn.p);
+}
+
+function renderRanking(d, focus) {
+  const refs = dec.refs;
+  const need = d.interaction.rankCount;
+  const byId = new Map(optionsOf(d).map((o) => [o.id, o]));
+  const idxOf = new Map(optionsOf(d).map((o, k) => [o.id, k]));
+  const mkOf = (id) => h('span', { class: 'mk' }, markSvg(idxOf.get(id), { size: 32, decorative: true }));
+  const order = dec.draft.order;
+  const mount = refs.rankMount;
+  const list = order.length ? h('ol', { class: 'rank', 'aria-label': 'Your ranking' }, order.map((id, i) => {
+    const o = byId.get(id);
+    const mv = (delta, verb) => rankingMoveControl({ id, label: o.label, direction: verb,
+      disabled: (delta < 0 && i === 0) || (delta > 0 && i === order.length - 1),
+      onMove: () => { const j = i + delta; [order[i], order[j]] = [order[j], order[i]]; refs.live.textContent = `${o.label} moved to position ${j + 1} of ${order.length}`; renderRanking(d, { id, verb }); refreshCard(S.view.decision); },
+    });
+    const li = h('li', {}, h('div', { class: 'top-row' }, h('span', { class: 'pos', 'aria-hidden': 'true', text: String(i + 1) }), mkOf(id), h('span', { class: 'lbl', style: 'overflow-wrap:anywhere' }, h('span', { class: 'sr-only', text: markFor(idxOf.get(id)).name + ': ' }), `${i + 1}. ${o.label}`)),
+      h('div', { class: 'row-btns' }, mv(-1, 'up'), mv(1, 'down'),
+        need ? rankingRemoveControl({ label: o.label, onRemove: () => { dec.draft.order = order.filter((x) => x !== id); refs.live.textContent = `${o.label} removed from your ranking`; renderRanking(d); refreshCard(S.view.decision); } }) : null));
+    li.style.setProperty('--mk', markFor(idxOf.get(id)).fill);
+    return li;
+  })) : h('p', { class: 'empty-rank', text: `Add ${need} options below, then put them in order.` });
+  const pool = optionsOf(d).filter((o) => !order.includes(o.id) && (need || o.disabled || o.explored));
+  const avail = pool.length ? h('ul', { class: 'avail', 'aria-label': need ? 'Options you can add' : 'Not available' }, pool.map((o) => {
+    const locked = o.disabled || o.explored;
+    const li = h('li', { class: locked ? 'locked' : '' },
+      mkOf(o.id),
+      h('span', { class: 'lbl', style: 'overflow-wrap:anywhere' }, h('span', { class: 'sr-only', text: markFor(idxOf.get(o.id)).name + ': ' }), o.label, o.explored ? h('span', { class: 'xnote', style: 'display:block', text: 'The room has already seen where this leads' }) : null),
+      locked ? h('span', { class: 'tag' }, icon('lock', 12), o.explored ? 'Explored' : 'Not available')
+        : h('button', { type: 'button', class: 'btn small', 'aria-label': `Add to ranking: ${o.label}`, text: 'Add', disabled: order.length >= need ? '' : null,
+          onclick: () => { dec.draft.order = [...order, o.id]; refs.live.textContent = `${o.label} added at position ${order.length + 1} of ${need}`; renderRanking(d); refreshCard(S.view.decision); } }));
+    li.style.setProperty('--mk', markFor(idxOf.get(o.id)).fill);
+    return li;
+  })) : null;
+  mount.replaceChildren(list, avail);
+  if (focus) {
+    const btn = mount.querySelector(`button[data-id="${CSS.escape(focus.id)}"][data-act="${focus.verb}"]:not(:disabled)`) || mount.querySelector(`button[data-id="${CSS.escape(focus.id)}"]:not(:disabled)`);
+    btn?.focus({ preventScroll: true });
+  }
+}
+
+function currentMsg(d) {
+  const p = dec.pend;
+  if (p) {
+    if (p.state === 'held') return { kind: 'pause', text: C.held };
+    if (p.state === 'refetch') return { kind: 'info', text: C.updating };
+    if (p.state === 'waiting' || S.conn !== 'online') return { kind: 'info', text: C.waiting, spin: true };
+    return { kind: 'info', text: C.sending, spin: true };
+  }
+  if (d.status === 'held') return { kind: 'pause', text: C.held };
+  if (dec.layout === 'locked' && dec.msg?.kind !== 'alert') return null;
+  return dec.msg;
+}
+
+function refreshCard(d) {
+  const refs = dec.refs;
+  if (!refs) return;
+  const saved = savedOf(d);
+  const savedLabel = labelOfResponse(d, saved);
+  const m = currentMsg(d);
+  // receipt regions: status vs alert, text only
+  const useAlert = m?.kind === 'alert';
+  const rc = refs.rcpt, ra = refs.rcptAlert;
+  const setText = (box, text, kind, spin) => {
+    const t = box.querySelector('.t');
+    if (t.textContent !== (text ?? '')) t.textContent = text ?? '';
+    box.className = `rcpt ${kind ?? ''}`.trim();
+    const ic = box.querySelector('.ic');
+    const want = !text ? '' : kind === 'ok' ? 'check' : kind === 'pause' ? 'pause' : spin ? 'spinner' : 'info';
+    if (box !== ra && ic.dataset.k !== want) { ic.dataset.k = want; ic.replaceChildren(...(want ? [icon(want, 16, want === 'spinner' ? 'spin' : '')] : [])); }
+  };
+  if (useAlert) { setText(rc, '', ''); setText(ra, m.text, 'alert'); }
+  else { setText(ra, '', 'alert'); setText(rc, m?.text ?? '', m?.kind ?? '', m?.spin); }
+
+  if (dec.layout === 'locked') {
+    refs.saved.textContent = savedLabel ? `Your answer (locked): ${savedLabel}` : 'No answer recorded from this phone';
+  } else {
+    refs.saved.textContent = savedLabel ? `Your answer: ${savedLabel}` : '';
+    const held = d.status === 'held';
+    refs.fs.disabled = held;
+    const online = S.conn === 'online';
+    const draftResp = responseFromDraft(d);
+    const sending = !!dec.pend;
+    const unchanged = !!saved && sameResponse(draftResp, saved);
+    const btn = refs.send;
+    btn.replaceChildren();
+    const inFlight = sending && dec.pend.state !== 'held';
+    if (inFlight) { btn.append(icon('spinner', 18, 'spin'), document.createTextNode(' Sending…')); btn.setAttribute('aria-busy', 'true'); }
+    else { btn.append(document.createTextNode(saved ? 'Change answer' : 'Send answer')); btn.removeAttribute('aria-busy'); }
+    btn.disabled = sending || held || !online || !draftResp || unchanged;
+    let hint = '';
+    if (!online && !sending) hint = S.conn === 'lost' ? 'Answering is off until the connection returns' : 'Answering is off until the room reconnects';
+    else if (!draftResp && refs.type === 'ranking') hint = `Rank exactly ${d.interaction.rankCount ?? enabledOptions(d).length} options to send`;
+    else if (!draftResp && refs.type === 'multi_select') hint = 'Choose at least one option to send';
+    else if (!draftResp && refs.type === 'single_choice') hint = 'Choose an option to send';
+    else if (!draftResp) hint = 'Write an answer to send';
+    if (refs.hint.textContent !== hint) refs.hint.textContent = hint;
+  }
+  renderTimer();
+}
+
+function onSend() {
+  const v = S.view, d = v?.decision;
+  if (!d || dec.pend || S.conn !== 'online') return;
+  const response = responseFromDraft(d);
+  if (!response) return;
+  const body = { v: WIRE_VERSION, t: 'command', type: 'vote', epoch: S.snap?.epoch ?? 0, clientEventId: uuidv7(), roundId: d.roundId, response };
+  dec.pend = { roundId: d.roundId, body, response, state: 'sending' };
+  dec.msg = null;
+  dispatchPending(dec.pend);
+}
+function dispatchPending(p) {
+  p.state = 'sending';
+  refreshDecision();
+  link.sendFrame(p.body).then((rb) => onReceipt(p, rb));
+}
+function resend(p) {
+  p.body = { ...p.body, epoch: S.snap?.epoch ?? p.body.epoch }; // same clientEventId, current epoch
+  dispatchPending(p);
+}
+
+function onReceipt(p, rb) {
+  if (dec.pend !== p) return; // dropped (round changed) or superseded
+  const d = S.view?.decision;
+  switch (rb.receipt) {
+    case 'accepted': case 'already_accepted':
+      dec.pend = null;
+      dec.accepted = { roundId: p.roundId, response: p.response };
+      dec.msg = ok(rb.receipt === 'accepted' ? C.saved : C.savedDup);
+      break;
+    case 'locked': {
+      dec.pend = null; dec.locked = true;
+      const had = d ? savedOf(d) : null;
+      dec.msg = alertMsg(had ? C.lockedSaved : C.lockedNone);
+      break;
+    }
+    case 'paused_held':
+      p.state = 'held'; // keep the same clientEventId; resent when decision.status returns to open
+      break;
+    case 'stale_epoch':
+      p.state = 'refetch';
+      link.refetch(); // fresh snapshot, then reconcilePending resends under the new epoch
+      setTimeout(() => { if (dec.pend === p && p.state === 'refetch') reconcilePending(S.view, true); }, 3000);
+      break;
+    case 'rejected': {
+      dec.pend = null;
+      const r = rb.reason;
+      if (r === 'round_voided') dec.msg = alertMsg(C.voided);
+      else if (r === 'manual_room') dec.msg = alertMsg(C.manualRoom);
+      else if (r === 'unknown_participant') { S.removed = true; render(); return; }
+      else if (r === 'room_ended') dec.msg = alertMsg(C.ended);
+      else dec.msg = alertMsg(C.rejected); // client_event_id_reused, bad_response, unknown_round: the snapshot refetch follows
+      break;
+    }
+    case 'timeout':
+      p.state = 'waiting'; // bus gave up after MAX_TRIES: say so, keep the answer, retry with the same id
+      setTimeout(() => { if (dec.pend === p && p.state === 'waiting') dispatchPending(p); }, 1000);
+      break;
+    default:
+      dec.pend = null; dec.msg = alertMsg(C.rejected);
+  }
+  if (S.mode === 'room') { reconcilePending(S.view); refreshDecision(); }
+}
+
+function reconcilePending(v, force = false) {
+  const p = dec.pend;
+  if (!p || !v) return;
+  const d = v.decision;
+  if (!d || d.roundId !== p.roundId) { dec.pend = null; return; }
+  if (d.status === 'locked') { // the round locked while the answer was held or in flight
+    if (p.state !== 'sending') { dec.pend = null; dec.msg = alertMsg(savedOf(d) ? C.lockedSaved : C.lockedNone); }
+    return;
+  }
+  if (p.state === 'held' && d.status === 'open') { resend(p); return; }
+  if (p.state === 'refetch' && S.snap) {
+    if (S.snap.epoch !== p.body.epoch || force) {
+      if (d.status === 'open') resend(p); else p.state = 'held';
+    }
+  }
+}
+
+// ───────────────────────── advisory timer (text only, no pulse, polite at 60 / 10 / 0) ─────────────────────────
+// ONE rounding with the console and the projector (src/shared/timer.mjs; walkthrough bug 3).
+const announced = new Set();
+function renderTimer() {
+  const refs = dec.refs, v = S.view;
+  if (!refs?.timer) return;
+  const t = v?.decision && v.timer;
+  if (!t) { refs.timer.textContent = ''; return; }
+  const r = timerRemainingS(t, Date.now());
+  const text = timerWords(r);
+  if (refs.timer.textContent !== text) refs.timer.textContent = text;
+  if (!t.paused) {
+    for (const th of TIMER_ANNOUNCE_AT) {
+      const k = `${v.decision.roundId}:${t.endsAt}:${th}`;
+      if (r <= th && !announced.has(k)) {
+        // Only announce a threshold while it is current (a late joiner does not hear the ones already passed).
+        announced.add(k);
+        const next = th === 60 ? 10 : th === 10 ? 0 : -1;
+        if (r > next) say(text);
+      }
+    }
+  }
+}
+setInterval(() => { if (S.mode === 'room') renderTimer(); }, 1000);
+
+// ───────────────────────── go ─────────────────────────
+render();
+// Lab/debug hook only: nothing here carries the token or a name.
+window.casePhone = { get view() { return S.view; }, get conn() { return S.conn; }, link };
+</script>
+</body>
+</html>

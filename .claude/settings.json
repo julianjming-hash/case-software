@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(gh api *deploy-production*)",
+      "Bash(gh api *pending_deployments*)",
+      "Bash(*wrangler deploy*)",
+      "Bash(*wrangler rollback*)",
+      "Bash(*wrangler secret*)",
+      "Bash(*wrangler versions deploy*)",
+      "Bash(*npm run deploy*)",
+      "Bash(gh secret set*)",
+      "Bash(gh secret delete*)",
+      "Read(./.env*)",
+      "Read(./.dev.vars*)",
+      "Read(./.git/**)",
+      "Bash(gh *)",
+      "Bash(curl *)"
+    ]
+  },
+  "disableClaudeAiConnectors": true
+}

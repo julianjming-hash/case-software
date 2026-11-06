@@ -1,0 +1,2 @@
+import {defineConfig}from '@playwright/test';
+export default defineConfig({testDir:'./e2e',testMatch:'device-recovery.spec.mjs',timeout:60000,expect:{timeout:10000},fullyParallel:false,retries:0,forbidOnly:!!process.env.CI,reporter:'list',use:{trace:'retain-on-failure',ignoreHTTPSErrors:true},projects:['webkit','chromium'].flatMap(browserName=>[{name:`${browserName}-iphone`,use:{browserName,viewport:{width:390,height:844},isMobile:true,hasTouch:true}},{name:`${browserName}-android`,use:{browserName,viewport:{width:412,height:915},isMobile:true,hasTouch:true}}])});

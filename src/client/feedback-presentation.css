@@ -1,0 +1,58 @@
+/* Shared case/session/Admin feedback, using the existing Case palette and exact counts. */
+.feedback-results,.case-feedback-body,.feedback-admin,.feedback-admin-body { display:grid;gap:var(--sp-5);min-width:0;max-width:none; }
+.feedback-results > :is(h3,p),.feedback-question :is(h3,h4,p),.feedback-comments :is(h3,h4,h5,p),.feedback-month-card :is(h3,p),.feedback-evidence p { margin:0; }
+.feedback-results .feedback-rating-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:var(--sp-4);min-width:0; }
+.feedback-evidence,.feedback-question,.feedback-comments,.feedback-month-card,.feedback-empty,.feedback-status { border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);padding:var(--sp-5);min-width:0;box-shadow:var(--shadow-1); }
+.feedback-evidence { display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-3) var(--sp-5); }
+.feedback-evidence-total { display:grid;gap:var(--sp-1); }
+.feedback-evidence-total strong { font-size:var(--t-lg);font-weight:var(--w-semibold);font-variant-numeric:tabular-nums; }
+.feedback-evidence p,.feedback-sample,.feedback-note,.feedback-status,.feedback-scale { color:var(--ink-muted);font-size:var(--t-sm);line-height:1.6; }
+.feedback-question { display:grid;align-content:start;gap:var(--sp-4); }
+.feedback-question-head { display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:var(--sp-2); }
+.feedback-question-head :is(h3,h4) { margin:0;font-size:var(--t-md);font-weight:var(--w-semibold); }
+.feedback-question .feedback-dist { width:100%;border:0;border-collapse:collapse;border-radius:0;box-shadow:none;table-layout:fixed;font-size:var(--t-sm); }
+.feedback-question .feedback-dist :is(th,td) { border:0;border-radius:0;background:transparent;padding:var(--sp-2) 0;vertical-align:middle;text-align:start; }
+.feedback-question .feedback-dist th { width:2.5ch;font-weight:var(--w-medium);color:var(--ink-muted);font-variant-numeric:tabular-nums; }
+.feedback-question .feedback-bar { width:auto;padding-inline:var(--sp-3); }
+.feedback-bar-track { display:block;height:10px;width:100%;background:var(--quiet);border-radius:var(--radius-xs);overflow:hidden; }
+.feedback-question .feedback-bar-fill { display:block;height:100%;min-width:0;border-radius:0;background:var(--petrol);color:var(--on-petrol); }
+.feedback-question .feedback-count { width:11ch;text-align:end;font-family:var(--mono);font-variant-numeric:tabular-nums; }
+.feedback-count strong,.feedback-percentage { display:block; }
+.feedback-percentage { color:var(--ink-muted);font-size:var(--t-xs); }
+.feedback-question .feedback-scale { margin:0;padding-top:var(--sp-3);border-top:1px solid var(--line); }
+.feedback-comments { display:grid;gap:var(--sp-4); }
+.feedback-comments > :is(h3,h4),.feedback-month-card h3 { font-size:var(--t-lg); }
+.feedback-comment-groups { display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--sp-5); }
+.feedback-comment-group { display:grid;align-content:start;gap:var(--sp-3);min-width:0; }
+.feedback-comment-group :is(h4,h5) { font-size:var(--t-sm);font-weight:var(--w-semibold); }
+.feedback-comments .feedback-comment-list { list-style:none;margin:0;padding:0;display:grid;gap:var(--sp-3); }
+.feedback-comment-list li { padding:var(--sp-3) var(--sp-4);background:var(--quiet);border-radius:var(--radius-sm);overflow-wrap:anywhere; }
+.feedback-comment-list p { white-space:pre-wrap; }
+.feedback-date { display:block;margin-bottom:var(--sp-2);color:var(--ink-muted);font-size:var(--t-xs);font-variant-numeric:tabular-nums; }
+.feedback-comments .feedback-warning { padding:var(--sp-3) var(--sp-4);border:1px solid var(--line);background:var(--quiet);border-radius:var(--radius-sm);font-size:var(--t-sm);color:var(--ink-muted); }
+.feedback-month-card { display:grid;gap:var(--sp-3); }
+.feedback-month-scroll { max-width:100%;overflow-x:auto; }
+.feedback-months { width:100%;min-width:420px;table-layout:fixed;border-collapse:collapse;border:0;border-radius:0;background:transparent;box-shadow:none;font-size:var(--t-sm);font-variant-numeric:tabular-nums; }
+.feedback-months caption { padding:0;border:0; }
+.feedback-months :is(th,td) { padding:var(--sp-3) var(--sp-2);border:0;border-radius:0;border-bottom:1px solid var(--line);text-align:center;background:transparent;vertical-align:middle; }
+.feedback-months thead th { color:var(--ink-muted);font-weight:var(--w-medium);background:var(--quiet); }
+.feedback-months th:first-child { width:9ch;text-align:start;font-weight:var(--w-medium); }
+.feedback-months tr:last-child :is(th,td) { border-bottom:0; }
+.feedback-month-value > span:first-child { display:block; }
+.feedback-month-track { display:block;position:relative;height:32px;width:14px;margin:var(--sp-2) auto 0;background:var(--quiet); }
+.feedback-month-fill { display:block;position:absolute;bottom:0;width:100%;background:var(--petrol);color:var(--on-petrol); }
+.feedback-month-total { font-weight:var(--w-semibold); }
+.feedback-admin-nav { display:flex;flex-wrap:wrap;gap:var(--sp-2); }
+.feedback-admin-nav .btn[aria-pressed=true] { background:var(--petrol-tint);color:var(--petrol-ink); }
+.feedback-status[hidden],.feedback-status:empty,.feedback-admin .admin-pagination:empty { display:none; }
+.feedback-rooms { list-style:none;display:grid;gap:var(--sp-3);margin:0;padding:0; }
+.feedback-rooms li { display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-3);padding:var(--sp-4);border:1px solid var(--line);background:var(--surface);border-radius:var(--radius); }
+.feedback-rooms li > span { flex:1 1 20rem;overflow-wrap:anywhere; }
+@media(max-width:719px) { .feedback-evidence,.feedback-question,.feedback-comments,.feedback-month-card,.feedback-empty,.feedback-status { padding:var(--sp-4); }.feedback-months { font-size:var(--t-xs); } }
+@media print { .feedback-evidence,.feedback-question,.feedback-comments,.feedback-month-card { box-shadow:none; }.feedback-month-scroll { overflow:visible; }.feedback-months { min-width:0; }.feedback-months tr,.feedback-comment-list li { break-inside:avoid; } }
+
+.case-feedback-body>.feedback-results:has(.feedback-comments){grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+.case-feedback-body>.feedback-results>.feedback-evidence{grid-column:1/-1}
+@media(max-width:900px){.case-feedback-body>.feedback-results:has(.feedback-comments){grid-template-columns:minmax(0,1fr)}}
+
+.feedback-dist .feedback-rating-column{width:2.5ch}.feedback-dist .feedback-count-column{width:11ch}

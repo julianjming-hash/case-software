@@ -1,0 +1,128 @@
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+import {uuidv7} from '../src/shared/ids.mjs';
+// Built shell + real local Worker and local R2. PostgREST/Auth are explicit in-memory fakes, never live services.
+import {test,expect} from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import {startLocalAuthStub} from '../tests/helpers/local-auth-stub.mjs';
+import {startPublishedWorker} from '../tests/helpers/published-worker.mjs';
+import {startServedAuthShell} from '../tests/helpers/served-auth-shell.mjs';
+let auth,worker,shell;const records=new Map(),actions=[];
+const adminEmail='beta-admin@example.invalid',caseOrigin='https://case.invalid';
+test.describe.configure({mode:'serial'});
+test.use({ignoreHTTPSErrors:true});
+test.beforeAll(async()=>{
+ auth=await startLocalAuthStub({appOrigin:null,jwt:null,email:adminEmail});
+ worker=await startPublishedWorker({authOrigin:auth.origin,email:adminEmail,bindings:{ADMIN_EMAILS:adminEmail,INCIDENT_ADMIN_EMAILS:adminEmail,CASE_PUBLIC_ORIGIN:caseOrigin}});
+ auth.setJwt(worker.jwt);shell=await startServedAuthShell({apiOrigin:worker.origin,casePublicOrigin:caseOrigin,buildAuthBindings:{SUPABASE_URL:auth.origin,SUPABASE_JWT_ISSUER:`${auth.origin}/auth/v1`,SUPABASE_JWKS_URL:`${auth.origin}/auth/v1/.well-known/jwks.json`}});auth.setAppOrigin(shell.origin);
+ worker.fake.replies.set('beta_issue_dispatch',({p_actor:actor,p_action:action,p_input:input})=>{
+  actions.push(action);let row=action==='receipt'||action==='reserve'?[...records.values()].find(r=>r.operationId===(input.id??input.draft?.operationId)):records.get(input.id);
+  const refusal=(error,status)=>({error,status});
+  const receipt=r=>({state:r.accepted_at?'accepted':'pending',operationId:r.operationId,id:r.id,reference:r.reference,digest:r.digest,acceptedAt:r.accepted_at,attachmentOutcome:r.original.attachments.map(f=>({...f,state:r.stored.has(f.id)?'stored':'missing'}))});
+  const dto=r=>({id:r.id,reference:r.reference,title:r.original.context||r.original.description,summary:r.summary,status:r.status,revision:r.revision,incident:r.incident,original:r.original,attachments:r.original.attachments.filter(f=>r.stored.has(f.id)),followups:r.followups,accepted_at:r.accepted_at,updated_at:r.updated_at,severity:'unknown',priority:'untriaged',owner:null,reproducibility:'unknown',verified_build:null,duplicate_of:null,evidenceDeleted:false,attachmentOutcome:r.original.attachments.map(f=>({...f,state:r.stored.has(f.id)?'stored':'missing'}))});
+  if(action==='reserve'){if(row)return row.digest===input.digest?receipt(row):refusal('conflict',409);row={id:uuidv7(),operationId:input.draft.operationId,reference:input.reference,digest:input.digest,principal:actor.principal,original:input.draft,incident:input.draft.incident,status:'New',revision:1,accepted_at:null,updated_at:new Date().toISOString(),stored:new Set(),followups:[]};records.set(row.id,row);return receipt(row);}
+  if(action==='list')return{rows:[...records.values()].filter(r=>r.accepted_at&&(input.adminView?r.incident===input.incidentView:r.principal===actor.principal)).map(r=>{const d=dto(r);delete d.original;delete d.attachments;delete d.followups;return d;}),cursor:null,asOf:new Date().toISOString(),canIncidents:actor.incident};
+  if(!row||(input.adminView?row.incident!==input.incidentView:row.principal!==actor.principal))return refusal('not_found',404);
+  if(action==='receipt')return receipt(row);
+  if(action==='accept'){row.accepted_at??=new Date().toISOString();return receipt(row);}
+  if(['upload','stored','file'].includes(action)){const f=row.original.attachments.find(f=>f.id===input.fileId);if(!f)return refusal('not_found',404);if(action==='stored')row.stored.add(f.id);return{key:`issues/${row.id}/${f.id}`,sha256:f.sha256,bytes:f.bytes,type:f.type};}
+  if(action==='read')return dto(row);
+  if(action==='triage'){if(input.expectedRevision!==row.revision)return refusal('conflict',409);row.revision++;if(input.change.restrict){row.incident=true;return{restricted:true};}for(const k of ['status','summary'])if(input.change[k]!==undefined)row[k]=input.change[k];if(input.change.publicReply)row.followups.push({at:new Date().toISOString(),action:'Reply',body:input.change.publicReply,public:true});return dto(row);}
+  throw Error(`unexpected beta RPC action ${action}`);
+ });
+});
+test.afterAll(async()=>{await shell?.stop();await worker?.stop();await auth?.stop();});
+test.beforeEach(async({page,context})=>{await context.setOffline(false);
+ // A no-route container reports false even with functioning loopback, and CDP cannot restore this hint.
+ // Model only the advisory browser hint; real requests still use the OS-isolated local Worker.
+ await page.addInitScript(()=>{if(!navigator.onLine){window.__caseBetaHintModelled=true;Object.defineProperty(navigator,'onLine',{configurable:true,get:()=>window.__caseBetaOnlineHint??true});}});
+ records.clear();actions.length=0;worker.fake.inactiveActors.delete(worker.userId);await page.route('**/api/v1/**',route=>{const request=route.request();if(new URL(request.url()).pathname.includes('/issues')||new URL(request.url()).pathname.includes('/incidents'))return route.continue({headers:{...request.headers(),origin:caseOrigin}});return route.continue();});});
+async function signedIn(page){await page.goto(`${shell.origin}/present`);expect(await page.evaluate(()=>navigator.onLine)).toBe(true);await page.getByLabel('Email',{exact:true}).fill(adminEmail);await page.getByRole('button',{name:'Email me a sign-in code'}).click();await page.getByLabel('One-time code').fill('123456');await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page.getByRole('button',{name:'Report an issue',exact:true})).toBeVisible();}
+async function native(page,mode='capture'){await page.addInitScript(mode=>{window.captureEvidence={calls:0,stops:0,dialogs:0};Object.defineProperty(navigator,'mediaDevices',{configurable:true,value:{getDisplayMedia(options){window.captureEvidence.calls++;window.captureEvidence.options=options;window.captureEvidence.dialogs=document.querySelectorAll('dialog[open]').length;if(mode==='cancel')return Promise.reject(Object.assign(new Error('denied'),{name:'NotAllowedError'}));const canvas=document.createElement('canvas');canvas.width=64;canvas.height=32;const ctx=canvas.getContext('2d');ctx.fillStyle='rgb(230,40,80)';ctx.fillRect(0,0,64,32);const stream=canvas.captureStream(1);for(const track of stream.getTracks()){const stop=track.stop.bind(track);track.stop=()=>{window.captureEvidence.stops++;stop();};}return Promise.resolve(stream);}}});},mode);}
+for(const [width,theme]of [[320,'light'],[390,'dark'],[1365,'light']])test(`native one-frame report and screenshot preview at ${width} ${theme}`,async({page})=>{
+ await page.setViewportSize({width,height:900});await page.emulateMedia({colorScheme:theme});await native(page);await signedIn(page);await page.getByRole('button',{name:'Report an issue',exact:true}).click();const form=page.getByRole('dialog',{name:'Report an issue',exact:true});await expect(form).toBeVisible();await expect(form.getByText('Screenshot 1',{exact:false})).toBeVisible();expect(actions).toEqual([]);
+ const evidence=await page.evaluate(()=>window.captureEvidence);expect(evidence.calls).toBe(1);expect(evidence.stops).toBe(1);expect(evidence.dialogs).toBe(0);expect(evidence.options.audio).toBe(false);
+ await form.getByRole('button',{name:'Preview',exact:true}).click();const preview=page.getByRole('dialog',{name:'Screenshot preview'});await expect(preview.locator('img')).toBeVisible();expect(await preview.locator('img').evaluate(async image=>{await image.decode();const c=document.createElement('canvas');c.width=64;c.height=32;c.getContext('2d').drawImage(image,0,0);return [...c.getContext('2d').getImageData(20,10,1,1).data];})).toEqual([230,40,80,255]);await preview.getByRole('button',{name:'Close',exact:true}).click();
+ await form.getByLabel('What went wrong?',{exact:true}).fill('The control stayed disabled');expect(await form.locator('details').getAttribute('open')).toBeNull();expect((await new AxeBuilder({page}).include('.issues-dialog').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await form.getByRole('button',{name:'Send report',exact:true}).click();await expect(form.getByRole('status')).toHaveText('Report received.');expect(actions.filter(a=>a==='reserve')).toHaveLength(1);expect(actions).toContain('stored');expect(actions).toContain('accept');await form.getByRole('button',{name:'My reports',exact:true}).click();await form.getByRole('button',{name:/New.*The control stayed disabled/}).click();await expect(form.getByText('Original reporter evidence — untrusted text.')).toBeVisible();await form.getByRole('button',{name:'Preview screenshot',exact:true}).click();const storedPreview=page.getByRole('dialog',{name:'Screenshot preview'});await expect(storedPreview.locator('img')).toBeVisible();expect(await storedPreview.locator('img').evaluate(async image=>{await image.decode();return[image.naturalWidth,image.naturalHeight];})).toEqual([64,32]);await storedPreview.getByRole('button',{name:'Close',exact:true}).click();
+});
+test('cancelled native picker permits a one-sentence text-only submission',async({page})=>{await native(page,'cancel');await signedIn(page);await page.getByRole('button',{name:'Report an issue',exact:true}).click();const modal=page.getByRole('dialog',{name:'Report an issue',exact:true});await modal.getByLabel('What went wrong?',{exact:true}).fill('   ');await modal.getByRole('button',{name:'Send report',exact:true}).click();await expect(modal.getByRole('alert')).toHaveText('Check the report fields and try again. Nothing has been submitted.');expect(actions).toEqual([]);await modal.getByLabel('What went wrong?',{exact:true}).fill('The tab did not reconnect');await modal.getByRole('button',{name:'Send report',exact:true}).click();await expect(modal.getByRole('status')).toHaveText('Report received.');expect(actions).not.toContain('upload');expect([...records.values()][0].original.expected).toBe('');expect([...records.values()][0].original.diagnostics).toBeNull();});
+test('lost receipt checks the original operation without a second create or upload',async({page})=>{await native(page,'cancel');await signedIn(page);let dropped=false;await page.route('**/api/v1/issues/*/accept',async route=>{if(!dropped){dropped=true;await route.fetch({headers:{...route.request().headers(),origin:caseOrigin}});await route.abort('failed');}else await route.continue({headers:{...route.request().headers(),origin:caseOrigin}});});await page.getByRole('button',{name:'Report an issue',exact:true}).click();const modal=page.getByRole('dialog',{name:'Report an issue',exact:true});await modal.getByLabel('What went wrong?',{exact:true}).fill('Lost receipt test');await modal.getByRole('button',{name:'Send report',exact:true}).click();await expect(modal.getByRole('alert')).toContainText('Submission is unconfirmed');await modal.getByRole('button',{name:'Close',exact:true}).click();const discard=page.getByRole('dialog',{name:'Discard changes?',exact:true});await expect(discard).toContainText('may already have been received');await discard.getByRole('button',{name:'Keep editing',exact:true}).click();await modal.getByRole('button',{name:'Retry report',exact:true}).click();await expect(modal.getByRole('status')).toHaveText('Report received.');expect(records.size).toBe(1);expect(actions.filter(a=>a==='reserve')).toHaveLength(1);expect(actions.filter(a=>a==='accept')).toHaveLength(1);});
+test('sign-out clears attached draft and retires decoded preview',async({page})=>{await native(page);await signedIn(page);await page.getByRole('button',{name:'Report an issue',exact:true}).click();const modal=page.getByRole('dialog',{name:'Report an issue',exact:true});await expect(modal).toBeVisible();await modal.getByLabel('What went wrong?',{exact:true}).fill('Private draft');await modal.getByRole('button',{name:'Preview',exact:true}).click();await page.evaluate(()=>window.dispatchEvent(new Event('case-auth-retired')));await expect(page.locator('.issues-dialog')).toHaveCount(0);expect(actions).toEqual([]);});
+
+test('Admin Issues triages with CAS, public reply, manual brief and restricted incident isolation',async({page})=>{
+ await page.addInitScript(()=>Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async text=>{window.reviewedCopy=text;}}}));await native(page,'cancel');await signedIn(page);await page.getByRole('button',{name:'Report an issue',exact:true}).click();let reporter=page.getByRole('dialog',{name:'Report an issue',exact:true});await reporter.getByLabel('What went wrong?',{exact:true}).fill('Queue triage test');await reporter.getByRole('button',{name:'Send report',exact:true}).click();await expect(reporter.getByRole('status')).toHaveText('Report received.');await reporter.getByRole('button',{name:'Close',exact:true}).click();
+ // People is an unrelated, already qualified adapter. Its bounded empty DTO admits the actual Admin shell here.
+ await page.route('**/api/v1/admin/facilitators**',route=>route.fulfill({json:{users:[],nextPage:null}}));
+ await page.getByRole('button',{name:'Open menu',exact:true}).click();await page.getByRole('link',{name:'Admin',exact:true}).click();await expect(page.getByRole('button',{name:'Issues',exact:true})).toBeVisible();await page.getByRole('button',{name:'Issues',exact:true}).click();await expect(page.getByRole('heading',{name:'Issues',exact:true})).toBeVisible();await page.locator('.issues-row').click();const detail=page.getByRole('dialog',{name:'Issue detail',exact:true});await expect(detail.getByText('Queue triage test',{exact:true})).toBeVisible();
+ await detail.getByLabel('Reviewed nonpersonal engineering summary',{exact:true}).fill('A control did not respond during beta testing.');await detail.getByLabel('I reviewed the summary and it contains no personal data',{exact:true}).check();await detail.getByLabel('Public follow-up to reporter',{exact:true}).fill('Please retry after refreshing.');await detail.getByRole('button',{name:'Save triage',exact:true}).click();await expect(detail).toHaveCount(0);
+ await page.locator('.issues-row').click();const reopened=page.getByRole('dialog',{name:'Issue detail',exact:true});await expect(reopened.getByText(/Please retry after refreshing/)).toBeVisible();await reopened.getByRole('button',{name:'Copy investigation brief',exact:true}).click();const brief=page.getByRole('dialog',{name:'Review investigation brief'});expect(await brief.getByLabel('Exact text to copy').inputValue()).toContain('untrusted evidence');expect(await brief.getByLabel('Exact text to copy').inputValue()).not.toContain('Queue triage test');expect(await page.evaluate(()=>window.reviewedCopy)).toBeUndefined();const exactCopy=await brief.getByLabel('Exact text to copy').inputValue();await brief.getByRole('button',{name:'Copy reviewed text',exact:true}).click();await expect(brief.getByRole('status')).toHaveText('Copied reviewed investigation brief.');expect(await page.evaluate(()=>window.reviewedCopy)).toBe(exactCopy);await brief.getByRole('button',{name:'Close',exact:true}).click();
+ await reopened.getByRole('button',{name:'Restrict as security/privacy incident',exact:true}).click();await expect(page.locator('.issues-row')).toHaveCount(0);await page.getByRole('button',{name:'Restricted incidents',exact:true}).click();await expect(page.locator('.issues-row')).toHaveCount(1);await page.locator('.issues-row').click();await expect(page.getByRole('button',{name:'Copy investigation brief',exact:true})).toBeDisabled();
+});
+
+test('a failed screenshot upload still accepts text and records the missing attachment explicitly',async({page})=>{
+ await native(page);await signedIn(page);await page.route('**/api/v1/issues/*/files/*',route=>route.fulfill({status:503,json:{error:'unavailable'}}));await page.getByRole('button',{name:'Report an issue',exact:true}).click();const modal=page.getByRole('dialog',{name:'Report an issue',exact:true});await modal.getByLabel('What went wrong?',{exact:true}).fill('The screenshot upload failed');await modal.getByRole('button',{name:'Send report',exact:true}).click();await expect(modal.getByRole('status')).toHaveText('Report received; 1 screenshot was not attached.');expect(records.size).toBe(1);expect([...records.values()][0].stored.size).toBe(0);
+});
+
+test('optional details use accessible radio controls and participate in discard protection',async({page})=>{
+ await native(page,'cancel');await signedIn(page);await page.getByRole('button',{name:'Report an issue',exact:true}).click();const modal=page.getByRole('dialog',{name:'Report an issue',exact:true});await modal.getByText('Show optional details',{exact:true}).click();await modal.getByLabel('What were you trying to do?',{exact:true}).fill('Opening the room');await modal.getByRole('group',{name:'How often?',exact:true}).getByRole('radio',{name:'always',exact:true}).check();await modal.getByRole('button',{name:'Close',exact:true}).click();const discard=page.getByRole('dialog',{name:'Discard changes?',exact:true});await expect(discard.getByRole('button',{name:'Keep editing',exact:true})).toBeFocused();await discard.getByRole('button',{name:'Keep editing',exact:true}).click();await modal.getByLabel('What went wrong?',{exact:true}).fill('The room did not open.');expect((await new AxeBuilder({page}).include('.issues-dialog').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()).violations).toEqual([]);await modal.getByRole('button',{name:'Send report',exact:true}).click();await expect(modal.getByRole('status')).toHaveText('Report received.');expect([...records.values()][0].original.context).toBe('Opening the room');expect([...records.values()][0].original.frequency).toBe('always');
+});
+
+test('report failure uses a top-layer alert without moving or discarding the draft',async({page})=>{
+ await native(page,'cancel');await signedIn(page);await page.getByRole('button',{name:'Report an issue',exact:true}).click();const modal=page.getByRole('dialog',{name:'Report an issue',exact:true});
+ await modal.getByLabel('What went wrong?',{exact:true}).fill('Keep this draft after an uncertain acceptance.');await page.evaluate(()=>document.fonts.ready);const before=await modal.boundingBox();
+ await page.route('**/api/v1/issues/*/accept',route=>route.fulfill({status:503,json:{error:'unavailable'}}));await modal.getByRole('button',{name:'Send report',exact:true}).click();
+ await expect(modal.getByRole('alert')).toContainText('Submission is unconfirmed');await expect(modal.getByLabel('What went wrong?',{exact:true})).toHaveValue('Keep this draft after an uncertain acceptance.');
+ const after=await modal.boundingBox();expect(after).toEqual(before);
+});
+
+test('pending Admin triage cannot be closed or submitted twice',async({page})=>{
+ await native(page,'cancel');await signedIn(page);await page.getByRole('button',{name:'Report an issue',exact:true}).click();const reporter=page.getByRole('dialog',{name:'Report an issue',exact:true});await reporter.getByLabel('What went wrong?',{exact:true}).fill('Pending triage test');await reporter.getByRole('button',{name:'Send report',exact:true}).click();await expect(reporter.getByRole('status')).toHaveText('Report received.');await reporter.getByRole('button',{name:'Close',exact:true}).click();
+ await page.route('**/api/v1/admin/facilitators**',route=>route.fulfill({json:{users:[],nextPage:null}}));
+ await page.getByRole('button',{name:'Open menu',exact:true}).click();await page.getByRole('dialog',{name:'Menu',exact:true}).getByRole('link',{name:'Admin',exact:true}).click();await page.getByRole('button',{name:'Issues',exact:true}).first().click();await page.locator('.issues-row').click();const detail=page.getByRole('dialog',{name:'Issue detail',exact:true});await detail.getByRole('combobox',{name:'Priority',exact:true}).click();await page.getByRole('option',{name:'high',exact:true}).click();
+ let release,reached=false;const held=new Promise(r=>release=r);await page.route('**/api/v1/admin/issues/*/triage',async route=>{reached=true;await held;await route.continue({headers:{...route.request().headers(),origin:caseOrigin}});});
+ try{await detail.getByRole('button',{name:'Save triage',exact:true}).click();await expect.poll(()=>reached).toBe(true);await expect(detail.getByRole('button',{name:'Close',exact:true})).toBeDisabled();const summary=detail.getByLabel('Reviewed nonpersonal engineering summary',{exact:true});await summary.focus();await expect(summary).not.toBeFocused();await page.keyboard.press('Escape');await expect(detail).toBeVisible();}finally{release();}
+ await expect(detail).not.toBeVisible();expect(actions.filter(a=>a==='triage')).toHaveLength(1);
+});
+
+test('My reports preserves an optional-only draft instead of replacing it',async({page})=>{
+ await native(page,'cancel');await signedIn(page);await page.getByRole('button',{name:'Report an issue',exact:true}).click();const modal=page.getByRole('dialog',{name:'Report an issue',exact:true});await modal.getByText('Show optional details',{exact:true}).click();await modal.getByLabel('What were you trying to do?',{exact:true}).fill('Preparing a session');await modal.getByRole('button',{name:'My reports',exact:true}).click();await expect(modal.getByRole('alert')).toHaveText('Send or discard this draft before opening My reports.');await expect(modal.getByLabel('What were you trying to do?',{exact:true})).toHaveValue('Preparing a session');expect(actions).toEqual([]);
+});
+
+test('My reports from an empty draft removes the unrelated Send action',async({page})=>{
+ await native(page,'cancel');await signedIn(page);await page.getByRole('button',{name:'Report an issue',exact:true}).click();const modal=page.getByRole('dialog',{name:'Report an issue',exact:true});await modal.getByRole('button',{name:'My reports',exact:true}).click();await expect(modal.locator('.issues-content').getByText('No reports yet.',{exact:true})).toBeVisible();await expect(modal.getByRole('button',{name:'Send report',exact:true})).toHaveCount(0);await modal.getByRole('button',{name:'Done',exact:true}).click();await expect(modal).toHaveCount(0);expect(actions).toEqual(['list']);
+});
+
+test('metadata-bearing JPEG survives private upload and authorized preview byte-for-byte',async({page})=>{
+ const file=new URL('../tests/fixtures/media/clean-64x48.jpg',import.meta.url),bytes=readFileSync(file),digest=createHash('sha256').update(bytes).digest('hex');
+ await native(page,'cancel');await signedIn(page);await page.getByRole('button',{name:'Report an issue',exact:true}).click();const form=page.getByRole('dialog',{name:'Report an issue',exact:true});
+ await form.getByText('Show optional details',{exact:true}).click();await form.locator('input[type=file]').setInputFiles(fileURLToPath(file));await form.getByLabel('What went wrong?',{exact:true}).fill('JPEG evidence roundtrip');expect(actions).toEqual([]);
+ await form.getByRole('button',{name:'Send report',exact:true}).click();await expect(form.getByRole('status')).toHaveText('Report received.');expect(actions).toContain('stored');
+ await form.getByRole('button',{name:'My reports',exact:true}).click();await form.getByRole('button',{name:/New.*JPEG evidence roundtrip/}).click();const download=page.waitForResponse(r=>r.request().method()==='GET'&&/\/issues\/[^/]+\/files\//.test(r.url()));await form.getByRole('button',{name:'Preview screenshot',exact:true}).click();const downloaded=await download;expect(downloaded.status()).toBe(200);expect(createHash('sha256').update(await downloaded.body()).digest('hex')).toBe(digest);
+ const image=page.getByRole('dialog',{name:'Screenshot preview'}).locator('img');await expect(image).toBeVisible();expect(await image.evaluate(async image=>{await image.decode();return[image.naturalWidth,image.naturalHeight];})).toEqual([64,48]);
+});
+
+
+test('offline report keeps the local draft and performs no reserve or upload until connectivity returns', async ({page,context}) => {
+  await native(page); await signedIn(page);
+  await page.getByRole('button', {name:'Report an issue',exact:true}).click();
+  const form=page.getByRole('dialog', {name:'Report an issue',exact:true});
+  await form.getByLabel('What went wrong?', {exact:true}).fill('Preserve this offline report');
+  try {
+    await context.setOffline(true);
+    await page.evaluate(()=>{if(window.__caseBetaHintModelled)window.__caseBetaOnlineHint=false;});
+    expect(await page.evaluate(()=>navigator.onLine)).toBe(false);
+    expect(await page.evaluate(async()=>{try{await fetch('/api/v1/version');return false;}catch{return true;}})).toBe(true);
+    await form.getByRole('button', {name:'Send report',exact:true}).click();
+    await expect(form.getByRole('alert')).toContainText('Offline. Your draft is still here');
+    expect(actions).toEqual([]);
+    await expect(form.getByLabel('What went wrong?', {exact:true})).toHaveValue('Preserve this offline report');
+    await expect(form.getByText('Screenshot 1', {exact:false})).toBeVisible();
+  } finally { await context.setOffline(false);await page.evaluate(()=>{if(window.__caseBetaHintModelled)window.__caseBetaOnlineHint=true;}); }
+  expect(await page.evaluate(()=>navigator.onLine)).toBe(true);
+  await form.getByRole('button', {name:'Send report',exact:true}).click();
+  await expect(form.getByRole('status')).toHaveText('Report received.');
+  expect(actions.filter(x=>x==='reserve')).toHaveLength(1);
+  expect(actions).toContain('stored');
+});

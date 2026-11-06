@@ -1,0 +1,1102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case · Facilitator console</title>
+<link rel="stylesheet" href="lib/tokens.css">
+<style>
+  /* Facilitator console. The spatial grid (CASE-113): the orientation band on top (case, beat, phase,
+     timer, connection, then the two tabs); in Run, the left column is what the room sees and the right
+     column is the decision (phase, answered count, the path); the ONE primary action sits in the dock
+     at the same place in every phase. Room holds people, displays, names, settings, manual mode and the
+     end (CASE-118). Explanations sit behind info disclosures. */
+  /* The sticky band and the fixed action dock never cover the focused control (WCAG 2.4.11). */
+  html { scroll-padding-top: 132px; scroll-padding-bottom: 120px; }
+  body { padding-bottom: 104px; font-size: var(--t-md); }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 0 var(--sp-5); }
+  h1, h2, h3, p { margin: 0; }
+  h1 { font-size: var(--t-xl); letter-spacing: -.015em; }
+  h2 { font-size: var(--t-md); }
+  h1:focus, h2:focus { outline: none; }
+  .stack { display: grid; gap: var(--sp-4); align-content: start; }
+  .card { padding: var(--sp-5); }
+  .card > * + * { margin-top: var(--sp-3); }
+  .cardhead { display: flex; align-items: center; gap: var(--sp-2); justify-content: space-between; }
+  .grid2 { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: var(--sp-5); align-items: start; padding-top: var(--sp-5); }
+  @media (max-width: 980px) { .grid2 { grid-template-columns: 1fr; } }
+  .ic { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vertical-align: -4px; }
+  .ic.sm { width: 16px; height: 16px; }
+
+  /* orientation band (petrol-tinted zone) + tabs */
+  .strip { position: sticky; top: 0; z-index: var(--z-sticky); background: var(--nav-bg); border-bottom: 1px solid var(--nav-line); color: var(--nav-ink); }
+  .strip .row1 { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-5); align-items: center; padding-top: var(--sp-3); padding-bottom: var(--sp-2); }
+  .si { display: inline-flex; gap: var(--sp-2); align-items: center; font-size: var(--t-sm); min-height: 28px; }
+  .si b { font-weight: var(--w-semibold); }
+  .si .k { color: var(--ink-muted); font-size: var(--t-xs); font-weight: var(--w-semibold); text-transform: uppercase; letter-spacing: .08em; }
+  .si.beat { flex: 1 1 260px; min-width: 0; display: grid; gap: 0; }
+  .si.beat .case { font-size: var(--t-xs); color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .si.beat b { font-size: var(--t-md); overflow-wrap: anywhere; }
+  .si .num { font-family: var(--mono); font-weight: var(--w-semibold); }
+  .strip .tag { background: var(--surface); border: 1px solid var(--nav-line); }
+  .strip .tag.ok, .strip .tag.warn, .strip .tag.bad { border-color: transparent; }
+  [role="tablist"] { display: flex; gap: var(--sp-1); margin-bottom: -1px; }
+  [role="tab"] { display: inline-flex; align-items: center; gap: var(--sp-2); min-height: 44px; padding: var(--sp-2) var(--sp-4); border: 1px solid transparent; border-bottom: 0; border-radius: var(--radius-sm) var(--radius-sm) 0 0; background: transparent; color: var(--ink-muted); font-size: var(--t-sm); font-weight: var(--w-semibold); }
+  [role="tab"][aria-selected="true"] { background: var(--ground); color: var(--ink); border-color: var(--nav-line); }
+  [role="tab"]:hover:not([aria-selected="true"]) { color: var(--ink); background: color-mix(in srgb, var(--surface) 50%, transparent); }
+  [role="tab"] .badge { min-width: 22px; padding: 0 6px; border-radius: var(--radius-pill); background: var(--petrol-tint); color: var(--petrol-ink); font-size: var(--t-xs); text-align: center; }
+
+  .banners { display: grid; gap: var(--sp-2); padding-top: var(--sp-4); }
+  .banners:empty { display: none; }
+  .banner { flex-wrap: wrap; border: 1px solid transparent; }
+  .banner .grow { flex: 1 1 260px; display: grid; gap: 2px; }
+  .banner .grow span { font-weight: var(--w-regular); font-size: var(--t-sm); }
+  .banner.manual { border-color: var(--manual); }
+  .banner.alert { border-color: var(--alert); }
+
+  .row-actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+  .status-line { font-size: var(--t-md); color: var(--ink); }
+  .cue { background: var(--sunken); border-radius: var(--radius-sm); padding: var(--sp-3) var(--sp-4); font-size: var(--t-sm); }
+  .cue .eyebrow { margin-bottom: 4px; }
+  .body-text { font-size: var(--t-md); line-height: 1.5; white-space: pre-line; }
+  .prompt { font-size: var(--t-lg); font-weight: var(--w-semibold); line-height: 1.3; }
+  .phase { box-shadow: inset 0 4px 0 var(--ph, var(--petrol)), var(--shadow-1); }
+  .phase .cardhead .pill { flex: none; }
+  .count { display: inline-flex; align-items: center; gap: var(--sp-2); font-weight: var(--w-medium); }
+  .count .num { font: var(--w-semibold) var(--t-lg)/1 var(--mono); }
+
+  .rows { list-style: none; margin: 0; padding: 0; display: grid; }
+  .rows li { display: grid; grid-template-columns: 22px 28px minmax(80px, 150px) 1fr; gap: var(--sp-2); align-items: center; padding: var(--sp-2) 0; border-bottom: 1px solid var(--line); min-height: 44px; font-size: var(--t-sm); }
+  .rows.plain li { grid-template-columns: 22px 1fr auto; }
+  .rows li:last-child { border-bottom: 0; }
+  .rows .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: var(--w-medium); }
+  .rows .ans { overflow-wrap: anywhere; }
+  .rows .none { color: var(--ink-muted); }
+  .agg { display: grid; gap: var(--sp-2); }
+  .agg div { display: grid; grid-template-columns: 1fr auto auto; gap: var(--sp-3); padding: 4px 0; border-bottom: 1px solid var(--line); align-items: center; font-size: var(--t-sm); }
+  .agg .n { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: var(--w-semibold); }
+  .agg .lbl { display: inline-flex; gap: var(--sp-2); align-items: center; }
+  .agg .bar { display: block; grid-column: 1 / -1; height: 6px; border-radius: var(--radius-pill); background: var(--sunken); overflow: hidden; padding: 0; }
+  .agg .bar i { display: block; height: 100%; background: var(--petrol); }
+
+  .routes { border: 0; margin: 0; padding: 0; display: grid; gap: var(--sp-2); }
+  .routes legend { padding: 0; font-weight: var(--w-semibold); font-size: var(--t-sm); margin-bottom: var(--sp-2); }
+  .route { display: grid; grid-template-columns: 24px 1fr; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); cursor: pointer; }
+  .route:has(input:checked) { border: 2px solid var(--petrol); padding: calc(var(--sp-3) - 1px) calc(var(--sp-4) - 1px); background: var(--petrol-tint); }
+  .route:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .route.locked { cursor: not-allowed; background: var(--ph-paused-tint); color: var(--ph-paused-ink); }
+  .route input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--petrol); }
+  .route .t { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-weight: var(--w-semibold); }
+  .route .meta { display: grid; gap: 3px; font-size: var(--t-sm); margin-top: 6px; }
+  .route .meta span b { font-weight: var(--w-semibold); }
+  .route details.more { margin-top: 6px; font-size: var(--t-sm); }
+  .route details.more summary { cursor: pointer; color: var(--petrol-ink); font-weight: var(--w-semibold); min-height: 28px; display: inline-flex; align-items: center; }
+  .cls { display: inline-flex; gap: 6px; align-items: center; font-weight: var(--w-medium); font-size: var(--t-sm); }
+  .cls.unsafe, .cls.terminal { color: var(--alert-ink); }
+  .cls.sound { color: var(--ok-ink); }
+  .subhead { font-size: var(--t-xs); font-weight: var(--w-semibold); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-muted); margin: 6px 0 -2px; }
+
+  .join { display: grid; gap: var(--sp-2); }
+  .join .code { font: var(--w-semibold) 44px/1 var(--mono); letter-spacing: .06em; }
+  .join .url { font: var(--w-medium) var(--t-md) var(--mono); }
+  .points { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: var(--t-md); line-height: 1.45; }
+  .points li::marker { color: var(--petrol); }
+  .scene-prose { font-size: var(--t-md); line-height: 1.55; }
+  .vitals { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-5); margin: 0; padding: var(--sp-3) var(--sp-4); list-style: none; background: var(--sunken); border-radius: var(--radius-sm); font-variant-numeric: tabular-nums; }
+  .vitals li { display: grid; font-size: var(--t-sm); }
+  .vitals .l { font-size: var(--t-xs); font-weight: var(--w-semibold); color: var(--ink-muted); }
+  .vitals .v { font: var(--w-semibold) var(--t-md) var(--mono); }
+  .vitals .u { font: var(--w-regular) var(--t-xs) var(--sans); color: var(--ink-muted); }
+  .vitals .tr { font: var(--w-medium) var(--t-xs) var(--mono); }
+  .tiles2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-3); }
+  .tiles2 > div { background: var(--ground); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: var(--sp-3) var(--sp-4); }
+  .tiles2 .points { font-size: var(--t-sm); }
+  details.notes { border: 1px dashed var(--field-line); border-radius: var(--radius-sm); padding: var(--sp-3) var(--sp-4); background: var(--sunken); }
+  details.notes summary { cursor: pointer; font-weight: var(--w-semibold); font-size: var(--t-xs); text-transform: uppercase; letter-spacing: .08em; color: var(--ink-muted); min-height: 28px; display: flex; align-items: center; }
+  details.notes p { margin-top: var(--sp-2); font-size: var(--t-sm); line-height: 1.55; white-space: pre-line; }
+  .opt { display: inline-flex; gap: var(--sp-2); align-items: center; min-width: 0; }
+  .mark { flex: none; }
+  .optlist { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 6px 0 0; padding: 0; list-style: none; font-size: var(--t-sm); }
+  .hint { font-size: var(--t-sm); color: var(--ink-muted); }
+
+  .strip-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: var(--t-sm); }
+  .strip-list li { display: flex; gap: var(--sp-2); align-items: center; padding: 3px 6px; border-radius: 6px; }
+  .strip-list li[aria-current] { background: var(--petrol-tint); font-weight: var(--w-semibold); }
+  .strip-list button { min-height: 44px; width: 100%; text-align: left; border: 1px solid transparent; border-radius: var(--radius-sm); background: transparent; color: var(--ink); font: inherit; cursor: pointer; }
+  .strip-list button:hover, .strip-list button:focus-visible { border-color: var(--field-line); background: var(--sunken); }
+
+  /* primary action dock: the same screen position in every phase and on both tabs */
+  .dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-dock); background: var(--surface); border-top: 1px solid var(--line); box-shadow: var(--shadow-2); }
+  .dock .wrap { display: grid; grid-template-columns: 1fr auto; gap: var(--sp-4); align-items: center; padding-top: var(--sp-3); padding-bottom: var(--sp-3); }
+  .dock .prim { grid-column: 2; justify-self: end; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; max-width: 100%; }
+  .dock .back { grid-column: 1; grid-row: 1; justify-self: start; }
+  .dock .prim { grid-row: 1; }
+  .btn.big { min-height: 52px; padding: var(--sp-3) var(--sp-6); font-size: var(--t-md); max-width: 560px; text-align: center; }
+  .btn.armed { background: var(--petrol-deep); outline: 3px solid var(--focus); outline-offset: 2px; }
+  .reason { font-size: var(--t-xs); color: var(--ink-muted); }
+
+  .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 100px; z-index: var(--z-toast); max-width: min(640px, 92vw); }
+  .toast:empty { display: none; }
+  .toast div { background: var(--ink); color: var(--ground); padding: 10px 16px; border-radius: var(--radius-sm); box-shadow: var(--shadow-2); font-size: var(--t-sm); }
+
+  /* dialogs */
+  dialog { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); padding: 0; box-shadow: var(--shadow-2); max-width: min(520px, 94vw); }
+  dialog::backdrop { background: rgba(10, 30, 36, .45); }
+  .dbody { padding: var(--sp-5); display: grid; gap: var(--sp-3); }
+  .dbody h2 { font-size: var(--t-lg); }
+  .dbody input { padding: 8px 10px; min-height: 44px; border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); }
+  .drow { display: flex; flex-wrap: wrap; gap: var(--sp-2); justify-content: flex-end; margin-top: 6px; }
+
+  /* Room tab: management cards on a grid */
+  .room-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--sp-5); align-items: start; padding-top: var(--sp-5); }
+  @media (max-width: 980px) { .room-grid { grid-template-columns: 1fr; } }
+  .room-grid > .stack { gap: var(--sp-5); }
+  .room-grid section.card { display: grid; gap: var(--sp-3); }
+  .room-grid section.card > * + * { margin-top: 0; }
+  .room-grid h2 { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--t-md); }
+  .roster { list-style: none; margin: 0; padding: 0; display: grid; }
+  .roster li { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; padding: var(--sp-2) 0; border-bottom: 1px solid var(--line); font-size: var(--t-sm); }
+  .roster li:last-child { border-bottom: 0; }
+  .roster .who { display: inline-flex; align-items: center; gap: var(--sp-2); flex: 1; min-width: 0; font-weight: var(--w-medium); }
+  .roster .who span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .roster .btns { display: flex; gap: 6px; }
+  .roster .btn { min-height: 36px; padding: 4px 10px; font-size: var(--t-xs); }
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+  .chips li { display: inline-flex; align-items: center; gap: 6px; max-width: 14em; padding: 3px 10px 3px 3px; border-radius: var(--radius-pill); background: var(--ground); border: 1px solid var(--line); font-size: var(--t-sm); font-weight: var(--w-medium); }
+  .chips li span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: var(--t-sm); }
+  .kv dt { color: var(--ink-muted); }
+  .kv dd { margin: 0; }
+  .marker { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: end; }
+  .marker label { display: grid; gap: 4px; font-weight: var(--w-semibold); font-size: var(--t-sm); flex: 1 1 260px; }
+  .marker input { padding: 8px 10px; min-height: 44px; border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); }
+  .fence { max-width: 640px; margin: 64px auto; padding: 28px; }
+  .fence > * + * { margin-top: 12px; }
+  @media (forced-colors: active) { .route, [role="tab"][aria-selected="true"] { border: 1px solid CanvasText; } }
+.ranked-controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); width: 100%; }
+.ranked-controls label { display: grid; gap: var(--sp-1); font-weight: var(--w-medium); max-width: 100%; }
+.ranked-controls select { min-height: 44px; max-width: 100%; padding: var(--sp-2); background: var(--surface); color: var(--ink); border: 1px solid var(--field-line); border-radius: var(--radius-sm); font: inherit; }
+.ranked-controls p { width: 100%; margin: 0; }
+</style>
+<script nomodule>document.addEventListener('DOMContentLoaded', function () { var p = document.createElement('p'); p.className = 'nomodule'; p.textContent = 'Case needs a current browser. Open this page in Microsoft Edge or Google Chrome.'; document.body.insertBefore(p, document.body.firstChild); });</script>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="alerts" class="sr-only" role="alert"></div>
+<div id="live" class="sr-only" aria-live="polite"></div>
+<dialog id="dlg"></dialog>
+
+<script type="module">
+import { connect, LOCAL_CHANNEL, realRoom, roomUrl } from './lib/link.mjs';
+import { LocalAuthority } from './lib/local-authority.mjs';
+import { formatCode } from '../../src/shared/ids.mjs';
+import { joinUrl } from '../../src/shared/urls.mjs';
+import { markSvg } from './lib/marks.mjs';
+import { avatarEl } from './lib/avatar.mjs';
+import { displayNameProblem, normaliseDisplayName, NAME_MAX, NAME_PROBLEM_TEXT } from '../../src/shared/participant.mjs';
+import { timerRemainingS, timerClock, timerWords } from '../../src/shared/timer.mjs';
+import { publicPresentationSurface } from '../../src/shared/presentation-groups.mjs';
+import { presentationNav } from '../../src/client/presentation-nav.mjs';
+import { renderRankedControls } from '../../src/client/console-ranking.mjs';
+import { facilitatorKey } from '../../src/client/keymap.mjs';
+import { registerShell, keepScreenAwake, singleScreen, watchProjector } from './lib/device.mjs';
+
+/* ───────── DOM helpers (text-only: every value goes through textContent / createTextNode) ───────── */
+const $ = (s) => document.querySelector(s);
+function h(tag, props, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (v == null || v === false) continue;
+    if (k === 'class') el.className = v;
+    else if (k === 'on') for (const [ev, fn] of Object.entries(v)) el.addEventListener(ev, fn);
+    else el.setAttribute(k, v === true ? '' : String(v));
+  }
+  const add = (c) => { if (Array.isArray(c)) c.forEach(add); else if (c != null && c !== false) el.append(c.nodeType ? c : document.createTextNode(String(c))); };
+  kids.forEach(add);
+  return el;
+}
+const NS = 'http://www.w3.org/2000/svg';
+const IC = { // 24-unit stroke icons; structural, never emoji
+  sound: [['circle', { cx: 12, cy: 12, r: 9.5, fill: 'currentColor', stroke: 'none' }], ['path', { d: 'M7.8 12.4l3 3 5.4-6', stroke: 'var(--surface)' }]],
+  defensible: [['circle', { cx: 12, cy: 12, r: 9 }], ['path', { d: 'M7.8 12.4l3 3 5.4-6' }]],
+  fork: [['path', { d: 'M12 21v-8M12 13c0-4-6-3-6-9M12 13c0-4 6-3 6-9' }], ['circle', { cx: 6, cy: 4, r: 1.4, fill: 'currentColor' }], ['circle', { cx: 18, cy: 4, r: 1.4, fill: 'currentColor' }]],
+  unsafe: [['path', { d: 'M12 3.5l9.5 16.5h-19z' }], ['path', { d: 'M12 10v4.5' }], ['circle', { cx: 12, cy: 17.2, r: .7, fill: 'currentColor' }]],
+  terminal: [['path', { d: 'M8.3 2.8h7.4l5.5 5.5v7.4l-5.5 5.5H8.3l-5.5-5.5V8.3z' }], ['path', { d: 'M7.5 12h9' }]],
+  bubble: [['path', { d: 'M4 5h16v11h-9l-5 4v-4H4z' }]],
+  pause: [['path', { d: 'M9 6v12M15 6v12' }]],
+  clock: [['circle', { cx: 12, cy: 12, r: 9 }], ['path', { d: 'M12 7v5l3 2' }]],
+  people: [['circle', { cx: 9, cy: 8, r: 3.2 }], ['path', { d: 'M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M16 5.3a3 3 0 010 5.4M18 14.5c1.8.8 3 2.6 3 5.5' }]],
+  projector: [['rect', { x: 3, y: 5, width: 18, height: 11, rx: 1.5 }], ['path', { d: 'M8 20h8M12 16v4' }]],
+  live: [['circle', { cx: 12, cy: 12, r: 3.2, fill: 'currentColor' }], ['path', { d: 'M6.5 6.5a8 8 0 000 11M17.5 6.5a8 8 0 010 11' }]],
+  sync: [['path', { d: 'M20 11a8 8 0 00-14-4M4 4v4h4M4 13a8 8 0 0014 4M20 20v-4h-4' }]],
+  offline: [['path', { d: 'M3 3l18 18M8.5 16.5a5 5 0 017 0M5 12.8a10 10 0 014-2.4M12 20h.01' }]],
+  manual: [['path', { d: 'M4 20h16M7 16V9l5-5 5 5v7' }], ['path', { d: 'M10 20v-5h4v5' }]],
+  circle: [['circle', { cx: 12, cy: 12, r: 8.5 }]],
+  tick: [['circle', { cx: 12, cy: 12, r: 9, fill: 'currentColor', stroke: 'none' }], ['path', { d: 'M8.3 12.3l2.6 2.6 4.8-5.2', stroke: 'var(--surface)' }]],
+  lock: [['rect', { x: 5, y: 11, width: 14, height: 9, rx: 2 }], ['path', { d: 'M8 11V8a4 4 0 018 0v3' }]],
+  info: [['circle', { cx: 12, cy: 12, r: 9 }], ['path', { d: 'M12 11v5M12 7.8v.01' }]],
+  menu: [['path', { d: 'M4 7h16M4 12h16M4 17h16' }]],
+  play: [['path', { d: 'M8 5.5v13l10.5-6.5z' }]],
+  gear: [['circle', { cx: 12, cy: 12, r: 3 }], ['path', { d: 'M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7' }]],
+  door: [['path', { d: 'M5 21V4h10v17M15 12h5M17.5 9.5L20 12l-2.5 2.5' }]],
+  key: [['circle', { cx: 8, cy: 14, r: 4 }], ['path', { d: 'M11 11l9-9M17 5l2 2M15 7l2 2' }]],
+};
+function icon(name, small = false) {
+  const s = document.createElementNS(NS, 'svg');
+  s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('aria-hidden', 'true'); s.setAttribute('class', small ? 'ic sm' : 'ic');
+  for (const [tag, attrs] of IC[name]) { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); s.append(e); }
+  return s;
+}
+const CLS = { // classification → [exact label, icon, css]
+  sound: ['Sound', 'sound', 'sound'], defensible: ['Defensible', 'defensible', 'defensible'],
+  'context-dependent': ['Context-dependent', 'fork', 'context'], unsafe: ['Unsafe · recoverable', 'unsafe', 'unsafe'],
+  'terminal-unsafe': ['Terminal · needs a checkpoint reset', 'terminal', 'terminal'], 'discussion-prompt': ['Discussion prompt', 'bubble', 'discussion'],
+};
+const mss = timerClock; // ONE rounding with the projector and phones (src/shared/timer.mjs; walkthrough bug 3)
+const PHASE_NAME = { responses_open: 'responses open', responses_locked: 'reviewing', surface_live: 'live surface', consequence_revealed: 'consequence shown', terminal_teaching: 'teaching point', path_selected: 'route chosen', lobby: 'lobby' };
+
+/* ───────── connection and client-local state ───────── */
+const params = new URLSearchParams(location.search);
+const tabN = Number(params.get('tab') || 1) || 1;
+const link = connect({ role: 'facilitator', label: tabN > 1 ? `Facilitator tab ${tabN}` : 'Facilitator' });
+const S = {
+  mode: 'network',          // 'network' | 'manual' (manual: every command goes to S.la, not the network)
+  la: null,                 // LocalAuthority while in manual mode
+  standby: tabN > 1,        // a second console starts passive until the facilitator takes over
+  fenced: false,            // another device owns the room now
+  knownEpoch: null, selfBump: 0, gen: 0, hadOnline: false,
+  busy: false, pick: null, armedUntil: 0, pickKey: '',
+  projector: 'unchecked',   // display check (client-local, SCREENS Spec gaps 4): unchecked | confirmed | separate | wrong
+  projOpenedAt: 0, projSeenAt: 0, projFallback: null, tab: 'run', marker: '', sent: 0, results: [], upload: null,
+  entryVoided: false, entryEpoch: null, announced: '',
+  pairCode: '', pairMsg: '', pairing: false, // `Pair a display` (real Worker only)
+};
+const view = () => (S.mode === 'manual' && S.la ? S.la.view() : link.snapshot?.view ?? null);
+// The hospital PC (spec red team 2, P1-2/P1-3): the offline shell, the screen kept awake, the projector
+// heard over BroadcastChannel (it opens with noopener, so there is no window handle to ask).
+registerShell({ real: Boolean(realRoom()) });
+keepScreenAwake();
+const localChannel = new BroadcastChannel(LOCAL_CHANNEL);
+watchProjector(localChannel, (at) => { const first = !S.projSeenAt || S.projFallback; S.projSeenAt = at; if (S.projFallback) S.projFallback = null; if (first) scheduleRender(); });
+const projectorOpen = () => Date.now() - S.projSeenAt < 10_000;
+function conn() {
+  const st = link.status;
+  if (st === 'lost') return 'lost';
+  if (st === 'connecting' || !link.snapshot) return S.hadOnline ? 'reconnecting' : 'connecting';
+  return 'online';
+}
+const canCmd = () => !S.fenced && !S.standby && (S.mode === 'manual' ? !S.upload : conn() === 'online' && !S.busy);
+
+let toastTimer = 0;
+function say(text) {
+  const t = $('#toast'); t.replaceChildren(h('div', null, text));
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.replaceChildren(), 7000);
+}
+const announce = (text, assertive = false) => { const r = assertive ? $('#alerts') : $('#live'); r.textContent = ''; setTimeout(() => { r.textContent = text; }, 30); };
+
+const REASON = {
+  stale_revision: 'The room changed · check the screen and try again',
+  cannot_advance_now: 'That is not available right now · the console has refreshed',
+  not_open: 'That is not available right now · the console has refreshed',
+  not_locked: 'That is not available right now · the console has refreshed',
+  nothing_selected: 'No route is selected · the console has refreshed',
+  path_already_explored: 'That route has already been explored',
+  reveal_or_clear_selection_first: 'Reveal or clear the selection first',
+  not_a_stable_boundary: 'Manual room mode cannot start at this point',
+  forbidden: 'This console is not allowed to do that',
+};
+
+/* ───────── commands ───────── */
+async function cmd(type, payload = {}) {
+  if (S.mode === 'manual') { // local authority uses the same reducer and captured ranked-page revision
+    const r = S.la.command(type, payload);
+    afterReceipt(type, r); render(); return r;
+  }
+  if (S.busy) return null;
+  const rankedFocus = type === 'ranked_page' && document.activeElement?.closest('.ranked-controls') ?
+    document.activeElement.dataset.k : null;
+  S.busy = true; const gen = S.gen;
+  if (rankedFocus) document.querySelectorAll('.ranked-controls button, .ranked-controls select')
+    .forEach(control => { control.disabled = true; });
+  render();
+  try {
+    const rb = await link.send(type, payload);
+    if (gen === S.gen) afterReceipt(type, rb);
+    return rb;
+  } finally {
+    S.busy = false;
+    const active = document.activeElement;
+    const restoreRankedFocus = rankedFocus && (active === document.body || !active ||
+      active.disabled || active.dataset?.k === rankedFocus);
+    render();
+    if (restoreRankedFocus && !$('#dlg').open) refocus(rankedFocus);
+  }
+}
+function afterReceipt(type, rb) {
+  const r = rb.receipt;
+  if (r === 'accepted' || r === 'already_accepted') { if (S.mode === 'network') S.sent++; S.pick = null; return; }
+  if (r === 'stale_epoch') { if (S.mode === 'network' && S.selfBump === 0) fence(); return; }
+  if (r === 'timeout') return say('No reply from the room yet · check the connection');
+  say(REASON[rb.reason] ?? `Not done · ${String(rb.reason ?? r).replaceAll('_', ' ')}`);
+}
+function fence() { if (S.fenced) return; S.fenced = true; announce('This room is now controlled from another device', true); render(); }
+
+async function takeover() {
+  S.selfBump++; S.busy = true; render();
+  try {
+    const rb = await link.send('takeover');
+    if (rb.receipt === 'accepted' || rb.receipt === 'already_accepted') {
+      S.standby = false; S.fenced = false; S.knownEpoch = rb.epoch ?? link.snapshot?.epoch; say('You now control this room');
+    } else say(REASON[rb.reason] ?? 'Could not take over · try again');
+  } finally { S.selfBump--; S.busy = false; render(); }
+}
+
+/* ───────── manual room mode ───────── */
+function quietClose(la) { try { la.local.close(); } catch { /* already closed */ } }
+function inRoundPhase(v) {
+  return ['responses_open', 'responses_locked'].includes(v.phase) || (v.phase === 'discussion_paused' && ['responses_open', 'responses_locked'].includes(v.resumePhase));
+}
+function askEnterManual() {
+  const v = view(); if (!v) return;
+  const lines = ['This starts a new epoch on this device. Phones cannot vote. You lead the discussion and choose routes.'];
+  if (inRoundPhase(v)) lines.push('This cancels the open round. Its answers are discarded.');
+  if (v.phase === 'path_selected' || v.resumePhase === 'path_selected') lines.push('The route you selected has not been shown to the room; it is cleared first.');
+  openDialog({ title: 'Enter manual room mode?', lines, focus: 'cancel', buttons: [{ label: 'Enter manual room mode', cls: 'primary', run: enterManual }] });
+}
+function enterManual() {
+  const snap = link.snapshot, pack = link.casePack;
+  if (!snap?.mirror || !pack) return say('Manual room mode needs the case pack · it has not loaded yet');
+  const v = snap.view, la = new LocalAuthority(snap.mirror, pack);
+  // A selected route cannot be carried into manual mode, so clear it locally first (same events replay on upload).
+  const pre = [];
+  if (v.phase === 'discussion_paused' && v.resumePhase === 'path_selected') pre.push('resume');
+  if (v.phase === 'path_selected' || v.resumePhase === 'path_selected') pre.push('back_to_review');
+  for (const t of pre) { const r = la.command(t); if (r.receipt !== 'accepted') { quietClose(la); return say(`Manual room mode could not start · ${r.reason ?? r.receipt}`); } }
+  const r = la.enter();
+  if (r.receipt !== 'accepted') { quietClose(la); return say(REASON[r.reason] ?? `Manual room mode could not start · ${r.reason ?? r.receipt}`); }
+  S.entryVoided = inRoundPhase(v); S.entryEpoch = snap.epoch;
+  S.la = la; S.mode = 'manual'; S.gen++; S.pick = null; S.upload = null; S.results = [];
+  announce('Manual room mode. Phone votes are unavailable.', true);
+  render();
+}
+async function resumeOnline() {
+  if (S.mode !== 'manual') return;
+  const r = S.la.command('resume_online');
+  if (r.receipt !== 'accepted') { say(REASON[r.reason] ?? `Could not resume · ${r.reason ?? r.receipt}`); return render(); }
+  S.upload = { state: conn() === 'online' ? 'uploading' : 'waiting' };
+  render();
+  if (S.upload.state === 'uploading') doUpload();
+  else say('Still offline · the manual choices upload when the connection returns');
+}
+async function doUpload() {
+  if (!S.la || !S.upload) return;
+  S.upload = { state: 'uploading' }; render();
+  const res = await link.uploadSegment(S.la.segmentBody());
+  if (res.status === 200) {
+    // The upload acknowledgement can beat the WebSocket broadcast. Keep manual controls
+    // until a real snapshot contains the accepted epoch/revision; an immediate End must
+    // not be fenced using the pre-upload snapshot. Retrying retains the same segment ID.
+    await link.refetch();
+    const current = link.snapshot;
+    if (!current || current.epoch < res.body.epoch ||
+        (current.epoch === res.body.epoch && current.revision < res.body.revision)) {
+      S.upload = { state: 'waiting' };
+      say('Manual choices reached the room · waiting for its current state before rejoining');
+      render(); return;
+    }
+    const real = S.la.events.some((e) => !['enter_manual', 'resume_online'].includes(e.type));
+    S.results = [...(S.entryVoided ? ['Round closed as abandoned'] : []), ...(real ? ['Manual choices recorded'] : []), 'New epoch'];
+    S.la.forget(); S.la.close(); S.la = null; S.mode = 'network'; S.upload = null; S.gen++;
+    S.knownEpoch = res.body.epoch ?? link.snapshot?.epoch;
+    say('Back online · open the recovery tray to see what was recorded');
+    announce('Back online. Rejoin at the next decision.');
+  } else if (res.status === 0) {
+    S.upload = { state: 'waiting' }; say('Still offline · the manual choices upload when the connection returns');
+  } else {
+    S.upload = { state: 'failed', error: res.body?.error ?? `http ${res.status}` };
+    announce('The room moved on while you were offline', true);
+    askRefused();
+  }
+  render();
+}
+// CASE-095: a refused segment is never forced. Offer the notes, then follow the latest room.
+function downloadNotes() {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([S.la.notesText()], { type: 'text/plain' }));
+  a.download = `case-manual-notes-${S.la.segmentId}.txt`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function followRoom() {
+  const moved = link.snapshot && link.snapshot.epoch !== S.entryEpoch;
+  S.la.forget(); quietClose(S.la); S.la = null; S.mode = 'network'; S.upload = null; S.gen++; S.results = [];
+  S.knownEpoch = link.snapshot?.epoch ?? null;
+  if (moved) fence(); else say('Following the room · showing the latest room state');
+  render();
+}
+function askRefused() {
+  openDialog({
+    title: 'The room moved on while you were offline', focus: 'confirm', cancel: false, // no Cancel and no force (CASE-095)
+    lines: ['Another device took over, so your offline choices were not applied.'],
+    buttons: [{ label: 'Download your notes', keep: true, run: downloadNotes }, { label: 'Follow the room', cls: 'primary', run: followRoom }],
+  });
+}
+addEventListener('beforeunload', (e) => { if (S.mode === 'manual') { e.preventDefault(); e.returnValue = ''; } });
+
+/* ───────── dialogs ───────── */
+let dlgFocusKey = null;
+function openDialog({ title, lines = [], node = null, input = null, buttons = [], focus = 'confirm', cancel: withCancel = true }) {
+  const d = $('#dlg');
+  dlgFocusKey = document.activeElement?.dataset?.k ?? null;
+  let inputEl = null;
+  const body = [h('h2', { id: 'dlgTitle' }, title), ...lines.map((t) => h('p', null, t)), node];
+  if (input) {
+    inputEl = h('input', { id: 'dlgIn', type: input.type || 'text', value: input.value ?? '', maxlength: input.max, min: input.min, max: input.maxv });
+    body.push(h('label', { for: 'dlgIn', class: 'muted' }, input.label), inputEl);
+  }
+  const btns = buttons.map((b) => h('button', { type: 'button', class: `btn ${b.cls || ''}`, on: { click: () => { if (!b.keep) d.close(); b.run?.(inputEl?.value); } } }, b.label)); // `keep`: the dialog stays open (e.g. Download your notes)
+  const cancel = h('button', { type: 'button', class: 'btn', autofocus: focus === 'cancel' || null, on: { click: () => d.close() } }, buttons.cancelLabel || 'Cancel');
+  d.replaceChildren(h('div', { class: 'dbody' }, ...body, h('div', { class: 'drow' }, ...(withCancel ? [cancel] : []), ...btns)));
+  d.setAttribute('aria-labelledby', 'dlgTitle');
+  d.showModal();
+  if (inputEl) { inputEl.focus(); inputEl.select(); } else if (focus === 'confirm') (d.querySelector('.primary, .danger') || cancel).focus();
+  else cancel.focus();
+}
+$('#dlg').addEventListener('close', () => setTimeout(() => refocus(dlgFocusKey), 0));
+function refocus(key) { if (key) document.querySelector(`[data-k="${CSS.escape(key)}"]`)?.focus(); }
+
+const confirmVoid = () => openDialog({ title: 'Void round?', focus: 'cancel', lines: ['Cancel this round? Its answers are discarded and never used.'], buttons: [{ label: 'Void round', cls: 'danger', run: () => cmd('void_round') }] });
+const confirmEnd = () => openDialog({ title: 'End this room?', focus: 'cancel', lines: ['Phones and the projector close the session. Private recaps are available to participants for 24 hours, then deleted. This cannot be undone.'], buttons: [{ label: 'End room', cls: 'danger', run: async () => { await cmd('end'); S.tab = 'run'; render(); } }] }); // the Run tab carries the end summary
+const confirmTakeover = () => openDialog({ title: 'Take over this room?', focus: 'cancel', lines: ['This console will control the room. Any other console open on it stops controlling it. Phones and the projector are unchanged.'], buttons: [{ label: 'Take over this room', cls: 'primary', run: takeover }] });
+function askTimer() {
+  const go = (s) => cmd('set_timer', { seconds: s });
+  openDialog({
+    title: 'Set timer', lines: ['The timer is advisory. It never locks the round.'], input: { label: 'Seconds (10 to 600)', type: 'number', value: 120, min: 10, maxv: 600 },
+    buttons: [{ label: 'Set timer', cls: 'primary', run: (v) => { const n = Number(v); Number.isInteger(n) && n >= 10 && n <= 600 ? go(n) : say('Enter whole seconds from 10 to 600'); } }, { label: 'No timer', run: () => go(null) }],
+  });
+}
+function askRename(p) {
+  // The same name rules as the join page (CASE-119); the server checks them again.
+  openDialog({ title: 'Rename', input: { label: `Name (3 to ${NAME_MAX} characters)`, value: p.name ?? '', max: NAME_MAX + 10 }, buttons: [{ label: 'Save changes', cls: 'primary', run: (v) => {
+    const problem = displayNameProblem(v);
+    if (problem) return say(NAME_PROBLEM_TEXT[problem]);
+    cmd('rename', { participantId: p.id, displayName: normaliseDisplayName(v) });
+  } }] });
+}
+function askRemove(p) {
+  openDialog({ title: 'Remove from room?', focus: 'cancel', lines: [`${p.name || 'This participant'} will lose access. Any answer in the open round is discarded.`], buttons: [{ label: 'Remove from room', cls: 'danger', run: () => cmd('remove_participant', { participantId: p.id }) }] });
+}
+function toggleNames(v) {
+  if (v.namesShown) return cmd('show_names', { on: false });
+  const named = v.participants.filter((p) => !p.removed && p.name);
+  const unnamed = v.participants.filter((p) => !p.removed && !p.name).length;
+  const list = h('ul', { class: 'chips' }, named.slice(0, 12).map((p) => h('li', null, avatarEl(p.avatarId, { size: 24, name: p.name }), h('span', null, p.name))));
+  const extra = [named.length > 12 ? `+ ${named.length - 12} more` : null, unnamed ? `+ ${unnamed} not named` : null].filter(Boolean).join(' · ');
+  openDialog({ title: "Show participants' display names on the projector?", lines: named.length ? ['The projector would show:'] : ['No one has given a name yet.'], node: h('div', null, list, extra ? h('p', { class: 'muted' }, extra) : null), buttons: [{ label: 'Show names on projector', cls: 'primary', run: () => cmd('show_names', { on: true }) }] });
+}
+
+/* ───────── pure view helpers ───────── */
+const activeParticipants = (v) => v.participants.filter((p) => !p.removed);
+function timerInfo(v) {
+  const t = v?.timer; if (!t) return null;
+  const paused = t.remainingS !== null && t.remainingS !== undefined;
+  return { paused, left: timerRemainingS(t, Date.now()) };
+}
+function answerText(v, r) {
+  const opts = v.decision?.interaction?.options ?? [], l = (id) => opts.find((o) => o.id === id)?.label ?? id;
+  if (r.option_id) return l(r.option_id);
+  if (r.option_ids) return r.option_ids.map(l).join(', ');
+  if (r.order) return r.order.map(l).join(' → ');
+  return r.text ?? '';
+}
+function answerNode(v, r) {
+  const opts = v.decision?.interaction?.options ?? [];
+  const one = (id) => { const i = opts.findIndex((o) => o.id === id); return h('span', { class: 'opt' }, i >= 0 ? markSvg(i, { size: 20 }) : null, i >= 0 ? opts[i].label : id); };
+  if (r.option_id) return one(r.option_id);
+  if (r.option_ids) return h('span', { style: 'display:inline-flex;flex-wrap:wrap;gap:4px 12px' }, r.option_ids.map(one));
+  if (r.order) return h('span', { style: 'display:inline-flex;flex-wrap:wrap;gap:4px 8px;align-items:center' }, r.order.map((id, k) => h('span', { class: 'opt' }, k ? '→' : null, one(id))));
+  return answerText(v, r);
+}
+const pathOf = (v, id) => v.decision?.paths.find((p) => p.id === id) ?? null;
+const needsCheck = (v) => v.phase === 'lobby' && !['confirmed', 'separate'].includes(S.projector);
+function heading(v) {
+  return ({ lobby: 'Lobby', surface_live: 'Live surface', responses_open: 'Team decision open', responses_locked: 'Responses locked', path_selected: 'Route chosen · not yet shown to the room', consequence_revealed: 'Consequence shown', terminal_teaching: 'Teaching point', discussion_paused: 'Discussion pause', ended: 'Room ended' })[v.phase] ?? v.phase;
+}
+function statusText(v) {
+  const n = activeParticipants(v).length, t = timerInfo(v);
+  switch (v.phase) {
+    case 'lobby': return `${n} in the room · Waiting to start`;
+    case 'surface_live':
+      if (v.manual && v.decision) return 'Manual room mode · lead the discussion, then choose the route';
+      return v.decision && v.rounds.at(-1)?.status === 'abandoned' ? 'Round cancelled · open a new response round when ready' : null;
+    case 'responses_open': return t && !t.paused && t.left === 0 ? 'Time is up · locking is still your call' : null;
+    case 'path_selected': return `Chosen route: ${pathOf(v, v.selectedPathId)?.label ?? ''}`;
+    case 'consequence_revealed': return `The room is seeing: ${v.liveSurface?.title ?? ''}`;
+    case 'terminal_teaching': return 'This route led to a serious deterioration. Debrief, then reset to the checkpoint.';
+    case 'discussion_paused':
+      return v.resumePhase === 'responses_open' ? 'Paused · answers are held and cannot change until you resume'
+        : `Paused from ${PHASE_NAME[v.resumePhase] ?? 'the room'}${t ? ` · timer frozen at ${mss(t.left)}` : ''}`;
+    case 'ended': return 'Private recaps are available to participants for 24 hours, then deleted';
+  }
+  return null;
+}
+
+/* ───────── components ───────── */
+function button(label, onClick, { cls = '', k = null, disabled = false, ic = null, props = {} } = {}) {
+  return h('button', { type: 'button', class: `btn ${cls}`, 'data-k': k ?? `b:${label}`, disabled: disabled || null, on: { click: onClick }, ...props }, ic ? icon(ic, true) : null, ic ? ' ' : null, label);
+}
+const cmdBtn = (label, type, payload, o = {}) => button(label, () => cmd(type, payload), { disabled: !canCmd(), ...o });
+
+/* ───────── orientation band and tabs (CASE-113, CASE-118) ───────── */
+const PHASE_PILL = { // phase → [phase accent, short label] (CASE-114)
+  lobby: ['reveal', 'Lobby'], surface_live: ['reveal', 'Revealed'], responses_open: ['open', 'Decision open'], responses_locked: ['locked', 'Locked'],
+  path_selected: ['locked', 'Route chosen'], consequence_revealed: ['consequence', 'Consequence'], terminal_teaching: ['consequence', 'Teaching point'],
+  discussion_paused: ['paused', 'Paused'], ended: ['reveal', 'Ended'],
+};
+function phasePill(v) {
+  const [ph, text] = PHASE_PILL[v.phase] ?? ['reveal', v.phase];
+  return h('span', { class: 'pill', 'data-phase': ph }, text);
+}
+function runStrip(v) {
+  const c = conn(), t = timerInfo(v), manual = S.mode === 'manual';
+  const proj = { unchecked: ['Not checked', 'warn'], confirmed: ['Showing', 'ok'], separate: ['Separate device', 'ok'], wrong: ['Console visible · fix first', 'bad'] }[S.projector];
+  const connTag = { connecting: ['Connecting…', 'sync', ''], online: ['Live', 'live', 'ok'], reconnecting: ['Reconnecting…', 'sync', 'warn'], lost: ['Offline', 'offline', 'bad'] }[c];
+  const open = v?.phase === 'responses_open' && v.round && !v.namesShown;
+  const tab = (id, label, ic, badge) => h('button', { type: 'button', role: 'tab', id: `tab-${id}`, 'aria-selected': String(S.tab === id), 'aria-controls': S.tab === id ? `panel-${id}` : null, tabindex: S.tab === id ? '0' : '-1', 'data-k': `tab:${id}`,
+    on: { click: () => selectTab(id), keydown: (e) => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); selectTab(id === 'run' ? 'room' : 'run', true); } } } }, icon(ic, true), label, badge != null ? h('span', { class: 'badge', 'aria-hidden': 'true' }, String(badge)) : null);
+  return h('header', { class: 'strip' }, h('div', { class: 'wrap' },
+    h('div', { class: 'row1' },
+      h('div', { class: 'si beat' }, h('span', { class: 'case' }, v?.caseTitle ?? 'Case'), h('b', null, v?.beat?.title ?? (v?.phase === 'lobby' ? 'Not started' : v ? '–' : 'Case'))),
+      v ? h('div', { class: 'si' }, phasePill(v)) : null,
+      open ? h('div', { class: 'si' }, icon('people', true), h('b', { class: 'num' }, `${v.round.responseCount}/${v.round.participantCount}`), h('span', { class: 'muted' }, 'answered')) : null,
+      h('div', { class: 'si' }, icon(t?.paused ? 'pause' : 'clock', true), t ? [h('b', { class: 'js-timer num' }, `${mss(t.left)} left`), h('span', { class: 'muted js-timer-words' }, `· room sees "${timerWords(t.left)}"`)] : h('span', { class: 'muted' }, 'No timer')),
+      h('div', { class: 'si' }, icon('projector', true), h('span', { class: `tag ${proj[1]}` }, proj[0])),
+      manual ? h('div', { class: 'si' }, h('span', { class: 'tag warn' }, icon('manual', true), 'Manual room mode')) : null,
+      h('div', { class: 'si' }, h('span', { class: `tag ${connTag[2]}` }, icon(connTag[1], true), connTag[0]))),
+    v ? h('div', { role: 'tablist', 'aria-label': 'Console' }, tab('run', 'Run', 'play'), tab('room', 'Room', 'people', activeParticipants(v).length)) : null));
+}
+function selectTab(id, focus = false) {
+  if (S.tab === id) return;
+  S.tab = id; render();
+  if (focus) refocus(`tab:${id}`);
+}
+
+function banners(v) {
+  const out = [], c = conn();
+  if (S.mode === 'network' && c === 'lost') {
+    out.push(h('div', { class: 'banner alert' }, icon('offline'), h('div', { class: 'grow' }, h('strong', null, 'Offline · Switch to manual room'), h('span', null, 'When you reconnect, rejoin online at the next decision')),
+      button('Switch to manual room', askEnterManual, { k: 'switchManual' })));
+  }
+  if (S.mode === 'manual') {
+    const A = new Set(v.actions), u = S.upload;
+    out.push(h('div', { class: 'banner manual' }, icon('manual'), h('div', { class: 'grow' }, h('strong', null, 'Manual room mode · phone votes and recap capture are unavailable until connectivity returns'),
+      u ? h('span', null, u.state === 'waiting' ? 'Waiting for the connection · your manual choices upload automatically' : u.state === 'uploading' ? 'Uploading your manual choices…' : `The room moved on while you were offline (${u.error}). Nothing from this segment was applied.`)
+        : !A.has('resume_online') ? h('span', null, 'Reveal or clear the selection first')
+        : c === 'online' ? h('span', null, 'Connection back · Rejoin online when ready') : null),
+      !u && A.has('resume_online') ? button('Resume online', resumeOnline, { k: 'resumeOnline' }) : null,
+      u?.state === 'waiting' ? button('Retry now', doUpload, { k: 'retry' }) : null,
+      u?.state === 'failed' ? [button('Download your notes', downloadNotes, { k: 'notes' }), button('Follow the room', followRoom, { k: 'follow' })] : null));
+    if (!u) out.push(h('form', { class: 'marker', on: { submit: (e) => { e.preventDefault(); addMarker(); } } },
+      h('label', null, 'Add marker', h('input', { 'data-k': 'marker', maxlength: 200, value: S.marker, autocomplete: 'off', placeholder: 'A short note for this device only', on: { input: (e) => { S.marker = e.target.value; } } })),
+      h('button', { type: 'submit', class: 'btn', 'data-k': 'addMarker' }, 'Add marker'),
+      h('p', { class: 'muted', style: 'flex-basis:100%;font-size:var(--t-xs)' }, `${S.marker.length} of 200 · markers stay on this device and are not journaled${S.la.markers.length ? ` · ${S.la.markers.length} added` : ''}`)));
+  }
+  if (v.display?.cursor !== null && v.display?.cursor !== undefined) out.push(h('div', { class: 'banner pause' }, icon('pause'), 'Presentation replay · phones remain on live surface'));
+  if (S.results.length && S.mode === 'network') out.push(h('div', { class: 'banner info' }, icon('info'), h('div', { class: 'grow' }, h('strong', null, 'Back online'), h('span', null, `${S.results.join(' · ')} · rejoin at the next decision`)),
+    button('Dismiss', () => { S.results = []; render(); }, { k: 'dismissResults', cls: 'tertiary' })));
+  return out.length ? h('div', { class: 'banners' }, out) : null;
+}
+function addMarker() {
+  const text = S.marker.trim(); if (!text) return;
+  const r = S.la.command('manual_marker', { text });
+  if (r.receipt === 'accepted') { S.marker = ''; say('Marker added on this device'); } else say(`Marker not added · ${r.reason ?? r.receipt}`);
+  render(); refocus('marker');
+}
+
+/** An info disclosure: the explanation stays one tap away instead of an inline paragraph (CASE-118). */
+function info(about, text) {
+  return h('details', { class: 'info' }, h('summary', null, icon('info', true), h('span', { class: 'sr-only' }, `About ${about}`)), h('p', { class: 'info-body' }, text));
+}
+
+/* ───────── Run tab: left = what the room sees ───────── */
+const TREND = { up: ['↑', 'up'], down: ['↓', 'down'] };
+function vitalsStrip(obs) {
+  return h('ul', { class: 'vitals', 'aria-label': 'Vitals' }, obs.map((o) => {
+    const t = TREND[o.trend], unit = o.unit ? ` ${o.unit}` : '';
+    return h('li', null,
+      h('span', { 'aria-hidden': 'true', style: 'display:contents' }, h('span', { class: 'l' }, o.label), h('span', { class: 'v' }, String(o.value), o.unit ? h('span', { class: 'u' }, unit) : null), t ? h('span', { class: 'tr' }, `${t[0]} ${o.previous}`) : null),
+      h('span', { class: 'sr-only' }, `${o.label} ${o.value}${unit}${t ? `, ${t[1]} from ${o.previous}` : ''}`));
+  }));
+}
+function surfaceCard(v) {
+  const full = v.liveSurface;
+  const s = full ? publicPresentationSurface(full, v.presentation?.shown ?? 0) : null;
+  if (!s) return null;
+  const nav = presentationNav(v);
+  const replay = nav.replaying ? v.timeline[nav.at] : null;
+  const tile = (title, items) => (items?.length ? h('div', null, h('p', { class: 'eyebrow' }, title), h('ul', { class: 'points' }, items.map((t) => h('li', null, t)))) : null);
+  const tiles = [tile('Findings', s.points), tile('Investigations', s.investigations)].filter(Boolean);
+  return h('section', { class: 'card panel', 'aria-labelledby': 'surfH' },
+    h('p', { class: 'eyebrow' }, 'The room is seeing'),
+    h('h2', { id: 'surfH', tabindex: -1, style: 'font-size:var(--t-lg)' }, s.title),
+    s.scene ? h('p', { class: 'scene-prose' }, s.scene) : null,
+    s.observations?.length ? vitalsStrip(s.observations) : null,
+    tiles.length ? h('div', { class: 'tiles2' }, tiles) : null,
+    replay ? h('p', { class: 'muted' }, `Projector is replaying: ${replay.title}`) : null,
+    v.presentation?.mediaUnavailable ? h('p', { class: 'muted' }, 'This case references media that cannot be displayed in this version.') : null,
+    full.notes ? h('details', { class: 'notes', open: true }, h('summary', null, 'Facilitator notes · not shown to the room'), h('p', null, full.notes)) : null);
+}
+function cueCard(v) {
+  if (!v.beat?.cue) return null;
+  return h('div', { class: 'cue' }, h('p', { class: 'eyebrow' }, 'Facilitator cue · not shown to the room'), h('p', null, v.beat.cue));
+}
+function replayStrip(v) {
+  if (!v.actions.includes('replay') || !v.timeline.length) return null;
+  const nav = presentationNav(v);
+  const go = (entryIndex) => cmd('replay', { entryIndex });
+  return h('section', { class: 'card panel', 'aria-labelledby': 'repH' },
+    h('div', { class: 'cardhead' }, h('h2', { id: 'repH' }, 'Presentation strip'), info('the presentation strip', 'Step the projector back through what the room has seen. Phones stay on the live surface.')),
+    h('div', { class: 'row-actions' },
+      button('Back', () => go(nav.backTarget), { k: 'rBack', disabled: !canCmd() || !nav.canBack }),
+      button('Live surface', () => go(null), { k: 'rLive', disabled: !canCmd() || !nav.replaying }),
+      button('Forward', () => go(nav.forwardTarget), { k: 'rFwd', disabled: !canCmd() || !nav.canForward })),
+    h('ol', { class: 'strip-list' }, nav.rows.map((row) => h('li', { 'aria-current': row.selected ? 'true' : null },
+      h('button', { type: 'button', 'data-k': `presentation:${row.entryIndex}`, 'aria-current': row.selected ? 'step' : null, disabled: !canCmd() || null, on: { click: () => go(row.live ? null : row.entryIndex) } }, `${row.entryIndex + 1}. ${row.title}`),
+      v.timeline[row.entryIndex].timelineKind === 'terminal' ? h('span', { class: 'tag' }, 'terminal') : null,
+      v.timeline[row.entryIndex].manual ? h('span', { class: 'tag warn' }, 'manual') : null,
+      row.live ? h('span', { class: 'tag' }, 'live') : null))));
+}
+
+/* ───────── Run tab: right = the decision ───────── */
+const whoNode = (p) => [avatarEl(p?.avatarId ?? null, { size: 24, name: p?.name ?? '' }), h('span', { class: 'nm' }, p?.name || 'Unnamed')];
+function responseList(v) {
+  const got = new Map(v.round.responses.map((r) => [r.participantId, r]));
+  const people = activeParticipants(v);
+  if (!people.length) return h('p', { class: 'muted' }, 'No one has joined yet');
+  return h('ul', { class: 'rows', 'aria-label': 'Responses' }, people.map((p) => {
+    const r = got.get(p.id);
+    // A free-text answer that looks like a patient identifier is flagged (kinds only; CASE-105).
+    const flagged = r?.identifierFlags?.length ? h('span', { class: 'tag warn', style: 'margin-left:8px' }, icon('unsafe', true), 'May contain patient details · do not read aloud') : null;
+    return h('li', null, icon(r ? 'tick' : 'circle', true), ...whoNode(p), h('span', { class: r ? 'ans' : 'none' }, r ? answerNode(v, r.response) : 'No answer yet', flagged));
+  }));
+}
+function aggregateCard(v) {
+  const r = v.round; if (!r?.aggregate) return null;
+  const opts = v.decision.interaction.options, a = r.aggregate;
+  const sug = r.suggestion && pathOf(v, r.suggestion.pathId);
+  return h('section', { class: 'card panel', 'aria-labelledby': 'aggH' },
+    h('div', { class: 'cardhead' }, h('h2', { id: 'aggH' }, `Responses · ${a.total} answers`), info('the suggestion', `Suggestion basis: ${r.suggestion?.kind ?? 'none'}. Responses suggest a route; you choose it.`)),
+    v.decision.interaction.type === 'free_text' ? h('p', { class: 'muted' }, 'Free-text answers are listed below.')
+      : h('div', { class: 'agg' }, opts.map((o, i) => { const n = a.counts[o.id] ?? 0, pct = a.total ? Math.round((n / a.total) * 100) : 0; return h('div', null, h('span', { class: 'lbl' }, markSvg(i, { size: 20 }), o.label), h('span', { class: 'n' }, String(n)), h('span', { class: 'muted' }, `${pct}%`), h('span', { class: 'bar', 'aria-hidden': 'true' }, h('i', { style: `width:${pct}%` }))); })),
+    sug ? h('p', { class: 'status-line' }, `Suggested by responses: ${sug.label} · ${r.suggestion.reason} · you choose the route`) : null,
+    responseList(v));
+}
+
+function routeRow(v, p, selectable) {
+  const [label, ic, cssc] = CLS[p.classification] ?? [p.classification, 'bubble', ''];
+  const locked = p.explored || !selectable, opts = v.decision?.interaction?.options ?? [];
+  const sug = v.round?.suggestion?.pathId === p.id;
+  const input = h('input', { type: 'radio', name: 'route', value: p.id, 'data-k': `route:${p.id}`, checked: S.pick === p.id || null, disabled: locked || null, on: { change: () => { S.pick = p.id; render(); } } });
+  return h('label', { class: `route${p.explored ? ' locked' : ''}` }, input, h('span', null,
+    h('span', { class: 't' }, p.label,
+      p.recommended ? h('span', { class: 'tag' }, 'Recommended') : null, sug ? h('span', { class: 'tag' }, 'Suggested by responses') : null,
+      p.explored ? h('span', { class: 'tag' }, icon('lock', true), 'Already explored') : null,
+      S.pick === p.id ? h('span', { class: 'tag sel' }, icon('tick', true), 'Selected') : null),
+    h('span', { class: `cls ${cssc}`, style: 'display:flex;margin-top:4px' }, icon(ic, true), label),
+    p.optionIds.length ? h('ul', { class: 'optlist', 'aria-label': 'Room options for this route' }, p.optionIds.map((id) => { const i = opts.findIndex((o) => o.id === id); return h('li', { class: 'opt' }, i >= 0 ? markSvg(i, { size: 20 }) : null, i >= 0 ? opts[i].label : id); })) : null,
+    h('span', { class: 'meta' },
+      h('span', null, h('b', null, 'If revealed: '), p.revealPreview), h('span', null, h('b', null, 'Private note: '), p.rationale), p.cue ? h('span', null, h('b', null, 'Cue: '), p.cue) : null)));
+}
+function resolutionPanel(v) {
+  const paths = v.decision.paths, sugId = v.round?.suggestion?.pathId;
+  const main = paths.filter((p) => p.recommended || p.id === sugId || p.optionIds.length).sort((a, b) => (b.recommended - a.recommended) || ((b.id === sugId) - (a.id === sugId)));
+  const rest = paths.filter((p) => !main.includes(p));
+  const mk = (list) => list.map((p) => routeRow(v, p, true));
+  return h('section', { class: 'card panel', 'aria-labelledby': 'resH' },
+    h('div', { class: 'cardhead' }, h('h2', { id: 'resH', tabindex: -1 }, v.manual ? 'Select route · Manual room' : 'Choose a route'),
+      info('choosing a route', v.manual ? 'Authored routes only. It will be recorded as Manual room.' : 'The recommended route is listed first. Responses suggest; you choose. Any other authored route is an override.')),
+    h('fieldset', { class: 'routes' }, h('legend', { class: 'sr-only' }, 'Routes'), mk(main)),
+    rest.length ? h('div', { class: 'routes' }, h('p', { class: 'subhead' }, 'Override: any other authored route'), mk(rest)) : null);
+}
+const focusResolution = () => { const el = $('#resH'); el?.scrollIntoView({ block: 'start' }); el?.focus(); };
+
+function projectorHint(v) {
+  const open = v.phase === 'responses_open' && v.round && !v.namesShown;
+  return h('p', { class: 'hint' }, icon('projector', true), ` The projector shows these options${open ? ` and "${v.round.responseCount} of ${v.round.participantCount} answered"` : ''}`);
+}
+/** The decision path so far: the route each decision took, as the consequences the room has seen. */
+function pathCard(v) {
+  const steps = v.timeline.filter((t) => t.timelineKind === 'consequence' || t.timelineKind === 'terminal');
+  if (!steps.length) return null;
+  return h('section', { class: 'card panel', 'aria-labelledby': 'pathH' },
+    h('h2', { id: 'pathH' }, 'Decision path'),
+    h('ol', { class: 'strip-list' }, steps.map((t, i) => h('li', null, h('span', { class: 'muted' }, `${i + 1}.`), t.title,
+      t.timelineKind === 'terminal' ? h('span', { class: 'tag bad' }, 'terminal') : null, t.manual ? h('span', { class: 'tag warn' }, 'manual') : null))));
+}
+/* the phase card body */
+function phaseBody(v) {
+  const out = [], n = activeParticipants(v).length;
+  switch (v.phase) {
+    case 'responses_open': {
+      const hide = v.namesShown;
+      out.push(h('p', { class: 'count' }, hide ? 'Names are shown on the projector · the live count is hidden' : `Round ${v.round.no} · ${v.round.responseCount} of ${v.round.participantCount} responded`));
+      if (v.round.no > 1) out.push(h('p', { class: 'tag warn', style: 'width:fit-content' }, `Reopened as round ${v.round.no} · earlier answers are kept privately`));
+      out.push(h('p', { class: 'prompt' }, v.decision.prompt), responseList(v), projectorHint(v));
+      break;
+    }
+    case 'responses_locked':
+      if (v.decision) out.push(h('p', { class: 'prompt' }, v.decision.prompt), projectorHint(v));
+      break;
+    case 'path_selected': {
+      const p = pathOf(v, v.selectedPathId);
+      out.push(h('p', { class: 'body-text' }, `If revealed: ${p?.revealPreview ?? ''}`),
+        h('p', null, `Recorded as ${{ majority: 'Majority', minority: 'Minority', override: 'Override', manual_room: 'Manual room' }[v.resolutionKind] ?? ''}`),
+        h('p', { class: 'muted' }, 'Phones and the projector have not changed'));
+      break;
+    }
+    case 'terminal_teaching': {
+      const tp = pathOf(v, v.terminalPathId);
+      out.push(h('p', { class: 'muted' }, 'The explored option will be greyed out when the decision reopens'));
+      if (tp) out.push(h('div', { class: 'cue' }, h('p', { class: 'eyebrow' }, `Route taken · ${tp.label}`), h('p', null, h('b', null, 'Debrief: '), v.terminal?.debriefPrompt ?? tp.cue ?? ''), h('p', null, h('b', null, 'Private note: '), tp.rationale)));
+      out.push(h('ul', { class: 'rows plain' }, v.decision.paths.filter((p) => p.explored || p.id === v.terminalPathId).map((p) => h('li', null, icon('lock', true), p.label, h('span', { class: 'none' }, 'explored')))));
+      break;
+    }
+    case 'ended':
+      out.push(h('p', { class: 'muted' }, 'Participants keep their recap on their phone for 24 hours; one who clears their browser data loses it'), h('p', null, `${v.rounds.length} rounds recorded · ${v.timeline.length} surfaces shown · ${n} in the room`));
+      break;
+  }
+  return out;
+}
+
+/* secondary actions during a round: tinted, never filled (CASE-114) */
+function secondaryRow(v) {
+  const A = new Set(v.actions), b = [], ok = canCmd();
+  if (A.has('show_results')) b.push(cmdBtn(v.resultsShown === false ? 'Show responses on projector' : 'Hide responses on projector', 'show_results', { on: v.resultsShown === false }));
+  if (A.has('show_results') && v.resultsShown !== false) b.push(h('p', null,
+    'Hide responses on projector before showing the next case context.'));
+  if (A.has('text_page') && v.textPresentation) {
+    const { page, pages, closedRoundId } = v.textPresentation;
+    b.push(h('p', null, `Responses page ${page + 1} of ${pages}`),
+      cmdBtn('Previous responses page', 'text_page', { page: page - 1, closedRoundId, expectRevision: v.revision }, { disabled: !ok || page === 0 }),
+      cmdBtn('Next responses page', 'text_page', { page: page + 1, closedRoundId, expectRevision: v.revision }, { disabled: !ok || page === pages - 1 }));
+  }
+  const rankedControls = renderRankedControls(v, { el: (tag, text, cls) => h(tag, cls ? { class: cls } : null, text),
+    button, send: (type, payload) => cmd(type, payload), disabled: !ok });
+  if (rankedControls) b.push(rankedControls);
+  if (!v.rankedPresentation && A.has('results_page')) {
+    const page = v.resultsPage ?? 0, pages = v.resultsPageCount;
+    b.push(h('p', null, `Results page ${page + 1} of ${pages}`),
+      cmdBtn('Previous results page', 'results_page', { page: page - 1 }, { disabled: !ok || page === 0 }),
+      cmdBtn('Next results page', 'results_page', { page: page + 1 }, { disabled: !ok || page === pages - 1 }));
+  }
+  if (A.has('reopen')) b.push(cmdBtn('Reopen as new round', 'reopen'));
+  if (A.has('set_timer') && v.phase === 'responses_open') b.push(button('Set timer', askTimer, { disabled: !ok, ic: 'clock', cls: 'tertiary' }));
+  if (A.has('void_round')) b.push(button('Void round', confirmVoid, { cls: 'danger', disabled: !ok }));
+  if (v.phase === 'terminal_teaching' && A.has('end')) b.push(button('End the case', confirmEnd, { cls: 'danger', disabled: !ok }));
+  return b.length ? h('div', { class: 'row-actions', role: 'group', 'aria-label': 'Other actions' }, b) : null;
+}
+
+/* the one primary action, derived from `actions` and the phase */
+function primaryFor(v) {
+  const A = new Set(v.actions);
+  if (A.has('start')) return { label: 'Start case', run: () => cmd('start'), block: null };
+  if (A.has('lock')) return { label: 'Lock responses & review', run: () => cmd('lock') };
+  if (A.has('advance') && v.presentation?.nextGroup) return { label: presentationNav(v).nextActionLabel, run: () => cmd('advance') };
+  if (A.has('select_path')) return S.pick ? { label: 'Select this route', run: () => cmd('select_path', { pathId: S.pick }) } : { label: 'Select route', run: () => { S.tab = 'run'; render(); focusResolution(); }, local: true };
+  if (A.has('reveal')) { const armed = S.armedUntil > Date.now(); return { label: armed ? 'Show to room?' : `Reveal: ${pathOf(v, v.selectedPathId)?.revealPreview ?? ''}`, run: onReveal, armed }; }
+  if (A.has('reset_checkpoint')) return { label: `Reset to ${v.terminal?.checkpointBeat?.title ?? 'checkpoint'}`, run: () => cmd('reset_checkpoint') };
+  if (A.has('resume')) return { label: v.resumePhase === 'responses_open' ? 'Resume · responses open' : v.resumePhase === 'responses_locked' ? 'Resume · reviewing' : 'Resume discussion', run: () => cmd('resume') };
+  if (A.has('advance')) return { label: presentationNav(v).nextActionLabel, run: () => cmd('advance') };
+  return null;
+}
+/* Reveal is a two-step control: the first press arms it for 3 s (SCREENS path_selected). */
+function onReveal() {
+  if (S.armedUntil > Date.now()) { S.armedUntil = 0; return cmd('reveal'); }
+  S.armedUntil = Date.now() + 3000;
+  announce('Press again within 3 seconds to show the room');
+  setTimeout(() => { if (S.armedUntil && Date.now() >= S.armedUntil) { S.armedUntil = 0; render(); } }, 3050);
+  render();
+}
+function dock(v) {
+  const P = v ? primaryFor(v) : null, A = new Set(v?.actions ?? []);
+  const disabled = !P || (!P.local && !canCmd()) || Boolean(P.block);
+  return h('section', { class: 'dock', 'aria-label': 'Next action' }, h('div', { class: 'wrap' },
+    h('div', { class: 'prim' },
+      P ? h('button', { type: 'button', class: `btn primary big${P.armed ? ' armed' : ''}`, 'data-k': 'primary', disabled: disabled || null, 'aria-describedby': P.block ? 'primReason' : null, on: { click: P.run } }, P.label) : null,
+      P?.block ? h('span', { id: 'primReason', class: 'reason' }, P.block) : null),
+    A.has('back_to_review') ? button('Back to review', () => cmd('back_to_review'), { k: 'back', cls: 'back', props: { class: 'btn tertiary back' }, disabled: !canCmd() }) : null));
+}
+
+/* lobby (Run tab): join route, display check, who is here */
+function lobbyCards(v) {
+  const code = v.joinCode;
+  const join = h('section', { class: 'card panel join', 'aria-labelledby': 'joinH' },
+    h('p', { class: 'eyebrow', id: 'joinH' }, 'Join code'),
+    h('div', { class: 'code', 'aria-label': `Join code ${formatCode(code).split('').join(' ')}` }, formatCode(code)),
+    h('div', { class: 'url' }, joinUrl(code).replace('https://', '')),
+    h('p', { class: 'muted' }, 'Scan, open the short URL, or type the code'),
+    v.nextBeat ? h('p', null, `Opens with: ${v.nextBeat.title}`) : null);
+  const check = S.projector === 'separate' ? h('p', { class: 'muted' }, 'Projector is a separate paired device · no display check needed.') : [
+    h('p', null, 'The second screen should read "Projector". Confirm this console is not visible to the room.'),
+    projectorFallback(),
+    singleScreen() ? phoneConsoleHint() : null,
+    S.projector === 'wrong' ? h('p', { class: 'banner alert' }, icon('unsafe'), 'Switch Windows to "Extend these displays", then check again.') : null,
+    h('div', { class: 'row-actions' },
+      button('Open projector window', openProjector, { k: 'openProj', ic: 'projector' }),
+      button('Projector is showing, console is not visible', () => { S.projector = 'confirmed'; render(); }, { k: 'projOk' })),
+    h('div', { class: 'row-actions' },
+      button('Not sure, show Projector again', () => { pingProjector(); say('Projector word sent to the second screen'); }, { k: 'projAgain', cls: 'tertiary' }),
+      button('Console is showing on the projector', () => { S.projector = 'wrong'; render(); }, { k: 'projBad', cls: 'tertiary' }),
+      button('Projector is on a separate paired device', () => { S.projector = 'separate'; render(); }, { k: 'projSep', cls: 'tertiary' }))];
+  const people = activeParticipants(v);
+  const here = h('section', { class: 'card panel', 'aria-labelledby': 'rosterH' },
+    h('div', { class: 'cardhead' }, h('h2', { id: 'rosterH' }, `In the room · ${people.length}`), v.actions.includes('show_names') ? button(v.namesShown ? 'Hide names on projector' : 'Show names on projector', () => toggleNames(v), { k: 'namesQuick', cls: 'tertiary', disabled: !canCmd() }) : null),
+    people.length ? h('ul', { class: 'chips' }, people.map((p) => h('li', null, avatarEl(p.avatarId, { size: 24, name: p.name ?? '' }), h('span', null, p.name || 'Unnamed')))) : h('p', { class: 'muted' }, 'No one has joined yet'));
+  return { left: [join, here], right: [h('section', { class: 'card panel', 'aria-labelledby': 'chkH' }, h('div', { class: 'cardhead' }, h('h2', { id: 'chkH' }, 'Display check'), info('the display check', 'The projector window shows the word "Projector" full screen. If the room can see this console instead, your notes are on show: switch Windows to "Extend these displays".')), check)] };
+}
+const projectorUrl = () => { const real = realRoom(); return real ? roomUrl('display.html', real, { topology: 'same-pc' }) : 'display.html?topology=same-pc'; };
+/**
+ * The projector window opens with `noopener` (spec red team 2, P1-6): it gets no handle on this console,
+ * its sessionStorage starts empty, and it pairs for itself (no token in its URL). `window.open` then
+ * returns null whether or not a pop-up blocker stopped it, so the console waits for the window to say
+ * hello over BroadcastChannel; silence after 3 s shows the link to open by hand (P1-3).
+ */
+function openProjector() {
+  const url = projectorUrl();
+  S.projOpenedAt = Date.now();
+  S.projFallback = null;
+  window.open(url, 'case-projector', 'popup,noopener,noreferrer,width=1280,height=720');
+  setTimeout(() => { if (S.projSeenAt < S.projOpenedAt) { S.projFallback = url; say('The projector window did not open · open it by hand from the link'); render(); } }, 3000);
+}
+function projectorFallback() {
+  if (!S.projFallback) return null;
+  const href = new URL(S.projFallback, location.href).href;
+  return h('div', { class: 'banner alert', role: 'note' }, icon('unsafe'), h('div', { class: 'grow' },
+    h('strong', null, 'The projector window did not open'),
+    h('span', null, 'The browser may have blocked it. Open this link in a new window, drag it to the second screen and make it full screen:'),
+    h('a', { href, target: '_blank', rel: 'noopener noreferrer', 'data-k': 'projLink' }, href.replace(/^https?:\/\//, ''))));
+}
+/** Windows "Duplicate" mode, or one screen: suggest the phone as the console. Never forced (CASE-102). */
+function phoneConsoleHint() {
+  return h('div', { class: 'banner info', role: 'note' }, icon('info'), h('div', { class: 'grow' },
+    h('strong', null, 'This computer is showing one screen'),
+    h('span', null, 'If the projector mirrors this screen, the room would see your notes. Either switch Windows to "Extend these displays" (Windows key + P), or run the console on your phone and keep this computer for the projector only.')));
+}
+function pingProjector() { try { localChannel.postMessage({ t: 'show_projector' }); } catch { /* no channel */ } }
+
+/* ───────── Room tab (CASE-118): people, displays, names, settings, manual mode, the end ───────── */
+function roomPanel(v) {
+  const A = new Set(v.actions), ok = canCmd(), manual = S.mode === 'manual';
+  const people = activeParticipants(v);
+  const pending = manual ? S.la.events.length : link.pendingCount;
+  const proj = S.projector === 'confirmed' || S.projector === 'separate' ? 'Projector is showing' : projectorOpen() ? 'Projector window open' : 'Not paired';
+  const card = (id, ic, title, about, ...body) => h('section', { class: 'card panel', 'aria-labelledby': id }, h('div', { class: 'cardhead' }, h('h2', { id }, icon(ic, true), title), about ? info(title.toLowerCase(), about) : null), ...body);
+  return h('div', { class: 'room-grid' }, h('div', { class: 'stack' },
+    card('dRoster', 'people', `People · ${people.length}`, 'Everyone who has joined. Rename fixes a name for the whole room; Remove takes away their access and discards any answer in the open round.',
+      people.length ? h('ul', { class: 'roster', 'aria-label': 'In the room' }, people.map((p) => h('li', null, h('span', { class: 'who' }, avatarEl(p.avatarId, { size: 28, name: p.name ?? '' }), h('span', null, p.name || 'Unnamed')),
+        h('span', { class: 'muted' }, new Date(p.joinedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
+        h('span', { class: 'btns' }, button('Rename', () => askRename(p), { k: `rn:${p.id}`, cls: 'tertiary', disabled: !ok, props: { 'aria-label': `Rename ${p.name || 'this participant'}` } }), button('Remove', () => askRemove(p), { k: `rm:${p.id}`, cls: 'danger', disabled: !ok, props: { 'aria-label': `Remove ${p.name || 'this participant'} from room` } }))))) : h('p', { class: 'muted' }, 'No one has joined yet'),
+      h('p', { class: 'muted' }, `Join code ${formatCode(v.joinCode)} · ${joinUrl(v.joinCode).replace('https://', '')}`),
+      A.has('close_joining') ? cmdBtn(v.joiningClosed ? 'Reopen joining' : 'Close joining', 'close_joining', { closed: !v.joiningClosed }, { k: 'dJoin' }) : null)),
+    h('div', { class: 'stack' },
+    card('dNamesH', 'projector', 'Names on the projector', v.phase === 'lobby' ? 'The lobby automatically shows names and avatars; no switch is needed.' : 'During play, Hide responses before showing names. Closing or showing responses clears names to keep answer counts anonymous.',
+      h('p', null, v.phase === 'lobby' ? 'Names and avatars appear in the lobby.' : v.resultsShown !== false && A.has('show_results') ? 'A response chart is on the projector; names are withheld.' : v.namesShown ? 'Names and avatars are on the projector.' : 'Names are not shown on the projector.'),
+      A.has('show_names') ? button(v.namesShown ? 'Hide names on projector' : 'Show names on projector', () => toggleNames(v), { k: 'dNames', disabled: !ok }) : null),
+    card('dDisp', 'projector', 'Displays', 'Open the projector window on this computer, or pair a separate display: open its pair page and type the code it shows.',
+      h('dl', { class: 'kv' }, h('dt', null, 'Projector'), h('dd', null, proj)),
+      h('div', { class: 'row-actions' },
+        button('Open projector window', openProjector, { k: 'dOpenProj', ic: 'projector' }),
+        button('Run the display check again', () => { S.projector = 'unchecked'; pingProjector(); S.tab = 'run'; say('Confirm the display check in the lobby'); render(); }, { k: 'dRecheck', cls: 'tertiary', disabled: v.phase !== 'lobby' })),
+      pairForm(manual)),
+    card('dSet', 'gear', 'Settings', null,
+      A.has('set_timer') ? h('div', { class: 'row-actions' }, button('Set timer', askTimer, { k: 'dTimer', disabled: !ok, ic: 'clock' }), info('the timer', 'The timer is advisory: it never locks the round. The room sees it rounded to the minute.')) : h('p', { class: 'muted' }, 'The timer can be set while a decision is open.')),
+    card('dManual', 'manual', 'Manual room', 'Lead the room from this device without the network: phones cannot vote, and you choose and reveal routes by hand. When the connection is back, rejoin online at the next decision and the choices upload.',
+      manual ? h('p', null, 'Manual room mode is on for this device.')
+        : A.has('enter_manual') ? button('Enter manual room mode', askEnterManual, { k: 'dManualBtn', ic: 'manual' })
+          : h('p', { class: 'muted' }, 'Not available at this point in the case.'),
+      h('dl', { class: 'kv', 'aria-label': 'Recovery tray' }, h('dt', null, 'Revision'), h('dd', null, `Revision ${v.revision} · epoch ${v.epoch}`), h('dt', null, 'Events'), h('dd', null, `${pending} pending · ${S.sent} sent`)),
+      S.results.length ? h('div', null, h('p', { class: 'subhead' }, 'After the last recovery'), h('ul', { class: 'roster' }, S.results.map((r) => h('li', null, icon('tick', true), r)))) : null,
+      manual && A.has('resume_online') && !S.upload ? button('Rejoin online at the next decision', () => { S.tab = 'run'; resumeOnline(); }, { k: 'dRejoin' }) : null,
+      manual && S.upload ? h('p', { class: 'muted' }, S.upload.state === 'failed' ? 'The last upload was not accepted · see the banner' : 'Upload in progress or waiting for the connection') : null),
+    card('dEndH', 'door', 'This console', 'Take over moves control of the room to this console. End room closes the session for everyone; participants keep a private recap for 24 hours.',
+      h('div', { class: 'row-actions' },
+        button('Take over this room', confirmTakeover, { k: 'dTakeover', cls: 'tertiary', disabled: conn() !== 'online' || manual }),
+        A.has('end') ? button('End room', confirmEnd, { k: 'dEnd', cls: 'danger', disabled: !ok }) : null))));
+}
+
+/* Pair a separate display (real Worker only): the facilitator types the code the display shows. */
+function pairForm(manual) {
+  if (typeof link.approveDisplay !== 'function') return null;
+  return h('form', { class: 'marker', on: { submit: (e) => { e.preventDefault(); pairDisplay(); } } },
+    h('label', null, 'Display code', h('input', { 'data-k': 'pairCode', maxlength: 12, value: S.pairCode, autocomplete: 'off', autocapitalize: 'characters', spellcheck: 'false', on: { input: (e) => { S.pairCode = e.target.value; } } })),
+    h('button', { type: 'submit', class: 'btn', 'data-k': 'pairBtn', disabled: S.pairing || manual || conn() !== 'online' || null }, 'Pair a display'),
+    S.pairMsg ? h('p', { class: 'muted', role: 'status', style: 'flex-basis:100%;font-size:var(--t-xs)' }, S.pairMsg) : null);
+}
+async function pairDisplay() {
+  const code = S.pairCode.replace(/[\s-]/g, '').toUpperCase();
+  if (!code) return;
+  S.pairing = true; S.pairMsg = 'Pairing…'; render();
+  const r = await link.approveDisplay(code);
+  S.pairing = false;
+  if (r.ok) { S.pairCode = ''; S.pairMsg = 'Display paired'; if (S.projector === 'unchecked') S.projector = 'separate'; say('Display paired · it shows the room now'); }
+  else S.pairMsg = r.error === 'unknown_or_expired_code' ? 'That code is not waiting to pair · check the display' : r.error === 'already_paired' ? 'That display is already paired' : `Not paired · ${String(r.error).replaceAll('_', ' ')}`;
+  render(); refocus('pairCode');
+}
+
+/* ───────── pages ───────── */
+function fencedPage() {
+  return h('main', { class: 'wrap' }, h('section', { class: 'fence card panel' }, icon('lock'), h('h1', { tabindex: -1, id: 'fenceH' }, 'This room is now controlled from another device'),
+    h('p', { class: 'muted' }, 'This console has no controls. Phones and the projector are unchanged.')));
+}
+function standbyPage(v) {
+  return h('main', { class: 'wrap' }, h('section', { class: 'fence card panel' }, icon('people'), h('h1', { tabindex: -1 }, 'This room is open on another device'),
+    h('p', { class: 'muted' }, 'Only one console controls a room at a time.'),
+    button('Take over this room', confirmTakeover, { k: 'standbyTake', cls: 'primary big', disabled: conn() !== 'online' })));
+}
+function consolePage(v) {
+  const st = statusText(v), A = new Set(v.actions);
+  if (S.tab === 'room') {
+    return h('main', { class: 'wrap' }, banners(v), h('div', { role: 'tabpanel', id: 'panel-room', 'aria-labelledby': 'tab-room' }, roomPanel(v)), dock(v));
+  }
+  let left, right = [];
+  const [ph] = PHASE_PILL[v.phase] ?? ['reveal'];
+  const card = h('section', { class: 'card panel phase', 'data-phase': ph, 'aria-labelledby': 'phaseH' },
+    h('p', { class: 'eyebrow' }, v.manual ? 'Manual room' : 'Phase'),
+    h('h1', { id: 'phaseH', tabindex: -1 }, heading(v)),
+    v.phase === 'surface_live' && v.liveSurface ? h('p', { class: 'body-text', style: 'font-weight:var(--w-semibold)' }, v.liveSurface.title) : null,
+    st ? h('p', { class: 'status-line' }, st) : null,
+    phaseBody(v),
+    secondaryRow(v));
+  if (v.phase === 'lobby') {
+    const lc = lobbyCards(v);
+    left = lc.left; right = [card, ...lc.right];
+  } else {
+    right = [card];
+    if (v.round?.aggregate && ['responses_locked', 'path_selected'].includes(v.phase)) right.push(aggregateCard(v));
+    if (A.has('select_path') && v.decision) right.push(resolutionPanel(v));
+    right.push(pathCard(v));
+    left = [surfaceCard(v), cueCard(v), v.nextBeat && ['surface_live', 'consequence_revealed'].includes(v.phase) ? h('p', { class: 'muted' }, `Next: ${v.nextBeat.title}`) : null, replayStrip(v)];
+  }
+  return h('main', { class: 'wrap' }, banners(v), h('div', { role: 'tabpanel', id: 'panel-run', 'aria-labelledby': 'tab-run', class: 'grid2' },
+    h('div', { class: 'stack', role: 'region', 'aria-label': v.phase === 'lobby' ? 'Join and people' : 'What the room sees' }, left),
+    h('div', { class: 'stack', role: 'region', 'aria-label': 'Decision' }, right)), dock(v));
+}
+
+/* ───────── a reload during a total outage (AS-061) ─────────
+   The shell came from the offline cache, but the case pack and the room mirror were memory-only
+   (CASE-092), so manual room mode cannot restart until the connection returns. Say so plainly, keep
+   the saved segment, and offer its notes. Online again, tryRestore() continues the manual segment. */
+const bootAt = Date.now();
+function offlineShell() {
+  if (!realRoom()) return null; // the lab has no outage reload: its server is the lab page itself
+  const offline = navigator.onLine === false || (Date.now() - bootAt > 8000 && !link.snapshot);
+  if (!offline) return null;
+  const sid = realRoom()?.sessionId ?? null;
+  const saved = sid ? LocalAuthority.saved(sid) : null;
+  return h('main', { class: 'wrap' }, h('section', { class: 'card panel', style: 'margin-top:16px', 'aria-labelledby': 'offH' },
+    icon('offline'),
+    h('h1', { id: 'offH', tabindex: -1 }, 'Offline after a reload'),
+    h('p', null, 'This console keeps the case only in memory, so the reload cleared it. It cannot run manual room mode until the connection returns and it can load the case again.'),
+    saved ? h('p', null, `Your manual room segment is kept on this device (${saved.events.length} recorded steps${saved.markers?.length ? `, ${saved.markers.length} markers` : ''}). When the connection returns, the console reloads the case and continues it.`)
+      : h('p', null, 'Lead the room from your own notes for now. The projector and phones keep what they were showing.'),
+    saved ? button('Download your notes', () => downloadText(LocalAuthority.notesFromSaved(saved), `case-manual-notes-${saved.segmentId}.txt`), { k: 'offNotes' }) : null,
+    h('p', { class: 'muted' }, 'This page reconnects by itself. Keep it open.')));
+}
+function downloadText(text, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+addEventListener('online', () => scheduleRender());
+addEventListener('offline', () => scheduleRender());
+setTimeout(() => scheduleRender(), 8100);
+
+/* ───────── render loop ───────── */
+let queued = false;
+const scheduleRender = () => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; render(); }); } };
+function render() {
+  const ae = document.activeElement;
+  const key = ae?.dataset?.k, sel = ae && 'selectionStart' in ae && ae.tagName === 'INPUT' ? [ae.selectionStart, ae.selectionEnd] : null;
+  const v = view();
+  let page;
+  if (S.fenced) page = fencedPage();
+  else if (S.standby && v) page = standbyPage(v);
+  else if (!v) page = offlineShell() ?? h('main', { class: 'wrap' }, h('section', { class: 'card panel', style: 'margin-top:16px' }, h('h1', null, conn() === 'connecting' ? 'Connecting…' : 'Waiting for the room'), h('p', { class: 'muted' }, 'Controls appear when the room answers.')));
+  else {
+    const k2 = `${v.phase}:${v.round?.id ?? ''}:${v.sessionId}`;
+    if (k2 !== S.pickKey) { S.pickKey = k2; S.pick = null; S.armedUntil = 0; }
+    if (S.pick && (!v.decision || pathOf(v, S.pick)?.explored)) S.pick = null;
+    page = consolePage(v);
+  }
+  if (S.fenced && $('#dlg').open) $('#dlg').close();
+  $('#app').replaceChildren(...(S.fenced ? [page] : [runStrip(v), page]));
+  if (key) { const el = document.querySelector(`[data-k="${CSS.escape(key)}"]`); if (el && el !== document.activeElement && !$('#dlg').open) { el.focus(); if (sel && el.setSelectionRange) try { el.setSelectionRange(...sel); } catch { /* not text */ } } }
+  const ann = !v || S.fenced || S.standby ? '' : `${heading(v)}${v.liveSurface ? ` · ${v.liveSurface.title}` : ''}`;
+  if (ann && ann !== S.announced) { S.announced = ann; announce(ann); }
+}
+
+document.addEventListener('keydown', (event) => {
+  const v = view();
+  if (!v || !canCmd() || document.querySelector('dialog[open]')) return;
+  const nav = presentationNav(v);
+  const action = facilitatorKey(event, {
+    hasMoreGroup: Boolean(v.presentation?.nextGroup), replaying: nav.replaying,
+    canReplayBack: nav.canBack, canReplayForward: nav.canForward,
+  });
+  if (!action) return;
+  event.preventDefault();
+  if (action === 'reveal_group') void cmd('advance');
+  else if (action === 'replay_back') void cmd('replay', { entryIndex: nav.backTarget });
+  else if (action === 'replay_forward') void cmd('replay', { entryIndex: nav.forwardTarget });
+});
+
+link.on('snapshot', (snap) => {
+  if (S.standby || S.knownEpoch === null) S.knownEpoch = snap.epoch;
+  else if (S.mode === 'network' && snap.epoch > S.knownEpoch) {
+    if (S.selfBump > 0) S.knownEpoch = snap.epoch; else fence(); // the epoch rose and this tab did not cause it
+  }
+  scheduleRender();
+});
+link.on('status', (s) => {
+  if (s === 'online') { S.hadOnline = true; if (S.upload?.state === 'waiting') doUpload(); }
+  if (s === 'lost' && S.mode === 'network') announce('Offline · Switch to manual room', true);
+  scheduleRender();
+});
+link.on('case_pack', scheduleRender);
+// A reload keeps the manual segment in session storage (CASE-093), but the mirror and case pack are
+// memory-only (CASE-092): once online again, rebuild manual mode from a fresh mirror plus the segment.
+function tryRestore() {
+  const snap = link.snapshot, pack = link.casePack;
+  if (S.restoreTried || S.mode !== 'network' || !snap?.mirror || !pack) return;
+  S.restoreTried = true;
+  const saved = LocalAuthority.saved(snap.view.sessionId);
+  if (!saved) return;
+  const la = LocalAuthority.restore(snap.mirror, pack, saved);
+  if (!la) { say('A saved manual segment no longer applies · following the room'); return; }
+  S.entryVoided = false; S.entryEpoch = snap.epoch;
+  S.la = la; S.mode = 'manual'; S.gen++; S.pick = null; S.upload = null; S.results = [];
+  announce('Manual room mode restored after a reload', true);
+  render();
+}
+link.on('snapshot', tryRestore);
+link.on('case_pack', tryRestore);
+link.on('error', (e) => say(`Connection error · ${e}`));
+
+// one-second tick: advisory timer text only (re-render when it reaches zero)
+let wasUp = false;
+setInterval(() => {
+  const v = view(), t = timerInfo(v);
+  document.querySelectorAll('.js-timer').forEach((n) => { if (t) n.textContent = `${mss(t.left)} left`; });
+  document.querySelectorAll('.js-timer-words').forEach((n) => { if (t) n.textContent = `· room sees "${timerWords(t.left)}"`; });
+  const up = Boolean(t && !t.paused && t.left === 0);
+  if (up !== wasUp) { wasUp = up; render(); if (up) announce('Time is up · locking is still your call'); }
+}, 1000);
+
+render();
+window.caseFacilitator = { S, view, cmd }; // for scripted checks
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+Original Card 69 audition compositions and generated WAV/MP3 recordings: CC0 1.0 Universal (CC0-1.0).
+The author dedicates these original compositions and recordings to the public domain under CC0 1.0.
+Source recordings: Versilian Community Sample Library (Versilian Studios LLC), CC0-1.0;
+Karoryfer Shinyguitar and Swagbass (Karoryfer Samples), CC0-1.0.
+Pinned source revisions, individual paths, hashes and licensing evidence: sources/manifest.json.
+Upstream CC0 legal text is preserved as sources/vcsl-license.txt.
+Karoryfer's current licence statement is preserved as sources/karoryfer-license.txt.
+Complete compositions and mix source: scripts/sound/render-sketches.mjs and sample-bank.mjs.
+No music services or shipped Case audio were used.
+CC0 legal text: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+The designer code remains under the repository MIT licence. Branding retains its existing terms.

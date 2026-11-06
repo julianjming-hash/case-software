@@ -1,0 +1,9 @@
+Original newly authored synthetic workshop narrative in this directory: CC0-1.0.
+To the extent permitted by law, the author waives copyright and related rights
+in that new narrative under the CC0 1.0 Universal public-domain dedication:
+https://creativecommons.org/publicdomain/zero/1.0/legalcode.en
+
+This applies only to newly authored synthetic text, not third-party software,
+schema code, fonts, audio, historical records, or copied assets. Software
+schema and test tooling remain MIT. No trademark rights are granted.
+Private preparation only: source and rights review is not yet complete.

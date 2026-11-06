@@ -1,0 +1,46 @@
+/* CASE-317: the Builder's blood gas editor (prototypes/builder-gas-editor.html), loaded with its lazy chunk. Everything fits a
+   340 px inspector without sideways scrolling: names are text, each sample is one narrow column, setup rows stack as cards. */
+.builder-gas-mode { margin-top: var(--sp-3); }
+.builder-gas-entry { width: 100%; margin-top: var(--sp-2); border-collapse: collapse; table-layout: fixed; font-size: var(--t-sm); font-variant-numeric: tabular-nums; }
+.builder-gas-entry .builder-gas-name { width: 26%; }
+.builder-gas-entry .builder-gas-unit { width: 16%; }
+.builder-gas-entry :is(th, td) { padding: 1px 2px; text-align: start; font-weight: var(--w-regular); vertical-align: middle; }
+.builder-gas-entry thead th { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--t-xs); font-weight: var(--w-semibold); color: var(--ink-muted); }
+.builder-gas-entry tbody th { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); }
+.builder-gas-entry .builder-gas-group th { padding-top: var(--sp-2); font-size: var(--t-xs); font-weight: var(--w-semibold); color: var(--ink-muted); }
+.builder-gas-entry .builder-gas-empty th { color: var(--ink-muted); font-weight: var(--w-regular); }
+/* Every editor field and small button shares one look in both themes. */
+:is(.builder-gas-entry, .builder-gas-card, .builder-gas-ghead, .builder-gas-panel) input[type="text"], .builder-gas-acts button { color: var(--ink); background: var(--surface); border: 1px solid var(--field-line); border-radius: var(--radius-sm); font: inherit; }
+.builder-gas-entry input { box-sizing: border-box; width: 100%; min-width: 0; min-height: 28px; padding: 0 3px; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--field-line); border-radius: var(--radius-sm); }
+.builder-gas-entry thead input { font-weight: var(--w-semibold); }
+.builder-gas-entry .builder-gas-value input { text-align: end; }
+.builder-gas-entry .builder-gas-now input { color: var(--ink); background: var(--petrol-tint); }
+.builder-gas-entry input.builder-gas-flagged { font-weight: var(--w-bold); }
+.builder-gas-entry td.builder-gas-unit { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--t-xs); color: var(--ink-muted); }
+.builder-gas-colacts td { padding-block: 0; }
+.builder-gas-colacts button { min-width: 24px; min-height: 24px; padding: 0; border: 0; background: transparent; color: var(--ink-muted); font: inherit; }
+.builder-gas-colacts button[aria-expanded="true"] { color: var(--petrol-ink); background: var(--petrol-tint); border-radius: var(--radius-sm); }
+.builder-gas-bar { margin-top: var(--sp-2); align-items: center; }
+.builder-gas-quiet { min-height: 32px; font-size: var(--t-sm); color: var(--petrol-ink); text-decoration: underline; text-underline-offset: 2px; }
+.builder-gas-check { display: flex; gap: var(--sp-2); align-items: center; margin-top: var(--sp-1); font-size: var(--t-sm); color: var(--ink); }
+.builder-gas-panel { display: grid; gap: var(--sp-2); margin-top: var(--sp-3); padding: var(--sp-2); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.builder-gas-panel h4 { margin: 0; }
+.builder-gas-panel textarea { box-sizing: border-box; width: 100%; font: var(--t-xs)/1.35 ui-monospace, monospace; color: var(--ink); background: var(--sunken); border: 1px solid var(--field-line); border-radius: var(--radius-sm); padding: var(--sp-1); }
+.builder-gas-panel input { box-sizing: border-box; width: 100%; }
+.builder-gas-sources { display: grid; border: 1px solid var(--field-line); border-radius: var(--radius-sm); overflow: hidden; }
+.builder-gas-source { min-height: 32px; padding: var(--sp-1) var(--sp-2); border: 0; border-bottom: 1px solid var(--field-line); font: inherit; font-size: var(--t-sm); text-align: start; color: var(--ink); background: var(--surface); }
+.builder-gas-source:last-child { border-bottom: 0; }
+.builder-gas-source[aria-pressed="true"] { color: var(--petrol-ink); background: var(--petrol-tint); font-weight: var(--w-semibold); }
+.builder-gas-missed { margin: 0; padding-inline-start: var(--sp-4); font-size: var(--t-xs); color: var(--ink); }
+.builder-gas-ghead { display: flex; gap: var(--sp-2); align-items: center; justify-content: space-between; margin-top: var(--sp-3); }
+.builder-gas-ghead input[type="text"] { flex: 1; min-width: 0; font-weight: var(--w-semibold); }
+.builder-gas-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-1) var(--sp-2); align-items: center; margin-top: var(--sp-1); padding: var(--sp-1) var(--sp-2); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.builder-gas-line { display: flex; gap: var(--sp-1); align-items: center; min-width: 0; font-size: var(--t-xs); color: var(--ink-muted); }
+.builder-gas-line > span { flex: none; white-space: nowrap; }
+.builder-gas-line:last-child { grid-column: 1 / -1; }
+.builder-gas-line input { box-sizing: border-box; width: 3.4em; min-width: 0; min-height: 28px; padding: 0 3px; font-size: var(--t-sm); }
+.builder-gas-line input.builder-gas-param { flex: 1; width: auto; font-weight: var(--w-semibold); }
+.builder-gas-line input[aria-label$=" unit"] { width: 4.4em; }
+.builder-gas-acts { display: flex; gap: 2px; }
+.builder-gas-acts button { min-width: 28px; min-height: 28px; padding: 0; }
+.builder-gas-acts button:disabled { color: var(--ink-muted); opacity: .5; }

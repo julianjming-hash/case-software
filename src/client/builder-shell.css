@@ -1,0 +1,651 @@
+/* Builder workspace shell (cards 50/51; Julian's ruling 2026-10-11: match the Round 4 study, prototypes/builder-slide.html).
+   One app bar, three full-height columns that scroll on their own, the slide as the dominant surface. Tokens only. */
+/* The editor fills the window under the app bar; the page itself never scrolls. */
+body:has(.builder-studio) { height: 100dvh; overflow: hidden; }
+body:has(.builder-studio) main.builder-page { padding: 0; height: calc(100dvh - var(--header-h)); display: flex; flex-direction: column; }
+body:has(.builder-studio) :is(.builder-page-content, .builder-page-editor, .builder-route) { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+body:has(.builder-studio) .builder-page-account:empty, .builder-route-header:empty { display: none; }
+.builder-route > .builder-editor-view { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.builder-route > .builder-editor-view[hidden] { display: none; }
+.builder-route > .builder-workflows-view { flex: 1; overflow: auto; padding: var(--sp-4); max-width: none; }
+.builder-studio { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.builder-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* App bar: wordmark and case breadcrumb (site bar), then history, insert tools, save state and actions. */
+.builder-app-bar { gap: var(--sp-4); }
+.builder-app-bar .site-breadcrumbs { min-width: 0; flex: 0 1 auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.builder-studio-top { flex: 1; min-width: 0; display: flex; align-items: center; gap: var(--sp-2); }
+.builder-history-tools, .builder-insert-tools, .builder-end-tools { display: flex; align-items: center; gap: var(--sp-1); }
+.builder-history-tools { margin-left: auto; padding-right: var(--sp-3); border-right: 1px solid var(--line); }
+.builder-insert-tools { margin-right: auto; padding-left: var(--sp-2); }
+.builder-end-tools { gap: var(--sp-2); }
+.builder-tool { min-height: 40px; padding: 0 var(--sp-3); border: 0; border-radius: var(--radius-sm); font: inherit; font-size: var(--t-sm); color: var(--ink); background: transparent; cursor: pointer; white-space: nowrap; }
+.builder-insert-tools .builder-tool { background: var(--quiet); }
+.builder-insert-tools .builder-menu:first-child > .builder-tool { color: var(--petrol-ink); background: var(--petrol-tint); }
+.builder-tool:hover { background: var(--quiet); }
+.builder-icon-tool { padding: 0; font-size: 18px; }
+.builder-icon-tool { display: inline-grid; place-items: center; }
+.builder-icon { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.builder-tool:disabled { color: var(--ink-muted); background: transparent; cursor: not-allowed; }
+.builder-save-state { font-size: var(--t-sm); color: var(--ink-muted); white-space: nowrap; }
+.builder-end-tools .builder-btn { min-height: 40px; padding: 0 var(--sp-3); font-size: var(--t-sm); }
+.builder-menu { position: relative; }
+.builder-menu-list { position: absolute; z-index: var(--z-dock); /* above the sticky canvas head (round 29 P1-1) */ top: calc(100% + 4px); right: 0; display: grid; padding: var(--sp-1);
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-2); }
+.builder-insert-tools .builder-menu-list { left: 0; right: auto; }
+.builder-menu-list button, .builder-menu-item { display: block; width: 100%; min-height: 40px; padding: 0 var(--sp-3); border: 0; border-radius: var(--radius-xs); text-align: left; font: inherit; color: var(--ink); background: transparent; cursor: pointer; }
+.builder-menu-list button:hover, .builder-menu-list button:focus-visible { background: var(--quiet); }
+/* Columns: Outline | slide | Tools, full height, each scrolling on its own. */
+.builder-studio .builder-workspace { flex: 1; min-height: 0; align-items: stretch; }
+.builder-studio .builder-workspace > * { min-height: 0; }
+.builder-outline, .builder-inspector { display: flex; flex-direction: column; padding: 0; }
+.builder-outline { border-right: 1px solid var(--line); }
+.builder-inspector { border-left: 1px solid var(--line); padding-inline: var(--sp-4); overflow: auto; }
+.builder-panel-head { flex: none; display: flex; align-items: center; justify-content: space-between; font-size: var(--t-sm); }
+.builder-outline .builder-panel-head { padding-inline: var(--sp-4); }
+.builder-panel-head h2 { margin: 0; }
+.builder-panel-close { border: 0; background: transparent; color: var(--ink-muted); font-size: 20px; cursor: pointer; }
+.builder-outline-scroll { flex: 1; min-height: 0; overflow: auto; padding: 0 var(--sp-3) var(--sp-4); }
+.builder-outline-footer { flex: none; display: flex; gap: var(--sp-4); padding: var(--sp-2) var(--sp-4); border-top: 1px solid var(--line); }
+.builder-quiet-link { padding: 0; border: 0; background: transparent; font: inherit; font-size: var(--t-xs); color: var(--ink-muted); cursor: pointer; }
+.builder-private-link { color: var(--private-ink); }
+.builder-separator { background: transparent; }
+/* Outline rows: a real slide miniature over a readable name. */
+.builder-outline .builder-outline-target { gap: 2px; border-color: transparent; background: transparent; padding: var(--sp-1) var(--sp-1) var(--sp-2); }
+.builder-outline .builder-outline-name > span:first-child { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.builder-outline .builder-outline-name small { font-size: var(--t-xs); }
+.builder-outline .builder-outline-ref { font-size: var(--t-xs); color: var(--ph-consequence-ink); }
+.builder-thumb { display: grid; aspect-ratio: 16 / 9; width: 100%; overflow: hidden; padding: var(--sp-1); border: 1px solid var(--line); border-radius: var(--radius-xs); background: var(--surface); color: var(--ink-muted); font-size: 6px; }
+.builder-thumb-slide { padding: 0; container-type: inline-size; }
+.builder-thumb-slide .slide-canvas { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: repeat(12, minmax(0, 1fr)); gap: 1.2cqw; padding: 3cqw; height: 100%; box-sizing: border-box; color: var(--ink); background: var(--slide-ground, var(--surface)); line-height: 1.3; }
+.builder-thumb-slide .slide-block { min-width: 0; min-height: 0; overflow: hidden; padding: .3em .5em; font-size: 2.75cqw; }
+.builder-thumb-slide :is(p, ul, ol, dl, h2, h3, h4, h5, table) { margin: 0; }
+.builder-thumb-slide :is(ul, ol) { padding-left: 1.2em; }
+.builder-thumb-slide .slide-h1 { font-size: 4.8cqw; } .builder-thumb-slide .slide-h2 { font-size: 3.9cqw; }
+.builder-thumb-slide :is(.slide-question, .slide-callout aside) { background: var(--quiet); border-radius: 2px; } /* a tile's callout keeps its fill (CASE-251) */
+/* The centre: canvas head, the slide at the largest size the window allows, its footer, then the contexts. */
+.builder-studio .builder-sheet { width: auto; margin: 0; overflow: auto; padding: 0 var(--sp-6) var(--sp-6); }
+.builder-canvas-head { max-width: calc((100dvh - var(--header-h) - 230px) * 16 / 9); margin-inline: auto; display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
+.builder-toolbar-dock { display: flex; align-items: center; }
+.builder-toolbar-dock .builder-canvas-toolbar { position: static; padding: 0; border: 0; background: transparent; box-shadow: none; }
+.builder-canvas-location { font-size: var(--t-xs); color: var(--ink-muted); white-space: nowrap; }
+.builder-sheet-heading { margin: 0; font-size: var(--t-md); }
+.builder-sheet[data-view="path"] .builder-sheet-heading { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.builder-head-fields { flex: 1; min-width: 12rem; }
+.builder-head-fields > div { display: flex; align-items: center; gap: var(--sp-2); }
+.builder-head-fields label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.builder-head-fields input { border-color: transparent; background: transparent; font-weight: var(--w-semibold); padding-inline: var(--sp-1); }
+.builder-head-fields input:hover, .builder-head-fields input:focus { border-color: var(--field-line); }
+.builder-canvas-stage { margin-inline: auto; max-width: calc((100dvh - var(--header-h) - 230px) * 16 / 9); min-width: min(100%, 480px); }
+.builder-studio .builder-canvas-stage .builder-slide { margin-block: 0; }
+.builder-studio .builder-canvas-stage .slide-canvas { border-radius: var(--radius-xs); box-shadow: var(--shadow-1); }
+.builder-canvas-footer { max-width: calc((100dvh - var(--header-h) - 230px) * 16 / 9); margin: var(--sp-2) auto 0; display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; color: var(--ink-muted); }
+.builder-canvas-footer select { min-height: 32px; background: transparent; color: var(--ink-muted); font: inherit; }
+.builder-canvas-footer .builder-btn { min-height: 32px; padding: 0 var(--sp-2); font-size: var(--t-xs); }
+.builder-fit-status { margin-left: auto; }
+.builder-fit-status[data-fits="false"] { color: var(--manual-ink); }
+/* Text tools float just above the block being edited; nothing in the layout moves when they appear. */
+.builder-studio .builder-slide { position: relative; }
+.builder-canvas-toolbar { position: absolute; z-index: var(--z-raised); display: flex; align-items: center; gap: var(--sp-1); padding: var(--sp-1);
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-2); }
+.builder-canvas-toolbar select { border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; font-size: var(--t-sm); }
+.builder-tool-button { border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; font-size: var(--t-sm); cursor: pointer; }
+.builder-tool-bold { font-weight: 700; }
+/* Blocks on the canvas: quiet until hovered or selected; edited text keeps the slide's own type. */
+.builder-studio .builder-slide-edit { opacity: 0; }
+.builder-studio .builder-slide-edit:focus-visible { opacity: 1; }
+/* The keyboard's way into text editing stays out of the pointer's way, so the hover grip under it drags (gap audit #5). */
+.builder-studio .builder-slide-edit:not(:focus-visible) { pointer-events: none; }
+.builder-studio .slide-block:hover:not([data-selected]) { outline: 1px dashed var(--field-line); outline-offset: 3px; }
+.builder-slide-text, .builder-studio .builder-slide-text:focus-visible { outline: none; min-height: 1.3em; cursor: text; }
+.builder-slide-text > * { margin: 0; }
+.builder-slide-text:not(ul, ol) > * + * { margin-top: .4em; }
+.builder-tray-block .builder-slide-text:is(ul, ol) { padding-left: 1.2em; }
+/* CASE-249: a field that edits slide text is drawn as that text: no inset, border or own type, and it grows with it. */
+.builder-studio .builder-slide :is(.builder-slide-table, .slide-question) textarea.builder-slide-input { display: block; box-sizing: border-box; width: 100%; min-height: 1lh; margin: 0; padding: 0; border: 0; border-radius: 0;
+  font: inherit; color: inherit; text-align: inherit; background: transparent; resize: none; field-sizing: content; overflow: hidden; overflow-wrap: break-word; }
+.builder-studio .builder-slide .slide-question :is(.builder-slide-prompt, textarea.builder-slide-input) { line-height: var(--lh); }
+.builder-reveal-badge { display: none; position: absolute; top: -10px; left: -10px; min-width: 18px; height: 18px; padding: 0 4px; border-radius: var(--radius-xs); font-size: 11px; line-height: 18px; text-align: center; }
+.slide-block:hover > .builder-reveal-badge, .slide-block[data-selected] > .builder-reveal-badge { display: block; }
+.builder-block-handle { position: absolute; padding: 0; border: 0; border-radius: var(--radius-xs); color: var(--petrol-ink); font-size: 16px; cursor: grab; touch-action: none; }
+.builder-block-resize { position: absolute; padding: 0; cursor: nwse-resize; touch-action: none; }
+/* Contexts under the slide: collapsed, labelled, never on the canvas. Private context carries the private tint. */
+.builder-disclosure { max-width: calc((100dvh - var(--header-h) - 230px) * 16 / 9); margin: var(--sp-4) auto 0; border-top: 1px solid var(--line); padding-top: var(--sp-2); }
+.builder-disclosure > summary { display: flex; align-items: center; gap: var(--sp-2); min-height: 32px; cursor: pointer; font-size: var(--t-sm); color: var(--ink); }
+.builder-disclosure + .builder-disclosure { margin-top: 0; }
+.builder-disclosure :is(.builder-fields, .builder-select-field) { max-width: 72ch; }
+.builder-format-toggle { justify-self: start; width: auto; }
+.builder-disclosure .builder-fields label { font-size: var(--t-sm); }
+.builder-disclosure-body { display: grid; gap: var(--sp-3); padding-block: var(--sp-2) var(--sp-3); }
+.builder-zone-private > summary { color: var(--private-ink); }
+.builder-private-chip { border: 0; border-radius: var(--radius-sm); background: var(--private-tint); color: var(--private-ink); } /* a tinted label, never a pill (CASE-163 taste) */
+.builder-issue-group h4 { margin: var(--sp-2) 0 var(--sp-1); font-size: var(--t-sm); }
+.builder-issue-group ul { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin: 0; padding: 0; list-style: none; }
+.builder-issue-group .builder-issue-link { padding: 0 var(--sp-2); }
+.builder-sheet > .builder-global-details, .builder-sheet > .builder-fields, .builder-sheet > .builder-context-controls { max-width: 48rem; margin-inline: auto; }
+/* Inspector: templates as drawn miniatures of their own slots. */
+.builder-template-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3) var(--sp-2); }
+.builder-studio .builder-template-option { display: grid; gap: var(--sp-2); padding: 6px; border: 1px solid transparent; border-radius: var(--radius-sm); background: transparent; font: inherit; font-size: var(--t-xs); color: var(--ink); text-align: left; cursor: pointer; }
+.builder-studio .builder-template-option[aria-pressed="true"] { border-color: var(--petrol); background: var(--petrol-tint); color: var(--petrol-ink); }
+.builder-template-preview { display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(12, 1fr); gap: 2px; aspect-ratio: 16 / 9; padding: 6px; border: 1px solid var(--line); border-radius: var(--radius-xs); background: var(--surface); }
+.builder-template-preview i { background: var(--line); border-radius: 1px; }
+/* Presentation themes (CASE-227): each preview is scoped by its theme's class, so it shows the theme's real ground, ink and fills. */
+.builder-inspector-subhead { margin: var(--sp-3) 0 0; font-size: var(--t-sm); font-weight: var(--w-semibold); }
+.builder-theme-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3) var(--sp-2); }
+.builder-studio .builder-theme-option { min-width: 0; }
+.builder-theme-preview { display: flex; align-items: center; gap: 3px; min-width: 0; aspect-ratio: 16 / 9; padding: 6px; border: 1px solid var(--line); border-radius: var(--radius-sm); color: var(--ink); background: var(--surface); }
+.builder-theme-preview b { margin-right: auto; font-size: var(--t-md); font-weight: var(--w-semibold); }
+.builder-theme-preview i { flex: none; width: 10px; height: 10px; border: 1px solid var(--line); border-radius: 3px; }
+.builder-theme-preview .slide-tone-blue { background: var(--slide-fill-blue); }
+.builder-theme-preview .slide-tone-teal { background: var(--slide-fill-teal); }
+.builder-theme-preview .slide-tone-amber { background: var(--slide-fill-amber); }
+.builder-exact > summary { display: flex; align-items: center; gap: var(--sp-2); min-height: 32px; list-style: none; cursor: pointer; font-size: var(--t-sm); color: var(--ink-muted); }
+.builder-exact > summary::-webkit-details-marker { display: none; }
+.builder-exact[open] > summary { color: var(--ink); font-weight: var(--w-semibold); }
+/* Status line and region controls at the foot of the window; in one-region layout they become the bottom navigation. */
+.builder-statusbar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); min-height: 32px; padding: 0 var(--sp-4); border-top: 1px solid var(--line); background: var(--ground); font-size: var(--t-xs); color: var(--ink-muted); }
+.builder-statusbar .builder-studio-status { flex: 1; min-width: 0; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.builder-statusbar .builder-regions { padding: 0; gap: var(--sp-2); flex-wrap: nowrap; }
+.builder-statusbar .builder-region-button { padding: 0 var(--sp-2); font-size: var(--t-xs); }
+.builder-workspace[data-layout="wide"] ~ .builder-statusbar .builder-region-button[aria-expanded="true"] { display: none; }
+.builder-workspace[data-layout="single"] ~ .builder-statusbar { flex-direction: column; align-items: stretch; padding: var(--sp-1) var(--sp-2); }
+.builder-workspace[data-layout="single"] ~ .builder-statusbar .builder-regions { justify-content: space-around; }
+.builder-workspace[data-layout="single"] ~ .builder-statusbar .builder-region-button { flex: 1; text-align: center; }
+@media (max-width: 60rem) {
+  .builder-save-state, .builder-insert-tools .builder-tool > span { display: none; }
+  .builder-studio .builder-sheet { padding-inline: var(--sp-3); }
+  .builder-canvas-head, .builder-canvas-stage, .builder-canvas-footer, .builder-disclosure { max-width: none; min-width: 0; }
+}
+.builder-menu-list[hidden] { display: none; }
+/* An edited text block keeps its slide area and scrolls inside it, so the slide frame stays true while writing. */
+.builder-studio .builder-slide .slide-block[data-selected]:has(.builder-slide-text) { min-height: 0; align-self: stretch; overflow: visible; grid-template-rows: minmax(0, 1fr); }
+.builder-studio .builder-slide .slide-block[data-selected] > :is(.builder-slide-text, .builder-slide-wrap) { min-height: 0; overflow: auto; }
+/* Round 12, as the study: on the block being written the grip and resize corner sit just outside its corners, in the
+   canvas margin, so they never cover a caption, header, cell or the end of a line (BWR20). */
+.builder-studio .builder-slide .slide-block[data-selected] > .builder-block-handle { top: -16px; right: -16px; }
+.builder-studio .builder-slide .slide-block[data-selected] > .builder-block-resize { bottom: -16px; right: -16px; }
+.builder-studio .slide-block[data-overflow]:not([data-selected])::before { content: ''; position: absolute; inset: auto 0 0; height: 2.4em; background-image: linear-gradient(to bottom, transparent, var(--surface)); pointer-events: none; }
+.builder-studio .slide-block[data-overflow]:not([data-selected])::after { content: 'More on your phone'; position: absolute; right: .4em; bottom: .3em; padding: 0 .35em; border-radius: var(--radius-xs);
+  background: var(--surface); color: var(--manual-ink); font-size: var(--t-xs); font-weight: var(--w-semibold); pointer-events: none; }
+.builder-slide-text { white-space: pre-wrap; }
+/* Targets: every control is at least 32 px (CASE-225); compact visuals sit inside their hit areas. */
+.builder-tool, .builder-end-tools .builder-btn, .builder-menu-list button, .builder-menu-item { min-height: 32px; }
+.builder-icon-tool { min-width: 32px; }
+.builder-panel-close { min-width: 32px; min-height: 32px; }
+.builder-quiet-link { min-height: 32px; }
+.builder-canvas-footer .builder-btn, .builder-canvas-footer select { min-height: 32px; }
+.builder-tool-button { min-width: 32px; min-height: 32px; }
+.builder-canvas-toolbar select { min-height: 32px; }
+.builder-issue-group .builder-issue-link { min-height: 32px; }
+.builder-statusbar .builder-region-button { min-height: 32px; }
+.builder-block-handle { top: 0; right: 0; width: 32px; height: 32px; background: transparent; display: grid; place-items: center; }
+.builder-block-resize { right: 0; bottom: 0; width: 32px; height: 32px; border: 0; background: transparent; }
+.builder-block-resize::after { content: ''; position: absolute; right: 2px; bottom: 2px; width: 12px; height: 12px; border: 1px solid var(--petrol); background: var(--surface); }
+.builder-studio .builder-slide-edit { min-width: 32px; min-height: 32px; }
+.builder-review-host:empty { display: none; }
+.builder-review-host { max-width: 48rem; margin: 0 auto var(--sp-3); }
+/* Saved checkpoints (D1/D2, round 24): one panel with its own name field; rows are divided by rules, not nested cards. */
+.builder-review-host .builder-checkpoints { display: grid; gap: var(--sp-2); border: 1px solid var(--field-line); border-radius: var(--radius); padding: 1rem; background: var(--surface); }
+.builder-checkpoints h3 { margin: 0; font-size: var(--t-sm); font-weight: var(--w-semibold); }
+.builder-checkpoint-create { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-1) var(--sp-2); align-items: end; }
+.builder-checkpoint-create .builder-primary { min-height: 2.75rem; }
+.builder-checkpoint-note { grid-column: 1 / -1; margin: 0; font-size: var(--t-sm); color: var(--ink-muted); }
+.builder-checkpoint-note[data-tone="alert"] { color: var(--alert-ink); }
+.builder-checkpoint-create input[aria-invalid="true"] { border-color: var(--alert); }
+.builder-checkpoint-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 var(--sp-2); align-items: center; padding-top: var(--sp-2); border-top: 1px solid var(--line); }
+.builder-checkpoint-row h4 { margin: 0; overflow-wrap: anywhere; font-size: var(--t-sm); }
+.builder-checkpoint-row p { grid-column: 1; margin: 0; font-size: var(--t-sm); color: var(--ink-muted); }
+.builder-checkpoint-actions { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-wrap: wrap; gap: var(--sp-1); justify-content: end; }
+.builder-checkpoint-empty { margin: 0; color: var(--ink-muted); }
+.builder-checkpoints > .builder-btn:last-child { justify-self: start; }
+@media (max-width: 30rem) {
+  .builder-checkpoint-create, .builder-checkpoint-row { grid-template-columns: minmax(0, 1fr); }
+  .builder-checkpoint-actions { grid-column: 1; grid-row: auto; justify-content: start; }
+}
+@media (max-width: 60rem) {
+  .builder-app-bar .site-breadcrumbs { display: none; }
+  /* Every tool stays on screen: the strip wraps instead of scrolling out of sight (gap audit #13). */
+  .builder-studio-top { flex-wrap: wrap; row-gap: var(--sp-1); }
+  .builder-history-tools { margin-left: 0; }
+}
+/* Live drag: an impossible position is outlined before release, and nothing is committed until then. */
+.builder-studio .slide-block[data-invalid] { outline: 2px solid var(--alert); outline-offset: 3px; }
+.builder-canvas-add { position: relative; display: grid; place-items: center; }
+.builder-canvas-add-button { width: 100%; height: 100%; min-height: 32px; border: 1px dashed var(--field-line); border-radius: var(--radius-sm); background: transparent;
+  color: var(--ink-muted); font-size: 2.4cqw; cursor: pointer; opacity: .55; }
+.builder-canvas-add-button:hover, .builder-canvas-add-button:focus-visible { opacity: 1; color: var(--petrol-ink); border-color: var(--petrol); background: var(--petrol-tint); }
+.builder-reveal-stepper { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; margin-top: var(--sp-2); padding: var(--sp-1) var(--sp-2); border-radius: var(--radius-sm); background: var(--private-tint); }
+.builder-reveal-where { flex: 1; text-align: center; font-size: var(--t-sm); color: var(--private-ink); }
+.builder-panel-head > .builder-panel-close:first-of-type:not(:last-child) { margin-left: auto; }
+.builder-outline-find { margin: 0 var(--sp-3) var(--sp-2); min-height: 32px; padding: 0 var(--sp-3); border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; font-size: var(--t-sm); }
+/* Recommended is a neutral labelled badge, never colour alone (BWR19). */
+.builder-outline .builder-outline-badge { justify-self: start; padding: 0; border: 0; border-radius: 0; color: var(--ink-muted); font-size: var(--t-xs); }
+.builder-outline .builder-outline-badge::before { content: '✓ ' / ''; } /* decorative: not part of the badge's name */
+.builder-zone-private > summary[data-filled] .builder-private-chip::after { content: ''; display: inline-block; width: 6px; height: 6px; margin-left: 6px; border-radius: 50%; background: var(--private); vertical-align: middle; }
+.builder-crumb { min-height: 32px; padding: 0 var(--sp-1); color: var(--petrol-ink); text-decoration: underline; }
+/* Block alignment and spacing as the room renders them (canvas and thumbnails). */
+.slide-align-center { text-align: center; } .slide-align-end { text-align: end; } :is(.builder-slide, .builder-thumb-slide) .slide-pad-normal { padding: .6em .8em; } :is(.builder-slide, .builder-thumb-slide) .slide-pad-roomy { padding: 1em 1.2em; }
+.builder-segmented { display: flex; border: 1px solid var(--field-line); border-radius: var(--radius-sm); overflow: hidden; }
+.builder-segment { flex: 1; min-height: 32px; border: 0; border-right: 1px solid var(--field-line); background: var(--surface); color: var(--ink); font: inherit; font-size: var(--t-sm); cursor: pointer; }
+.builder-segment:last-child { border-right: 0; }
+.builder-studio .builder-segment[aria-pressed="true"] { border-bottom: 0; background: var(--petrol-tint); color: var(--petrol-ink); font-weight: var(--w-semibold); }
+.builder-swatches { display: grid; grid-template-columns: repeat(auto-fill, 32px); justify-content: start; gap: 4px; }
+.builder-swatch { border: 1px solid var(--field-line); border-radius: var(--radius-sm); color: var(--ink); font: inherit; cursor: pointer; }
+.builder-swatch.slide-tone-plain { background: var(--surface); } .builder-swatch.slide-tone-soft { background: var(--slide-fill-soft); }
+.builder-swatch.slide-tone-blue { background: var(--slide-fill-blue); } .builder-swatch.slide-tone-teal { background: var(--slide-fill-teal); }
+.builder-swatch.slide-tone-green { background: var(--slide-fill-green); } .builder-swatch.slide-tone-purple { background: var(--slide-fill-purple); }
+.builder-swatch.slide-tone-coral { background: var(--slide-fill-coral); } .builder-swatch.slide-tone-orange { background: var(--slide-fill-orange); }
+.builder-swatch.slide-tone-amber { background: var(--slide-fill-amber); } .builder-swatch.slide-tone-grey { background: var(--slide-fill-grey); }
+/* Inspector fields: one label style, one rhythm (16 px between fields, 4 px label to control), 32 px controls (CASE-225). */
+.builder-inspector-body :is(h4, .builder-inspector-group) { margin: var(--sp-4) 0 var(--sp-1); font-size: var(--t-xs); font-weight: var(--w-semibold); color: var(--ink-muted); }
+.builder-inspector-body > .builder-slide-field, .builder-inspector-body > .builder-exact { margin-top: var(--sp-4); }
+.builder-inspector-body > :first-child { margin-top: 0; }
+.builder-inspector-body .builder-slide-field > span:first-child { font-size: var(--t-xs); font-weight: var(--w-semibold); color: var(--ink-muted); }
+.builder-inspector-body .builder-slide-field :is(select, input) { min-height: 32px; padding: 0 var(--sp-2); }
+.builder-block-actions { display: flex; gap: var(--sp-2); margin-top: var(--sp-4); }
+.builder-block-actions > * { flex: 1; text-align: center; }
+.builder-inspector-body > .builder-danger { margin-top: var(--sp-2); width: 100%; text-align: center; }
+.builder-inspector-body > .builder-slide-note { margin: var(--sp-2) 0 0; }
+.builder-shared-note { position: absolute; bottom: 2px; left: 2px; padding: 0 6px; border-radius: var(--radius-xs); font-size: 11px; color: var(--petrol-ink); background: var(--petrol-tint); }
+/* Block order: steps as drop targets, draggable rows, the block outlined on the canvas while its row is active. */
+.builder-slide-steps { display: grid; gap: var(--sp-2); margin: 0; padding: 0; list-style: none; }
+.builder-step { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.builder-step[data-drop] { border-color: var(--petrol); background: var(--petrol-tint); }
+.builder-step-new { min-height: 32px; display: grid; place-items: center; border-style: dashed; font-size: var(--t-xs); color: var(--ink-muted); }
+.builder-slide-step-head { display: flex; align-items: center; gap: var(--sp-1); }
+.builder-slide-step-head :is(h3, h4) { margin: 0; flex: 1; font-size: inherit; }
+.builder-step-count { font-size: var(--t-xs); }
+.builder-icon-button { min-width: 32px; min-height: 32px; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--ink-muted); cursor: pointer; }
+.builder-step-blocks { display: grid; gap: 2px; margin: var(--sp-1) 0 0; list-style: none; }
+.builder-order-row { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 2px var(--sp-2); align-items: center; padding: var(--sp-1); border-radius: var(--radius-xs); cursor: grab; }
+.builder-order-row:hover, .builder-order-row:focus-within { background: var(--quiet); }
+.builder-order-row[data-dragging] { opacity: .5; }
+.builder-order-row select { min-height: 32px; border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; font-size: var(--t-xs); }
+.builder-type-icon { text-align: center; color: var(--ink-muted); }
+.builder-order-label { font-size: var(--t-sm); overflow-wrap: anywhere; }
+.builder-studio button.builder-order-label { min-height: 32px; padding: 0 var(--sp-1); border: 1px solid transparent; border-radius: var(--radius-xs); color: var(--ink); background: transparent; text-align: start; font: inherit; font-size: var(--t-sm); }
+.builder-studio button.builder-order-label[aria-pressed="true"] { border-color: var(--petrol); background: var(--petrol-tint); color: var(--petrol-ink); }
+.builder-studio .slide-block[data-highlight] { outline: 2px solid var(--private); outline-offset: 3px; }
+.builder-menu-group { margin: var(--sp-2) var(--sp-3) var(--sp-1); font-size: var(--t-xs); font-weight: var(--w-semibold); color: var(--ink-muted); }
+.builder-menu-list .builder-menu-item { display: flex; align-items: center; gap: var(--sp-2); }
+.builder-menu-list button:disabled { color: var(--ink-muted); cursor: not-allowed; }
+.builder-menu-list small { color: var(--ink-muted); }
+.builder-menu-list .builder-menu-note { max-width: 18rem; margin: 0; padding: var(--sp-1) var(--sp-3) var(--sp-2); font-size: var(--t-sm); color: var(--ink-muted); }
+.builder-menu-list { max-height: min(70dvh, 32rem); overflow: auto; }
+.builder-issue-category { display: grid; gap: var(--sp-1); }
+.builder-issue-category > h4 { margin: var(--sp-2) 0 0; font-size: var(--t-sm); }
+.builder-issue-message { margin: var(--sp-1) 0 0; font-size: var(--t-sm); color: var(--ink-muted); }
+/* Decision matrix: one labelled table per question; overflow scrolls inside it, never the page (BWR05). */
+.builder-matrix { max-width: 100%; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.builder-matrix:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.builder-matrix table { width: 100%; border-collapse: collapse; font-size: var(--t-sm); }
+.builder-matrix caption { padding: var(--sp-2); text-align: left; font-weight: var(--w-semibold); }
+.builder-matrix th, .builder-matrix td { padding: var(--sp-1) var(--sp-2); border-top: 1px solid var(--line); text-align: left; vertical-align: middle; }
+.builder-matrix thead th { position: sticky; z-index: var(--z-raised); top: 0; background: var(--ground); font-size: var(--t-xs); color: var(--ink-muted); }
+.builder-matrix tbody th { position: sticky; z-index: var(--z-raised); left: 0; background: var(--surface); font-weight: var(--w-regular); }
+.builder-matrix td:has(input) { text-align: center; }
+.builder-matrix input[type="checkbox"] { width: 22px; height: 22px; margin: 11px; }
+.builder-canvas-head .builder-menu > .builder-btn { min-height: 32px; border-color: transparent; background: transparent; color: var(--ink-muted); font-size: var(--t-sm); }
+.builder-canvas-head .builder-menu > .builder-btn:hover, .builder-canvas-head .builder-menu > .builder-btn[aria-expanded="true"] { border-color: var(--field-line); color: var(--ink); }
+.builder-review-host .builder-confirm-change { border-color: var(--manual); background: color-mix(in srgb, var(--manual-tint) 60%, var(--surface)); }
+.builder-review-host .builder-confirm-change:focus-visible { outline: 3px solid var(--focus); }
+/* Polish pass to the Round 4 study (parity inventory §C). */
+.builder-studio .builder-sheet { background: var(--ground); }
+.builder-studio .builder-canvas-stage .slide-canvas { background: var(--slide-ground, var(--surface)); }
+/* Side panels are paper and the canvas sits in the ground; the resize gutters belong to the canvas, not to a white seam. */
+.builder-outline, .builder-inspector { background: var(--surface); }
+.builder-studio .builder-separator { background: var(--ground); }
+.builder-outline .builder-outline-target { font-size: var(--t-sm); }
+.builder-panel-head { height: 48px; }
+.builder-panel-head h2 { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--t-sm); font-weight: var(--w-semibold); }
+.builder-history-tools .builder-tool:not(:disabled) { color: var(--petrol-ink); }
+.builder-separator { position: relative; }
+.builder-separator:hover, .builder-separator:focus-visible { background: var(--petrol-tint); box-shadow: inset 1px 0 var(--petrol), inset -1px 0 var(--petrol); }
+.builder-reveal-badge { color: var(--ink-muted); background: var(--surface); border: 1px solid var(--line); }
+.builder-studio .builder-slide-unplaced { border-color: var(--manual); background: var(--manual-tint); color: var(--manual-ink); }
+.builder-studio .builder-slide-review { border: 1px solid var(--manual); background: var(--manual-tint); }
+.builder-studio .builder-slide-review > p:first-child, .builder-review-host .builder-confirm-change h4 { color: var(--manual-ink); }
+/* Outline: the selected slide is ringed in petrol; its name takes the petrol ink. */
+/* The current stage is one card: thumbnail, title and badges inside a petrol frame (Round 4 study). */
+.builder-outline .builder-outline-target[aria-current="true"] { background: var(--surface); border-color: var(--petrol); box-shadow: 0 0 0 1px var(--petrol); }
+.builder-outline .builder-outline-target[aria-current="true"] .builder-thumb { border-color: var(--ink-muted); }
+.builder-outline .builder-outline-target[aria-current="true"] .builder-outline-name > span:first-child { color: var(--petrol-ink); font-weight: var(--w-semibold); }
+.builder-outline .builder-outline-target:hover .builder-thumb { border-color: var(--field-line); }
+/* Private context: a hairline disclosure with +/− and the private ink; its fields carry the private tint. */
+.builder-zone-private { padding: var(--sp-2) 0 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent; }
+.builder-disclosure > summary { list-style: none; }
+.builder-disclosure > summary::-webkit-details-marker { display: none; }
+.builder-disclosure[open] > summary { font-weight: var(--w-semibold); }
+.builder-private-chip { padding: 0 6px; font-size: 11px; }
+.builder-zone-private .builder-fields textarea, .builder-zone-private .builder-fields input { background: var(--private-tint); border-color: color-mix(in srgb, var(--private) 45%, var(--field-line)); }
+/* Canvas head and footer: quiet lines; the slide is the subject. */
+.builder-canvas-head { min-height: 52px; }
+/* The head (slide name, text tools, Stage menu) stays in view while the sheet scrolls to the tray (critique r23). */
+@media (min-width: 60.01rem) { .builder-canvas-head { position: sticky; top: 0; z-index: var(--z-sticky); background: var(--ground); }
+  /* CASE-249: on a slide the text tools never wrap the head to a second row, which moved the slide down on selection. */
+  .builder-canvas-head:has(> .builder-toolbar-dock:not(:empty)) { flex-wrap: nowrap; } .builder-canvas-head > * { min-width: 0; flex-shrink: 0; } .builder-canvas-head > :is(.builder-canvas-location, .builder-head-fields) { flex-shrink: 1; overflow: hidden; } }
+.builder-head-fields input { font-size: var(--t-md); color: var(--ink); } /* the stage name reaches learners as the slide heading: not styled private (r24 P2-3) */
+.builder-head-fields input::placeholder { color: var(--ink-muted); opacity: 1; }
+/* The head clips its fields above 60 rem (CASE-249), so the Stage name's ring is drawn inside the field (CASE-251). */
+.builder-studio .builder-head-fields input:focus-visible { outline-offset: -3px; }
+.builder-canvas-footer { font-size: 12px; }
+.builder-canvas-footer select { border: 0; }
+.builder-canvas-footer .builder-btn.builder-private { min-height: 32px; padding: 0 var(--sp-3); border: 1px solid var(--private); background: transparent; color: var(--private-ink); }
+.builder-canvas-footer .builder-btn.builder-private[aria-pressed="true"] { background: var(--private-tint); }
+.builder-issues-toggle { min-height: 32px; padding: 0 var(--sp-2); border: 0; background: transparent; color: var(--manual-ink); font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.builder-canvas-footer .builder-slide-issues { flex-basis: 100%; display: grid; gap: 2px; margin: 0; padding: var(--sp-2) var(--sp-3) var(--sp-2) 1.6em; border: 1px solid var(--manual); border-radius: var(--radius-sm);
+  background: var(--manual-tint); color: var(--manual-ink); font-size: var(--t-sm); }
+.builder-canvas-footer .builder-slide-issues[hidden] { display: none; }
+.builder-canvas-footer .builder-slide-issues .builder-issue-link { min-height: 32px; padding: 0; color: var(--manual-ink); text-align: left; background: transparent; }
+/* Palette: two columns of labelled tiles under family headings. */
+.builder-insert-tools .builder-menu-list { grid-template-columns: repeat(2, minmax(0, 1fr)); width: min(24rem, 92vw); gap: 2px; }
+.builder-insert-tools .builder-menu-group { grid-column: 1 / -1; }
+.builder-insert-tools .builder-menu-list .builder-menu-item { font-size: 13px; }
+.builder-menu-list .builder-type-icon { width: 20px; color: var(--petrol-ink); font-size: 15px; }
+.builder-insert-tools .builder-menu-list small { display: none; }
+/* Block order: step cards with a quiet head and a count badge; rows show a grip on hover. */
+.builder-step { padding: 0; overflow: hidden; }
+.builder-slide-step-head { padding: 0 0 0 var(--sp-2); background: var(--quiet); }
+.builder-step-count { color: var(--ink-muted); }
+.builder-step-blocks { padding: var(--sp-1); }
+.builder-order-row:hover .builder-type-icon::after { content: ' ⠿'; color: var(--petrol); }
+/* Editing table: the slide's own table, not a form; the focused cell is outlined in petrol. */
+.builder-studio .builder-slide-table textarea:focus { outline: 2px solid var(--petrol); outline-offset: 1px; }
+.builder-studio .builder-slide .slide-question textarea { outline: none; }
+.builder-cell-unit { display: flex; align-items: baseline; } .slide-end > .builder-cell-unit { justify-content: flex-end; }
+.builder-studio .builder-cell-unit > textarea.builder-slide-input { width: auto; min-width: 1ch; }
+/* Status: a quiet toast-like line; panel controls stay in the bar. */
+.builder-statusbar .builder-studio-status.is-fresh { color: var(--ink); }
+.builder-rehearsal-changed { padding: var(--sp-2) var(--sp-3); border: 1px solid var(--manual); border-radius: var(--radius-sm); background: var(--manual-tint); color: var(--manual-ink); }
+/* Narrow authoring (BWR20): an edited table reflows to one card per row, each cell labelled with its column. */
+@container (max-width: 560px) {
+  .builder-studio .builder-slide-table :is(table, thead, tbody, tr, th, td) { display: block; }
+  .builder-studio .builder-slide-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .builder-studio .builder-slide-table tbody tr { margin-bottom: var(--sp-2); padding: var(--sp-1); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+  .builder-studio .builder-slide-table tbody :is(td, th)::before { content: attr(data-column); display: block; font-size: var(--t-xs); color: var(--ink-muted); }
+}
+/* The same cards when the table's own width is too narrow for its columns (gap audit #26), at any canvas width. */
+.builder-studio .builder-slide-table.builder-table-cards :is(table, thead, tbody, tr, th, td) { display: block; }
+.builder-studio .builder-slide-table.builder-table-cards thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.builder-studio .builder-slide-table.builder-table-cards tbody tr { margin-bottom: var(--sp-2); padding: var(--sp-1); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); }
+.builder-studio .builder-slide-table.builder-table-cards tbody :is(td, th)::before { content: attr(data-column); display: block; font-size: var(--t-xs); color: var(--ink-muted); }
+/* One region at a time (round 15): the Outline is one centred column, branches indented under their stage; no half-empty grid. */
+.builder-workspace[data-layout="single"] .builder-outline-list { grid-template-columns: minmax(0, 1fr); max-width: 34rem; margin-inline: auto; }
+.builder-outline .builder-outline-stage > .builder-outline-target[draggable="true"] { cursor: grab; }
+/* Handles show on hover or keyboard focus, and always on the selected block. */
+.builder-studio .slide-block:not([data-selected]):not(:hover):not(:focus-within) > :is(.builder-block-handle, .builder-block-resize, .builder-shared-note) { opacity: 0; }
+.builder-reopen { white-space: nowrap; color: var(--petrol-ink); }
+.builder-turn-preview { max-height: 12rem; overflow: auto; margin: 0; padding: var(--sp-2); border-radius: var(--radius-xs); background: var(--surface); font-family: var(--mono); font-size: var(--t-xs); white-space: pre-wrap; }
+/* Block background and table presentation as the room renders them (CASE-220). */
+.slide-bg-soft { background: var(--quiet); border-radius: var(--radius-sm); } .slide-bg-outline { border: 1px solid var(--line); border-radius: var(--radius-sm); } .slide-banded tbody tr:nth-child(even) { background: var(--quiet); } .slide-density-compact :is(th, td) { padding-block: .05em; } .slide-density-roomy :is(th, td) { padding-block: .4em; } .slide-text-large { font-size: 1.15em; }
+.builder-slide-steps .builder-order-row { display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; grid-template-areas: "icon name move"; align-items: center; gap: 0 var(--sp-1); }
+.builder-order-row > .builder-type-icon { grid-area: icon; } .builder-order-row > .builder-order-label { grid-area: name; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; overflow-wrap: normal; }
+.builder-order-row > select { grid-area: move; justify-self: end; width: auto; }
+/* The ⑂ chip sits in its stage card's bottom-right corner, beside the caption (which narrows to make room), with no
+   row of its own: the button keeps a real 32 px box and draws a 24 px chip inside it (CASE-223). */
+.builder-outline li:has(> .builder-outline-foot) { position: relative; }
+.builder-outline li:has(> .builder-outline-foot) .builder-outline-name { width: auto; margin-right: 34px; }
+.builder-outline li > .builder-outline-foot { position: absolute; right: 2px; bottom: 0; }
+.builder-outline .builder-branch-chip { position: relative; z-index: var(--z-raised); min-width: 32px; min-height: 32px; padding: 0 6px; border: 0; background: transparent; color: var(--ph-consequence-ink); font-size: var(--t-xs); text-align: center; }
+.builder-outline .builder-branch-chip::before { content: ''; position: absolute; inset: 5px 0; border: 1px solid var(--ph-consequence); border-radius: var(--radius-xs); background: var(--surface); }
+.builder-outline .builder-branch-chip > span { position: relative; z-index: var(--z-raised); }
+.builder-outline .builder-outline-foot .builder-branch-chip[aria-expanded="true"] { background: transparent; }
+.builder-outline .builder-branch-chip[aria-expanded="true"]::before { background: color-mix(in srgb, var(--ph-consequence) 14%, var(--surface)); }
+/* Round 6 (Julian 2026-10-12, CASE-225): compact 32 px controls, menus whose reasons sit under their labels, a quiet
+   focus ring, the add-block palette and colour swatches in the Inspector, and exact position on one row. */
+.builder-insert-tools:empty { display: none; }
+.builder-menu-list { min-width: 18rem; }
+.builder-menu-list .builder-menu-item { flex-wrap: wrap; row-gap: 0; padding-block: var(--sp-1); line-height: 1.3; text-align: left; }
+.builder-menu-list .builder-menu-item small { flex-basis: 100%; font-size: var(--t-xs); }
+.builder-swatch { min-height: 32px; padding: 0 var(--sp-2); font-size: var(--t-xs); text-align: center; }
+.builder-swatch.builder-ink { background: var(--surface); font-weight: var(--w-semibold); }
+.builder-slide-placement { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; align-items: end; gap: var(--sp-1); }
+.builder-slide-placement input { width: 100%; min-height: 32px; }
+.builder-slide-placement .builder-apply { min-height: 32px; padding: 0 var(--sp-3); }
+.builder-block-actions > .builder-btn, .builder-inspector-body > .builder-danger { min-height: 32px; padding-block: 0; }
+/* Case dropdowns in the Builder: compact, no chevron (Julian 2026-10-12); the label is the control. */
+.builder-studio .shared-select-trigger { gap: var(--sp-2); width: 100%; min-height: 32px; padding: 0 var(--sp-2); border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; font-size: var(--t-sm); text-align: left; cursor: pointer; }
+.builder-studio .shared-select-trigger::after { content: none; }
+.builder-studio .shared-select-trigger:hover { border-color: var(--petrol); }
+.builder-canvas-footer .shared-select-trigger, .builder-order-row .shared-select-trigger, .builder-canvas-toolbar .shared-select-trigger { width: auto; }
+.builder-canvas-footer .shared-select-trigger { border-color: transparent; background: transparent; color: var(--ink-muted); font-size: var(--t-xs); }
+.builder-order-row > .shared-select-trigger { grid-area: move; justify-self: end; }
+.builder-options [role="option"] { min-height: 32px; padding: 4px 10px; font-size: var(--t-sm); }
+.builder-slide-reading li { display: flex; align-items: center; gap: var(--sp-1); }
+.builder-slide-reading li > span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.builder-studio .builder-reading-move { min-width: 32px; min-height: 32px; padding: 0; }
+/* Undo and Redo show what they changed: the block flashes once (gap audit #11). */
+.builder-studio .builder-slide .slide-block[data-flash] { outline: 3px solid var(--petrol); outline-offset: 3px; box-shadow: 0 0 0 9px var(--petrol-tint); } /* where Undo/Redo changed: petrol like a selection (BWR19 keeps amber for review), with a halo so it is seen */
+@media (prefers-reduced-motion: no-preference) { .builder-studio .builder-slide .slide-block[data-flash] { transition: outline-color .7s; } }
+.builder-menu-separator { margin: var(--sp-1) 0; border: 0; border-top: 1px solid var(--line); }
+.builder-studio .builder-menu-item.builder-menu-danger { color: var(--alert-ink); }
+/* Case-wide fit (gap audit #10): a slide that does not fit says so in words, beside its thumbnail. */
+.builder-outline .builder-outline-unfit { justify-self: start; color: var(--alert-ink); font-size: var(--t-xs); }
+.builder-outline [data-unfit] .builder-thumb { border-color: var(--alert); }
+.builder-new-case { display: grid; gap: var(--sp-2); justify-items: start; margin-top: var(--sp-5); padding-top: var(--sp-3); border-top: 1px solid var(--line); }
+.builder-new-case h3 { margin: 0; font-size: var(--t-sm); }
+.builder-studio .builder-step-grip { cursor: grab; min-width: 32px; min-height: 32px; }
+.builder-step[data-drop] { outline: 2px dashed var(--petrol); outline-offset: 2px; }
+.builder-step[data-dragging] { opacity: .6; }
+/* A way back to the question from a selected consequence: a small link, never a field-sized box. */
+.builder-studio .builder-back-link { justify-self: start; width: auto; min-height: 32px; padding-inline: 0; border-color: transparent; background: transparent; color: var(--petrol-ink); text-decoration: underline; text-underline-offset: .2em; }
+.builder-studio .builder-back-link::before { content: '← ' / ''; }
+/* Visual pass (2026-10-13): the grip reads as a control on top of text, and the canvas-head add button matches its neighbours. */
+.builder-studio .builder-block-handle { padding: 6px; background: var(--surface); background-clip: content-box; outline: 1px solid var(--field-line); outline-offset: -6px; }
+.builder-studio .builder-slide .slide-block[data-empty]::after { content: attr(data-empty); color: var(--ink-muted); }
+@container (max-width: 560px) { .builder-studio .builder-slide .slide-block[data-empty] { min-height: 44px; } }
+.builder-studio .builder-block-handle:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; } /* the grip's idle outline must not hide keyboard focus (r24 P2-2) */
+.builder-studio .builder-add-block-head { min-height: 32px; padding: 0 var(--sp-2); font-size: var(--t-sm); }
+/* Column widths on the canvas (gap audit #26): a ruler of the columns' parts, each edge a separator that drags or steps. */
+.builder-slide-table { position: relative; }
+.builder-col-ruler { position: absolute; inset: 0; z-index: var(--z-raised); display: grid; pointer-events: none; font-size: var(--t-xs); color: var(--ink-muted); }
+.builder-col-segment { position: relative; min-width: 0; }
+.builder-col-name { display: none; position: absolute; top: 0; right: 10px; padding: 0 var(--sp-1); border-radius: var(--radius-xs); background: var(--surface); box-shadow: 0 0 0 1px var(--line); white-space: nowrap; }
+.builder-col-segment[data-dragging] > .builder-col-name { display: block; }
+.builder-col-edge { position: absolute; top: 0; right: -6px; z-index: var(--z-raised); width: 12px; height: 100%; cursor: col-resize; touch-action: none; pointer-events: auto; }
+.builder-col-edge::after { content: ''; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; }
+.builder-col-edge:hover::after, .builder-col-edge:focus-visible::after, [data-dragging] > .builder-col-edge::after { background: var(--petrol); }
+.builder-col-edge:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.builder-table-cards .builder-col-ruler { display: none; }
+/* A selected block looks as it does on the slide: its fill and paragraph spacing stay (re-audit round 11, P2). */
+.builder-studio .builder-slide .slide-canvas .builder-slide-text:not(ul, ol) > * + * { margin-top: .4em; }
+/* Re-audit P1 (BWR13): each Outline row holds a full slide thumbnail; rows off screen skip style, layout and paint. */
+.builder-outline-list > li { content-visibility: auto; contain-intrinsic-size: auto 72px; }
+/* Phone width (re-audit round 11): the app bar holds history, Save draft and More on one line; Preview and the save
+   state move out of the bar (Preview into More; Save draft still announces its state). */
+.builder-menu-list .builder-narrow-only { display: none; }
+@media (max-width: 40rem) {
+  .builder-end-tools .builder-save-state, .builder-end-tools .builder-private, .builder-end-tools .builder-wide-only { display: none; }
+  .builder-menu-list .builder-narrow-only { display: block; }
+  .builder-studio-top .builder-btn { white-space: nowrap; padding-inline: var(--sp-2); }
+  .builder-studio-top { flex-wrap: nowrap; gap: var(--sp-1); } .builder-studio-top .builder-insert-tools:empty { display: none; }
+  .builder-app-bar { gap: var(--sp-2); }
+}
+/* The narrowest phones (re-audit round 12): the wordmark keeps its tessera only and the bar's gutters tighten, so
+   history, Save draft, More and the site menu all fit at 320 without overlapping. */
+@media (max-width: 22.5rem) {
+  .builder-app-bar .wordmark > span { display: none; }
+  .builder-app-bar { gap: var(--sp-1); padding-inline: var(--sp-2); }
+  .builder-studio-top .builder-history-tools { gap: 0; }
+}
+/* Forced colours (BWA32, re-audit round 12): selection, focus and the change flash use system colours, never tints. */
+@media (forced-colors: active) {
+  .builder-outline .builder-outline-target[aria-current="true"] { outline: 3px solid Highlight; outline-offset: -3px; }
+  .builder-studio .builder-slide .slide-block[data-selected], .builder-studio .builder-slide .slide-block[data-flash] { outline: 3px solid Highlight; }
+  .builder-studio .slide-block:hover:not([data-selected]) { outline: 1px dashed CanvasText; }
+  .builder-col-edge::after, .builder-block-resize::after { background: CanvasText; border-color: CanvasText; }
+  .builder-confirm-change { border: 1px solid CanvasText; }
+}
+/* Round 13: while a block is selected, its neighbours keep their hover grips out of the way of its outside handles. */
+.builder-studio .builder-slide .slide-canvas:has(> .slide-block[data-selected]) > .slide-block:not([data-selected]) > :is(.builder-block-handle, .builder-block-resize) { display: none; }
+/* Notes and other long fields grow with what is written (round 15). */
+.builder-studio .builder-fields textarea { field-sizing: content; min-height: 4.5em; max-height: 28em; }
+/* Round 16: a selected table keeps its slide area; its editor scrolls inside it (as written text does), so it never
+   covers the block below, and the grip and resize corner stay outside the corners. */
+.builder-studio .builder-slide .slide-block[data-selected]:has(> .builder-slide-table) { min-height: 0; align-self: stretch; grid-template-rows: minmax(0, 1fr); }
+.builder-studio .builder-slide .slide-block[data-selected] > .builder-slide-table { min-height: 0; overflow: auto; }
+/* A long table scrolls inside its block while edited; its header row stays in view above the rows (round 19). */
+.builder-studio .builder-slide .slide-block[data-selected] > .builder-slide-table:not(.builder-table-cards) thead { position: sticky; top: 0; z-index: var(--z-raised); }
+.builder-studio .builder-slide-table[data-scrolled] thead { background: var(--surface); }
+@container (max-width: 560px) { .builder-studio .builder-slide .slide-block[data-selected] > .builder-slide-table { overflow: visible; } }
+/* Thumbnails wrap as the room does: never letter by letter (round 16). */
+.builder-thumb-slide { overflow-wrap: normal; }
+/* The character meter beneath the block being written (polish round 17): quiet until the limit nears; coral when over. */
+.builder-studio .builder-limit-meter { margin-inline-start: var(--sp-2); padding: 1px 6px; border-radius: var(--radius-xs); background: var(--surface); color: var(--ink-muted); font-size: var(--t-xs); font-variant-numeric: tabular-nums; white-space: nowrap; box-shadow: 0 0 0 1px var(--line); }
+.builder-studio .builder-limit-meter[data-state="near"] { color: var(--manual-ink); box-shadow: 0 0 0 1px var(--manual); }
+.builder-studio .builder-limit-meter[data-state="over"] { color: var(--alert-ink); box-shadow: 0 0 0 1px var(--alert); font-weight: var(--w-semibold); }
+/* Menus never run off the screen; they scroll inside (polish round 17). */
+.builder-menu-list { max-height: min(70vh, 34rem); overflow-y: auto; overscroll-behavior: contain; }
+.builder-menu-list .builder-menu-item:disabled { color: var(--ink-muted); opacity: .7; }
+/* The keyboard's Edit affordance is a ring around the whole block, never a label painted over its words (round 17). */
+.builder-studio .builder-slide .builder-slide-edit { inset: 0; padding: 0; border: 0; background: transparent; font-size: 0; border-radius: var(--radius-sm); }
+.builder-studio .builder-slide .builder-slide-edit:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.builder-studio .builder-canvas-stage:focus { outline: none; }
+/* Swatches are 32 px squares; the selected one carries a ring, not a heavier border (polish round 17). */
+.builder-studio .builder-swatch { width: 32px; height: 32px; min-height: 32px; padding: 0; display: grid; place-items: center; }
+.builder-studio .builder-swatch[aria-pressed="true"] { border: 1px solid var(--field-line); box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--petrol); }
+.builder-swatch-sample { font-size: var(--t-sm); font-weight: var(--w-semibold); }
+/* Motion (polish round 17): short, quiet arrivals so nothing snaps; none at all when reduced motion is asked for. */
+@keyframes builder-arrive { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@keyframes builder-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: no-preference) {
+  .builder-menu-list:not([hidden]), .builder-confirm-change, .builder-review-host > * { animation: builder-arrive .14s ease-out; }
+  .builder-disclosure[open] > :not(summary) { animation: builder-fade .16s ease-out; }
+  .builder-workspace[data-layout="single"] > :not([hidden]) { animation: builder-fade .14s ease-out; }
+  .builder-studio .builder-slide .slide-block { transition: outline-color .12s ease-out, box-shadow .12s ease-out; }
+  .builder-studio :is(.builder-btn, .builder-tool, .builder-menu-item, .builder-swatch, .builder-outline-target) { transition: background-color .12s ease-out, border-color .12s ease-out, color .12s ease-out, box-shadow .12s ease-out; }
+}
+/* Readiness severity (round 18): a problem that stops saving or rehearsal is marked in alert ink, advice in amber; the
+   zone's summary carries one dot in the same colour, and "Mark all reviewed" reads at the line's own size. */
+.builder-readiness-slide li[data-severity]::marker { color: var(--alert-ink); }
+.builder-readiness-slide li[data-stops=""]::marker { color: var(--manual-ink); }
+.builder-zone-readiness[data-severity] > summary::after { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; vertical-align: middle; background: var(--ok); }
+.builder-zone-readiness[data-severity="advice"] > summary::after { background: var(--manual); }
+.builder-zone-readiness[data-severity="stop"] > summary::after { background: var(--alert); }
+.builder-readiness-sources .builder-quiet-link { font-size: inherit; }
+/* The one-region bar (round 18, as in the 390 study): borderless choices, the current region filled in petrol tint. */
+.builder-workspace[data-layout="single"] ~ .builder-statusbar .builder-region-button { min-height: 40px; border: 0; border-radius: var(--radius); background: transparent; color: var(--ink-muted); font-size: var(--t-sm); }
+.builder-workspace[data-layout="single"] ~ .builder-statusbar .builder-region-button[aria-pressed="true"] { border: 0; background: var(--petrol-tint); color: var(--petrol-ink); font-weight: var(--w-semibold); }
+/* Block order's Move to… reads as a quiet link beside the name, framed only when its row is hovered or focused. */
+.builder-order-row .shared-select-trigger { min-height: 32px; padding-inline: var(--sp-1); border-color: transparent; background: transparent; color: var(--ink-muted); font-size: var(--t-xs); }
+.builder-order-row:is(:hover, :focus-within) .shared-select-trigger { border-color: var(--field-line); color: var(--ink); }
+/* At phone width each consequence is a labelled card instead of a four-column table that breaks words (round 19). */
+@media (max-width: 37.5rem) {
+  .builder-studio table.builder-consequences, .builder-studio .builder-consequences :is(caption, tbody, tr, th, td) { display: block; }
+  .builder-studio .builder-consequences tbody th { padding: 0; background: transparent; }
+  .builder-studio .builder-consequences tbody th .builder-issue-link { padding-inline: 0; background: transparent; }
+  .builder-studio .builder-consequences thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .builder-studio .builder-consequences tbody tr { padding: var(--sp-2) var(--sp-3); border-top: 1px solid var(--line); }
+  .builder-studio .builder-consequences caption { padding-inline: var(--sp-3); }
+  .builder-studio .builder-consequences td { display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: var(--sp-2); padding: 2px 0; border: 0; overflow-wrap: normal; }
+  .builder-studio .builder-consequences td::before { content: attr(data-label); color: var(--ink-muted); font-size: var(--t-xs); }
+  .builder-studio .builder-consequences td.builder-path-order { grid-template-columns: 6rem auto auto; justify-content: start; }
+}
+/* The text tools and the Stage menu keep the canvas head's right edge, whatever the slide's name length (round 19). */
+.builder-canvas-head > .builder-toolbar-dock { margin-inline-start: auto; }
+.builder-canvas-head > .builder-toolbar-dock:empty + .builder-stage-menu { margin-inline-start: auto; }
+/* Round 20: a table edited as row cards keeps the slide's hierarchy — values read at least as large as their labels. */
+.builder-studio .builder-slide-table.builder-table-cards tbody :is(textarea, input) { font-size: max(1em, var(--t-sm)); }
+/* At the limit the meter is amber, a stop rather than an error. */
+.builder-studio .builder-limit-meter[data-state="limit"] { color: var(--manual-ink); box-shadow: 0 0 0 1px var(--manual); font-weight: var(--w-semibold); }
+.builder-order-unplaced { grid-column: 2 / -1; color: var(--manual-ink); font-size: var(--t-xs); }
+/* CASE-321: Based on, Sources and the Overview. Tokens only; chips are the shared .tag. */
+.builder-based-on { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); margin: var(--sp-2) 0 0; font-size: var(--t-sm); }
+.builder-based-on-label { color: var(--ink-muted); }
+.builder-based-on .builder-menu-list { left: 0; right: auto; min-width: 14rem; }
+.builder-based-on-chip { white-space: normal; overflow-wrap: anywhere; }
+.builder-based-on-remove { min-width: 24px; min-height: 24px; padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+.builder-sources-view, .builder-overview { display: grid; gap: var(--sp-4); max-width: 48rem; margin-inline: auto; font-size: var(--t-sm); }
+.builder-overview .whole-case-braid h2 { font-size: var(--t-md); }
+.builder-overview { max-width: 72rem; }
+.builder-chip-row { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin: 0; }
+.builder-source-list { display: grid; gap: var(--sp-2); margin: 0; padding: 0; list-style: none; }
+.builder-source-item, .builder-add-source, .builder-cited-review, .builder-overview-flow, .builder-overview-check, .builder-overview-details { display: grid; gap: var(--sp-2); padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.builder-source-body { display: grid; grid-template-columns: auto 1fr auto; gap: var(--sp-3); align-items: start; }
+.builder-source-number, .builder-flow-number { display: inline-grid; place-items: center; min-width: 1.75rem; height: 1.75rem; border-radius: var(--radius-chip); background: var(--sunken); font-weight: var(--w-semibold); }
+.builder-source-body p, .builder-sources-view h3, .builder-overview h3, .builder-overview h4 { margin: 0; overflow-wrap: anywhere; }
+.builder-source-detail, .builder-source-used, .builder-overview-meta { color: var(--ink-muted); font-size: var(--t-sm); }
+.builder-source-actions, .builder-overview-head, .builder-overview-actions, .builder-overview-details-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2); }
+.builder-add-source textarea, .builder-add-source input[type="text"] { width: 100%; min-height: 2.5rem; padding: var(--sp-2); border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; }
+.builder-add-source .builder-btn { justify-self: start; }
+.builder-cited-review { border-color: var(--manual); }
+.builder-sources-advanced > summary { cursor: pointer; font-weight: var(--w-semibold); min-height: 2rem; }
+.builder-overview-title { font-size: var(--t-lg); }
+.builder-overview-label { font-size: var(--t-xs); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--ink-muted); }
+.builder-overview-body { display: grid; grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr); gap: var(--sp-4); align-items: start; }
+.builder-overview-side { display: grid; gap: var(--sp-4); }
+.builder-overview-braid { min-width: 0; overflow-x: auto; }
+.builder-flow { display: grid; gap: var(--sp-2); margin: 0; padding: 0; list-style: none; }
+.builder-flow > li { margin-inline-start: calc(var(--depth, 0) * var(--sp-4)); }
+.builder-flow-node { display: inline-flex; align-items: center; gap: var(--sp-2); }
+.builder-flow-stop[data-kind="question"] .builder-flow-number { background: var(--petrol-tint); color: var(--petrol-ink); }
+.builder-flow-branches { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin: var(--sp-1) 0 0 var(--sp-6); }
+.builder-flow-branch { display: grid; gap: 2px; border-inline-start-width: 4px; }
+.builder-flow-branch small, .builder-flow-node small { color: var(--ink-muted); font-size: var(--t-xs); }
+:is(.builder-flow-branch, .builder-flow-key)[data-classification="sound"] { border-inline-start-color: var(--ph-open); }
+:is(.builder-flow-branch, .builder-flow-key)[data-classification="defensible"] { border-inline-start-color: var(--petrol); }
+:is(.builder-flow-branch, .builder-flow-key)[data-classification="context-dependent"] { border-inline-start-color: var(--ph-locked); }
+:is(.builder-flow-branch, .builder-flow-key):is([data-classification="unsafe"], [data-classification="terminal-unsafe"]) { border-inline-start-color: var(--ph-consequence); }
+.builder-flow-branch[data-broken], .builder-flow-ref.is-missing { border-color: var(--alert); background: var(--alert-tint); color: var(--alert-ink); }
+.builder-flow-ref, .builder-flow-legend { color: var(--ink-muted); font-size: var(--t-sm); }
+.builder-flow-legend { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin: 0; }
+.builder-flow-key { padding-inline-start: var(--sp-2); border-inline-start: 4px solid var(--line); }
+.builder-overview-band ul { margin: var(--sp-1) 0 var(--sp-3); padding-inline-start: var(--sp-4); font-size: var(--t-sm); }
+.builder-overview-band h4 { padding-inline-start: var(--sp-2); border-inline-start: 4px solid var(--line); font-size: var(--t-sm); }
+.builder-overview-band[data-band="publish"] h4 { border-color: var(--alert); }
+.builder-overview-band[data-band="rehearsal"] h4 { border-color: var(--manual); }
+@media (max-width: 60rem) { .builder-overview-body { grid-template-columns: minmax(0, 1fr); } .builder-overview-side { order: -1; } .builder-source-body { grid-template-columns: auto 1fr; } .builder-source-body > .tag { grid-column: 2; justify-self: start; } }
+/* CASE-344: the one contextual inspector, the "+" areas and "/" menu, synced blocks, Check and the transfer dialog. */
+.builder-palette { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-1); margin-top: var(--sp-2); }
+.builder-palette-item { display: grid; align-content: center; gap: 1px; height: 46px; min-width: 0; padding: 4px var(--sp-2); border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; font-size: 13px; text-align: left; cursor: pointer; }
+.builder-palette-item:hover { border-color: var(--petrol); background: var(--petrol-tint); }
+.builder-palette-item small { overflow: hidden; color: var(--ink-muted); font-size: 11px; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+.builder-palette-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.builder-inspector-title { margin: 0 0 var(--sp-1); font-size: var(--t-md); }
+.builder-inspector-section { margin-top: var(--sp-4); }
+.builder-back-to-slide { margin-bottom: var(--sp-2); }
+.builder-variants, .builder-sync { margin-top: var(--sp-3); }
+.builder-tones { flex-wrap: wrap; } .builder-tones .builder-segment { flex: 1 1 auto; padding-inline: var(--sp-2); }
+.builder-more-colours, .builder-more-format, .builder-layout-fold { margin-top: var(--sp-3); }
+.builder-icons { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.builder-icon-choice { aspect-ratio: 1; display: grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); cursor: pointer; }
+.builder-icon-choice[aria-pressed="true"] { border-color: var(--petrol); background: var(--petrol-tint); color: var(--petrol-ink); }
+.builder-icon-choice svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.builder-syncbox { padding: var(--sp-3); border-radius: var(--radius-sm); background: var(--petrol-tint); }
+.builder-sync-note { margin: 0 0 var(--sp-2); font-size: var(--t-sm); }
+.builder-sync-chips, .builder-sync-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); margin: var(--sp-1) 0 var(--sp-2); }
+.builder-sync-chip { min-height: 28px; padding: 0 var(--sp-2); border: 1px solid var(--petrol); border-radius: 999px; background: var(--surface); color: var(--petrol-ink); font: inherit; font-size: var(--t-xs); cursor: pointer; }
+.builder-sync-dialog, .builder-check-dialog, .builder-transfer-dialog { width: min(34rem, 94vw); max-height: 86dvh; padding: 0; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-2); }
+.builder-sync-form, .builder-check-body, .builder-transfer-body { display: grid; gap: var(--sp-3); padding: var(--sp-4); }
+.builder-sync-form h2, .builder-check-body h2, .builder-transfer-body h2 { margin: 0; font-size: var(--t-lg); }
+.builder-transfer-body table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: var(--t-sm); }
+.builder-transfer-body :is(th, td) { padding: var(--sp-1) var(--sp-2); border-bottom: 1px solid var(--field-line); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.builder-transfer-body th[scope="col"] { color: var(--ink-muted); font-size: var(--t-xs); font-weight: 600; }
+.builder-transfer-body th[scope="row"] { width: 6.5rem; font-weight: 600; }
+.builder-transfer-body tr[data-changed="true"] td:last-child { font-weight: 600; }
+.builder-transfer-body details { margin-block: var(--sp-2); } .builder-transfer-body summary { min-height: 32px; cursor: pointer; color: var(--petrol-ink); }
+.builder-sync-list { max-height: 18rem; overflow: auto; border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.builder-sync-list label { display: flex; align-items: center; gap: var(--sp-2); padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--field-line); cursor: pointer; }
+.builder-sync-list label:last-child { border-bottom: 0; } .builder-sync-list small { margin-left: auto; color: var(--ink-muted); }
+.builder-sync-buttons { display: flex; justify-content: flex-end; gap: var(--sp-2); }
+.builder-check { display: inline-flex; align-items: center; gap: var(--sp-1); }
+.builder-check-dot { min-width: 18px; height: 18px; padding: 0 4px; border-radius: 9px; background: var(--alert-ink); color: var(--surface); font-size: 11px; font-weight: var(--w-semibold); line-height: 18px; text-align: center; }
+.builder-check-list, .builder-check-list ul { margin: 0; padding: 0; list-style: none; }
+.builder-check-group { padding: var(--sp-2) 0; border-top: 1px solid var(--line); } .builder-check-group h3 { margin: 0 0 var(--sp-1); font-size: var(--t-sm); }
+.builder-check-group li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); padding: 2px 0; } .builder-check-group li > span { flex: 1 1 12rem; }
+.builder-check-group small { color: var(--ink-muted); } .builder-check-advice p { display: flex; gap: var(--sp-2); margin: var(--sp-1) 0; }
+/* The new block being written: plain text in its area; "/" opens the menu beside it. */
+.builder-fresh { outline: 2px solid var(--petrol); outline-offset: 3px; border-radius: var(--radius-xs); }
+.builder-fresh-text { min-height: 1.4em; padding: .1em .2em; outline: 0; white-space: pre-wrap; } /* the block's own outline is the focus ring */
+.builder-fresh-text:focus-visible { outline: 0; }
+.builder-fresh-text:empty::before { content: attr(data-placeholder); color: var(--ink-muted); }
+.builder-slash-menu { position: absolute; z-index: var(--z-dock); width: 300px; max-width: 94vw; max-height: 300px; overflow: auto; padding: 6px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow-2); font-size: var(--t-sm); }
+.builder-slash-menu[hidden] { display: none; }
+.builder-slash-group { margin: 6px 8px 2px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); }
+.builder-slash-item { display: flex; align-items: center; width: 100%; min-height: 32px; padding: 0 8px; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.builder-slash-item small { margin-left: auto; color: var(--ink-muted); } .builder-slash-item[aria-selected="true"], .builder-slash-item:hover { background: var(--petrol-tint); }
+.builder-slash-empty { margin: 6px 8px; color: var(--ink-muted); }
+/* A synced block is outlined on hover and selection, and says how many slides show it. */
+.builder-studio .slide-block[data-synced]:is(:hover, [data-selected]) { outline: 2px solid var(--petrol-ink); outline-offset: 3px; }
+.builder-thumb-sync { position: absolute; top: 2%; right: 2%; width: 14%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; background: var(--petrol-tint); color: var(--petrol-ink); font-size: 9px; line-height: 1; }
+
+.builder-thumb-slide { position: relative; }

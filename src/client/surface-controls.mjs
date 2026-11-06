@@ -1,0 +1,17 @@
+// Shared task controls for Present, Create, Sessions and administration. Text-only, native input semantics.
+import { uiIcon, compactTool } from './ui-icons.mjs';
+let ids=0;
+export function collapseSearch(input,{label=input.getAttribute('aria-label')||'Search'}={}){
+ const doc=input.ownerDocument,win=doc.defaultView,root=doc.createElement('div'),trigger=doc.createElement('button'),panel=doc.createElement('div'),close=doc.createElement('button');
+ root.className='surface-search';panel.className='surface-search-panel';panel.id='surface-search-'+(++ids);panel.hidden=true;
+ trigger.type=close.type='button';trigger.className=close.className='btn quiet icon-button';trigger.append(uiIcon('search'));trigger.setAttribute('aria-label',label);trigger.setAttribute('aria-expanded','false');trigger.setAttribute('aria-controls',panel.id);close.append(uiIcon('x'));close.setAttribute('aria-label','Close search');input.setAttribute('aria-label',label);panel.append(input,close);root.append(trigger,panel);
+ const position=()=>{if(panel.hidden)return;const box=root.getBoundingClientRect(),bounds=root.closest('dialog')?.getBoundingClientRect()??{left:0,right:win.innerWidth};const width=Math.min(400,bounds.right-bounds.left-32),left=Math.max(bounds.left+16,Math.min(box.left,bounds.right-width-16));panel.style.width=width+'px';panel.style.left=(left-box.left)+'px';};
+ const sync=()=>{trigger.dataset.active=String(Boolean(input.value.trim()));trigger.title=input.value?label+' · '+input.value:label;};
+ const setOpen=open=>{panel.hidden=!open;trigger.setAttribute('aria-expanded',String(open));if(open){position();input.focus();}else trigger.focus();};trigger.onclick=()=>setOpen(panel.hidden);close.onclick=()=>setOpen(false);
+ const key=e=>{if(e.key==='Escape'&&!panel.hidden){e.preventDefault();e.stopPropagation();setOpen(false);}};panel.addEventListener('keydown',key);root.addEventListener('focusout',event=>{if(event.relatedTarget&&root.contains(event.relatedTarget))return;queueMicrotask(()=>{if(!root.contains(doc.activeElement)){panel.hidden=true;trigger.setAttribute('aria-expanded','false');}});});
+ input.addEventListener('input',sync);win.addEventListener('resize',position);sync();return{root,addSubmit(){const button=doc.createElement('button');button.type='submit';button.className='btn';button.textContent='Search';panel.insertBefore(button,close);return button;},setLabel(next){label=next;trigger.setAttribute('aria-label',label);input.setAttribute('aria-label',label);sync();},open:()=>setOpen(true),dispose(){input.removeEventListener('input',sync);win.removeEventListener('resize',position);}};
+}
+export function disclosure(label,content,{className='surface-disclosure',fixedLabel=false,tool=null}={}){
+ const doc=content.ownerDocument,root=doc.createElement('section'),toggle=doc.createElement('button');root.className=className;toggle.type='button';toggle.className='btn quiet';content.id||='surface-disclosure-'+(++ids);content.hidden=true;toggle.setAttribute('aria-controls',content.id);toggle.setAttribute('aria-expanded','false');toggle.textContent=fixedLabel?label:'Show '+label;if(tool)compactTool(toggle,tool);
+ toggle.onclick=()=>{content.hidden=!content.hidden;if(!fixedLabel)toggle.textContent=(content.hidden?'Show ':'Hide ')+label;toggle.setAttribute('aria-expanded',String(!content.hidden));if(tool)compactTool(toggle,tool,{label:toggle.textContent,active:!content.hidden});};root.append(toggle,content);return root;
+}

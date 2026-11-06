@@ -1,0 +1,84 @@
+.builder-studio { color: var(--ink); background: var(--surface); font: inherit; }
+.builder-workspace > * { min-width: 0; overflow-wrap: anywhere; }
+.builder-studio-top, .builder-row-actions, .builder-regions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+.builder-studio-status { flex-basis: 100%; margin: 0; color: var(--ink-muted); }
+.builder-workspace { display: grid; align-items: start; }
+.builder-outline, .builder-inspector { padding: var(--sp-3); background: var(--ground); }
+.builder-separator { min-height: 32px; align-self: stretch; cursor: col-resize; touch-action: none; }
+.builder-outline-list { display: grid; gap: var(--sp-2); margin: 0; padding: 0; list-style: none; }
+.builder-outline-target, .builder-outline-name { display: grid; gap: var(--sp-1); width: 100%; }
+.builder-outline small, .builder-outline-ref { font-size: var(--t-sm); }
+.builder-outline .builder-outline-warn { color: var(--manual-ink); }
+.builder-outline-foot { text-align: right; }
+.builder-outline-foot button { color: var(--ph-consequence-ink); border-color: var(--ph-consequence); }
+.builder-outline-foot [aria-expanded="true"] { background: var(--ph-consequence-tint); }
+.builder-inspector-tabs { display: flex; margin-bottom: var(--sp-3); border-bottom: 1px solid var(--line); }
+.builder-inspector-tabs > * { flex: auto; padding-inline: var(--sp-2); overflow-wrap: normal; }
+.builder-studio [aria-pressed="true"] { color: var(--petrol-ink); border-bottom: 2px solid var(--petrol); }
+/* Not on the slide canvas, which keeps the room's line height (D23, CASE-264: it showed as a taller hero card). */
+.builder-sheet :is(p, li):not(.slide-canvas *), .builder-global-details p, .builder-global-details li { line-height: var(--lh); overflow-wrap: anywhere; }
+.builder-fields, .builder-format-field, .builder-context-controls { display: grid; gap: 1rem; }
+.builder-fields > div { display: grid; gap: .35rem; }
+.builder-fields label, .builder-outline small, .builder-outline-ref { color: var(--ink-muted); }
+.builder-fields textarea { min-height: 5rem; resize: vertical; }
+.builder-fields .field-error { margin: 0; color: var(--alert-ink); }
+.builder-source-range { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+.builder-format-field [contenteditable="true"] { min-height: 10rem; max-width: 72ch; white-space: pre-wrap; overflow-wrap: anywhere; line-height: var(--lh); border: 1px solid var(--field-line); border-radius: var(--radius-sm); padding: var(--sp-3); background: var(--surface); }
+.builder-inline-field, .builder-select-field { display: grid; gap: .35rem; color: var(--ink-muted); }
+.builder-fields input, .builder-fields textarea, .builder-source-range input, .builder-inline-field input, .builder-inline-field textarea, .builder-select-field select, .builder-template-picker {
+  width: 100%; min-width: 0; min-height: 2rem; border: 1px solid var(--field-line); border-radius: var(--radius-sm);
+  padding: .6rem .7rem; color: var(--ink); background: var(--surface); font: inherit;
+}
+.builder-content-group, .builder-decision-panel, .builder-path-panel, .builder-rule-row,
+.builder-content-row, .builder-option-row, .builder-clarification-row, .builder-flag-row, .builder-confirm-change,
+.builder-conflict, .builder-issues { border: 1px solid var(--field-line); border-radius: var(--radius); padding: 1rem; margin-block: .75rem; }
+.builder-content-row, .builder-option-row, .builder-flag-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .75rem; align-items: end; }
+.builder-format-field button, .builder-btn, .builder-outline-target, .builder-branch-chip, .builder-region-button, .builder-inspector-tab, .builder-issue-link, .builder-flow-node, .builder-flow-branch {
+  min-width: 32px; min-height: 32px; max-width: 100%; border: 1px solid var(--field-line); border-radius: var(--radius-sm); padding: .3rem .7rem; font-size: var(--t-sm);
+  color: var(--ink); background: var(--surface); font: inherit; text-align: left; cursor: pointer;
+}
+.builder-primary { color: var(--on-petrol); background: var(--petrol); border-color: var(--petrol); }
+.builder-primary:disabled, .builder-btn:disabled { color: var(--ink-muted); background: var(--quiet); border-color: var(--field-line); cursor: not-allowed; } /* BWR19: disabled is neutral wherever the button sits, the app bar included */
+/* A reviewed, non-destructive change (move, connect, turn into, paste): amber like every review; coral is for removal only (BWR19). */
+.builder-confirm { color: var(--manual-ink); background: var(--manual-tint); border-color: var(--manual); }
+.builder-private { color: var(--private-ink); background: var(--private-tint); border-color: var(--private); }
+.builder-studio :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.builder-outline-target[aria-current="true"] { border-color: var(--petrol); background: var(--petrol-tint); }
+.builder-check-row { display: flex; align-items: center; gap: .65rem; min-height: 2rem; }
+.builder-check-row input { width: 1.2rem; height: 1.2rem; }
+.builder-issues { background: var(--ground); }
+.builder-issue-link { border: 0; text-decoration: underline; }
+.builder-multi-select { border: 1px solid var(--field-line); border-radius: var(--radius-sm); }
+.builder-studio button:disabled { color: var(--ink-muted); background: var(--quiet); border-color: var(--field-line); cursor: not-allowed; }
+@media (max-width: 25rem) {
+  .builder-content-row, .builder-option-row, .builder-flag-row { grid-template-columns: minmax(0, 1fr); }
+  .builder-row-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.builder-consequences .builder-path-order { white-space: nowrap; } .builder-consequences .builder-path-order .builder-btn + .builder-btn { margin-inline-start: var(--sp-1); }
+/* Readiness as a slide checklist (CASE-238): one entry per slide that needs work, its problems listed beneath. */
+.builder-readiness-slide { display: grid; gap: 2px; padding-block: var(--sp-2); border-bottom: 1px solid var(--line); }
+.builder-readiness-slide:last-of-type { border-bottom: 0; }
+.builder-readiness-slide .builder-readiness-name { justify-self: start; margin: 0; font-size: var(--t-sm); font-weight: var(--w-semibold); color: var(--ink); }
+.builder-readiness-slide ul { display: grid; gap: 2px; margin: 0; padding-left: var(--sp-4); }
+.builder-readiness-slide li { font-size: var(--t-sm); }
+.builder-readiness-stops { margin-left: var(--sp-2); font-size: var(--t-xs); color: var(--alert-ink); }
+.builder-readiness-sources, .builder-readiness-cited { margin: var(--sp-3) 0 0; font-size: var(--t-sm); color: var(--ink-muted); }
+/* Round 12: one control height for text fields and dropdowns, room between a field's label and the control above,
+   and row tools (order arrows, remove) grouped beside their field. */
+.builder-studio :is(.builder-fields input, .builder-inline-field input, .builder-inline-field textarea, .builder-select-field select, .builder-template-picker) { min-height: 2.5rem; padding-block: .45rem; }
+.builder-studio .shared-select-trigger { min-height: 2.5rem; }
+.builder-studio :is(.builder-inline-field, .builder-select-field) + :is(.builder-inline-field, .builder-select-field, .builder-multi-select) { margin-top: var(--sp-2); }
+.builder-row-tools { display: flex; gap: var(--sp-1); align-items: center; flex-wrap: wrap; }
+.builder-readiness-slide .builder-issue-link { padding: 0; background: transparent; color: inherit; text-decoration-color: var(--line); text-underline-offset: 3px; }
+.builder-readiness-slide .builder-issue-link:hover { text-decoration-color: currentColor; }
+/* One field system in the zones beneath the slide (polish round 17): the zone is the container, so its groups and rows
+   are not cards inside it; one label size, one control height and value size, one maximum width, and an even rhythm. */
+.builder-studio .builder-disclosure :is(.builder-decision-panel, .builder-path-panel, .builder-content-group) { border: 0; padding: 0; margin-block: 0; display: grid; gap: var(--sp-4); }
+.builder-studio .builder-disclosure :is(.builder-option-row, .builder-rule-row, .builder-content-row, .builder-flag-row, .builder-clarification-row) { border: 0; border-radius: 0; padding: 0; margin: 0; }
+.builder-studio .builder-disclosure :is(.builder-inline-field, .builder-select-field) { display: grid; gap: 4px; max-width: 44rem; font-size: 13px; font-weight: var(--w-semibold); color: var(--ink-muted); }
+.builder-studio .builder-disclosure :is(.builder-inline-field, .builder-select-field) :is(input, textarea, select),
+.builder-studio .builder-disclosure .builder-select-field .shared-select-trigger { min-height: 36px; padding-block: 6px; font-size: 15px; font-weight: var(--w-regular); color: var(--ink); }
+.builder-studio .builder-disclosure :is(h4, h5) { margin: var(--sp-2) 0 0; font-size: var(--t-sm); }
+.builder-studio .builder-disclosure .builder-matrix { margin-block: var(--sp-2) var(--sp-3); }
+.builder-studio .builder-disclosure input[type="number"] { max-width: 9rem; }
+.builder-studio .builder-disclosure :is(.builder-decision-panel, .builder-path-panel) > .builder-btn { justify-self: start; width: auto; }

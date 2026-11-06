@@ -1,0 +1,1035 @@
+{
+  "schema_version": 1,
+  "title": "Workshop sensor fault simulation",
+  "summary": "An original synthetic equipment scenario for software verification. It carries branches, flags, private cues, observations and terminal restoration without clinical source material.",
+  "audience": "Software testers",
+  "setting": "Fictional offline workshop",
+  "duration_min": 15,
+  "learning_objectives": [
+    "S00005 workshop learning objectives. Record a sensor signal and inspect the selected branch after reveal",
+    "S00006 workshop learning objectives. Record a sensor signal and inspect the selected branch a",
+    "S00007 workshop learning objectives. Record a sensor signal and inspect the selected branch after rev",
+    "S00008 workshop learning objectives. Record a sensor signal and inspect the selected branch after reveal. S00008 workshop learning objectives."
+  ],
+  "flags": [
+    {
+      "id": "01a0f4c9-8abb-7518-97b3-bc5d63995692",
+      "key": "workshop_flag_01",
+      "label": "S00009 workshop label. Record a s"
+    },
+    {
+      "id": "01a0f4f1-f7c7-770e-91cf-ea6fbc64c646",
+      "key": "workshop_flag_02",
+      "label": "S00010 workshop label. Record a sen"
+    }
+  ],
+  "surfaces": [
+    {
+      "id": "01a0f4c9-8ab6-7392-bfb9-6c7b53391ed4",
+      "kind": "handover",
+      "title": "S00011 workshop title.z",
+      "scene": "S00012 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00012 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00012 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00012 workshop scene. Record a sensoxxxxxxxxxxxxx",
+      "points": [
+        "S00013 workshop points. Record a sensor signal and inspect the selec",
+        "S00014 workshop points. Record a sensor s",
+        "S00015 workshop points. Record a sensor signal and inspec",
+        "S00016 workshop poi",
+        "S00017 workshop points. Record a sensor signal and inspect the sel",
+        "S00018 workshop points. Record a sensor signal and inspect the sele",
+        "S00019 workshop points. Record a sensor signal and inspect the selected"
+      ],
+      "notes": "S00020 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00020 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00020 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00020 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00020 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00020 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00020 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00020 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00020 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00020 workshop notes. Record a sensor sixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+      "id": "01a0f4c9-8aba-7702-8bfd-c1156d727e03",
+      "kind": "observations",
+      "title": "S00021 worksho",
+      "scene": "S00022 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00022 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00022 workshop scene. Record a sensor signal and inspect thez",
+      "points": [
+        "S00023 workshop points. Recor",
+        "S00024 workshop points. Record a sensor signal and inspect the se",
+        "S00025 workshop points. Record a sensor signal and inspec",
+        "S00026 workshop points. Record a sensor si",
+        "S00027 worksh",
+        "S00028 workshop points.",
+        "S00029 workshop points. Record a sensor signal and"
+      ],
+      "notes": "S00030 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00030 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00030 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00030 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00030 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00030 workshop notes. Record a sens",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "92",
+          "unit": "unit"
+        },
+        {
+          "label": "R2",
+          "value": "99/57",
+          "unit": "unit"
+        },
+        {
+          "label": "R3",
+          "value": "50",
+          "unit": "unit"
+        },
+        {
+          "label": "R4",
+          "value": "92",
+          "unit": "unit"
+        },
+        {
+          "label": "R5",
+          "value": "78 (E50 V57 M64)"
+        },
+        {
+          "label": "R6",
+          "value": "85",
+          "unit": "unit"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8aba-7703-bf74-77fbef5e6cb0",
+      "kind": "update",
+      "title": "S00031 workshop title. Recordz",
+      "scene": "S00032 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00032 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00032 workshop scene. Record a se",
+      "points": [
+        "S00033 workshop points. Record a sensor signal a",
+        "S00034 workshop points. Record a sensor signal and",
+        "S00035 workshop points. Record a sensor s",
+        "S00036 workshop points.",
+        "S00037 workshop points. Recordz"
+      ],
+      "notes": "S00038 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00038 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00038 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00038 workshop notes. Record a sensor signal and inspect th",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "71",
+          "unit": "unit"
+        },
+        {
+          "label": "R2",
+          "value": "127/71",
+          "unit": "unit"
+        },
+        {
+          "label": "R3",
+          "value": "57",
+          "unit": "unit"
+        },
+        {
+          "label": "R4",
+          "value": "71",
+          "unit": "unit"
+        },
+        {
+          "label": "R5",
+          "value": "85"
+        },
+        {
+          "label": "R6",
+          "value": "85",
+          "unit": "unit"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8aba-7704-9bd3-dc498bda24a1",
+      "kind": "update",
+      "title": "S00039 workshop title. Record a senso",
+      "scene": "S00040 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00040 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00040 workshop scene. Record a sensor signal and inspect the selected branch after r",
+      "points": [
+        "S00041 workshop points. Record a sensor signal and inspectz",
+        "S00042 workshop points. Record a sensor signal and inspe",
+        "S00043 workshop points. Record a sensor signal",
+        "S00044 workshop points. Record a sensor signalz",
+        "S00045 workshop points. Record a sens"
+      ],
+      "notes": "S00046 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00046 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00046 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00046 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00046 workshop notes. Record a sensor signal and inspect th",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "71",
+          "unit": "unit"
+        },
+        {
+          "label": "R2",
+          "value": "127/71",
+          "unit": "unit"
+        },
+        {
+          "label": "R3",
+          "value": "57",
+          "unit": "unit"
+        },
+        {
+          "label": "R4",
+          "value": "71",
+          "unit": "unit"
+        },
+        {
+          "label": "R5",
+          "value": "85"
+        },
+        {
+          "label": "R6",
+          "value": "85",
+          "unit": "unit"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8aba-7705-aa52-6e2fe10bdda8",
+      "kind": "update",
+      "title": "S00047 workshop title. Record a sensor signal and inspe",
+      "scene": "S00048 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00048 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00048 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00048 wo",
+      "points": [
+        "S00049 workshop points. Record a sensor signal and inspec",
+        "S00050 workshop points. Record a sensor signal and in",
+        "S00051 workshop points. Record a sensor signal and inspect the sele",
+        "S00052 workshop points. Record a sensor signal and",
+        "S00053 workshop points. Record a sensor signal and inspec",
+        "S00054 workshop points. Record a sensor signal and inspect th"
+      ],
+      "investigations": [
+        "S00055 workshop investigations. Record a sensor signal an"
+      ],
+      "notes": "S00056 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00056 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00056 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00056 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00056 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00056 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00056 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00056 workshop notes. Record a sensor signal and inspect t",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "113",
+          "unit": "unit"
+        },
+        {
+          "label": "R7",
+          "value": "64/50 → 71/57",
+          "unit": "unit"
+        },
+        {
+          "label": "R8",
+          "value": "50 → 57",
+          "unit": "unit"
+        },
+        {
+          "label": "R4",
+          "value": "99",
+          "unit": "unit"
+        },
+        {
+          "label": "R9",
+          "value": "50 → 57"
+        },
+        {
+          "label": "R6",
+          "value": "71",
+          "unit": "unit"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8aba-7706-b0ad-7cd371534f02",
+      "kind": "update",
+      "title": "S00057 workshop title. Reco",
+      "scene": "S00058 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00058 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00058 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00058 workshop sc",
+      "points": [
+        "S00059 workshop points. Recor",
+        "S00060 workshop points. Record a",
+        "S00061 workshop points. Re",
+        "S00062 workshop points. Record a se",
+        "S00063 workshop points. Record a s",
+        "S00064 workshop points. Record az",
+        "S00065 workshop points. Record a sensor s"
+      ],
+      "notes": "S00066 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00066 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00066 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00066 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00066 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00066 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00066 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00066 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00066 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00066 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00066 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00066 workshop not",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "50",
+          "unit": "unit"
+        },
+        {
+          "label": "R2",
+          "value": "unrecordable",
+          "unit": "unit"
+        },
+        {
+          "label": "R10",
+          "value": "50 ↓",
+          "unit": "unit"
+        },
+        {
+          "label": "R11",
+          "value": "PEA"
+        },
+        {
+          "label": "R12",
+          "value": "50",
+          "unit": "unit"
+        },
+        {
+          "label": "R5",
+          "value": "50 (post-induction)"
+        },
+        {
+          "label": "R6",
+          "value": "78",
+          "unit": "unit"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8aba-7707-992b-64509c425104",
+      "kind": "observations",
+      "title": "S00067 workshop t",
+      "scene": "S00068 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00068 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00068 workshop scene. Record a sensor signal and inspec",
+      "points": [
+        "S00069 workshop points. Record a s",
+        "S00070 workshop points. Recordz",
+        "S00071 workshop points. Record a sensor signal",
+        "S00072 workshop points. Record az",
+        "S00073 workshop points. Record a sensor signal and inspect thez"
+      ],
+      "investigations": [
+        "S00074 workshop investigations. Record a sensor signal a"
+      ],
+      "notes": "S00075 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00075 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00075 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00075 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00075 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00075 workshop notes. Record a sensor signal and inspect t",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "64",
+          "unit": "unit"
+        },
+        {
+          "label": "R2",
+          "value": "134/78",
+          "unit": "unit"
+        },
+        {
+          "label": "R3",
+          "value": "57",
+          "unit": "unit"
+        },
+        {
+          "label": "R4",
+          "value": "64",
+          "unit": "unit"
+        },
+        {
+          "label": "R5",
+          "value": "85"
+        },
+        {
+          "label": "R6",
+          "value": "78",
+          "unit": "unit"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8aba-7708-b189-c10952e806b8",
+      "kind": "update",
+      "title": "S00076 workshop title. Record a sens",
+      "scene": "S00077 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00077 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00077 workshop scene. Record a sensor signal and inspect the",
+      "points": [
+        "S00078 workshop points. Record a sensor signal and inspec",
+        "S00079 workshop points. Record a sensor signal and inspect th",
+        "S00080 workshop points.",
+        "S00081 workshop points. Record a sensor signal and ins",
+        "S00082 workshop points. Record a sensor signal and inspectz",
+        "S00083 workshop points. Record a sensor sig",
+        "S00084 workshop points. Record a sensor signal and inspect the se"
+      ],
+      "notes": "S00085 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00085 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00085 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00085 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00085 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00085 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00085 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00085 workshop notes. Record a senso",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "57",
+          "unit": "unit"
+        },
+        {
+          "label": "R2",
+          "value": "141/85",
+          "unit": "unit"
+        },
+        {
+          "label": "R13",
+          "value": "64",
+          "unit": "unit"
+        },
+        {
+          "label": "R4",
+          "value": "50",
+          "unit": "unit"
+        },
+        {
+          "label": "R5",
+          "value": "85"
+        },
+        {
+          "label": "R6",
+          "value": "85",
+          "unit": "unit"
+        },
+        {
+          "label": "R14",
+          "value": "50 mL blood, slowing"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8aba-7709-b0a1-c2c5581d95e3",
+      "kind": "update",
+      "title": "S00086 workshop title. Record a sensor signal and",
+      "scene": "S00087 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00087 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00087 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00087 worksh",
+      "points": [
+        "S00088 workshop points. Record a sensor signal and inspe",
+        "S00089 workshop points. Record a sensor sign",
+        "S00090 workshop points. Record a sensor signalz",
+        "S00091 workshop poin",
+        "S00092 workshop points. Record a sensor signal and inspec",
+        "S00093 workshop points. Record a sensor si",
+        "S00094 workshop points. Record a sensor sig"
+      ],
+      "notes": "S00095 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00095 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00095 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00095 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00095 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00095 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S000",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "78",
+          "unit": "unit"
+        },
+        {
+          "label": "R2",
+          "value": "106/57",
+          "unit": "unit"
+        },
+        {
+          "label": "R15",
+          "value": "50 → 64",
+          "unit": "unit"
+        },
+        {
+          "label": "R4",
+          "value": "78",
+          "unit": "unit"
+        },
+        {
+          "label": "R5",
+          "value": "78"
+        },
+        {
+          "label": "R6",
+          "value": "71",
+          "unit": "unit"
+        },
+        {
+          "label": "R14",
+          "value": "57 mL blood"
+        }
+      ],
+      "variants": [
+        {
+          "when_flags": [
+            "workshop_flag_02"
+          ],
+          "scene": "S00096 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00096 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00096 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00096 workshop scen",
+          "points": [
+            "S00088 workshop points. Record a sensor signal and inspe",
+            "S00097 workshop points. Record a sensor signal andz",
+            "S00090 workshop points. Record a sensor signalz",
+            "S00091 workshop poin",
+            "S00098 workshop points. Record a sensor signal and inspect thez",
+            "S00093 workshop points. Record a sensor si",
+            "S00094 workshop points. Record a sensor sig"
+          ],
+          "notes": "S00099 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00099 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00099 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00099 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00099 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00099 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00099 workshop notes. Record a sensor s"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8aba-770a-8349-00205ba3b79c",
+      "kind": "update",
+      "title": "S00100 workshop title. Record a s",
+      "scene": "S00101 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00101 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00101 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00101 workshop scen",
+      "points": [
+        "S00102 workshop points. Record a sensor signal and i",
+        "S00103 workshop points. Record a sensor signal and inspect the selecte",
+        "S00104 workshop points. Record a sensor s",
+        "S00105 workshop points. Record a se",
+        "S00106 workshop points. Record a sensor sign",
+        "S00107 workshop points. Record a sensor signal and i",
+        "S00108 workshop points. Record a sensor signal a"
+      ],
+      "notes": "S00109 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00109 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00109 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00109 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00109 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00109 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00109 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00109 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00109 work",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "85",
+          "unit": "unit"
+        },
+        {
+          "label": "R2",
+          "value": "113/64",
+          "unit": "unit"
+        },
+        {
+          "label": "R15",
+          "value": "57 → 64",
+          "unit": "unit"
+        },
+        {
+          "label": "R4",
+          "value": "85",
+          "unit": "unit"
+        },
+        {
+          "label": "R5",
+          "value": "78"
+        },
+        {
+          "label": "R6",
+          "value": "71",
+          "unit": "unit"
+        },
+        {
+          "label": "R14",
+          "value": "57 mL blood"
+        }
+      ],
+      "variants": [
+        {
+          "when_flags": [
+            "workshop_flag_02"
+          ],
+          "scene": "S00110 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00110 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00110 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00110 workshop scene.",
+          "points": [
+            "S00102 workshop points. Record a sensor signal and i",
+            "S00103 workshop points. Record a sensor signal and inspect the selecte",
+            "S00104 workshop points. Record a sensor s",
+            "S00105 workshop points. Record a se",
+            "S00106 workshop points. Record a sensor sign",
+            "S00111 workshop points. Record a sensor signal and inspect the sele",
+            "S00108 workshop points. Record a sensor signal a"
+          ],
+          "notes": "S00112 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00112 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00112 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00112 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00112 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00112 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00112 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00112 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00112 workshop notes. Record a sensor signal a"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8abb-74f7-a35e-78ca8bc5814c",
+      "kind": "observations",
+      "title": "S00113 workshop title. Record a sens",
+      "scene": "S00114 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00114 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00114 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S001",
+      "points": [
+        "S00115 workshop points. Record a",
+        "S00116 workshop points. Record a sensor signal and",
+        "S00117 works",
+        "S00118 workshop points. Record a sensor signal and",
+        "S00119 worksh",
+        "S00120 workshop points. Record a s",
+        "S00121 workshop points. Record a sen"
+      ],
+      "notes": "S00122 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00122 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00122 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00122 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00122 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00122 workshop notes. Record a sensor signal and inspect the select",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "78",
+          "unit": "unit"
+        },
+        {
+          "label": "R2",
+          "value": "113/57",
+          "unit": "unit"
+        },
+        {
+          "label": "R13",
+          "value": "57",
+          "unit": "unit"
+        },
+        {
+          "label": "R4",
+          "value": "64",
+          "unit": "unit"
+        },
+        {
+          "label": "R5",
+          "value": "78 (E50 V57 M64)"
+        },
+        {
+          "label": "R6",
+          "value": "64",
+          "unit": "unit"
+        },
+        {
+          "label": "R16",
+          "value": "57",
+          "unit": "unit"
+        },
+        {
+          "label": "R17",
+          "value": "57",
+          "unit": "unit"
+        },
+        {
+          "label": "R18",
+          "value": "50",
+          "unit": "unit"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8abb-74f8-aa8a-5ded2be14fb3",
+      "kind": "update",
+      "title": "S00123 workshop title. Record a sensor signal and i",
+      "scene": "S00124 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00124 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00124 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00124 workshop scene. Recordz",
+      "points": [
+        "S00125 workshop points. Record a sensor signal and inspect the selected bran",
+        "S00126 workshop points. Record a sensor signal and in",
+        "S00127 workshop points. Record a sensor signal and inspect the selected branchz",
+        "S00128 workshop points. Record a s",
+        "S00129 workshop points. Record a sensor signal and inspect the sel",
+        "S00130 workshop points. Record a sensor signal and inspect th"
+      ],
+      "investigations": [
+        "S00131 workshop investigations. Record a sensor signal and inspect the selec"
+      ],
+      "notes": "S00132 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00132 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00132 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00132 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00132 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00132 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00132 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00132 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00132 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00132 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00132 workshop notes. Record a sensor signal and inspect the selected branch af",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "64",
+          "unit": "unit"
+        },
+        {
+          "label": "R2",
+          "value": "120/64",
+          "unit": "unit"
+        },
+        {
+          "label": "R13",
+          "value": "64",
+          "unit": "unit"
+        },
+        {
+          "label": "R4",
+          "value": "57",
+          "unit": "unit"
+        },
+        {
+          "label": "R5",
+          "value": "85"
+        },
+        {
+          "label": "R6",
+          "value": "71",
+          "unit": "unit"
+        },
+        {
+          "label": "R16",
+          "value": "50",
+          "unit": "unit"
+        },
+        {
+          "label": "R19",
+          "value": "MTP pack 50 running"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8abb-74f9-bc15-451dbeebf584",
+      "kind": "update",
+      "title": "S00133 workshop title. Record a sensor signa",
+      "scene": "S00134 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00134 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00134 workshop scene. Record a sensor signal and inspect thez",
+      "points": [
+        "S00135 workshop points. Record a sensorz",
+        "S00136 workshop points. Record a sensor signal and insp",
+        "S00137 workshop points",
+        "S00138 workshop points. Recordz",
+        "S00139 workshop points. Record a sensor sign"
+      ],
+      "investigations": [
+        "S00140 workshop investigations. Record az"
+      ],
+      "notes": "S00141 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00141 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00141 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00141 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00141 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00141 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00141 workshop notes. Record a sensor sign",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "106",
+          "unit": "unit"
+        },
+        {
+          "label": "R2",
+          "value": "92/50",
+          "unit": "unit"
+        },
+        {
+          "label": "R13",
+          "value": "50",
+          "unit": "unit"
+        },
+        {
+          "label": "R4",
+          "value": "71",
+          "unit": "unit"
+        },
+        {
+          "label": "R5",
+          "value": "71"
+        },
+        {
+          "label": "R6",
+          "value": "50",
+          "unit": "unit"
+        },
+        {
+          "label": "R16",
+          "value": "64",
+          "unit": "unit"
+        },
+        {
+          "label": "R17",
+          "value": "50",
+          "unit": "unit"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8abb-74fa-8750-a0da682fe22c",
+      "kind": "update",
+      "title": "S00142 workshop title. Reco",
+      "scene": "S00143 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00143 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00143 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00",
+      "points": [
+        "S00144 workshop points. Record a sensorz",
+        "S00145 workshop points. Record a sensor signal and inspect the selected b",
+        "S00146 workshop points. Record a sensor signal and i",
+        "S00147 workshop points. Recor",
+        "S00148 workshop points. Recor",
+        "S00149 workshop points. Record a sensor signal and insp"
+      ],
+      "investigations": [
+        "S00150 workshop investigations. Record a sensor signal and inspec"
+      ],
+      "notes": "S00151 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00151 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00151 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00151 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00151 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00151 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00151 workshop notes. Record a",
+      "observations": [
+        {
+          "label": "R1",
+          "value": "99",
+          "unit": "unit"
+        },
+        {
+          "label": "R2",
+          "value": "92/50",
+          "unit": "unit"
+        },
+        {
+          "label": "R13",
+          "value": "50",
+          "unit": "unit"
+        },
+        {
+          "label": "R4",
+          "value": "71",
+          "unit": "unit"
+        },
+        {
+          "label": "R5",
+          "value": "71"
+        },
+        {
+          "label": "R6",
+          "value": "57",
+          "unit": "unit"
+        },
+        {
+          "label": "R16",
+          "value": "64",
+          "unit": "unit"
+        },
+        {
+          "label": "R18",
+          "value": "57",
+          "unit": "unit"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8abb-74fb-8cf7-1a63c58e785a",
+      "kind": "debrief",
+      "title": "S00152z",
+      "scene": "S00153 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00153 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00153 workshop scene. Record a sensor signal and inspect the selected branch after reveal. S00153 workshop scene. Recordz",
+      "points": [
+        "S00154 workshop points. Record a sensor signal and inspect the selected br",
+        "S00155 workshop points. Record a sensor signal and inspect th",
+        "S00156 workshop points. Record a sensor signal and inspect the selected branch afte",
+        "S00157 workshop points. Record a sensor signal and inspect the selected branc",
+        "S00158 workshop points. Record a sensor signal and inspect the selected branch a",
+        "S00159 workshop points. Record a sensor signal and inspect the selected branch after",
+        "S00160 workshop points. Record a sensor signal and inspect the selected branchz",
+        "S00161 workshop points. Record a sensor signal and inspect the selected branch after reveal."
+      ],
+      "notes": "S00162 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00162 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00162 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00162 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00162 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00162 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00162 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00162 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00162 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00162 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00162 workshop notes. Record a sensor signal and inspect the selected branch after reveal. S00162 workshop notes.z"
+    }
+  ],
+  "beats": [
+    {
+      "id": "01a0f4c9-8abb-74fc-aef7-56efce51760f",
+      "kind": "surface",
+      "title": "S00163z",
+      "surface_id": "01a0f4c9-8ab6-7392-bfb9-6c7b53391ed4",
+      "next_beat_id": "01a0f4c9-8abb-74fd-b21d-ed3de9d7b9d7",
+      "cue": "S00164 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00164 workshop cue. Record a senso"
+    },
+    {
+      "id": "01a0f4c9-8abb-74fd-b21d-ed3de9d7b9d7",
+      "kind": "decision",
+      "title": "S00165 workshop title",
+      "surface_id": "01a0f4c9-8aba-7702-8bfd-c1156d727e03",
+      "decision_id": "01a0f4c9-8abb-7501-9081-57d394f821d9",
+      "cue": "S00166 workshop cue. Record a sensor signal and inspect the selected branch after re"
+    },
+    {
+      "id": "01a0f4c9-8abb-74fe-bbd1-64a68966c159",
+      "kind": "decision",
+      "title": "S00167 worksho",
+      "surface_id": "01a0f4c9-8aba-7707-992b-64509c425104",
+      "decision_id": "01a0f4c9-8abb-7502-b7eb-7d75d07ac5f2",
+      "requires_flags": [
+        "workshop_flag_01"
+      ],
+      "cue": "S00168 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S0016"
+    },
+    {
+      "id": "01a0f4c9-8abb-74ff-be9f-634e8dfa4de7",
+      "kind": "decision",
+      "title": "S00169 works",
+      "surface_id": "01a0f4c9-8abb-74f7-a35e-78ca8bc5814c",
+      "decision_id": "01a0f4c9-8abb-7503-b702-6208421c671f",
+      "cue": "S00170 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00170 workshop cue.z"
+    },
+    {
+      "id": "01a0f4c9-8abb-7500-8412-7531ed567788",
+      "kind": "debrief",
+      "title": "S00152z",
+      "surface_id": "01a0f4c9-8abb-74fb-8cf7-1a63c58e785a",
+      "cue": "S00171 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00171 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00171 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00171 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00171 workshop cue. Record a sensor signal and inspect th"
+    }
+  ],
+  "start_beat_id": "01a0f4c9-8abb-74fc-aef7-56efce51760f",
+  "decisions": [
+    {
+      "id": "01a0f4c9-8abb-7501-9081-57d394f821d9",
+      "prompt": "S00172 workshop prompt. Record a sensor",
+      "timer_s": 75,
+      "interaction": {
+        "type": "single_choice",
+        "options": [
+          {
+            "id": "01a0f4c9-8abb-7506-8e01-29df392db325",
+            "label": "S00173 workshop label. Record az"
+          },
+          {
+            "id": "01a0f4c9-8abb-7507-9f92-662e9633fc8a",
+            "label": "S00174 workshop label. Record a senso"
+          },
+          {
+            "id": "01a0f4c9-8abb-7504-905e-f608ba94f121",
+            "label": "S00175 workshop label. Record a s"
+          },
+          {
+            "id": "01a0f4c9-8abb-7505-8e6c-deb51832f54d",
+            "label": "S00176 workshop label. Record az"
+          }
+        ]
+      },
+      "fallback_path_id": "01a0f4c9-8abb-750e-8816-c6954e78b659",
+      "paths": [
+        {
+          "id": "01a0f4c9-8abb-750e-8816-c6954e78b659",
+          "label": "S00177 workshop label. Record a sensor signal and inspect the selec",
+          "classification": "sound",
+          "recommended": true,
+          "rationale": "S00178 workshop rationale. Record a sensor signal and inspect the selected branch after reveal. S00178 workshop rationale. Record a sensor signal and inspect the selected branch after revea",
+          "option_ids": [
+            "01a0f4c9-8abb-7504-905e-f608ba94f121"
+          ],
+          "set_flags": [
+            "workshop_flag_01"
+          ],
+          "reveal_surface_id": "01a0f4c9-8aba-7703-bf74-77fbef5e6cb0",
+          "next_beat_id": "01a0f4c9-8abb-74fe-bbd1-64a68966c159",
+          "cue": "S00179 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00179 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00179 workshop cue. Record az"
+        },
+        {
+          "id": "01a0f4c9-8abb-750f-8afe-f6046fb656f3",
+          "label": "S00180 workshop label. Record az",
+          "classification": "defensible",
+          "rationale": "S00181 workshop rationale. Record a sensor signal and inspect the selected branch after reveal. S00181 workshop rationale. Reco",
+          "option_ids": [
+            "01a0f4c9-8abb-7505-8e6c-deb51832f54d"
+          ],
+          "set_flags": [
+            "workshop_flag_01",
+            "workshop_flag_02"
+          ],
+          "reveal_surface_id": "01a0f4c9-8aba-7704-9bd3-dc498bda24a1",
+          "next_beat_id": "01a0f4c9-8abb-74fe-bbd1-64a68966c159",
+          "cue": "S00182 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00182 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00182 workshop cue. Record a sensor signal and inspect the sel"
+        },
+        {
+          "id": "01a0f4c9-8abb-7510-a2cc-2ab1318db27a",
+          "label": "S00173 workshop label. Record az",
+          "classification": "unsafe",
+          "rationale": "S00183 workshop rationale. Record a sensor signal and inspect the selected branch after reveal. S00183 workshop rationale. Record a sensor signal and inspectz",
+          "option_ids": [
+            "01a0f4c9-8abb-7506-8e01-29df392db325"
+          ],
+          "set_flags": [
+            "workshop_flag_01"
+          ],
+          "reveal_surface_id": "01a0f4c9-8aba-7705-aa52-6e2fe10bdda8",
+          "next_beat_id": "01a0f4c9-8abb-74fe-bbd1-64a68966c159",
+          "cue": "S00184 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00184 workshop cue. Record a sensor signal and inspect the selected bran"
+        },
+        {
+          "id": "01a0f4c9-8abb-7511-a31c-1dbb0f4b59c6",
+          "label": "S00174 workshop label. Record a senso",
+          "classification": "terminal-unsafe",
+          "rationale": "S00185 workshop rationale. Record a sensor signal and inspect the selected branch after reveal. S00185 workshop rationale. Record a sensor signal and ins",
+          "option_ids": [
+            "01a0f4c9-8abb-7507-9f92-662e9633fc8a"
+          ],
+          "reveal_surface_id": "01a0f4c9-8aba-7706-b0ad-7cd371534f02",
+          "terminal": {
+            "checkpoint_beat_id": "01a0f4c9-8abb-74fd-b21d-ed3de9d7b9d7",
+            "debrief_prompt": "S00186 workshop debrief prompt. Record a sensor signal and inspect the selected branch after reveal. S00186 workshop debrief prompt. Record a sensor signal and inspect the selected branch afte",
+            "restore_policy": "snapshot"
+          },
+          "cue": "S00187 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00187 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00187 workshop cue. Record az"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8abb-7502-b7eb-7d75d07ac5f2",
+      "prompt": "S00188 workshop prompt. Record a sensor sig",
+      "timer_s": 75,
+      "interaction": {
+        "type": "single_choice",
+        "options": [
+          {
+            "id": "01a0f4c9-8abb-7508-a9e7-f3ecd59c4b19",
+            "label": "S00189 workshop label. Record a s"
+          },
+          {
+            "id": "01a0f4c9-8abb-7509-acf5-98f924292dc0",
+            "label": "S00190 workshop label. Record a"
+          },
+          {
+            "id": "01a0f4c9-8abb-750a-b9c2-773ff7ff68c0",
+            "label": "S00191 workshop label. Record"
+          }
+        ]
+      },
+      "fallback_path_id": "01a0f4c9-8abb-7512-b642-7eb39c384249",
+      "paths": [
+        {
+          "id": "01a0f4c9-8abb-7512-b642-7eb39c384249",
+          "label": "S00189 workshop label. Record a s",
+          "classification": "sound",
+          "recommended": true,
+          "rationale": "S00192 workshop rationale. Record a sensor signal and inspect the selected branch after reveal. S00192 workshop rationale. Record a sensor signal and inspect the",
+          "option_ids": [
+            "01a0f4c9-8abb-7508-a9e7-f3ecd59c4b19"
+          ],
+          "reveal_surface_id": "01a0f4c9-8aba-7708-b189-c10952e806b8",
+          "next_beat_id": "01a0f4c9-8abb-74ff-be9f-634e8dfa4de7",
+          "cue": "S00193 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00193 workshop cue. Record a sensor signal and inspect t"
+        },
+        {
+          "id": "01a0f4c9-8abb-7513-aca7-e3ce7e2686fe",
+          "label": "S00194 workshop lab",
+          "classification": "unsafe",
+          "rationale": "S00195 workshop rationale. Record a sensor signal and inspect the selected branch after reveal. S00195 workshop rationale. Record a sensor signal",
+          "option_ids": [
+            "01a0f4c9-8abb-7509-acf5-98f924292dc0"
+          ],
+          "reveal_surface_id": "01a0f4c9-8aba-7709-b0a1-c2c5581d95e3",
+          "next_beat_id": "01a0f4c9-8abb-74ff-be9f-634e8dfa4de7",
+          "cue": "S00196 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00196 workshop cue. Record a sensor signal and in"
+        },
+        {
+          "id": "01a0f4c9-8abb-7514-8923-2640c42afe7b",
+          "label": "S00197 workshop label. Record a sensor signal and inspect the",
+          "classification": "unsafe",
+          "rationale": "S00198 workshop rationale. Record a sensor signal and inspect the selected branch after reveal. S00198 workshop rationale. Record a sensor signal and inspect the selected branch",
+          "option_ids": [
+            "01a0f4c9-8abb-750a-b9c2-773ff7ff68c0"
+          ],
+          "reveal_surface_id": "01a0f4c9-8aba-770a-8349-00205ba3b79c",
+          "next_beat_id": "01a0f4c9-8abb-74ff-be9f-634e8dfa4de7",
+          "cue": "S00199 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00199 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00199 w"
+        }
+      ]
+    },
+    {
+      "id": "01a0f4c9-8abb-7503-b702-6208421c671f",
+      "prompt": "S00200 workshop prompt. Record a sensor s",
+      "timer_s": 75,
+      "interaction": {
+        "type": "single_choice",
+        "options": [
+          {
+            "id": "01a0f4c9-8abb-750c-8fad-0e2e5daa4658",
+            "label": "S00201 workshop label. Re"
+          },
+          {
+            "id": "01a0f4c9-8abb-750b-af74-cca44612f3a6",
+            "label": "S00202 workshop label. Recor"
+          },
+          {
+            "id": "01a0f4c9-8abb-750d-9bb5-ad0f383e41bc",
+            "label": "S00203 workshop label. Rec"
+          }
+        ]
+      },
+      "fallback_path_id": "01a0f4c9-8abb-7515-8f6a-c6ec68c11385",
+      "paths": [
+        {
+          "id": "01a0f4c9-8abb-7515-8f6a-c6ec68c11385",
+          "label": "S00204 workshop label. Record a sensor signal and inspec",
+          "classification": "sound",
+          "recommended": true,
+          "rationale": "S00205 workshop rationale. Record a sensor signal and inspect the selected branch after reveal. S00205 workshop rationale. Record a sensor signal and inspect the selected branch after reveal. S00205 workshop rat",
+          "option_ids": [
+            "01a0f4c9-8abb-750b-af74-cca44612f3a6"
+          ],
+          "reveal_surface_id": "01a0f4c9-8abb-74f8-aa8a-5ded2be14fb3",
+          "next_beat_id": "01a0f4c9-8abb-7500-8412-7531ed567788",
+          "cue": "S00206 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00206 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00206 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00206 workshop cue. Record a sensor signal and inspect th"
+        },
+        {
+          "id": "01a0f4c9-8abb-7516-a577-c332f6141804",
+          "label": "S00201 workshop label. Re",
+          "classification": "unsafe",
+          "rationale": "S00207 workshop rationale. Record a sensor signal and inspect the selected branch after reveal. S00207 workshop rationale. Record a sensor signal and inspect t",
+          "option_ids": [
+            "01a0f4c9-8abb-750c-8fad-0e2e5daa4658"
+          ],
+          "reveal_surface_id": "01a0f4c9-8abb-74f9-bc15-451dbeebf584",
+          "next_beat_id": "01a0f4c9-8abb-7500-8412-7531ed567788",
+          "cue": "S00208 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00208 workshop cue. Record a sen"
+        },
+        {
+          "id": "01a0f4c9-8abb-7517-86af-e45cd2b19aed",
+          "label": "S00209 workshop lab",
+          "classification": "unsafe",
+          "rationale": "S00210 workshop rationale. Record a sensor signal and inspect the selected branch after reveal. S00210 workshop rationale. Rec",
+          "option_ids": [
+            "01a0f4c9-8abb-750d-9bb5-ad0f383e41bc"
+          ],
+          "reveal_surface_id": "01a0f4c9-8abb-74fa-8750-a0da682fe22c",
+          "next_beat_id": "01a0f4c9-8abb-7500-8412-7531ed567788",
+          "cue": "S00211 workshop cue. Record a sensor signal and inspect the selected branch after reveal. S00211 workshop cue. Record a sensor si"
+        }
+      ]
+    }
+  ]
+}

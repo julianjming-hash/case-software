@@ -1,0 +1,11 @@
+# Proposed ownership only; effective enforcement requires owner-approved repository rules.
+* @julianjming-hash
+/.github/ @julianjming-hash
+/AGENTS.md @julianjming-hash
+/CLAUDE.md @julianjming-hash
+/LICENSE @julianjming-hash
+/NOTICE.md @julianjming-hash
+/src/fixtures/ @julianjming-hash
+/tests/fixtures/ @julianjming-hash
+/scripts/public-ci-result.mjs @julianjming-hash
+/package*.json @julianjming-hash

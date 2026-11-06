@@ -1,0 +1,363 @@
+/* Approved phone prototype layout, scoped to the served participant surface. */
+
+  /* Participant phone (stage C). Rendering rule: every string from the case or from a participant is
+     placed with textContent / createTextNode. Nothing here ever assigns innerHTML.
+     The spatial grid (CASE-113), stacked for a phone: the orientation band on top (Case, the phase pill,
+     who you are), then the information (scene card, vitals, findings, investigations), then the decision. */
+  html.phone-page { -webkit-text-size-adjust: 100%; scroll-padding-top: 72px; scroll-padding-bottom: 96px; } /* the sticky header and the fixed Live surface bar never hide the focused control (WCAG 2.4.11) */
+  body.phone-page { min-height: 100vh; font-size: var(--t-md); }
+  .phone-app { max-width: 520px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+  .phone-app .top { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--nav-line); background: var(--nav-bg); color: var(--nav-ink); position: sticky; top: 0; z-index: var(--z-sticky); }
+  .phone-app .top .who { flex: 1; min-width: 0; display: flex; align-items: center; gap: var(--sp-2); }
+  .phone-app .top .who-text { min-width: 0; }
+  .phone-app .top .brand { margin: 0; font-size: var(--t-xs); font-weight: var(--w-semibold); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-muted); }
+  .phone-app .top .name { margin: 0; font-weight: var(--w-semibold); font-size: var(--t-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .phone-app .top .pill svg { flex: none; }
+  .phone-app .iconbtn { min-width: 44px; min-height: 44px; border: 1px solid var(--field-line); background: var(--surface); color: var(--nav-ink); border-radius: var(--radius-sm); display: grid; place-items: center; }
+  .phone-app .conn { margin: var(--sp-2) var(--sp-4) 0; }
+  .phone-app .conn:empty { margin: 0; }
+  .phone-app .conn .banner { font-size: var(--t-sm); }
+  .phone-app .conn .banner.lost { background: var(--alert-tint); color: var(--alert-ink); }
+  .phone-app .conn .banner.wait { background: var(--sunken); color: var(--ink); }
+  .phone-app .note { margin: var(--sp-2) var(--sp-4) 0; min-height: 0; font-size: var(--t-sm); font-weight: var(--w-semibold); color: var(--petrol-ink); }
+  .phone-app .note:empty { display: none; }
+  .phone-app #menu { margin: var(--sp-2) var(--sp-4) 0; padding: var(--sp-4); }
+  .phone-app main { flex: 1; margin: 0; padding: var(--sp-4) var(--sp-4) var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-3); }
+  .phone-app main.pad-bar { padding-bottom: 96px; }
+  .phone-app main:focus { outline: none; }
+  .phone-app main > :empty { display: none; }
+  .phone-app h1, .phone-app h2, .phone-app h3, .phone-app h4 { margin: 0; }
+  .phone-app h1 { font-size: var(--t-xl); }
+  .phone-app h2 { font-size: var(--t-lg); }
+  .phone-app h3 { font-size: var(--t-md); }
+  .phone-app h4 { font-size: var(--t-md); font-weight: var(--w-semibold); }
+  .phone-app [tabindex="-1"]:focus { outline: none; }
+  .phone-app [tabindex="-1"]:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .phone-app p { margin: 0; }
+  .phone-app .card { padding: var(--sp-4); display: grid; gap: var(--sp-3); }
+  .phone-app .card.flat { box-shadow: none; }
+  .phone-app .small { font-size: var(--t-sm); }
+  .phone-app .join-footer { display: flex; justify-content: center; }
+  .phone-app .join-footer a { min-height: 44px; display: inline-flex; align-items: center; padding: 0 var(--sp-3); color: var(--petrol-ink); font-size: var(--t-sm); font-weight: var(--w-medium); }
+
+  /* information: one scene card, then bento tiles (CASE-116, CASE-117) */
+  .phone-app .scene { gap: var(--sp-2); }
+  .phone-app .scene .prose { font-size: var(--t-md); line-height: 1.55; }
+  /* consequence and terminal scenes: a coral-tinted surface and a leading tessera on the eyebrow; no rail (CASE-163) */
+  .phone-app .scene[data-kind="consequence"], .phone-app .scene[data-kind="terminal"] { background: var(--ph-consequence-tint); }
+  .phone-app .scene[data-kind="consequence"] > .eyebrow::before, .phone-app .scene[data-kind="terminal"] > .eyebrow::before { content: ""; display: inline-block; width: var(--tessera); height: var(--tessera); margin-right: var(--sp-2); border-radius: 2px; background: var(--ph-consequence); }
+  .phone-app .tile { padding: var(--sp-3) var(--sp-4); gap: var(--sp-2); }
+  .phone-app .points { margin: 0; padding-left: 20px; display: grid; gap: 6px; line-height: 1.45; font-size: var(--t-md); }
+  .phone-app .points li { overflow-wrap: anywhere; padding-left: 2px; }
+  .phone-app .points li::marker { color: var(--petrol-ink); }
+  /* one ruled strip (card 36a): labels above mono numerals, rules above and below, no box; wraps at 320 px */
+  .phone-app .vitals { list-style: none; margin: 0; padding: var(--sp-3) 0; display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-5); border-block: 1px solid var(--line); }
+  .phone-app .vitals li { display: grid; align-content: start; min-width: 0; flex: 0 1 auto; }
+  .phone-app .vitals .vl { font-size: var(--t-xs); font-weight: var(--w-semibold); color: var(--ink-muted); overflow-wrap: anywhere; }
+  .phone-app .vitals .vv { font-weight: var(--w-semibold); font-size: var(--t-lg); line-height: 1.15; font-family: var(--mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .phone-app .vitals .vu { display: inline-block; font-size: var(--t-xs); font-weight: var(--w-regular); color: var(--ink-muted); margin-left: 3px; font-family: var(--sans); white-space: nowrap; }
+  .phone-app .vitals .arrow { font: var(--w-medium) var(--t-xs)/1.3 var(--mono); }
+  .phone-app details.ctx { border: 1px solid var(--field-line); border-radius: var(--radius); background: var(--surface); }
+  .phone-app details.ctx summary { min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); padding: 0 var(--sp-4); font-weight: var(--w-semibold); cursor: pointer; }
+  .phone-app details.ctx .inner { padding: 0 var(--sp-4) var(--sp-4); display: grid; gap: var(--sp-3); }
+
+  /* forms */
+  .phone-app label.field, .phone-app .field-label { display: block; font-weight: var(--w-semibold); font-size: var(--t-sm); margin-bottom: 6px; }
+  .phone-app input[type=text], .phone-app textarea { width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font-size: 16px; }
+  .phone-app textarea { min-height: 112px; resize: vertical; }
+  .phone-app input[aria-invalid=true] { border-color: var(--alert); border-width: 2px; }
+  /* Room code: ONE native input; six cells are drawn behind it as underlines, not six fields. The cell width tracks the type size. */
+  .phone-app .counter { font-size: var(--t-xs); color: var(--ink-muted); text-align: right; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .phone-app .btn { min-height: 48px; font-size: var(--t-md); }
+  .phone-app .btn.small { min-height: 44px; font-size: var(--t-sm); padding: 6px 12px; }
+  .phone-app .stack { display: grid; gap: var(--sp-3); }
+  .phone-app .err { color: var(--alert-ink); font-weight: var(--w-semibold); font-size: var(--t-sm); margin-top: 6px; display: flex; gap: 8px; align-items: flex-start; }
+  .phone-app .err:empty { display: none; }
+  .phone-app .idwarn { margin-top: 6px; padding: 8px 10px; border-radius: var(--radius-sm); background: var(--manual-tint); color: var(--manual-ink); font-size: var(--t-sm); font-weight: var(--w-medium); }
+  .phone-app .idwarn:empty { display: none; }
+  .phone-app fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+  .phone-app fieldset:disabled .opt { opacity: .75; }
+  .phone-app legend { max-width: 100%; overflow-wrap: anywhere; padding: 0; font-size: var(--t-lg); font-weight: var(--w-semibold); line-height: 1.3; margin-bottom: var(--sp-3); }
+  .phone-app .hint { font-size: var(--t-sm); color: var(--ink-muted); margin: 0 0 8px; }
+
+  /* avatar picker (CASE-119): a radio group of 16 vendored drawings, each with a spoken label */
+  .phone-app .avatars { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-2); }
+  .phone-app .av { position: relative; display: grid; place-items: center; aspect-ratio: 1; border: 2px solid transparent; border-radius: var(--radius); background: var(--sunken); cursor: pointer; }
+  .phone-app .av input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: inherit; }
+  .phone-app .av img { width: 78%; height: auto; border-radius: 50%; pointer-events: none; }
+  .phone-app .av:has(input:checked) { border-color: var(--petrol); background: var(--petrol-tint); }
+  .phone-app .av:has(input:checked)::after { content: "\2713" / ""; position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: var(--petrol); color: var(--on-petrol); font-size: 12px; font-weight: var(--w-bold); line-height: 1; }
+  .phone-app .av:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .phone-app .preview { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3); border-radius: var(--radius); background: var(--quiet); }
+  .phone-app .preview .nm { font-weight: var(--w-semibold); overflow-wrap: anywhere; }
+
+  /* option tiles: the decision zone carries the option colours (CASE-114): mark + full text + a checked indicator */
+  .phone-app .opts { display: grid; gap: var(--sp-2); }
+  .phone-app .opt { position: relative; display: grid; grid-template-columns: 36px minmax(0, 1fr) 26px; gap: var(--sp-3); align-items: center; min-height: 60px; padding: 10px 12px; cursor: pointer; }
+  .phone-app .opt input { position: absolute; opacity: 0; width: 100%; height: 100%; inset: 0; margin: 0; cursor: inherit; }
+  .phone-app .opt:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .phone-app .opt .mk { display: grid; }
+  .phone-app .opt .lbl { overflow-wrap: break-word; line-height: 1.35; font-weight: var(--w-medium); }
+  .phone-app .opt .ind { width: 24px; height: 24px; border: 2px solid var(--field-line); border-radius: 50%; display: grid; place-items: center; color: var(--ink); background: var(--surface); }
+  .phone-app .opt.multi .ind { border-radius: 6px; }
+  .phone-app .opt:has(input:checked) { --mk:var(--petrol); border: 2px solid var(--ink); padding: 9px 11px; background: color-mix(in srgb, var(--mk) 22%, var(--surface)); }
+  .phone-app .opt:has(input:checked) .ind { background: var(--ink); border: 0; color: var(--surface); }
+  .phone-app .opt:has(input:checked) .lbl { font-weight: var(--w-semibold); }
+  .phone-app .opt.locked { background: var(--sunken); border-style: dashed; cursor: not-allowed; color: var(--ink-muted); }
+  .phone-app .opt.locked .mk { opacity: .45; }
+  .phone-app .opt.locked .ind { display: none; }
+  .phone-app .opt .tag { grid-column: 2 / -1; justify-self: start; }
+  .phone-app .opt .xnote { grid-column: 2 / -1; }
+  .phone-app .xnote { font-size: var(--t-xs); color: var(--ink-muted); }
+  .phone-app .mk-line { display: inline-flex; gap: 8px; align-items: center; vertical-align: middle; }
+  .phone-app .mk-line svg { flex: none; }
+  .phone-app .mk-wrap { display: inline-flex; gap: 4px; vertical-align: middle; margin-right: 6px; }
+  .phone-app .chose { display: flex; gap: 10px; align-items: center; font-weight: var(--w-semibold); overflow-wrap: anywhere; }
+  .phone-app .chose .mk-wrap { margin: 0; flex: none; }
+
+  /* ranking */
+  .phone-app .rank { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 8px; }
+  /* D24: a ranked option takes the full row width under its number, mark and move controls, so a long label never
+     squeezes into a column beside them. Labels wrap between words; break-word splits only a token wider than the row. */
+  .phone-app .rank li { --mk: var(--petrol); border: 2px solid var(--petrol); background: color-mix(in srgb, var(--mk) 14%, var(--surface)); border-radius: var(--radius); padding: 8px 12px; display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; grid-template-areas: "pos mk . btns" "lbl lbl lbl lbl"; align-items: center; gap: 4px 10px; }
+  .phone-app .rank .top-row { display: contents; }
+  .phone-app .rank .pos { grid-area: pos; width: 28px; height: 28px; border-radius: var(--radius-chip); background: var(--petrol); color: var(--on-petrol); font-weight: var(--w-semibold); display: grid; place-items: center; font-size: var(--t-sm); }
+  .phone-app .rank .top-row .mk { grid-area: mk; display: grid; }
+  .phone-app .rank .top-row .lbl { grid-area: lbl; min-width: 0; overflow-wrap: break-word; line-height: 1.35; }
+  .phone-app .rank .row-btns { grid-area: btns; display: grid; grid-template-columns: repeat(3, 44px); gap: 4px; align-items: center; }
+  .phone-app .rank-move { min-width: 44px; min-height: 44px; padding: 4px; font-size: var(--t-lg); }
+  .phone-app .avail { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .phone-app .avail li { --mk: var(--ink-muted); display: flex; gap: 10px; align-items: center; min-height: 56px; padding: 6px 6px 6px 12px; border: 1px solid var(--field-line); border-radius: var(--radius); background: color-mix(in srgb, var(--mk) 12%, var(--surface)); }
+  .phone-app .avail li > .lbl { flex: 1; min-width: 0; overflow-wrap: break-word; }
+  .phone-app .avail li.locked { background: var(--sunken); border-style: dashed; }
+  .phone-app .avail li.locked .mk, .phone-app .rank li.locked .mk { opacity: .45; }
+  .phone-app .empty-rank { padding: 12px; border: 1px dashed var(--field-line); border-radius: var(--radius-sm); color: var(--ink-muted); margin-bottom: 10px; }
+
+  /* receipts */
+  .phone-app .receipts { display: grid; gap: 6px; }
+  .phone-app .receipts:not(:has(.t:not(:empty))) { display: none; }
+  .phone-app .card > p:empty { display: none; }
+  .phone-app .rcpt { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--sunken); font-weight: var(--w-medium); font-size: var(--t-sm); }
+  .phone-app .rcpt:has(.t:empty) { display: none; }
+  .phone-app .rcpt .t { flex: 1; }
+  .phone-app .rcpt svg { flex: none; margin-top: 2px; }
+  .phone-app .rcpt.alert { background: var(--alert-tint); color: var(--alert-ink); }
+  .phone-app .rcpt.ok { background: var(--ok-tint); color: var(--ok-ink); }
+  .phone-app .rcpt.info { background: var(--petrol-tint); color: var(--petrol-ink); }
+  .phone-app .rcpt.pause { background: var(--ph-paused-tint); color: var(--ph-paused-ink); }
+  .phone-app .saved-line { font-weight: var(--w-semibold); overflow-wrap: anywhere; }
+  .phone-app .timer-line { font-size: var(--t-sm); color: var(--ink-muted); display: inline-flex; gap: 6px; align-items: center; }
+  .phone-app .timer-line:empty { display: none; }
+  /* the decision card is a plain card: the phase chip in the header carries the phase, so no top rail (CASE-163) */
+  /* CASE-313: the branch badge, top right of a question card whose answers lead to different next slides. */
+  .phone-app .decision { position: relative; }
+  .phone-app .decision > .branch-badge { position: absolute; top: var(--sp-3); right: var(--sp-3); display: inline-flex; color: var(--ink-muted); }
+  .phone-app .decision:has(> .branch-badge) > h2 { padding-inline-end: 28px; }
+
+  /* timeline */
+  .phone-app .tl h3 { margin-bottom: 8px; font-size: var(--t-sm); color: var(--ink-muted); letter-spacing: .08em; text-transform: uppercase; }
+  .phone-app .strip { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x proximity; padding: 2px 2px 8px; margin: 0 -16px; padding-inline: 16px; list-style: none; }
+  .phone-app .strip li { scroll-snap-align: start; flex: 0 0 62%; }
+  .phone-app .strip button { width: 100%; min-height: 64px; text-align: left; padding: 8px 12px; border: 1px solid var(--field-line); background: var(--surface); border-radius: var(--radius-sm); display: grid; gap: 2px; }
+  .phone-app .strip button[aria-current=true] { border: 2px solid var(--petrol); padding: 7px 11px; background: var(--petrol-tint); }
+  .phone-app .strip .n { font-size: var(--t-xs); font-weight: var(--w-semibold); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-muted); }
+  .phone-app .strip .t { font-weight: var(--w-medium); font-size: var(--t-sm); overflow-wrap: anywhere; }
+  .phone-app .bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-dock); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--surface); border-top: 1px solid var(--nav-line); box-shadow: var(--shadow-2); }
+  .phone-app .bar .inner { max-width: 520px; margin: 0 auto; }
+  .phone-app .bar[hidden] { display: none; }
+
+  /* result + recap */
+  .phone-app .result { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: var(--sp-4); display: grid; gap: 6px; }
+  .phone-app .ranking-result { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-3); color: var(--ink); background: var(--surface); }
+  .phone-app .ranking-result ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2); font-variant-numeric: tabular-nums; }
+  .phone-app .recap-round { border-top: 1px solid var(--line); padding-top: 12px; display: grid; gap: 6px; }
+  .phone-app .recap-round p { overflow-wrap: anywhere; }
+  .phone-app .cls { display: inline-flex; gap: 6px; align-items: center; font-weight: var(--w-semibold); }
+  .phone-app ul.plain, .phone-app ol.plain { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+  .phone-app .sr-only-live { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  :root:not([data-motion="false"]) .phone-app .spin { animation: phone-spin 1s linear infinite; }
+  @keyframes phone-spin { to { transform: rotate(360deg); } }
+  .phone-app .print-head { display: none; }
+  @media print {
+    @page { size: A4 portrait; margin: 13mm; }
+    .phone-app .top, .phone-app .conn, .phone-app .note, .phone-app .bar, .phone-app #menu, .phone-app .noprint, .phone-app .strip, .phone-app .tl, .phone-app .recap-head { display: none; }
+    body.phone-page, .phone-app { background: var(--surface); color: var(--ink); }
+    .phone-app main { padding: 0; }
+    .phone-app .card { box-shadow: none; border: 0; padding: 0; }
+    .phone-app .print-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2) var(--sp-4); padding-bottom: var(--sp-3); border-bottom: 1px solid var(--line); }
+    .phone-app .print-head strong { letter-spacing: .14em; }
+    .phone-app .recap-round, .phone-app .stop { break-inside: avoid; }
+  }
+
+.phone-app .rename-heading { font-size:var(--t-md); margin-bottom:var(--sp-2); }
+.phone-app .held-prompt { font-size:var(--t-lg); font-weight:var(--w-semibold); line-height:1.3; overflow-wrap:anywhere; }
+.phone-app .wrap-anywhere { overflow-wrap:anywhere; }
+.phone-app .block-note { display:block; }
+.phone-app .av-color-label { color:var(--ink); font-size:var(--t-xs); font-weight:var(--w-semibold); }
+.phone-app .unsent { color:var(--alert-ink); background:var(--alert-tint); margin:var(--sp-2) var(--sp-4); padding:var(--sp-2); }
+.phone-app .unsent:empty { display:none; }
+
+.phone-app .opt .ind svg { visibility:hidden; }
+.phone-app .opt:has(input:checked) .ind svg { visibility:visible; }
+
+/* Authored layout must not override the participant hidden state. */
+.phone-app [hidden] { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="false"]) .phone-app .presentation-new-group { animation: phone-presentation-share 240ms ease-out both; }
+  @keyframes phone-presentation-share { from { opacity: .72; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+}
+
+/* ── card 36a: splash surfaces (join, waiting), the one-line code, the preassigned avatar, the recap header ──
+   The braid fills the page; an opaque panel (never see-through, so contrast never depends on the art) carries the
+   form or the status. Join draws the brand braid, waiting the room's own descriptor from the participant view.
+   A band of at least 28vh always follows the panel, so on a short phone the braid composes there, below the card,
+   never mainly behind it (Julian, 2026-10-10). */
+.phone-app .phone-splash { position: relative; isolation: isolate; flex: 1 1 auto; display: flex; flex-direction: column; justify-content: flex-start; margin: calc(-1 * var(--sp-4)) calc(-1 * var(--sp-4)) calc(-1 * var(--sp-5)); padding: var(--sp-4) var(--sp-4) max(var(--sp-8), 28vh); overflow: hidden; }
+.phone-app .phone-splash[hidden] { display: none; }
+.phone-app .splash-art { position: absolute; inset: 0; pointer-events: none; }
+.phone-app .splash-art > svg { position: absolute; inset: 0; }
+.phone-app .splash-panel { position: relative; z-index: var(--z-raised); border-radius: var(--radius-lg); box-shadow: var(--shadow-2); }
+.phone-app .splash-panel > div:empty { display: none; }
+.phone-app .room-line[hidden] { display: none; }
+.phone-app .room-line { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); min-height: 44px; }
+.phone-app .room-line-text { font-size: var(--t-sm); color: var(--ink-muted); }
+.phone-app .room-code { margin-left: var(--sp-1); font: var(--w-bold) var(--t-lg)/1.2 var(--mono); letter-spacing: .06em; color: var(--ink); }
+.phone-app .join-name { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--sp-3); }
+.phone-app .join-name > label, .phone-app .join-name > input, .phone-app .join-name > .err, .phone-app .join-name > .idwarn { grid-column: 1 / -1; }
+.phone-app .join-name > .hint { grid-column: 1; grid-row: 3; margin: 0; }
+.phone-app .join-name > .counter { grid-column: 2; grid-row: 3; margin: 0; align-self: start; }
+.phone-app .avatar-row { display: flex; align-items: center; gap: var(--sp-4); }
+.phone-app .avatar-slot { flex: none; display: grid; }
+.phone-app .avatar-slot .avatar { border-radius: 50%; }
+.phone-app .avatar-text { display: grid; gap: 2px; min-width: 0; }
+.phone-app .avatar-label { font-size: var(--t-sm); font-weight: var(--w-semibold); }
+.phone-app .avatar-note { font-size: var(--t-xs); color: var(--ink-muted); }
+.phone-app details.disclose > summary { min-height: 44px; display: flex; align-items: center; font-size: var(--t-sm); font-weight: var(--w-semibold); color: var(--petrol-ink); cursor: pointer; }
+.phone-app details.disclose > summary:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.phone-app details.disclose[open] > summary { margin-bottom: var(--sp-2); }
+.phone-app .recap-head { display: flex; align-items: center; gap: var(--sp-4); }
+.phone-app .recap-title { display: grid; gap: var(--sp-1); min-width: 0; }
+.phone-app .recap-cover { flex: none; width: 72px; height: 72px; border-radius: var(--radius-sm); background: var(--sunken); }
+@media (max-width: 359.98px) { .phone-app .recap-cover { display: none; } }
+
+/* Desktop participants read the revealed situation beside their own answer.
+   Screen-only: paper recap keeps its existing document layout. */
+@media screen and (min-width: 64rem) {
+  .phone-app { max-width: 72rem; }
+  .phone-app main { width: 100%; max-width: none; padding-inline: var(--sp-5); }
+  .phone-app main.participant-room { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: var(--sp-5); }
+  .phone-app main.participant-decision { grid-template-columns: minmax(0, 1.15fr) minmax(24rem, 1fr); align-items: start; }
+  .phone-app main.participant-decision > * { grid-column: 1 / -1; min-width: 0; }
+  .phone-app main.participant-decision > .participant-information { grid-column: 1; }
+  .phone-app main.participant-decision > .decision { grid-column: 2; }
+  .phone-app main:not(.participant-decision) > .participant-information,
+  .phone-app .participant-result, .phone-app main > .card { width: 100%; max-width: 46rem; justify-self: center; }
+  .phone-app .scene .prose { max-width: 70ch; }
+  .phone-app .phone-splash { width: 100%; max-width: 32.5rem; justify-self: center; margin-inline: auto; }
+  .phone-app .strip li { flex-basis: 16rem; }
+  .phone-app .bar .inner { max-width: 69rem; }
+}
+
+/* D24: below 360 px an option row gives its label the room a long clinical word needs (e.g. "haemodynamically"). */
+@media screen and (max-width: 359.98px) {
+  .phone-app .opt { grid-template-columns: 30px minmax(0, 1fr) 22px; gap: var(--sp-2); padding-inline: 10px; }
+  .phone-app .opt:has(input:checked) { padding-inline: 9px; }
+  .phone-app .opt .mk svg { width: 30px; height: 30px; }
+  .phone-app .opt .ind { width: 22px; height: 22px; }
+  .phone-app .avail li { gap: var(--sp-2); padding-left: 10px; }
+}
+
+/* Card 57 served slides on phones: released blocks in reading order (no grid), readable sizes, every table cell kept
+   as a labelled card row (BWR20). The question slot stays empty here; the decision card carries the question. */
+.slide-reflow { display: flex; flex-direction: column; gap: var(--sp-3); margin-top: var(--sp-3); }
+/* A presentation theme (CASE-227) brings its own ground, so a themed slide reads as one panel on the phone. */
+.slide-canvas.slide-reflow:is(.slide-theme-clinic, .slide-theme-night, .slide-theme-print) { padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius-sm); color: var(--ink); background: var(--slide-ground, var(--surface)); }
+/* A filled slide (CASE-312) reads as one tinted panel on the phone, in the phone's own light or dark tokens. */
+.slide-canvas.slide-reflow.slide-filled { padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius-sm); color: var(--ink); background: var(--slide-ground, var(--surface)); }
+.slide-reflow p, .slide-reflow ul, .slide-reflow ol, .slide-reflow dl, .slide-reflow h2, .slide-reflow h3, .slide-reflow h4, .slide-reflow h5 { margin: 0; }
+.slide-reflow .slide-block { min-width: 0; display: grid; gap: .4em; padding: .3em .5em; font-size: var(--t-md); line-height: 1.45; }
+.slide-reflow .slide-h1, .slide-reflow .slide-h2 { font-size: var(--t-lg); line-height: 1.25; }
+.slide-reflow .slide-h3, .slide-reflow .slide-h4 { font-size: var(--t-md); font-weight: var(--w-semibold); }
+.slide-reflow .slide-question:empty { display: none; }
+.slide-reflow .slide-callout aside { padding: var(--sp-2) var(--sp-3); border-radius: var(--radius-sm); color: var(--ink); background: var(--quiet); }
+/* CASE-344: a callout with an icon field is centred in its area, the icon (em-sized, so the fit pass scales it) beside its text. */
+.slide-reflow .slide-centred > aside { display: flex; align-items: center; gap: .8em; }
+.slide-reflow .slide-centred .slide-icon { flex: none; width: 1.6em; height: 1.6em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.slide-reflow .slide-callout-text { flex: 1; min-width: 0; }
+.slide-reflow .slide-tone-soft aside, .slide-reflow .slide-tone-soft:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-soft); }
+.slide-reflow .slide-tone-blue aside, .slide-reflow .slide-tone-blue:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-blue); }
+.slide-reflow .slide-tone-teal aside, .slide-reflow .slide-tone-teal:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-teal); }
+.slide-reflow .slide-tone-green aside, .slide-reflow .slide-tone-green:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-green); }
+.slide-reflow .slide-tone-purple aside, .slide-reflow .slide-tone-purple:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-purple); }
+.slide-reflow .slide-tone-coral aside, .slide-reflow .slide-tone-coral:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-coral); }
+.slide-reflow .slide-tone-orange aside, .slide-reflow .slide-tone-orange:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-orange); }
+.slide-reflow .slide-tone-amber aside, .slide-reflow .slide-tone-amber:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-amber); }
+.slide-reflow .slide-tone-grey aside, .slide-reflow .slide-tone-grey:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-grey); }
+/* CASE-225: text colour from the slide palette, deepened toward the theme's ink so it reads in light and dark. */
+.slide-reflow .slide-ink-blue { color: var(--slide-ink-blue); }
+.slide-reflow .slide-ink-teal { color: var(--slide-ink-teal); }
+.slide-reflow .slide-ink-green { color: var(--slide-ink-green); }
+.slide-reflow .slide-ink-purple { color: var(--slide-ink-purple); }
+.slide-reflow .slide-ink-coral { color: var(--slide-ink-coral); }
+.slide-reflow .slide-ink-orange { color: var(--slide-ink-orange); }
+.slide-reflow .slide-ink-amber { color: var(--slide-ink-amber); }
+.slide-reflow .slide-ink-grey { color: var(--slide-ink-grey); }
+.slide-reflow .slide-values dl, .slide-reflow .slide-table-card dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .25em 1em; }
+.slide-reflow .slide-values dt, .slide-reflow .slide-unit, .slide-reflow .slide-table-card dt { color: var(--ink-muted); }
+.slide-reflow .slide-unit { margin-left: .3em; }
+.slide-reflow .slide-table-caption { font-weight: var(--w-semibold); }
+.slide-reflow .slide-table-cards { display: grid; gap: var(--sp-2); margin: 0; padding: 0; list-style: none; }
+.slide-reflow .slide-table-card { padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.slide-reflow .slide-timeline-list { display: grid; gap: .3em; padding-left: 1.2em; }
+
+/* Block alignment and spacing (card 56 styles). */
+.slide-reflow .slide-align-center { text-align: center; } .slide-reflow .slide-align-end { text-align: end; } .slide-reflow .slide-pad-normal { padding: .6em .8em; } .slide-reflow .slide-pad-roomy { padding: 1em 1.2em; }
+
+/* Block background and table presentation (CASE-220). */
+.slide-reflow .slide-bg-soft { background: var(--quiet); border-radius: var(--radius-sm); } .slide-reflow .slide-bg-outline { border: 1px solid var(--line); border-radius: var(--radius-sm); } .slide-reflow .slide-banded tbody tr:nth-child(even) { background: var(--quiet); } .slide-reflow .slide-density-compact :is(th, td) { padding-block: .05em; } .slide-reflow .slide-density-roomy :is(th, td) { padding-block: .4em; } .slide-reflow .slide-text-large { font-size: 1.15em; }
+
+/* Card 59 M3: an image opened full size. Native pinch-zoom and two-way scrolling; an ECG reads at its stored pixels. */
+.phone-zoom { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: var(--figure-card); color: var(--figure-ink); }
+.phone-zoom-close { margin: 8px; }
+.phone-zoom-scroll { overflow: auto; height: calc(100% - 64px); touch-action: pan-x pan-y pinch-zoom; }
+.phone-zoom-image { display: block; max-width: none; width: auto; height: auto; }
+.slide-reflow img.slide-picture { cursor: zoom-in; }
+.slide-reflow img.slide-video-poster { cursor: pointer; }
+
+/* J10 (card 59 M3): the images shown in the room, in the recap and its printed copy. */
+.phone-app .recap-figure { margin: 0; display: grid; gap: 6px; break-inside: avoid; }
+.phone-app .recap-picture { display: block; max-width: 100%; height: auto; background: var(--figure-card); color: var(--figure-ink); }
+
+/* Card 40b: the recap as a case journey. A rail joins the stops; a petrol ring is a slide, a diamond a question, a coral
+   dot a slide a question revealed, a petrol chip your answer (prototypes/debrief-pdfs.html, Recap). Compact rows on
+   screen; each stop's slide content prints. Print is always light (phone.mjs), so every pair is checked on white. */
+@media screen { .phone-app .recap-actions { display: grid; gap: var(--sp-2); } }
+.phone-app .recap-actions a.btn { text-decoration: none; }
+.phone-app .key { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0; font-size: var(--t-xs); color: var(--ink-muted); }
+.phone-app .key span { display: inline-flex; align-items: center; gap: 6px; }
+.phone-app .sw, .phone-app .stop .node { display: inline-block; flex: none; box-sizing: border-box; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--petrol); background: var(--surface); }
+.phone-app .sw.dia, .phone-app .stop[data-kind="question"] .node { border-radius: 2px; border-color: var(--ink); background: var(--ink); color: var(--surface); transform: rotate(45deg) scale(.8); }
+.phone-app .sw.rev, .phone-app .stop[data-kind="reveal"] .node { border-color: var(--ph-consequence); background: var(--ph-consequence); color: var(--on-phase); }
+.phone-app .sw.ans { width: 18px; border-radius: 3px; border: 1px solid var(--petrol); background: var(--petrol-tint); }
+.phone-app .journey { list-style: none; margin: 0; padding: 0; }
+.phone-app .stop { position: relative; display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 0 var(--sp-3); padding-bottom: var(--sp-3); }
+.phone-app .stop::before { content: ""; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--line); }
+.phone-app .stop:first-child::before { top: 8px; }
+.phone-app .stop:last-child::before { bottom: auto; height: 8px; }
+.phone-app .stop .node { position: relative; margin: 5px 0 0 2px; }
+.phone-app .stop .col { min-width: 0; display: grid; gap: 4px; }
+.phone-app .chapter { margin: 0; font-size: var(--t-xs); font-weight: var(--w-semibold); letter-spacing: .12em; text-transform: uppercase; color: var(--petrol-ink); }
+.phone-app .stop-t { margin: 0; font-weight: var(--w-medium); overflow-wrap: anywhere; }
+.phone-app .stop .recap-round { border: 0; padding: var(--sp-2) var(--sp-3); border-radius: var(--radius-sm); background: var(--quiet); color: var(--ink); gap: 4px; }
+.phone-app .stop .recap-round h4 { font-size: var(--t-md); line-height: 1.35; overflow-wrap: anywhere; }
+.phone-app .ig { margin-right: 6px; color: var(--ink-muted); font-weight: var(--w-regular); }
+.phone-app .ans { justify-self: start; display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; padding: 4px 10px; border-radius: var(--radius-sm); background: var(--petrol-tint); color: var(--ink); font-weight: var(--w-medium); overflow-wrap: anywhere; }
+.phone-app .ans .mk-wrap { margin: 0; }
+.phone-app .ans.none { padding-left: 0; background: transparent; color: var(--ink-muted); }
+.phone-app .stop-body { display: none; gap: 2px; font-size: var(--t-sm); }
+.phone-app .stop-body p { margin: 0; overflow-wrap: anywhere; }
+@media print { .phone-app .stop-body { display: grid; } }
+/* Image credits print under each revealed image (Julian, 2026-10-17); the screen stays credit-free. */
+.phone-app .recap-credit { display: none; margin: 2px 0 0; font-size: var(--t-xs); color: var(--ink-muted); }
+@media print { .phone-app .recap-credit { display: block; } }

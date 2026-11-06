@@ -1,0 +1,103 @@
+/* Card 51: the Builder's schema-3 slide canvas. Geometry and type scale follow the G07 ruling (CASE-211): a 16:9 slide on a
+   12 × 12 grid, body 2.75cqw, H4 3.0, H3 3.3, H2 3.9, H1 4.8cqw. Editing chrome is native controls inside the block. */
+.builder-slide { container-type: inline-size; display: grid; gap: var(--sp-3); margin-block: var(--sp-3); }
+.builder-slide .slide-canvas { box-sizing: border-box; aspect-ratio: 16 / 9; width: 100%; container-type: inline-size; overflow-wrap: normal; /* wraps as the room does (round 16) */
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: repeat(12, minmax(0, 1fr)); gap: 1.2cqw; padding: 3cqw;
+  color: var(--ink); background: var(--slide-ground, var(--surface)); border: 1px solid var(--line); border-radius: var(--radius); line-height: 1.35; }
+.builder-slide .slide-canvas p, .builder-slide .slide-canvas ul, .builder-slide .slide-canvas ol, .builder-slide .slide-canvas dl,
+.builder-slide .slide-canvas h2, .builder-slide .slide-canvas h3, .builder-slide .slide-canvas h4, .builder-slide .slide-canvas h5 { margin: 0; }
+.builder-slide .slide-block { min-width: 0; min-height: 0; overflow: hidden; display: grid; align-content: start; gap: .4em; padding: .3em .5em; font-size: calc(2.75cqw * var(--fit, 1)); border-radius: var(--radius-sm); cursor: pointer; }
+.builder-slide .slide-h1 { font-size: calc(4.8cqw * var(--fit, 1)); line-height: 1.15; }
+.builder-slide .slide-h2 { font-size: calc(3.9cqw * var(--fit, 1)); line-height: 1.2; }
+.builder-slide .slide-h3 { font-size: calc(3.3cqw * var(--fit, 1)); line-height: 1.25; }
+.builder-slide .slide-h4 { font-size: calc(3cqw * var(--fit, 1)); line-height: 1.3; }
+.builder-slide .slide-callout aside { padding: .6em .8em; border-radius: var(--radius-sm); color: var(--ink); background: var(--quiet); }
+/* CASE-344: a callout with an icon field is centred in its area, the icon (em-sized, so the fit pass scales it) beside its text. */
+.builder-slide .slide-centred { align-content: stretch; }
+.builder-slide .slide-centred > aside { display: flex; align-items: center; gap: .8em; }
+.builder-slide .slide-centred .slide-icon { flex: none; width: 1.6em; height: 1.6em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.builder-slide .slide-callout-text { flex: 1; min-width: 0; }
+.builder-slide .slide-tone-soft aside, :is(.builder-slide, .builder-thumb-slide) .slide-tone-soft:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-soft); }
+.builder-slide .slide-tone-blue aside, :is(.builder-slide, .builder-thumb-slide) .slide-tone-blue:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-blue); }
+.builder-slide .slide-tone-teal aside, :is(.builder-slide, .builder-thumb-slide) .slide-tone-teal:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-teal); }
+.builder-slide .slide-tone-green aside, :is(.builder-slide, .builder-thumb-slide) .slide-tone-green:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-green); }
+.builder-slide .slide-tone-purple aside, :is(.builder-slide, .builder-thumb-slide) .slide-tone-purple:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-purple); }
+.builder-slide .slide-tone-coral aside, :is(.builder-slide, .builder-thumb-slide) .slide-tone-coral:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-coral); }
+.builder-slide .slide-tone-orange aside, :is(.builder-slide, .builder-thumb-slide) .slide-tone-orange:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-orange); }
+.builder-slide .slide-tone-amber aside, :is(.builder-slide, .builder-thumb-slide) .slide-tone-amber:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-amber); }
+.builder-slide .slide-tone-grey aside, :is(.builder-slide, .builder-thumb-slide) .slide-tone-grey:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-grey); }
+/* CASE-225: text colour from the slide palette, deepened toward the theme's ink so it reads in light and dark. */
+.slide-ink-blue { color: var(--slide-ink-blue); }
+.slide-ink-teal { color: var(--slide-ink-teal); }
+.slide-ink-green { color: var(--slide-ink-green); }
+.slide-ink-purple { color: var(--slide-ink-purple); }
+.slide-ink-coral { color: var(--slide-ink-coral); }
+.slide-ink-orange { color: var(--slide-ink-orange); }
+.slide-ink-amber { color: var(--slide-ink-amber); }
+.slide-ink-grey { color: var(--slide-ink-grey); }
+.builder-slide .slide-values dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .25em 1em; }
+.builder-slide .slide-values dt, .builder-slide .slide-unit { color: var(--ink-muted); }
+.builder-slide .slide-unit { margin-left: .3em; }
+/* CASE-327: authored widths are preferences; a column never narrows past its longest word, and columns sit 1.5em apart. */
+.builder-slide .slide-table-grid { border-collapse: collapse; width: 100%; table-layout: auto; font-variant-numeric: tabular-nums; }
+.builder-slide .slide-table-grid caption { text-align: left; font-weight: var(--w-semibold); padding-bottom: .3em; }
+.builder-slide .slide-table-grid th, .builder-slide .slide-table-grid td { padding: .15em .75em; border-bottom: 1px solid var(--line); text-align: left; }
+.builder-slide .slide-table-grid :is(th, td):first-child { padding-inline-start: 0; }
+.builder-slide .slide-table-grid :is(th, td):last-child { padding-inline-end: 0; }
+.builder-slide .slide-table-grid .slide-end { text-align: right; }
+.builder-slide .slide-block { position: relative; }
+.builder-slide-edit { position: absolute; inset-block-start: 2px; inset-inline-end: 2px; padding: 2px var(--sp-2); font: inherit; font-size: var(--t-sm);
+  color: var(--petrol-ink); background: var(--surface); border: 1px solid var(--field-line); border-radius: var(--radius-sm); cursor: pointer; }
+.builder-slide-edit:focus-visible, .builder-slide-editor:focus-visible, .builder-slide-review:focus-visible { outline: 2px solid var(--petrol); outline-offset: 2px; }
+/* While edited, a block grows over the rows below it (its stored placement is unchanged) so no control is clipped. */
+.builder-slide .slide-block[data-selected] { position: relative; z-index: var(--z-raised); align-self: start; min-height: 100%; overflow: visible; cursor: auto;
+  outline: 2px solid var(--petrol); outline-offset: 3px; } /* its own fill and ink stay, as on the slide (round 11) */
+.builder-slide-kicker { font-size: var(--t-sm); color: var(--ink-muted); }
+/* The question slot reads as the panel the room will show there (the projector draws the live decision card in it). */
+.builder-slide .slide-question { padding: .5em .7em; border-radius: var(--radius); background: color-mix(in srgb, var(--ink) 6%, var(--surface)); }
+.builder-slide-note { font-size: var(--t-sm); color: var(--ink-muted); }
+.builder-slide-formatted { white-space: pre-wrap; }
+.builder-slide-editor { display: grid; gap: var(--sp-2); align-content: start; font-size: var(--t-sm); }
+.builder-slide-paragraph, .builder-slide-entry { display: flex; flex-wrap: wrap; gap: var(--sp-1); align-items: start; }
+.builder-slide-input { box-sizing: border-box; flex: 1 1 8em; min-width: 0; width: 100%; font: inherit; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--field-line); border-radius: var(--radius-sm); padding: var(--sp-1) var(--sp-2); }
+textarea.builder-slide-input { resize: vertical; }
+.builder-slide-unplaced { display: grid; gap: var(--sp-2); padding: var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius); }
+.builder-slide-unplaced ul, .builder-slide-steps, .builder-slide-steps ul, .builder-slide-reading { display: grid; gap: var(--sp-2); margin: 0; padding: 0; list-style: none; }
+.builder-slide-unplaced li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1) var(--sp-2); }
+.builder-unplaced-name { flex: 1 1 12rem; min-width: 0; }
+.builder-tray-block { flex-basis: 100%; min-height: 0; max-height: 18rem; overflow: auto; font-size: var(--t-sm); }
+.builder-tray-block :is(th, td, input, textarea, .builder-slide-text, .builder-slide-text *) { font-size: var(--t-sm); }
+.builder-slide-choices, .builder-slide-placement { display: flex; flex-wrap: wrap; gap: var(--sp-1); }
+.builder-slide-field { display: grid; gap: var(--sp-1); font-size: var(--t-sm); color: var(--ink-muted); }
+.builder-slide-field input, .builder-slide-field select, .builder-slide-field textarea { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--field-line); border-radius: var(--radius-sm); padding: var(--sp-1); }
+.builder-slide-placement input { width: 4.5em; }
+.builder-slide-check { display: flex; gap: var(--sp-1); align-items: center; }
+.builder-slide-steps > li, .builder-slide-reading > li { display: grid; gap: var(--sp-1); }
+.builder-slide-step-head { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: baseline; }
+.builder-slide-steps ul li, .builder-slide-reading li { display: flex; flex-wrap: wrap; gap: var(--sp-1); align-items: center; }
+.builder-slide-review { display: grid; gap: var(--sp-2); padding: var(--sp-3); border: 1px solid var(--field-line); border-radius: var(--radius-sm); margin-bottom: var(--sp-3); }
+.builder-slide-issues { margin: 0; padding-left: 1.2em; }
+/* Narrow editor widths reflow in reading order at readable sizes; the projected 16:9 geometry is unchanged. */
+@container (max-width: 560px) {
+  .builder-slide .slide-canvas { display: flex; flex-direction: column; aspect-ratio: auto; gap: var(--sp-2); padding: var(--sp-3); }
+  .builder-slide .slide-block, .builder-slide .slide-block[data-selected] { font-size: var(--t-md); overflow: visible; flex-shrink: 0; align-self: stretch; min-height: auto; width: auto; } /* stacked blocks keep their height: a selected table never squeezes the title (round 15) */
+  .builder-slide .slide-h1, .builder-slide .slide-h2 { font-size: var(--t-lg); }
+  .builder-slide .slide-h3, .builder-slide .slide-h4 { font-size: var(--t-md); }
+}
+/* Private preview window (Live and Rehearse): the frame is the real target size, scaled to fit, never scrolled inside. */
+/* CASE-251: a values or timeline field is the drawn text itself, outlined in petrol when focused as a table cell is. The
+   Outline tile keeps a quote's room indent as a share of the slide (40 of 1280 px). */
+.builder-slide [data-entry-field]:focus { outline: 2px solid var(--petrol); outline-offset: 1px; }
+.builder-slide [data-entry-field]:empty::before { content: attr(data-entry-field); color: var(--ink-muted); }
+.builder-thumb-slide blockquote { margin: 1em 3.125cqw; }
+/* A quote or callout is written inside its drawn blockquote or aside, keeping the drawn paragraph spacing; a block one or
+   two rows tall puts its Move grip beside Resize, so the two never overlap. */
+.builder-studio .builder-slide .slide-canvas .builder-slide-wrap > .builder-slide-text > * + * { margin-top: 0; }
+.slide-block[data-short] > .builder-block-handle { right: 32px; }
+.builder-studio .builder-slide .slide-block[data-short][data-selected] > .builder-block-handle { right: 16px; }
+
+/* CASE-313: the room's branch badge on a question block whose answers lead to different next slides. */
+.builder-slide .slide-question { position: relative; }
+.builder-branch-badge { position: absolute; top: .4em; right: .5em; display: inline-flex; width: 1.2em; height: 1.2em; color: var(--ink-muted); }
+.builder-branch-badge svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }

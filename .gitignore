@@ -1,0 +1,18 @@
+node_modules
+.env
+.env.*
+!.env.example
+.DS_Store
+db/supabase/.temp/
+db/supabase/.branches/
+*.log
+.wrangler/
+dist/
+test-results/
+playwright-report/
+.dev.vars
+.dev.vars.*
+.claude/settings.local.json
+
+# Design-critique screenshots (docs/plans/BUILDER-DESIGN-CRITIQUE.md)
+tests/design-critique/shots/

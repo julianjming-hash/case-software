@@ -1,0 +1,1858 @@
+{
+  "format": "case-builder-transfer",
+  "transfer_version": 1,
+  "intent": "copy",
+  "scope": [
+    "/audience",
+    "/beats",
+    "/clarifications",
+    "/decisions",
+    "/duration_min",
+    "/flags",
+    "/learning_objectives",
+    "/required_capabilities",
+    "/schema_version",
+    "/setting",
+    "/start_beat_id",
+    "/summary",
+    "/surfaces",
+    "/title",
+    "/authoring_metadata"
+  ],
+  "excluded_fields": [
+    "/authoring_metadata/lineage"
+  ],
+  "private_fields": [
+    "/decisions/0/paths/0/rationale",
+    "/decisions/0/paths/0/cue",
+    "/decisions/0/paths/1/rationale",
+    "/decisions/0/paths/1/cue",
+    "/decisions/0/paths/2/rationale",
+    "/decisions/0/paths/2/cue",
+    "/decisions/1/paths/0/rationale",
+    "/decisions/1/paths/0/cue",
+    "/decisions/1/paths/1/rationale",
+    "/decisions/1/paths/1/cue",
+    "/decisions/1/paths/1/recovery/prompt",
+    "/decisions/2/paths/0/rationale",
+    "/decisions/2/paths/0/cue",
+    "/decisions/2/paths/0/recovery/prompt",
+    "/decisions/3/paths/0/rationale",
+    "/decisions/3/paths/0/cue",
+    "/decisions/3/paths/1/rationale",
+    "/decisions/3/paths/1/cue",
+    "/decisions/3/paths/1/recovery/prompt",
+    "/decisions/3/paths/2/rationale",
+    "/decisions/3/paths/2/cue",
+    "/decisions/3/paths/2/recovery/prompt",
+    "/decisions/3/paths/3/rationale",
+    "/decisions/3/paths/3/cue",
+    "/decisions/3/paths/3/recovery/prompt",
+    "/surfaces/0/notes",
+    "/surfaces/1/notes",
+    "/surfaces/2/notes",
+    "/surfaces/4/notes",
+    "/surfaces/10/notes",
+    "/surfaces/11/notes",
+    "/surfaces/15/notes",
+    "/surfaces/16/notes",
+    "/surfaces/17/notes",
+    "/surfaces/19/notes",
+    "/surfaces/20/notes",
+    "/surfaces/21/notes",
+    "/surfaces/22/notes",
+    "/surfaces/23/notes",
+    "/surfaces/25/notes",
+    "/surfaces/26/notes",
+    "/surfaces/28/notes",
+    "/surfaces/29/notes"
+  ],
+  "operations": [
+    {
+      "kind": "set",
+      "path": "/audience",
+      "value": "S0064 workshop item. Inspect th"
+    },
+    {
+      "kind": "set",
+      "path": "/beats",
+      "value": [
+        {
+          "id": "01a11de6-71d8-70df-9a34-7a1145d2dccb",
+          "kind": "decision",
+          "title": "S1090 workshop item. In",
+          "surface_id": "01a11de6-71d8-70de-b6ae-01aa188fe1a1",
+          "decision_id": "01a11de6-71d8-7119-8560-e77da6d34ffe"
+        },
+        {
+          "id": "01a11de6-71d8-70e2-a0ed-df2b36dcaba6",
+          "kind": "surface",
+          "title": "S1095 workshop it",
+          "surface_id": "01a11de6-71d8-70e1-827a-9d663a7ca824",
+          "next_beat_id": "01a11de6-71d8-70e6-b560-282a1d872266"
+        },
+        {
+          "id": "01a11de6-71d8-70e6-b560-282a1d872266",
+          "kind": "decision",
+          "title": "S0089 workshop item.",
+          "surface_id": "01a11de6-71d8-70e5-bdbd-908ff851eed2",
+          "decision_id": "01a11de6-71d8-7123-863c-44533c1bcbe5"
+        },
+        {
+          "id": "01a11de6-71d8-70e8-be47-7fab606b4087",
+          "kind": "decision",
+          "title": "S0094 workshop item. Inspect t",
+          "surface_id": "01a11de6-71d8-70e7-88a8-bcabf788b4b4",
+          "requires_flags": [
+            "infectious_reassessment"
+          ],
+          "decision_id": "01a11de6-71d8-7127-ab8b-8827973786cf"
+        },
+        {
+          "id": "01a11de6-71d8-70ec-aa83-33b9eef143dc",
+          "kind": "surface",
+          "title": "S0100 workshop item. Inspect the signal, cho",
+          "surface_id": "01a11de6-71d8-70eb-9cd1-f229853b480f",
+          "next_beat_id": "01a11de6-71d8-70ee-8742-bc257bc496d0"
+        },
+        {
+          "id": "01a11de6-71d8-70ee-8742-bc257bc496d0",
+          "kind": "surface",
+          "title": "S0105 workshop item. Inspect the signal, choose",
+          "surface_id": "01a11de6-71d8-70ed-a2f6-8439bf9cca19",
+          "next_beat_id": "01a11de6-71d8-70f0-a7a9-d9722e4f26f8"
+        },
+        {
+          "id": "01a11de6-71d8-70f0-a7a9-d9722e4f26f8",
+          "kind": "surface",
+          "title": "S0110 workshop item. Inspect the signal, choose a",
+          "surface_id": "01a11de6-71d8-70ef-8772-343bb5a1eafc",
+          "next_beat_id": "01a11de6-71d8-70f2-84c8-9d45deb27617"
+        },
+        {
+          "id": "01a11de6-71d8-70f2-84c8-9d45deb27617",
+          "kind": "surface",
+          "title": "S0115 workshop item. Insp",
+          "surface_id": "01a11de6-71d8-70f1-8a27-47335dae06b1",
+          "next_beat_id": "01a11de6-71d8-7125-8553-51d18f416602"
+        },
+        {
+          "id": "01a11de6-71d8-70f4-87c3-b072123fcb07",
+          "kind": "surface",
+          "title": "S0120 workshop item. Inspe",
+          "surface_id": "01a11de6-71d8-70f3-aa04-8b833d0562ec",
+          "next_beat_id": "01a11de6-71d8-70f6-b44a-d64e0e85b9a1"
+        },
+        {
+          "id": "01a11de6-71d8-70f6-b44a-d64e0e85b9a1",
+          "kind": "surface",
+          "title": "S1129 workshop item. Inspect thez",
+          "surface_id": "01a11de6-71d8-70f5-a672-cd189d2f2afd",
+          "next_beat_id": "01a11de6-71d8-70fa-9d49-dd6dd61b7791",
+          "requires_flags": [
+            "serial_focal_assessment"
+          ]
+        },
+        {
+          "id": "01a11de6-71d8-70fa-9d49-dd6dd61b7791",
+          "kind": "surface",
+          "title": "S0136 worksh",
+          "surface_id": "01a11de6-71d8-70f9-b444-3d0556c2cdfd",
+          "next_beat_id": "01a11de6-71d8-70fc-a61f-72038b0f26b0"
+        },
+        {
+          "id": "01a11de6-71d8-70fc-a61f-72038b0f26b0",
+          "kind": "surface",
+          "title": "S0141 workshop ite",
+          "surface_id": "01a11de6-71d8-70fb-9a13-9b5a1adb0807",
+          "next_beat_id": "01a11de6-71d8-70fe-afe0-5a19d11b8c81"
+        },
+        {
+          "id": "01a11de6-71d8-70fe-afe0-5a19d11b8c81",
+          "kind": "decision",
+          "title": "S0146 works",
+          "surface_id": "01a11de6-71d8-70fd-94c1-56fea49bb91b",
+          "decision_id": "01a11de6-71d9-7267-aa06-d5ae621cb09c"
+        },
+        {
+          "id": "01a11de6-71d8-7100-94bf-ae8f5c8b9cc4",
+          "kind": "surface",
+          "title": "S1147 workshop item. Inspect the",
+          "surface_id": "01a11de6-71d8-70ff-9a88-506e26417070",
+          "next_beat_id": "01a11de6-71d8-7104-8077-6aae0b62f692",
+          "requires_flags": [
+            "surgical_escalation",
+            "exploration_proceeding"
+          ]
+        },
+        {
+          "id": "01a11de6-71d8-7104-8077-6aae0b62f692",
+          "kind": "surface",
+          "title": "S0163 workshop item. Inspect the si",
+          "surface_id": "01a11de6-71d8-7103-8e41-5c9d9f37c40d",
+          "next_beat_id": "01a11de6-71d8-7106-aa00-d0afde1f9c4c"
+        },
+        {
+          "id": "01a11de6-71d8-7106-aa00-d0afde1f9c4c",
+          "kind": "surface",
+          "title": "S1158 workshop item. Inspectz",
+          "surface_id": "01a11de6-71d8-7105-9546-f5c8b84bd741",
+          "next_beat_id": "01a11de6-71d8-710a-9f83-160ffa7f4141"
+        },
+        {
+          "id": "01a11de6-71d8-710a-9f83-160ffa7f4141",
+          "kind": "surface",
+          "title": "S1163 workshop item. Inspect",
+          "surface_id": "01a11de6-71d8-7109-8b9e-5201482c3734",
+          "next_beat_id": "01a11de6-71d8-710e-a358-b0a69703cbac"
+        },
+        {
+          "id": "01a11de6-71d8-710e-a358-b0a69703cbac",
+          "kind": "debrief",
+          "title": "S0188 w",
+          "surface_id": "01a11de6-71d8-710d-88ba-fe60572cbe65"
+        },
+        {
+          "id": "01a11de6-71d8-7110-ab7c-a2b3b2b9f68c",
+          "kind": "surface",
+          "title": "S0192 workshop item. Inspect the sig",
+          "surface_id": "01a11de6-71d8-710f-9c86-0a5472e2a9cf",
+          "next_beat_id": "01a11de6-71d8-70e8-be47-7fab606b4087"
+        },
+        {
+          "id": "01a11de6-71d8-7112-9fb6-9943d3c8b140",
+          "kind": "surface",
+          "title": "S0197 workshop item. Inspect th",
+          "surface_id": "01a11de6-71d8-7111-a9cf-ff72c0052b29",
+          "next_beat_id": "01a11de6-71d8-7100-94bf-ae8f5c8b9cc4"
+        },
+        {
+          "id": "01a11de6-71d8-7125-8553-51d18f416602",
+          "kind": "surface",
+          "title": "S0202 workshop item. Inspect the signa",
+          "surface_id": "01a11de6-71d8-7124-af60-4fde34005105",
+          "next_beat_id": "01a11de6-71d8-70f4-87c3-b072123fcb07"
+        }
+      ]
+    },
+    {
+      "kind": "set",
+      "path": "/clarifications",
+      "value": [
+        {
+          "id": "01a1206e-296a-7438-8c5f-ffcb53025cfa",
+          "label": "S0208 workshop item. Inspect the signal, cho",
+          "surface_id": "01a11de6-71d8-7115-8cdf-62335250c6c0",
+          "beat_ids": [
+            "01a11de6-71d8-70df-9a34-7a1145d2dccb"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "set",
+      "path": "/decisions",
+      "value": [
+        {
+          "id": "01a11de6-71d8-7119-8560-e77da6d34ffe",
+          "prompt": "S0214 workshop item. Inspect the signal, choose an authored route, then reve",
+          "interaction": {
+            "type": "free_text",
+            "max_length": 240
+          },
+          "paths": [
+            {
+              "id": "01a11de6-71d8-7116-9441-2795b2c701c6",
+              "label": "S0217 workshop item",
+              "classification": "sound",
+              "recommended": true,
+              "rationale": "S0219 workshop item. Inspect the signal, choose an authored route, thenz",
+              "cue": "S0220 workshop item. Inspect the signal, choose an authored route, then reveal its conse",
+              "set_flags": [],
+              "clear_flags": [],
+              "reveal_surface_id": "01a11de6-71d8-70e0-a740-52f9b2e65d82",
+              "next_beat_id": "01a11de6-71d8-70e2-a0ed-df2b36dcaba6"
+            },
+            {
+              "id": "01a11de6-71d8-7117-896e-75b4da144069",
+              "label": "S0224 workshop item. Inspect the sig",
+              "classification": "defensible",
+              "recommended": false,
+              "rationale": "S0219 workshop item. Inspect the signal, choose an authored route, thenz",
+              "cue": "S0220 workshop item. Inspect the signal, choose an authored route, then reveal its conse",
+              "set_flags": [],
+              "clear_flags": [],
+              "reveal_surface_id": "01a11de6-71d8-70e0-a740-52f9b2e65d82",
+              "next_beat_id": "01a11de6-71d8-70e2-a0ed-df2b36dcaba6"
+            },
+            {
+              "id": "01a11de6-71d8-7118-93b6-19de5060bb87",
+              "label": "S0229 workshop item. Inspect the",
+              "classification": "discussion-prompt",
+              "recommended": false,
+              "rationale": "S0219 workshop item. Inspect the signal, choose an authored route, thenz",
+              "cue": "S0220 workshop item. Inspect the signal, choose an authored route, then reveal its conse",
+              "set_flags": [],
+              "clear_flags": [],
+              "reveal_surface_id": "01a11de6-71d8-70e0-a740-52f9b2e65d82",
+              "next_beat_id": "01a11de6-71d8-70e2-a0ed-df2b36dcaba6"
+            }
+          ],
+          "fallback_path_id": "01a11de6-71d8-7116-9441-2795b2c701c6",
+          "rules": [],
+          "interpretation": "facilitator"
+        },
+        {
+          "id": "01a11de6-71d8-7123-863c-44533c1bcbe5",
+          "prompt": "S0236 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0236 wo",
+          "interaction": {
+            "type": "ranking",
+            "options": [
+              {
+                "id": "01a11de6-71d8-711c-9359-c518e0deaa84",
+                "label": "S0239 workshop item. Inspect thez"
+              },
+              {
+                "id": "01a11de6-71d8-711d-9541-838f37ee6c40",
+                "label": "S0241 wor"
+              },
+              {
+                "id": "01a11de6-71d8-711e-907d-ddc5093de1ed",
+                "label": "S0243 workshop item. Insp"
+              },
+              {
+                "id": "01a11de6-71d8-711f-b9bf-42f07e7de56e",
+                "label": "S0245 workshop item. Inspect the signal"
+              },
+              {
+                "id": "01a11de6-71d8-7120-9879-328d17e86256",
+                "label": "S0247 workshop item. Inspect thez"
+              }
+            ],
+            "order_meaning": "priority"
+          },
+          "paths": [
+            {
+              "id": "01a11de6-71d8-7121-94ae-96f4f94ba495",
+              "label": "S0250 workshop item. I",
+              "classification": "sound",
+              "recommended": true,
+              "rationale": "S0252 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0252 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S",
+              "cue": "S0252 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0252 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S",
+              "set_flags": [
+                "infectious_reassessment"
+              ],
+              "clear_flags": [],
+              "reveal_surface_id": "01a11de6-71d8-711a-b1e9-bf412be5d38c",
+              "next_beat_id": "01a11de6-71d8-70e8-be47-7fab606b4087"
+            },
+            {
+              "id": "01a11de6-71d8-7122-8ef6-9ff16326d81e",
+              "label": "S0257 workshop item. Inspect the signal, choose an auth",
+              "classification": "unsafe",
+              "recommended": false,
+              "rationale": "S0259 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0259 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0259 works",
+              "cue": "S0259 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0259 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0259 works",
+              "set_flags": [
+                "alternative_a_explored",
+                "infectious_reassessment"
+              ],
+              "clear_flags": [],
+              "reveal_surface_id": "01a11de6-71d8-711b-9603-6878b8bb0512",
+              "next_beat_id": "01a11de6-71d8-7110-ab7c-a2b3b2b9f68c",
+              "recovery": {
+                "prompt": "S0264 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0264 workshop item. Inspect the signal, choose an authored route,z"
+              }
+            }
+          ],
+          "fallback_path_id": "01a11de6-71d8-7121-94ae-96f4f94ba495",
+          "rules": [],
+          "interpretation": "facilitator"
+        },
+        {
+          "id": "01a11de6-71d8-7127-ab8b-8827973786cf",
+          "prompt": "S0268 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0268 workshop item. Inspect the signal, choosez",
+          "interaction": {
+            "type": "free_text",
+            "max_length": 500
+          },
+          "paths": [
+            {
+              "id": "01a11de6-71d8-7126-8f2f-78ca6b16e0d3",
+              "label": "S0271 workshop item. Inspect the signal",
+              "classification": "discussion-prompt",
+              "recommended": true,
+              "rationale": "S0273 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0273 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0273 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0273 workshop item. Inspect the signal, choosez",
+              "cue": "S0273 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0273 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0273 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0273 workshop item. Inspect the signal, choosez",
+              "set_flags": [
+                "serial_focal_assessment"
+              ],
+              "clear_flags": [],
+              "reveal_surface_id": "01a11de6-71d8-70e9-9089-5206dab50a6e",
+              "next_beat_id": "01a11de6-71d8-70ec-aa83-33b9eef143dc",
+              "recovery": {
+                "prompt": "S0277 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0277 workshop item. Inspect the signal, ch"
+              }
+            }
+          ],
+          "fallback_path_id": "01a11de6-71d8-7126-8f2f-78ca6b16e0d3",
+          "rules": [],
+          "interpretation": "facilitator"
+        },
+        {
+          "id": "01a11de6-71d9-7267-aa06-d5ae621cb09c",
+          "prompt": "S0281 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0281z",
+          "interaction": {
+            "type": "single_choice",
+            "options": [
+              {
+                "id": "01a11de6-71d8-712b-bd81-63b22530c16c",
+                "label": "S0284 workshop item. Inspect the signal, choose an a"
+              },
+              {
+                "id": "01a11de6-71d8-712c-92d3-cada70b25ad4",
+                "label": "S0286 workshop item. Inspect the signal, choose an authored route,"
+              },
+              {
+                "id": "01a11de6-71d8-712d-b9cc-9448620cd413",
+                "label": "S0288 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0288 w"
+              }
+            ]
+          },
+          "paths": [
+            {
+              "id": "01a11de6-71d8-712e-8f7f-2d43f6c6e108",
+              "label": "S0290 workshop item. Inspe",
+              "classification": "sound",
+              "recommended": true,
+              "rationale": "S0292 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0292 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0292 workshop item. Inspect the signal, choose an au",
+              "cue": "S0292 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0292 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0292 workshop item. Inspect the signal, choose an au",
+              "set_flags": [
+                "surgical_escalation",
+                "exploration_proceeding"
+              ],
+              "clear_flags": [],
+              "reveal_surface_id": "01a11de6-71d8-7128-8a88-baf6b34eb5aa",
+              "next_beat_id": "01a11de6-71d8-7100-94bf-ae8f5c8b9cc4",
+              "option_ids": [
+                "01a11de6-71d8-712c-92d3-cada70b25ad4"
+              ]
+            },
+            {
+              "id": "01a11de6-71d9-7264-a6bb-2703e3a43b10",
+              "label": "S0299 workshop item. Inspect the signal, choo",
+              "classification": "unsafe",
+              "recommended": false,
+              "rationale": "S0301 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0301 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0301 workshop item. Inspect the signal, choose an authored route, thenz",
+              "cue": "S0301 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0301 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0301 workshop item. Inspect the signal, choose an authored route, thenz",
+              "set_flags": [
+                "alternative_b_explored",
+                "surgical_escalation",
+                "exploration_proceeding"
+              ],
+              "clear_flags": [],
+              "reveal_surface_id": "01a11de6-71d8-7129-9bff-3745791293d1",
+              "next_beat_id": "01a11de6-71d8-7112-9fb6-9943d3c8b140",
+              "option_ids": [
+                "01a11de6-71d8-712b-bd81-63b22530c16c"
+              ],
+              "recovery": {
+                "prompt": "S0308 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0308 workshop item. Inspect the signal, choose an authored route, thenz"
+              }
+            },
+            {
+              "id": "01a11de6-71d9-7265-b764-9a1634c0abba",
+              "label": "S0310 workshop item. Inspect the si",
+              "classification": "context-dependent",
+              "recommended": false,
+              "rationale": "S0312 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0312 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0312 work",
+              "cue": "S0312 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0312 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0312 work",
+              "set_flags": [
+                "surgical_escalation",
+                "exploration_proceeding"
+              ],
+              "clear_flags": [],
+              "reveal_surface_id": "01a11de6-71d8-712a-880a-fc1f0b5f728b",
+              "next_beat_id": "01a11de6-71d8-7100-94bf-ae8f5c8b9cc4",
+              "option_ids": [
+                "01a11de6-71d8-712d-b9cc-9448620cd413"
+              ],
+              "recovery": {
+                "prompt": "S0318 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0318 workshop item. Inspect the signal, choose an authored route, then reveal its"
+              }
+            },
+            {
+              "id": "01a11de6-71d9-7266-85c6-db643d52be3b",
+              "label": "S0320 workshop item. Inspect the signal, choose",
+              "classification": "context-dependent",
+              "recommended": false,
+              "rationale": "S0322 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0322 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0322 workshop item. Inspect the signal, choose an authored route, thenz",
+              "cue": "S0322 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0322 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0322 workshop item. Inspect the signal, choose an authored route, thenz",
+              "set_flags": [
+                "surgical_escalation",
+                "exploration_proceeding"
+              ],
+              "clear_flags": [],
+              "reveal_surface_id": "01a11de6-71d8-7113-a38c-4be4be491460",
+              "next_beat_id": "01a11de6-71d8-7112-9fb6-9943d3c8b140",
+              "option_ids": [],
+              "recovery": {
+                "prompt": "S0327 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0327 workshop item. Inspect the signal, ch"
+              }
+            }
+          ],
+          "fallback_path_id": "01a11de6-71d8-712e-8f7f-2d43f6c6e108",
+          "interpretation": "facilitator"
+        }
+      ]
+    },
+    {
+      "kind": "set",
+      "path": "/duration_min",
+      "value": 30
+    },
+    {
+      "kind": "set",
+      "path": "/flags",
+      "value": [
+        {
+          "id": "01a11de6-71d7-734d-9e64-60fd019274b9",
+          "key": "exposure_eye_shared",
+          "label": "S0336 workshop item"
+        },
+        {
+          "id": "01a11de6-71d8-70d6-b55a-3e2b4b45df68",
+          "key": "infectious_reassessment",
+          "label": "S0339 workshop item. In"
+        },
+        {
+          "id": "01a11de6-71d8-70d7-9514-5c585ac56593",
+          "key": "serial_focal_assessment",
+          "label": "S0342 workshop item. In"
+        },
+        {
+          "id": "01a11de6-71d8-70d8-b8da-a9cc2d59bd48",
+          "key": "surgical_escalation",
+          "label": "S0345 workshop item"
+        },
+        {
+          "id": "01a11de6-71d8-70d9-8db1-6d5f1133e0e9",
+          "key": "exploration_proceeding",
+          "label": "S0348 workshop item. I"
+        },
+        {
+          "id": "01a11de6-71d8-70da-a196-60a4b8effce7",
+          "key": "alternative_a_explored",
+          "label": "S0351 workshop item. I"
+        },
+        {
+          "id": "01a11de6-71d8-70db-99b0-2484564b6c92",
+          "key": "alternative_b_explored",
+          "label": "S0354 workshop item. I"
+        }
+      ]
+    },
+    {
+      "kind": "set",
+      "path": "/learning_objectives",
+      "value": [
+        "S0357 workshop item. Inspect the signal, choose an authored route, thenz",
+        "S0358 workshop item. Inspect the signal, choose an authored route, then reveal its conseq",
+        "S0359 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S",
+        "S0360 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0360 workshop item. Inspectz"
+      ]
+    },
+    {
+      "kind": "set",
+      "path": "/required_capabilities",
+      "value": [
+        "human_interpretation",
+        "early_clarification",
+        "required_recovery",
+        "formatted_text"
+      ]
+    },
+    {
+      "kind": "set",
+      "path": "/schema_version",
+      "value": 2
+    },
+    {
+      "kind": "set",
+      "path": "/setting",
+      "value": "S0370 workshop item. Inspect the signal,z"
+    },
+    {
+      "kind": "set",
+      "path": "/start_beat_id",
+      "value": "01a11de6-71d8-70df-9a34-7a1145d2dccb"
+    },
+    {
+      "kind": "set",
+      "path": "/summary",
+      "value": "S0376 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0376 workshop item. Inspect the signal, choose an authored ro"
+    },
+    {
+      "kind": "set",
+      "path": "/surfaces",
+      "value": [
+        {
+          "id": "01a11de6-71d8-70de-b6ae-01aa188fe1a1",
+          "kind": "text",
+          "title": "S1090 workshop item. In",
+          "scene": {
+            "blocks": [
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1309 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1309 workshop item. Inspect the signal, choose an aut"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1311 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1311 workshop item. Inspect thez"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1313 workshop item. Inspect the signal, choose an author"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1315 workshop item. Inspect the sign"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1317 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1317 workshop it"
+                  }
+                ]
+              }
+            ]
+          },
+          "points": [
+            "S1318 workshop item. Inspect the signal, choose an authored route, then revea"
+          ],
+          "notes": "S0382 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0382 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0382 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0382 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0382 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0382 workshop item. Inspect the signal, choose an"
+        },
+        {
+          "id": "01a11de6-71d8-70e0-a740-52f9b2e65d82",
+          "kind": "text",
+          "title": "S0388 workshop item. Inspectz",
+          "scene": "S0389 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0389 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0389 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0389",
+          "notes": "S0390 workshop item. Inspect the signal, choose an authored route, then reveal its"
+        },
+        {
+          "id": "01a11de6-71d8-70e1-827a-9d663a7ca824",
+          "kind": "text",
+          "title": "S1095 workshop it",
+          "scene": {
+            "blocks": [
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1324 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1324 works"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1326 workshop item. Inspect the signal, choose an autho"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1328 workshop item. Inspect the signal, choose an authore"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1330 workshop item. Inspect the signal, choose an a"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1332 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S133"
+                  }
+                ]
+              }
+            ]
+          },
+          "notes": "S0394 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0394 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0394 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0394 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0394 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0394 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0394 workshop item. Inspect the signal, choose an authored route, then reveal it"
+        },
+        {
+          "id": "01a11de6-71d8-70e5-bdbd-908ff851eed2",
+          "kind": "text",
+          "title": "S0089 workshop item.",
+          "scene": "S0400 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0400 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0400 workshop item. Inspect the signal, choose an authored route, then reveal its consequence.z"
+        },
+        {
+          "id": "01a11de6-71d8-70e7-88a8-bcabf788b4b4",
+          "kind": "text",
+          "title": "S0094 workshop item. Inspect t",
+          "scene": "S0403 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0403 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0403 workshop item. Inspect the signal, choose an authored route, then reveal its conse",
+          "notes": "S0404 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0404 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0404 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0404 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0404 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0404 workshop item. Inspect the signal, choose an authored route, then reveal its conse"
+        },
+        {
+          "id": "01a11de6-71d8-70e9-9089-5206dab50a6e",
+          "kind": "text",
+          "title": "S0407 workshop item. Inspect the sign",
+          "scene": "S0408 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0408 workshop item. Inspect the signal, choose an authored route, then reveal its con"
+        },
+        {
+          "id": "01a11de6-71d8-70eb-9cd1-f229853b480f",
+          "kind": "text",
+          "title": "S0100 workshop item. Inspect the signal, cho",
+          "scene": "S0411 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0411 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0411 workshop item. Inspect the signal"
+        },
+        {
+          "id": "01a11de6-71d8-70ed-a2f6-8439bf9cca19",
+          "kind": "text",
+          "title": "S0105 workshop item. Inspect the signal, choose",
+          "scene": "S0414 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0414 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S"
+        },
+        {
+          "id": "01a11de6-71d8-70ef-8772-343bb5a1eafc",
+          "kind": "text",
+          "title": "S0110 workshop item. Inspect the signal, choose a",
+          "scene": "S0417 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0417 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0417 workshop item. Inspect the signal, choose an authored route,"
+        },
+        {
+          "id": "01a11de6-71d8-70f1-8a27-47335dae06b1",
+          "kind": "text",
+          "title": "S0115 workshop item. Insp",
+          "scene": "S0420 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0420 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0420 workshop item. Inspectz"
+        },
+        {
+          "id": "01a11de6-71d8-70f3-aa04-8b833d0562ec",
+          "kind": "text",
+          "title": "S0120 workshop item. Inspe",
+          "scene": "S0423 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0423 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0423 workshop item. Inspect the signal, choose an authored route, th",
+          "notes": "S0424 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0424 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0424 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0424 workshop item. Inspect the signal, choose anz"
+        },
+        {
+          "id": "01a11de6-71d8-70f5-a672-cd189d2f2afd",
+          "kind": "text",
+          "title": "S1129 workshop item. Inspect thez",
+          "scene": {
+            "blocks": [
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1352 workshop item. Inspect the signal, choose an authored route, then reveal itsz"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1354 workshop item. Inspect the signal, choose an authored route, then reveal it"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1356 workshop item. Inspect thez"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1358 workshop item. Inspect the signal, choose"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1360 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1360 workshop it"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1362 workshop item. Inspect the signal, cho"
+                  }
+                ]
+              }
+            ]
+          },
+          "notes": "S0428 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0428 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0428 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0428 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0428 workshop item. Inspect the signal, choose a"
+        },
+        {
+          "id": "01a11de6-71d8-70f9-b444-3d0556c2cdfd",
+          "kind": "text",
+          "title": "S0136 worksh",
+          "scene": "S0434 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0434 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0434 workshop item. Insp"
+        },
+        {
+          "id": "01a11de6-71d8-70fb-9a13-9b5a1adb0807",
+          "kind": "text",
+          "title": "S0141 workshop ite",
+          "scene": "S0437 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0437 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0437 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0437 workshop i"
+        },
+        {
+          "id": "01a11de6-71d8-70fd-94c1-56fea49bb91b",
+          "kind": "text",
+          "title": "S0146 works",
+          "scene": "S0440 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0440 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0440"
+        },
+        {
+          "id": "01a11de6-71d8-70ff-9a88-506e26417070",
+          "kind": "text",
+          "title": "S1147 workshop item. Inspect the",
+          "scene": {
+            "blocks": [
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1372 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1372 wor"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1374 workshop item. Inspect thez"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1376 workshop item. Inspect the signal,"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1378 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1378 workshop item. Inspect the signal, choose a"
+                  }
+                ]
+              }
+            ]
+          },
+          "notes": "S0444 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0444 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0444 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0444 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0444 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0444 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0444 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0444 workshop item. Inspect the signal, choose an authored route, then reveal it"
+        },
+        {
+          "id": "01a11de6-71d8-7103-8e41-5c9d9f37c40d",
+          "kind": "text",
+          "title": "S0163 workshop item. Inspect the si",
+          "scene": "S0450 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0450 workshop item. Inspect the signal, choose an authored route, then reveal its conseq",
+          "notes": "S0451 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0451 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0451 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0451 workshop item. Inspect the signal, choose an authored route, then reveal its consequence"
+        },
+        {
+          "id": "01a11de6-71d8-7105-9546-f5c8b84bd741",
+          "kind": "text",
+          "title": "S1158 workshop item. Inspectz",
+          "scene": {
+            "blocks": [
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1384 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1384 workshop item. In"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1386 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1386 workshop item. Insp"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1388 workshop item. Inspect the signal, choose an authore"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1390 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1390 workshop item. Inspect t"
+                  }
+                ]
+              }
+            ]
+          },
+          "notes": "S0455 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0455 workshop item. Inspect the signal, choose an authored route, t"
+        },
+        {
+          "id": "01a11de6-71d8-7109-8b9e-5201482c3734",
+          "kind": "text",
+          "title": "S1163 workshop item. Inspect",
+          "scene": {
+            "blocks": [
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1394 workshop item. Inspect the signal, choose an authored route, then reve"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1396 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1396 workshop item.z"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1398 workshop item. Inspec"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1400 workshop item. Inspect the si"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "runs": [
+                  {
+                    "text": "S1402 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1402 workshop item. I"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "01a11de6-71d8-710d-88ba-fe60572cbe65",
+          "kind": "text",
+          "title": "S0188 w",
+          "scene": "S0467 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0467 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0467 workshop item. Inspect the s",
+          "notes": "S0468 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0468 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0468 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0468 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0468 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0468 workshop item. Inspect the signal, choose an authored route, then reveal its c"
+        },
+        {
+          "id": "01a11de6-71d8-710f-9c86-0a5472e2a9cf",
+          "kind": "text",
+          "title": "S0192 workshop item. Inspect the sig",
+          "scene": "S0471 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0471 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0471 workshop item. Inspect the signal, choose an authored route, then reveal its consequence.",
+          "notes": "S0472 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0472 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0472 workshop item. Inspect the signal, choose an authored route, then reveal its consequence"
+        },
+        {
+          "id": "01a11de6-71d8-7111-a9cf-ff72c0052b29",
+          "kind": "text",
+          "title": "S0197 workshop item. Inspect th",
+          "scene": "S0475 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0475 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0475 workshop item. Inspect the signal, choose an autho",
+          "notes": "S0476 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0476 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0476 workshop item. Inspect"
+        },
+        {
+          "id": "01a11de6-71d8-7113-a38c-4be4be491460",
+          "kind": "text",
+          "title": "S0479 workshop item. Inspectz",
+          "scene": "S0480 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0480 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0480 workshop item. Inspect the signal",
+          "notes": "S0322 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0322 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0322 workshop item. Inspect the signal, choose an authored route, thenz"
+        },
+        {
+          "id": "01a11de6-71d8-7115-8cdf-62335250c6c0",
+          "kind": "text",
+          "title": "S0483 workshop item. Inspect th",
+          "scene": "S0484 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0484 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S",
+          "notes": "S0485 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0485 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0485 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0485 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0485 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0485 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0485 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0485 workshop it"
+        },
+        {
+          "id": "01a11de6-71d8-711a-b1e9-bf412be5d38c",
+          "kind": "text",
+          "title": "S0250 workshop item. I",
+          "scene": "S0488 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0488 workshop item. Inspect the signal, choose an authored route, then reveal its conse"
+        },
+        {
+          "id": "01a11de6-71d8-711b-9603-6878b8bb0512",
+          "kind": "text",
+          "title": "S0491 workshop item. Inspect the signal,z",
+          "scene": "S0492 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0492 workshop item. Inspect the signal, choose an authored route, then reveal its cons",
+          "notes": "S0493 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0493 workshop item.z"
+        },
+        {
+          "id": "01a11de6-71d8-7124-af60-4fde34005105",
+          "kind": "text",
+          "title": "S0202 workshop item. Inspect the signa",
+          "scene": "S0496 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0496 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0496 workshop item. Ins",
+          "notes": "S0497 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0497 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0497 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0497 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0497 workshop item. Insp"
+        },
+        {
+          "id": "01a11de6-71d8-7128-8a88-baf6b34eb5aa",
+          "kind": "text",
+          "title": "S0290 workshop item. Inspe",
+          "scene": "S0500 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0500 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0500 workshop item. Inspect the signal, c"
+        },
+        {
+          "id": "01a11de6-71d8-7129-9bff-3745791293d1",
+          "kind": "text",
+          "title": "S0503 workshop item. Inspect the signal, choos",
+          "scene": "S0504 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0504 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0504 workshop item. Inspect the signal",
+          "notes": "S0505 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0505 workshop item. Inspect the signal, cho"
+        },
+        {
+          "id": "01a11de6-71d8-712a-880a-fc1f0b5f728b",
+          "kind": "text",
+          "title": "S0508 workshop item. Inspect the si",
+          "scene": "S0509 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0509 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0509",
+          "notes": "S0510 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0510 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0510 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0510 w"
+        }
+      ]
+    },
+    {
+      "kind": "set",
+      "path": "/title",
+      "value": "S0513 workshop item. Inspec"
+    },
+    {
+      "kind": "set",
+      "path": "/authoring_metadata",
+      "value": {
+        "metadata_version": 1,
+        "sources": [
+          {
+            "id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "title": "S0517 workshop item. Inspect the signal, choose an au",
+            "text": "Free-text prompt, proposed limit 500 characters: n authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S0518 workshop item. Inspect the signal, choose an authoredz",
+            "sha256": "64746ef648d8c461191bfbb442fc97287c865f47a5bf258f7e96c447c35c0b19",
+            "rights_status": "unknown"
+          }
+        ],
+        "provenance": [
+          {
+            "entity_id": "01a11de6-71d8-70de-b6ae-01aa188fe1a1",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 73,
+            "end_line": 73,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70e0-a740-52f9b2e65d82",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 81,
+            "end_line": 81,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70e1-827a-9d663a7ca824",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 95,
+            "end_line": 95,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70e5-bdbd-908ff851eed2",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 97,
+            "end_line": 97,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70e7-88a8-bcabf788b4b4",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 141,
+            "end_line": 141,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70e9-9089-5206dab50a6e",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 157,
+            "end_line": 157,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70eb-9cd1-f229853b480f",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 158,
+            "end_line": 158,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70ed-a2f6-8439bf9cca19",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 159,
+            "end_line": 159,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70ef-8772-343bb5a1eafc",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 160,
+            "end_line": 160,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70f1-8a27-47335dae06b1",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 170,
+            "end_line": 170,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70f3-aa04-8b833d0562ec",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 320,
+            "end_line": 320,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70f5-a672-cd189d2f2afd",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 184,
+            "end_line": 184,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70f9-b444-3d0556c2cdfd",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 188,
+            "end_line": 188,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70fb-9a13-9b5a1adb0807",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 192,
+            "end_line": 192,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70fd-94c1-56fea49bb91b",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 194,
+            "end_line": 194,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70ff-9a88-506e26417070",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 259,
+            "end_line": 259,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7103-8e41-5c9d9f37c40d",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 269,
+            "end_line": 269,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7105-9546-f5c8b84bd741",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 277,
+            "end_line": 277,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7109-8b9e-5201482c3734",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 283,
+            "end_line": 283,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-710d-88ba-fe60572cbe65",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 289,
+            "end_line": 289,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-710f-9c86-0a5472e2a9cf",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 312,
+            "end_line": 312,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7111-a9cf-ff72c0052b29",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 328,
+            "end_line": 328,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7113-a38c-4be4be491460",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 344,
+            "end_line": 344,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7115-8cdf-62335250c6c0",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 304,
+            "end_line": 304,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7119-8560-e77da6d34ffe",
+            "field": "prompt",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 77,
+            "end_line": 77,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-711a-b1e9-bf412be5d38c",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 113,
+            "end_line": 113,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-711b-9603-6878b8bb0512",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 127,
+            "end_line": 127,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7123-863c-44533c1bcbe5",
+            "field": "prompt",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 101,
+            "end_line": 101,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7124-af60-4fde34005105",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 174,
+            "end_line": 174,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7127-ab8b-8827973786cf",
+            "field": "prompt",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 149,
+            "end_line": 149,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7128-8a88-baf6b34eb5aa",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 216,
+            "end_line": 216,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7129-9bff-3745791293d1",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 230,
+            "end_line": 230,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-712a-880a-fc1f0b5f728b",
+            "field": "scene",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 336,
+            "end_line": 336,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d9-7267-aa06-d5ae621cb09c",
+            "field": "prompt",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 198,
+            "end_line": 198,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70de-b6ae-01aa188fe1a1",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 11,
+            "end_line": 83
+          },
+          {
+            "entity_id": "01a11de6-71d8-70e0-a740-52f9b2e65d82",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 81,
+            "end_line": 81
+          },
+          {
+            "entity_id": "01a11de6-71d8-70e1-827a-9d663a7ca824",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 105,
+            "end_line": 105
+          },
+          {
+            "entity_id": "01a11de6-71d8-70e7-88a8-bcabf788b4b4",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 164,
+            "end_line": 164
+          },
+          {
+            "entity_id": "01a11de6-71d8-70f3-aa04-8b833d0562ec",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 316,
+            "end_line": 322
+          },
+          {
+            "entity_id": "01a11de6-71d8-70f5-a672-cd189d2f2afd",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 184,
+            "end_line": 186
+          },
+          {
+            "entity_id": "01a11de6-71d8-70ff-9a88-506e26417070",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 255,
+            "end_line": 265
+          },
+          {
+            "entity_id": "01a11de6-71d8-7103-8e41-5c9d9f37c40d",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 269,
+            "end_line": 271
+          },
+          {
+            "entity_id": "01a11de6-71d8-7105-9546-f5c8b84bd741",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 277,
+            "end_line": 277
+          },
+          {
+            "entity_id": "01a11de6-71d8-710d-88ba-fe60572cbe65",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 292,
+            "end_line": 294
+          },
+          {
+            "entity_id": "01a11de6-71d8-710f-9c86-0a5472e2a9cf",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 308,
+            "end_line": 314
+          },
+          {
+            "entity_id": "01a11de6-71d8-7111-a9cf-ff72c0052b29",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 324,
+            "end_line": 330
+          },
+          {
+            "entity_id": "01a11de6-71d8-7113-a38c-4be4be491460",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 340,
+            "end_line": 346
+          },
+          {
+            "entity_id": "01a11de6-71d8-7115-8cdf-62335250c6c0",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 300,
+            "end_line": 306
+          },
+          {
+            "entity_id": "01a11de6-71d8-711b-9603-6878b8bb0512",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 129,
+            "end_line": 133
+          },
+          {
+            "entity_id": "01a11de6-71d8-7124-af60-4fde34005105",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 164,
+            "end_line": 164
+          },
+          {
+            "entity_id": "01a11de6-71d8-7129-9bff-3745791293d1",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 234,
+            "end_line": 234
+          },
+          {
+            "entity_id": "01a11de6-71d8-712a-880a-fc1f0b5f728b",
+            "field": "notes",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 332,
+            "end_line": 338
+          },
+          {
+            "entity_id": "01a11de6-71d8-7116-9441-2795b2c701c6",
+            "field": "rationale",
+            "transformation": "editorial",
+            "visibility": "private",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7116-9441-2795b2c701c6",
+            "field": "cue",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 61,
+            "end_line": 61
+          },
+          {
+            "entity_id": "01a11de6-71d8-7117-896e-75b4da144069",
+            "field": "rationale",
+            "transformation": "editorial",
+            "visibility": "private",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7117-896e-75b4da144069",
+            "field": "cue",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 61,
+            "end_line": 61
+          },
+          {
+            "entity_id": "01a11de6-71d8-7118-93b6-19de5060bb87",
+            "field": "rationale",
+            "transformation": "editorial",
+            "visibility": "private",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7118-93b6-19de5060bb87",
+            "field": "cue",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 61,
+            "end_line": 61
+          },
+          {
+            "entity_id": "01a11de6-71d8-7121-94ae-96f4f94ba495",
+            "field": "rationale",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 115,
+            "end_line": 115
+          },
+          {
+            "entity_id": "01a11de6-71d8-7121-94ae-96f4f94ba495",
+            "field": "cue",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 115,
+            "end_line": 115
+          },
+          {
+            "entity_id": "01a11de6-71d8-7122-8ef6-9ff16326d81e",
+            "field": "rationale",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 133,
+            "end_line": 133
+          },
+          {
+            "entity_id": "01a11de6-71d8-7122-8ef6-9ff16326d81e",
+            "field": "cue",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 133,
+            "end_line": 133
+          },
+          {
+            "entity_id": "01a11de6-71d8-7126-8f2f-78ca6b16e0d3",
+            "field": "rationale",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 166,
+            "end_line": 166
+          },
+          {
+            "entity_id": "01a11de6-71d8-7126-8f2f-78ca6b16e0d3",
+            "field": "cue",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 166,
+            "end_line": 166
+          },
+          {
+            "entity_id": "01a11de6-71d8-712e-8f7f-2d43f6c6e108",
+            "field": "rationale",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 208,
+            "end_line": 218
+          },
+          {
+            "entity_id": "01a11de6-71d8-712e-8f7f-2d43f6c6e108",
+            "field": "cue",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 208,
+            "end_line": 218
+          },
+          {
+            "entity_id": "01a11de6-71d9-7264-a6bb-2703e3a43b10",
+            "field": "rationale",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 236,
+            "end_line": 236
+          },
+          {
+            "entity_id": "01a11de6-71d9-7264-a6bb-2703e3a43b10",
+            "field": "cue",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 236,
+            "end_line": 236
+          },
+          {
+            "entity_id": "01a11de6-71d9-7265-b764-9a1634c0abba",
+            "field": "rationale",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 244,
+            "end_line": 244
+          },
+          {
+            "entity_id": "01a11de6-71d9-7265-b764-9a1634c0abba",
+            "field": "cue",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 244,
+            "end_line": 244
+          },
+          {
+            "entity_id": "01a11de6-71d9-7266-85c6-db643d52be3b",
+            "field": "rationale",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 346,
+            "end_line": 346
+          },
+          {
+            "entity_id": "01a11de6-71d9-7266-85c6-db643d52be3b",
+            "field": "cue",
+            "transformation": "adapted",
+            "visibility": "private",
+            "review_status": "unreviewed",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 346,
+            "end_line": 346
+          },
+          {
+            "entity_id": "01a11de6-71d8-7122-8ef6-9ff16326d81e",
+            "field": "recovery.prompt",
+            "start_line": 308,
+            "end_line": 314,
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "transformation": "editorial",
+            "visibility": "private",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-7126-8f2f-78ca6b16e0d3",
+            "field": "recovery.prompt",
+            "start_line": 316,
+            "end_line": 322,
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "transformation": "editorial",
+            "visibility": "private",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d9-7264-a6bb-2703e3a43b10",
+            "field": "recovery.prompt",
+            "start_line": 324,
+            "end_line": 330,
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "transformation": "editorial",
+            "visibility": "private",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d9-7265-b764-9a1634c0abba",
+            "field": "recovery.prompt",
+            "start_line": 332,
+            "end_line": 338,
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "transformation": "editorial",
+            "visibility": "private",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d9-7266-85c6-db643d52be3b",
+            "field": "recovery.prompt",
+            "start_line": 340,
+            "end_line": 346,
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "transformation": "editorial",
+            "visibility": "private",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a1206e-296a-7438-8c5f-ffcb53025cfa",
+            "field": "label",
+            "start_line": 300,
+            "end_line": 306,
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "transformation": "editorial",
+            "visibility": "private",
+            "review_status": "unreviewed"
+          },
+          {
+            "entity_id": "01a11de6-71d8-70de-b6ae-01aa188fe1a1",
+            "field": "points[0]",
+            "source_id": "01a1206e-296a-7439-83fa-9300cec89892",
+            "start_line": 73,
+            "end_line": 73,
+            "transformation": "adapted",
+            "visibility": "public",
+            "review_status": "unreviewed"
+          }
+        ],
+        "preparation_requirements": "S1903 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1903 workshop item. Inspect the signal, choose an authored route, then reveal its consequence. S1903 workshop item. Inspect the signal, choose an authore"
+      }
+    }
+  ]
+}

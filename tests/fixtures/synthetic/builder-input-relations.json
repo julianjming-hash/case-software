@@ -1,0 +1,3859 @@
+{
+  "kind": "Synthetic input relation/volume witness, not clinical or human review approval",
+  "files": [
+    "builder-diving-transfer.json",
+    "builder-diving-polished-transfer.json"
+  ],
+  "equal_value_groups": [
+    {
+      "group": 1,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/0/value"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/0/value"
+        }
+      ]
+    },
+    {
+      "group": 2,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/0/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/0/title"
+        }
+      ]
+    },
+    {
+      "group": 3,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/1/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/1/title"
+        }
+      ]
+    },
+    {
+      "group": 4,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/2/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/3/title"
+        }
+      ]
+    },
+    {
+      "group": 5,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/3/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/4/title"
+        }
+      ]
+    },
+    {
+      "group": 6,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/4/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/5/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/2/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/3/title"
+        }
+      ]
+    },
+    {
+      "group": 7,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/5/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/6/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/3/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/4/title"
+        }
+      ]
+    },
+    {
+      "group": 8,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/6/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/8/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/4/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/6/title"
+        }
+      ]
+    },
+    {
+      "group": 9,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/7/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/9/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/5/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/7/title"
+        }
+      ]
+    },
+    {
+      "group": 10,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/8/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/10/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/6/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/8/title"
+        }
+      ]
+    },
+    {
+      "group": 11,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/9/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/11/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/7/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/9/title"
+        }
+      ]
+    },
+    {
+      "group": 12,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/10/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/12/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/8/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/10/title"
+        }
+      ]
+    },
+    {
+      "group": 13,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/11/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/13/title"
+        }
+      ]
+    },
+    {
+      "group": 14,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/12/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/14/title"
+        }
+      ]
+    },
+    {
+      "group": 15,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/13/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/15/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/10/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/12/title"
+        }
+      ]
+    },
+    {
+      "group": 16,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/14/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/16/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/11/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/13/title"
+        }
+      ]
+    },
+    {
+      "group": 17,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/15/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/17/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/12/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/14/title"
+        }
+      ]
+    },
+    {
+      "group": 18,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/16/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/18/title"
+        }
+      ]
+    },
+    {
+      "group": 19,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/17/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/19/title"
+        }
+      ]
+    },
+    {
+      "group": 20,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/18/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/20/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/14/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/16/title"
+        }
+      ]
+    },
+    {
+      "group": 21,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/19/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/21/title"
+        }
+      ]
+    },
+    {
+      "group": 22,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/20/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/22/title"
+        }
+      ]
+    },
+    {
+      "group": 23,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/21/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/23/title"
+        }
+      ]
+    },
+    {
+      "group": 24,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/22/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/24/title"
+        }
+      ]
+    },
+    {
+      "group": 25,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/23/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/25/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/17/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/19/title"
+        }
+      ]
+    },
+    {
+      "group": 26,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/24/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/26/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/18/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/20/title"
+        }
+      ]
+    },
+    {
+      "group": 27,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/25/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/27/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/19/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/21/title"
+        }
+      ]
+    },
+    {
+      "group": 28,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/1/value/26/title"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/32/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/20/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/26/title"
+        }
+      ]
+    },
+    {
+      "group": 29,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/2/value/0/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/2/value/0/label"
+        }
+      ]
+    },
+    {
+      "group": 30,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/0/prompt"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/0/prompt"
+        }
+      ]
+    },
+    {
+      "group": 31,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/0/paths/0/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/0/paths/0/label"
+        }
+      ]
+    },
+    {
+      "group": 32,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/0/paths/0/rationale"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/0/paths/1/rationale"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/0/paths/2/rationale"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/0/paths/0/rationale"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/0/paths/1/rationale"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/0/paths/2/rationale"
+        }
+      ]
+    },
+    {
+      "group": 33,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/0/paths/0/cue"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/0/paths/1/cue"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/0/paths/2/cue"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/0/paths/0/cue"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/0/paths/1/cue"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/0/paths/2/cue"
+        }
+      ]
+    },
+    {
+      "group": 34,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/0/paths/1/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/0/paths/1/label"
+        }
+      ]
+    },
+    {
+      "group": 35,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/0/paths/2/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/0/paths/2/label"
+        }
+      ]
+    },
+    {
+      "group": 36,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/prompt"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/prompt"
+        }
+      ]
+    },
+    {
+      "group": 37,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/interaction/options/0/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/interaction/options/0/label"
+        }
+      ]
+    },
+    {
+      "group": 38,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/interaction/options/1/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/interaction/options/1/label"
+        }
+      ]
+    },
+    {
+      "group": 39,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/interaction/options/2/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/interaction/options/2/label"
+        }
+      ]
+    },
+    {
+      "group": 40,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/interaction/options/3/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/interaction/options/3/label"
+        }
+      ]
+    },
+    {
+      "group": 41,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/interaction/options/4/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/interaction/options/4/label"
+        }
+      ]
+    },
+    {
+      "group": 42,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/paths/0/label"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/30/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/paths/0/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/24/title"
+        }
+      ]
+    },
+    {
+      "group": 43,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/paths/0/rationale"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/paths/0/cue"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/paths/0/rationale"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/paths/0/cue"
+        }
+      ]
+    },
+    {
+      "group": 44,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/paths/1/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/paths/1/label"
+        }
+      ]
+    },
+    {
+      "group": 45,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/paths/1/rationale"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/paths/1/cue"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/paths/1/rationale"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/paths/1/cue"
+        }
+      ]
+    },
+    {
+      "group": 46,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/1/paths/1/recovery/prompt"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/1/paths/1/recovery/prompt"
+        }
+      ]
+    },
+    {
+      "group": 47,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/2/prompt"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/2/prompt"
+        }
+      ]
+    },
+    {
+      "group": 48,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/2/paths/0/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/2/paths/0/label"
+        }
+      ]
+    },
+    {
+      "group": 49,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/2/paths/0/rationale"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/2/paths/0/cue"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/2/paths/0/rationale"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/2/paths/0/cue"
+        }
+      ]
+    },
+    {
+      "group": 50,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/2/paths/0/recovery/prompt"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/2/paths/0/recovery/prompt"
+        }
+      ]
+    },
+    {
+      "group": 51,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/prompt"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/prompt"
+        }
+      ]
+    },
+    {
+      "group": 52,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/interaction/options/0/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/interaction/options/0/label"
+        }
+      ]
+    },
+    {
+      "group": 53,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/interaction/options/1/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/interaction/options/1/label"
+        }
+      ]
+    },
+    {
+      "group": 54,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/interaction/options/2/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/interaction/options/2/label"
+        }
+      ]
+    },
+    {
+      "group": 55,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/0/label"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/33/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/0/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/27/title"
+        }
+      ]
+    },
+    {
+      "group": 56,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/0/rationale"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/0/cue"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/0/rationale"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/0/cue"
+        }
+      ]
+    },
+    {
+      "group": 57,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/1/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/1/label"
+        }
+      ]
+    },
+    {
+      "group": 58,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/1/rationale"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/1/cue"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/1/rationale"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/1/cue"
+        }
+      ]
+    },
+    {
+      "group": 59,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/1/recovery/prompt"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/1/recovery/prompt"
+        }
+      ]
+    },
+    {
+      "group": 60,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/2/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/2/label"
+        }
+      ]
+    },
+    {
+      "group": 61,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/2/rationale"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/2/cue"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/2/rationale"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/2/cue"
+        }
+      ]
+    },
+    {
+      "group": 62,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/2/recovery/prompt"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/2/recovery/prompt"
+        }
+      ]
+    },
+    {
+      "group": 63,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/3/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/3/label"
+        }
+      ]
+    },
+    {
+      "group": 64,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/3/rationale"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/3/cue"
+        },
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/28/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/3/rationale"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/3/cue"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/22/notes"
+        }
+      ]
+    },
+    {
+      "group": 65,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/3/value/3/paths/3/recovery/prompt"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/3/value/3/paths/3/recovery/prompt"
+        }
+      ]
+    },
+    {
+      "group": 66,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/5/value/0/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/5/value/0/label"
+        }
+      ]
+    },
+    {
+      "group": 67,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/5/value/1/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/5/value/1/label"
+        }
+      ]
+    },
+    {
+      "group": 68,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/5/value/2/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/5/value/2/label"
+        }
+      ]
+    },
+    {
+      "group": 69,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/5/value/3/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/5/value/3/label"
+        }
+      ]
+    },
+    {
+      "group": 70,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/5/value/4/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/5/value/4/label"
+        }
+      ]
+    },
+    {
+      "group": 71,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/5/value/5/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/5/value/5/label"
+        }
+      ]
+    },
+    {
+      "group": 72,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/5/value/6/label"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/5/value/6/label"
+        }
+      ]
+    },
+    {
+      "group": 73,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/6/value/0"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/6/value/0"
+        }
+      ]
+    },
+    {
+      "group": 74,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/6/value/1"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/6/value/1"
+        }
+      ]
+    },
+    {
+      "group": 75,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/6/value/2"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/6/value/2"
+        }
+      ]
+    },
+    {
+      "group": 76,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/6/value/3"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/6/value/3"
+        }
+      ]
+    },
+    {
+      "group": 77,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/9/value"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/9/value"
+        }
+      ]
+    },
+    {
+      "group": 78,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/11/value"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/11/value"
+        }
+      ]
+    },
+    {
+      "group": 79,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/0/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/0/notes"
+        }
+      ]
+    },
+    {
+      "group": 80,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/2/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/1/title"
+        }
+      ]
+    },
+    {
+      "group": 81,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/2/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/1/scene"
+        }
+      ]
+    },
+    {
+      "group": 82,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/2/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/1/notes"
+        }
+      ]
+    },
+    {
+      "group": 83,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/3/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/2/notes"
+        }
+      ]
+    },
+    {
+      "group": 84,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/5/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/3/scene"
+        }
+      ]
+    },
+    {
+      "group": 85,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/6/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/4/scene"
+        }
+      ]
+    },
+    {
+      "group": 86,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/6/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/4/notes"
+        }
+      ]
+    },
+    {
+      "group": 87,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/7/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/5/title"
+        }
+      ]
+    },
+    {
+      "group": 88,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/7/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/5/scene"
+        }
+      ]
+    },
+    {
+      "group": 89,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/8/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/6/scene"
+        }
+      ]
+    },
+    {
+      "group": 90,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/9/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/7/scene"
+        }
+      ]
+    },
+    {
+      "group": 91,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/10/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/8/scene"
+        }
+      ]
+    },
+    {
+      "group": 92,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/11/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/9/scene"
+        }
+      ]
+    },
+    {
+      "group": 93,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/12/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/10/scene"
+        }
+      ]
+    },
+    {
+      "group": 94,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/12/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/10/notes"
+        }
+      ]
+    },
+    {
+      "group": 95,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/13/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/11/notes"
+        }
+      ]
+    },
+    {
+      "group": 96,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/15/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/12/scene"
+        }
+      ]
+    },
+    {
+      "group": 97,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/16/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/13/scene"
+        }
+      ]
+    },
+    {
+      "group": 98,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/17/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/14/scene"
+        }
+      ]
+    },
+    {
+      "group": 99,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/18/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/15/notes"
+        }
+      ]
+    },
+    {
+      "group": 100,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/20/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/16/scene"
+        }
+      ]
+    },
+    {
+      "group": 101,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/20/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/16/notes"
+        }
+      ]
+    },
+    {
+      "group": 102,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/21/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/17/notes"
+        }
+      ]
+    },
+    {
+      "group": 103,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/25/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/19/scene"
+        }
+      ]
+    },
+    {
+      "group": 104,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/25/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/19/notes"
+        }
+      ]
+    },
+    {
+      "group": 105,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/26/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/20/scene"
+        }
+      ]
+    },
+    {
+      "group": 106,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/26/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/20/notes"
+        }
+      ]
+    },
+    {
+      "group": 107,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/27/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/21/scene"
+        }
+      ]
+    },
+    {
+      "group": 108,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/27/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/21/notes"
+        }
+      ]
+    },
+    {
+      "group": 109,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/28/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/22/title"
+        }
+      ]
+    },
+    {
+      "group": 110,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/28/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/22/scene"
+        }
+      ]
+    },
+    {
+      "group": 111,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/29/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/23/title"
+        }
+      ]
+    },
+    {
+      "group": 112,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/29/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/23/scene"
+        }
+      ]
+    },
+    {
+      "group": 113,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/29/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/23/notes"
+        }
+      ]
+    },
+    {
+      "group": 114,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/30/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/24/scene"
+        }
+      ]
+    },
+    {
+      "group": 115,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/31/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/25/title"
+        }
+      ]
+    },
+    {
+      "group": 116,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/31/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/25/scene"
+        }
+      ]
+    },
+    {
+      "group": 117,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/31/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/25/notes"
+        }
+      ]
+    },
+    {
+      "group": 118,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/32/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/26/scene"
+        }
+      ]
+    },
+    {
+      "group": 119,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/32/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/26/notes"
+        }
+      ]
+    },
+    {
+      "group": 120,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/33/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/27/scene"
+        }
+      ]
+    },
+    {
+      "group": 121,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/34/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/28/title"
+        }
+      ]
+    },
+    {
+      "group": 122,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/34/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/28/scene"
+        }
+      ]
+    },
+    {
+      "group": 123,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/34/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/28/notes"
+        }
+      ]
+    },
+    {
+      "group": 124,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/35/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/29/title"
+        }
+      ]
+    },
+    {
+      "group": 125,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/35/scene"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/29/scene"
+        }
+      ]
+    },
+    {
+      "group": 126,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/12/value/35/notes"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/29/notes"
+        }
+      ]
+    },
+    {
+      "group": 127,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/13/value"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/13/value"
+        }
+      ]
+    },
+    {
+      "group": 128,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/14/value/sources/0/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/14/value/sources/0/title"
+        }
+      ]
+    },
+    {
+      "group": 129,
+      "members": [
+        {
+          "file": "builder-diving-transfer.json",
+          "pointer": "/operations/14/value/sources/0/text"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/14/value/sources/0/text"
+        }
+      ]
+    },
+    {
+      "group": 130,
+      "members": [
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/0/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/0/title"
+        }
+      ]
+    },
+    {
+      "group": 131,
+      "members": [
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/1/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/2/title"
+        }
+      ]
+    },
+    {
+      "group": 132,
+      "members": [
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/9/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/11/title"
+        }
+      ]
+    },
+    {
+      "group": 133,
+      "members": [
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/13/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/15/title"
+        }
+      ]
+    },
+    {
+      "group": 134,
+      "members": [
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/15/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/17/title"
+        }
+      ]
+    },
+    {
+      "group": 135,
+      "members": [
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/1/value/16/title"
+        },
+        {
+          "file": "builder-diving-polished-transfer.json",
+          "pointer": "/operations/12/value/18/title"
+        }
+      ]
+    }
+  ],
+  "character_counts": [
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/0/value",
+      "characters": 31
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/0/title",
+      "characters": 32
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/1/title",
+      "characters": 32
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/2/title",
+      "characters": 26
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/3/title",
+      "characters": 26
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/4/title",
+      "characters": 20
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/5/title",
+      "characters": 30
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/6/title",
+      "characters": 44
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/7/title",
+      "characters": 47
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/8/title",
+      "characters": 49
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/9/title",
+      "characters": 25
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/10/title",
+      "characters": 26
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/11/title",
+      "characters": 42
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/12/title",
+      "characters": 42
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/13/title",
+      "characters": 12
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/14/title",
+      "characters": 18
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/15/title",
+      "characters": 11
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/16/title",
+      "characters": 41
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/17/title",
+      "characters": 41
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/18/title",
+      "characters": 35
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/19/title",
+      "characters": 38
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/20/title",
+      "characters": 38
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/21/title",
+      "characters": 37
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/22/title",
+      "characters": 37
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/23/title",
+      "characters": 7
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/24/title",
+      "characters": 36
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/25/title",
+      "characters": 31
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/1/value/26/title",
+      "characters": 38
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/2/value/0/label",
+      "characters": 44
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/0/prompt",
+      "characters": 76
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/0/paths/0/label",
+      "characters": 19
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/0/paths/0/rationale",
+      "characters": 72
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/0/paths/0/cue",
+      "characters": 88
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/0/paths/1/label",
+      "characters": 36
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/0/paths/1/rationale",
+      "characters": 72
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/0/paths/1/cue",
+      "characters": 88
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/0/paths/2/label",
+      "characters": 32
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/0/paths/2/rationale",
+      "characters": 72
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/0/paths/2/cue",
+      "characters": 88
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/prompt",
+      "characters": 104
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/interaction/options/0/label",
+      "characters": 33
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/interaction/options/1/label",
+      "characters": 9
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/interaction/options/2/label",
+      "characters": 25
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/interaction/options/3/label",
+      "characters": 39
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/interaction/options/4/label",
+      "characters": 33
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/paths/0/label",
+      "characters": 22
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/paths/0/rationale",
+      "characters": 193
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/paths/0/cue",
+      "characters": 193
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/paths/1/label",
+      "characters": 55
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/paths/1/rationale",
+      "characters": 203
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/paths/1/cue",
+      "characters": 203
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/1/paths/1/recovery/prompt",
+      "characters": 163
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/2/prompt",
+      "characters": 144
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/2/paths/0/label",
+      "characters": 39
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/2/paths/0/rationale",
+      "characters": 336
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/2/paths/0/cue",
+      "characters": 336
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/2/paths/0/recovery/prompt",
+      "characters": 139
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/prompt",
+      "characters": 102
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/interaction/options/0/label",
+      "characters": 52
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/interaction/options/1/label",
+      "characters": 66
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/interaction/options/2/label",
+      "characters": 103
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/0/label",
+      "characters": 26
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/0/rationale",
+      "characters": 245
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/0/cue",
+      "characters": 245
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/1/label",
+      "characters": 45
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/1/rationale",
+      "characters": 264
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/1/cue",
+      "characters": 264
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/1/recovery/prompt",
+      "characters": 168
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/2/label",
+      "characters": 35
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/2/rationale",
+      "characters": 202
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/2/cue",
+      "characters": 202
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/2/recovery/prompt",
+      "characters": 178
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/3/label",
+      "characters": 47
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/3/rationale",
+      "characters": 264
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/3/cue",
+      "characters": 264
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/3/value/3/paths/3/recovery/prompt",
+      "characters": 139
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/5/value/0/label",
+      "characters": 19
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/5/value/1/label",
+      "characters": 23
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/5/value/2/label",
+      "characters": 23
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/5/value/3/label",
+      "characters": 19
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/5/value/4/label",
+      "characters": 22
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/5/value/5/label",
+      "characters": 22
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/5/value/6/label",
+      "characters": 22
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/6/value/0",
+      "characters": 72
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/6/value/1",
+      "characters": 89
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/6/value/2",
+      "characters": 97
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/6/value/3",
+      "characters": 125
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/9/value",
+      "characters": 41
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/11/value",
+      "characters": 158
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/0/title",
+      "characters": 32
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/0/scene",
+      "characters": 320
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/0/notes",
+      "characters": 530
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/1/title",
+      "characters": 32
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/1/scene",
+      "characters": 248
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/2/title",
+      "characters": 29
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/2/scene",
+      "characters": 293
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/2/notes",
+      "characters": 82
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/3/title",
+      "characters": 26
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/3/scene",
+      "characters": 317
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/3/notes",
+      "characters": 657
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/4/title",
+      "characters": 26
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/4/scene",
+      "characters": 60
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/5/title",
+      "characters": 20
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/5/scene",
+      "characters": 288
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/6/title",
+      "characters": 30
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/6/scene",
+      "characters": 280
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/6/notes",
+      "characters": 568
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/7/title",
+      "characters": 37
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/7/scene",
+      "characters": 182
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/8/title",
+      "characters": 44
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/8/scene",
+      "characters": 231
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/9/title",
+      "characters": 47
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/9/scene",
+      "characters": 193
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/10/title",
+      "characters": 49
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/10/scene",
+      "characters": 258
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/11/title",
+      "characters": 25
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/11/scene",
+      "characters": 221
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/12/title",
+      "characters": 26
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/12/scene",
+      "characters": 261
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/12/notes",
+      "characters": 339
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/13/title",
+      "characters": 42
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/13/scene",
+      "characters": 317
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/13/notes",
+      "characters": 433
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/14/title",
+      "characters": 42
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/14/scene",
+      "characters": 89
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/15/title",
+      "characters": 12
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/15/scene",
+      "characters": 217
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/16/title",
+      "characters": 18
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/16/scene",
+      "characters": 304
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/17/title",
+      "characters": 11
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/17/scene",
+      "characters": 197
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/18/title",
+      "characters": 41
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/18/scene",
+      "characters": 318
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/18/notes",
+      "characters": 753
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/19/title",
+      "characters": 41
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/19/scene",
+      "characters": 8
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/20/title",
+      "characters": 35
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/20/scene",
+      "characters": 185
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/20/notes",
+      "characters": 382
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/21/title",
+      "characters": 38
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/21/scene",
+      "characters": 318
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/21/notes",
+      "characters": 164
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/22/title",
+      "characters": 38
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/22/scene",
+      "characters": 109
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/23/title",
+      "characters": 37
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/23/scene",
+      "characters": 313
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/24/title",
+      "characters": 37
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/24/scene",
+      "characters": 64
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/25/title",
+      "characters": 7
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/25/scene",
+      "characters": 226
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/25/notes",
+      "characters": 564
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/26/title",
+      "characters": 36
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/26/scene",
+      "characters": 287
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/26/notes",
+      "characters": 286
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/27/title",
+      "characters": 31
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/27/scene",
+      "characters": 248
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/27/notes",
+      "characters": 220
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/28/title",
+      "characters": 29
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/28/scene",
+      "characters": 231
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/28/notes",
+      "characters": 264
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/29/title",
+      "characters": 31
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/29/scene",
+      "characters": 193
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/29/notes",
+      "characters": 689
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/30/title",
+      "characters": 22
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/30/scene",
+      "characters": 184
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/31/title",
+      "characters": 41
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/31/scene",
+      "characters": 183
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/31/notes",
+      "characters": 117
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/32/title",
+      "characters": 38
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/32/scene",
+      "characters": 216
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/32/notes",
+      "characters": 409
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/33/title",
+      "characters": 26
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/33/scene",
+      "characters": 234
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/34/title",
+      "characters": 46
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/34/scene",
+      "characters": 231
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/34/notes",
+      "characters": 140
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/35/title",
+      "characters": 35
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/35/scene",
+      "characters": 197
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/12/value/35/notes",
+      "characters": 295
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/13/value",
+      "characters": 27
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/14/value/sources/0/title",
+      "characters": 53
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/14/value/sources/0/text",
+      "characters": 43260
+    },
+    {
+      "file": "builder-diving-transfer.json",
+      "pointer": "/operations/14/value/preparation_requirements",
+      "characters": 300
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/0/value",
+      "characters": 31
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/0/title",
+      "characters": 23
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/1/title",
+      "characters": 17
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/2/title",
+      "characters": 20
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/3/title",
+      "characters": 30
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/4/title",
+      "characters": 44
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/5/title",
+      "characters": 47
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/6/title",
+      "characters": 49
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/7/title",
+      "characters": 25
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/8/title",
+      "characters": 26
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/9/title",
+      "characters": 33
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/10/title",
+      "characters": 12
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/11/title",
+      "characters": 18
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/12/title",
+      "characters": 11
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/13/title",
+      "characters": 32
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/14/title",
+      "characters": 35
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/15/title",
+      "characters": 29
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/16/title",
+      "characters": 28
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/17/title",
+      "characters": 7
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/18/title",
+      "characters": 36
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/19/title",
+      "characters": 31
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/1/value/20/title",
+      "characters": 38
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/2/value/0/label",
+      "characters": 44
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/0/prompt",
+      "characters": 76
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/0/paths/0/label",
+      "characters": 19
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/0/paths/0/rationale",
+      "characters": 72
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/0/paths/0/cue",
+      "characters": 88
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/0/paths/1/label",
+      "characters": 36
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/0/paths/1/rationale",
+      "characters": 72
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/0/paths/1/cue",
+      "characters": 88
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/0/paths/2/label",
+      "characters": 32
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/0/paths/2/rationale",
+      "characters": 72
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/0/paths/2/cue",
+      "characters": 88
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/prompt",
+      "characters": 104
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/interaction/options/0/label",
+      "characters": 33
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/interaction/options/1/label",
+      "characters": 9
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/interaction/options/2/label",
+      "characters": 25
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/interaction/options/3/label",
+      "characters": 39
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/interaction/options/4/label",
+      "characters": 33
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/paths/0/label",
+      "characters": 22
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/paths/0/rationale",
+      "characters": 193
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/paths/0/cue",
+      "characters": 193
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/paths/1/label",
+      "characters": 55
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/paths/1/rationale",
+      "characters": 203
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/paths/1/cue",
+      "characters": 203
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/1/paths/1/recovery/prompt",
+      "characters": 163
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/2/prompt",
+      "characters": 144
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/2/paths/0/label",
+      "characters": 39
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/2/paths/0/rationale",
+      "characters": 336
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/2/paths/0/cue",
+      "characters": 336
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/2/paths/0/recovery/prompt",
+      "characters": 139
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/prompt",
+      "characters": 102
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/interaction/options/0/label",
+      "characters": 52
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/interaction/options/1/label",
+      "characters": 66
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/interaction/options/2/label",
+      "characters": 103
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/0/label",
+      "characters": 26
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/0/rationale",
+      "characters": 245
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/0/cue",
+      "characters": 245
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/1/label",
+      "characters": 45
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/1/rationale",
+      "characters": 264
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/1/cue",
+      "characters": 264
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/1/recovery/prompt",
+      "characters": 168
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/2/label",
+      "characters": 35
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/2/rationale",
+      "characters": 202
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/2/cue",
+      "characters": 202
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/2/recovery/prompt",
+      "characters": 178
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/3/label",
+      "characters": 47
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/3/rationale",
+      "characters": 264
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/3/cue",
+      "characters": 264
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/3/value/3/paths/3/recovery/prompt",
+      "characters": 139
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/5/value/0/label",
+      "characters": 19
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/5/value/1/label",
+      "characters": 23
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/5/value/2/label",
+      "characters": 23
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/5/value/3/label",
+      "characters": 19
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/5/value/4/label",
+      "characters": 22
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/5/value/5/label",
+      "characters": 22
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/5/value/6/label",
+      "characters": 22
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/6/value/0",
+      "characters": 72
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/6/value/1",
+      "characters": 89
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/6/value/2",
+      "characters": 97
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/6/value/3",
+      "characters": 125
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/9/value",
+      "characters": 41
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/11/value",
+      "characters": 158
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/0/title",
+      "characters": 23
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/0/scene/blocks/0/runs/0/text",
+      "characters": 150
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/0/scene/blocks/1/runs/0/text",
+      "characters": 129
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/0/scene/blocks/2/runs/0/text",
+      "characters": 57
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/0/scene/blocks/3/runs/0/text",
+      "characters": 37
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/0/scene/blocks/4/runs/0/text",
+      "characters": 113
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/0/points/0",
+      "characters": 77
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/0/notes",
+      "characters": 530
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/1/title",
+      "characters": 29
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/1/scene",
+      "characters": 293
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/1/notes",
+      "characters": 82
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/2/title",
+      "characters": 17
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/2/scene/blocks/0/runs/0/text",
+      "characters": 107
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/2/scene/blocks/1/runs/0/text",
+      "characters": 56
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/2/scene/blocks/2/runs/0/text",
+      "characters": 58
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/2/scene/blocks/3/runs/0/text",
+      "characters": 52
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/2/scene/blocks/4/runs/0/text",
+      "characters": 100
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/2/notes",
+      "characters": 657
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/3/title",
+      "characters": 20
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/3/scene",
+      "characters": 288
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/4/title",
+      "characters": 30
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/4/scene",
+      "characters": 280
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/4/notes",
+      "characters": 568
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/5/title",
+      "characters": 37
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/5/scene",
+      "characters": 182
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/6/title",
+      "characters": 44
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/6/scene",
+      "characters": 231
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/7/title",
+      "characters": 47
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/7/scene",
+      "characters": 193
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/8/title",
+      "characters": 49
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/8/scene",
+      "characters": 258
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/9/title",
+      "characters": 25
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/9/scene",
+      "characters": 221
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/10/title",
+      "characters": 26
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/10/scene",
+      "characters": 261
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/10/notes",
+      "characters": 339
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/11/title",
+      "characters": 33
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/11/scene/blocks/0/runs/0/text",
+      "characters": 83
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/11/scene/blocks/1/runs/0/text",
+      "characters": 81
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/11/scene/blocks/2/runs/0/text",
+      "characters": 33
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/11/scene/blocks/3/runs/0/text",
+      "characters": 47
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/11/scene/blocks/4/runs/0/text",
+      "characters": 113
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/11/scene/blocks/5/runs/0/text",
+      "characters": 44
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/11/notes",
+      "characters": 433
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/12/title",
+      "characters": 12
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/12/scene",
+      "characters": 217
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/13/title",
+      "characters": 18
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/13/scene",
+      "characters": 304
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/14/title",
+      "characters": 11
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/14/scene",
+      "characters": 197
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/15/title",
+      "characters": 32
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/15/scene/blocks/0/runs/0/text",
+      "characters": 105
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/15/scene/blocks/1/runs/0/text",
+      "characters": 33
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/15/scene/blocks/2/runs/0/text",
+      "characters": 40
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/15/scene/blocks/3/runs/0/text",
+      "characters": 145
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/15/notes",
+      "characters": 753
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/16/title",
+      "characters": 35
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/16/scene",
+      "characters": 185
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/16/notes",
+      "characters": 382
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/17/title",
+      "characters": 29
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/17/scene/blocks/0/runs/0/text",
+      "characters": 119
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/17/scene/blocks/1/runs/0/text",
+      "characters": 121
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/17/scene/blocks/2/runs/0/text",
+      "characters": 58
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/17/scene/blocks/3/runs/0/text",
+      "characters": 126
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/17/notes",
+      "characters": 164
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/18/title",
+      "characters": 28
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/18/scene/blocks/0/runs/0/text",
+      "characters": 76
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/18/scene/blocks/1/runs/0/text",
+      "characters": 117
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/18/scene/blocks/2/runs/0/text",
+      "characters": 27
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/18/scene/blocks/3/runs/0/text",
+      "characters": 35
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/18/scene/blocks/4/runs/0/text",
+      "characters": 118
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/19/title",
+      "characters": 7
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/19/scene",
+      "characters": 226
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/19/notes",
+      "characters": 564
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/20/title",
+      "characters": 36
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/20/scene",
+      "characters": 287
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/20/notes",
+      "characters": 286
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/21/title",
+      "characters": 31
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/21/scene",
+      "characters": 248
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/21/notes",
+      "characters": 220
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/22/title",
+      "characters": 29
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/22/scene",
+      "characters": 231
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/22/notes",
+      "characters": 264
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/23/title",
+      "characters": 31
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/23/scene",
+      "characters": 193
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/23/notes",
+      "characters": 689
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/24/title",
+      "characters": 22
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/24/scene",
+      "characters": 184
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/25/title",
+      "characters": 41
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/25/scene",
+      "characters": 183
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/25/notes",
+      "characters": 117
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/26/title",
+      "characters": 38
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/26/scene",
+      "characters": 216
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/26/notes",
+      "characters": 409
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/27/title",
+      "characters": 26
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/27/scene",
+      "characters": 234
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/28/title",
+      "characters": 46
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/28/scene",
+      "characters": 231
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/28/notes",
+      "characters": 140
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/29/title",
+      "characters": 35
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/29/scene",
+      "characters": 197
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/12/value/29/notes",
+      "characters": 295
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/13/value",
+      "characters": 27
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/14/value/sources/0/title",
+      "characters": 53
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/14/value/sources/0/text",
+      "characters": 43260
+    },
+    {
+      "file": "builder-diving-polished-transfer.json",
+      "pointer": "/operations/14/value/preparation_requirements",
+      "characters": 250
+    }
+  ],
+  "private_source_text_or_short_value_hashes_included": false
+}

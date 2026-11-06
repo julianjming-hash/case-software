@@ -1,0 +1,5 @@
+/* prototypes/design/tokens.css: an @import of the shipped tokens (CASE-163). The v2 design system was approved
+   2026-10-06 and its values now live in src/client/tokens.css, the single source. design-system.html reads them
+   back with getComputedStyle, so this page cannot drift from what ships. scripts/check-case.mjs (PROTO_DRIFT)
+   fails if this file stops being exactly this import. */
+@import url('../../src/client/tokens.css');

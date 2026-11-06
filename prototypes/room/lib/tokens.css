@@ -1,0 +1,302 @@
+/* prototypes/room/lib/tokens.css: shared tokens and base styles for the stage C room windows.
+   CASE-163: the custom-property blocks are a mirror of src/client/tokens.css (tests/contrast.test.mjs keeps them equal);
+   the base rules below stay the lab's own.
+   This file is the visual spec for Phase 2 (CASE-112 to CASE-118). Every colour, size, weight, radius
+   and z-index a window uses is a token here; tests/contrast.test.mjs checks every text and non-text
+   pair in BOTH themes, and tests/z-index.test.mjs forbids raw z-index literals.
+
+   Colour carries three signals and nothing else:
+   • ZONES: the orientation band (header, footer) is petrol-tinted; the scene and findings sit on
+     neutral cards; only the decision column carries the option colours.
+   • PHASE STATE: one accent per phase on the phase pill and the left rail of the phase card, never a
+     flood: open = green, locked = amber, reveal = petrol, consequence = coral, paused = slate.
+   • CONTROL PRIORITY: one filled primary action per screen (petrol), secondary tinted, tertiary
+     plain text, destructive a coral outline.
+   Petrol is never a clinical meaning; clinical meaning is never colour alone (icon + text). */
+
+/* Montserrat (SIL OFL 1.1) and JetBrains Mono (SIL OFL 1.1), self-hosted (NOTICE.md): never loaded from
+   a third-party font service, so no participant's address leaves Case. No serif face anywhere (CASE-112). */
+@font-face {
+  font-family: 'Montserrat'; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url(fonts/montserrat-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Montserrat'; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url(fonts/montserrat-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono'; font-style: normal; font-weight: 500 700; font-display: swap;
+  src: url(fonts/jetbrains-mono-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light;
+  /* foundations — neutral */
+  --ground: #f3f5f5;
+  --surface: #ffffff;
+  --sunken: #e8edee;
+  --line: #d5dddf;
+  --field-line: #6f7f81;      /* control borders: 3:1 non-text  */
+  --ink: #16242a;
+  --ink-muted: #4a5b62;
+  /* orientation band */
+  --nav-bg: #ffffff;
+  --nav-line: #d5dddf;
+  --nav-ink: #16242a;
+  --qr-card: #ffffff;
+  /* An ECG's card stays light, with dark ink for its text alternative, in every theme (card 59). */
+  --figure-card: #ffffff; --figure-ink: #16242a;
+  /* control priority */
+  --petrol: #0f5566;
+  --petrol-deep: #0a4150;
+  --on-petrol: #ffffff;
+  --petrol-tint: #e1eeef;
+  --petrol-ink: #0d4a58;
+  --focus: #0f5566;
+  --quiet: #eef2f3;
+  --quiet-ink: #16242a;
+  /* phase state: fill (chip tessera) + tint (chip, soft states) + ink on tint */
+  --ph-open: #276b4c;        --ph-open-tint: #ddefe5;        --ph-open-ink: #1a503a;
+  --ph-locked: #8a5200;      --ph-locked-tint: #f6e6c8;      --ph-locked-ink: #693e00;
+  --ph-reveal: #0f5566;      --ph-reveal-tint: #dcebeb;      --ph-reveal-ink: #0d4a58;
+  --ph-consequence: #b5432e; --ph-consequence-tint: #f9e3dc; --ph-consequence-ink: #8c301f;
+  --ph-paused: #4b575e;      --ph-paused-tint: #e5e8e8;      --ph-paused-ink: #37424a;
+  --on-phase: #ffffff;
+  /* status (not phase): destructive, offline, manual room */
+  --alert: #a8372a;          --alert-tint: #f8e1da;          --alert-ink: #8c2e1d;
+  --manual: #7a4c0a;         --manual-tint: #f4e5c6;         --manual-ink: #623c06;
+  --ok: #26603f;             --ok-tint: #dcefe2;             --ok-ink: #17503a;
+  --private: #5b4fa3;        --private-tint: #eeecf8;        --private-ink: #3f357d;
+  --tile-tint: 12%;
+  /* elevation and shape */
+  --shadow-1: 0 1px 2px rgba(22, 36, 42, .06);
+  --shadow-2: 0 12px 32px rgba(22, 36, 42, .14);
+  /* radius — one scale tied to element size (Apple-style): small things are nearly square, large
+     surfaces are soft. Nested corners are concentric: inner = outer − padding (never below --radius-xs).
+     Capsules are reserved for avatars and switches; nothing else is a pill. */
+  --radius-xs: 3px;
+  --radius-chip: 6px;
+  --radius-sm: 8px;           /* controls: buttons, fields, segmented items, small covers */
+  --radius: 12px;             /* cards, option tiles, covers, timeline items */
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-pill: 999px;       /* avatars and switches only */
+  --tessera: 8px;
+  /* spacing: 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
+  --sp-8: 64px; --sp-9: 96px;
+  /* layout */
+  --measure: 68ch;            /* prose */
+  --form-w: 26rem;            /* join, sign-in, dialogs */
+  --page-w: 1200px;           /* library, admin */
+  --header-h: 64px;
+  /* type: one family, one tight scale (CASE-112) + display steps for arrival and projector */
+  --sans: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --t-xs: 12px; --t-sm: 14px; --t-md: 16px; --t-lg: 20px; --t-xl: 24px; --t-code: 32px;
+  --t-2xl: 32px; --t-3xl: 44px;
+  --w-regular: 400; --w-medium: 500; --w-semibold: 600; --w-bold: 700;
+  --lh-tight: 1.2; --lh: 1.5;
+  --track-caps: .08em;
+  /* projector (CASE-083 body minimum; further steps derived from it) */
+  --projector-body: 24px;
+  --projector-title: 44px;
+  --projector-code: clamp(72px, 5vw, 120px);
+  --projector-qr: clamp(180px, 31vh, 340px);  /* lobby QR: about 335 px at 1080p, 223 px at 720p (Julian, 2026-10-07) */
+  /* option marks: same names, shapes and positions (CASE-088), hues pulled into the Case palette.
+     Each fill keeps 3:1 on every ground, on its own tile, and under its white glyph (yellow keeps its CASE-115
+     edge exception). Solved against these v2 grounds; see design-system.html. */
+  --mark-red: #d34b36; --mark-blue: #5e74cc; --mark-yellow: #e9a51d; --mark-yellow-edge: #6e5208; --mark-green: #378862;
+  --mark-purple: #9c61b5; --mark-teal: #21858c; --mark-orange: #ba611c; --mark-grey: #6b7b82;
+  /* Slide palette (CASE-225): every slide fill and text colour comes from these tokens, derived from the marks and the
+     theme's ink and surface so light and dark adapt. A presentation theme overrides only these; the design gates test
+     each pair (text colours at 7:1 on the slide). */
+  --slide-fill-soft: var(--quiet);
+  --slide-fill-blue: color-mix(in srgb, var(--mark-blue) 12%, var(--surface));
+  --slide-fill-teal: color-mix(in srgb, var(--mark-teal) 12%, var(--surface));
+  --slide-fill-green: color-mix(in srgb, var(--mark-green) 12%, var(--surface));
+  --slide-fill-purple: color-mix(in srgb, var(--mark-purple) 12%, var(--surface));
+  --slide-fill-coral: color-mix(in srgb, var(--mark-red) 12%, var(--surface));
+  --slide-fill-orange: color-mix(in srgb, var(--mark-orange) 12%, var(--surface));
+  --slide-fill-amber: color-mix(in srgb, var(--mark-yellow) 12%, var(--surface));
+  --slide-fill-grey: color-mix(in srgb, var(--mark-grey) 12%, var(--surface));
+  --slide-ink-blue: color-mix(in srgb, var(--mark-blue) 50%, var(--ink));
+  --slide-ink-teal: color-mix(in srgb, var(--mark-teal) 50%, var(--ink));
+  --slide-ink-green: color-mix(in srgb, var(--mark-green) 50%, var(--ink));
+  --slide-ink-purple: color-mix(in srgb, var(--mark-purple) 50%, var(--ink));
+  --slide-ink-coral: color-mix(in srgb, var(--mark-red) 50%, var(--ink));
+  --slide-ink-orange: color-mix(in srgb, var(--mark-orange) 50%, var(--ink));
+  --slide-ink-amber: color-mix(in srgb, var(--mark-yellow) 30%, var(--ink));
+  --slide-ink-grey: color-mix(in srgb, var(--mark-grey) 50%, var(--ink));
+  /* fixed previews of each theme's ground for the Appearance chooser (not themed) */
+  --preview-light: #f3f5f5; --preview-dark: #12181b;
+  /* z-index bands (a raw number never appears in a window: tests/z-index.test.mjs) */
+  --z-raised: 1; --z-sticky: 100; --z-dock: 110; --z-toast: 300; --z-overlay: 400;
+  /* motion: one easing, two UI durations and the living-art timings (splash-motion.mjs). All motion is opt-in
+     (reduced motion, Motion in Appearance), pauses when hidden and never runs on working surfaces. */
+  --ease: cubic-bezier(.2, .7, .2, 1); --dur-1: 120ms; --dur-2: 240ms;
+  --art-arrival-tile: 420ms; --art-arrival-span: 1300ms; --art-current: 800ms; --art-lay: 420ms;
+  --art-join-hold: 1500ms; --art-join-flight: 600ms; --art-join-queue: 400ms;
+}
+
+/* Dark: same roles. Charcoal foundations. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground: #12181b; --surface: #1a2226; --sunken: #0d1214; --line: #2a353a; --field-line: #7f9599;
+    --ink: #e7edef; --ink-muted: #a9b7bc;
+    --nav-bg: #161d20; --nav-line: #2a353a; --nav-ink: #e7edef; --qr-card: #ffffff;
+    --petrol: #6cc2cf; --petrol-deep: #8fd3dd; --on-petrol: #062228; --petrol-tint: #193a41; --petrol-ink: #a9e0e8; --focus: #8fd3dd;
+    --quiet: #222c30; --quiet-ink: #e7edef;
+    --ph-open: #57c08c; --ph-open-tint: #143a28; --ph-open-ink: #a5e6c4;
+    --ph-locked: #e3a74c; --ph-locked-tint: #3d2c10; --ph-locked-ink: #f3cf96;
+    --ph-reveal: #6cc2cf; --ph-reveal-tint: #173d46; --ph-reveal-ink: #a9e0e8;
+    --ph-consequence: #f08b72; --ph-consequence-tint: #432019; --ph-consequence-ink: #f8bcab;
+    --ph-paused: #9eabb1; --ph-paused-tint: #252f34; --ph-paused-ink: #cfd8dc;
+    --on-phase: #0a1a1f;
+    --alert: #f08b72; --alert-tint: #432019; --alert-ink: #f8bcab;
+    --manual: #e3a74c; --manual-tint: #3d2c10; --manual-ink: #f3cf96;
+    --ok: #57c08c; --ok-tint: #143a28; --ok-ink: #a5e6c4;
+    --private: #a99cf0; --private-tint: #272340; --private-ink: #d2caff;
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, .3); --shadow-2: 0 12px 32px rgba(0, 0, 0, .5);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #12181b; --surface: #1a2226; --sunken: #0d1214; --line: #2a353a; --field-line: #7f9599;
+  --ink: #e7edef; --ink-muted: #a9b7bc;
+  --nav-bg: #161d20; --nav-line: #2a353a; --nav-ink: #e7edef; --qr-card: #ffffff;
+  --petrol: #6cc2cf; --petrol-deep: #8fd3dd; --on-petrol: #062228; --petrol-tint: #193a41; --petrol-ink: #a9e0e8; --focus: #8fd3dd;
+  --quiet: #222c30; --quiet-ink: #e7edef;
+  --ph-open: #57c08c; --ph-open-tint: #143a28; --ph-open-ink: #a5e6c4;
+  --ph-locked: #e3a74c; --ph-locked-tint: #3d2c10; --ph-locked-ink: #f3cf96;
+  --ph-reveal: #6cc2cf; --ph-reveal-tint: #173d46; --ph-reveal-ink: #a9e0e8;
+  --ph-consequence: #f08b72; --ph-consequence-tint: #432019; --ph-consequence-ink: #f8bcab;
+  --ph-paused: #9eabb1; --ph-paused-tint: #252f34; --ph-paused-ink: #cfd8dc;
+  --on-phase: #0a1a1f;
+  --alert: #f08b72; --alert-tint: #432019; --alert-ink: #f8bcab;
+  --manual: #e3a74c; --manual-tint: #3d2c10; --manual-ink: #f3cf96;
+  --ok: #57c08c; --ok-tint: #143a28; --ok-ink: #a5e6c4;
+  --private: #a99cf0; --private-tint: #272340; --private-ink: #d2caff;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, .3); --shadow-2: 0 12px 32px rgba(0, 0, 0, .5);
+}
+
+/* ── Presentation themes (CASE-227) ──
+   A case may choose one; the slide renderer adds slide-theme-<name> to the slide root. A theme sets the slide's own
+   ground, ink and lines; its fills and text colours derive from the shared marks, so they are declared again inside
+   the theme (a token derived at :root would keep the room's values). Option marks never change: they mean the same on
+   every phone. The Builder's editing chrome on a slide uses the theme's own accent, so selection stays visible.
+   Every pair is checked at 7:1 by the design gates (tests/design-gates.test.mjs, slide themes). */
+.slide-theme-clinic, .slide-theme-night, .slide-theme-print {
+  --slide-fill-soft: var(--quiet);
+  --slide-fill-blue: color-mix(in srgb, var(--mark-blue) var(--slide-fill-mix), var(--surface));
+  --slide-fill-teal: color-mix(in srgb, var(--mark-teal) var(--slide-fill-mix), var(--surface));
+  --slide-fill-green: color-mix(in srgb, var(--mark-green) var(--slide-fill-mix), var(--surface));
+  --slide-fill-purple: color-mix(in srgb, var(--mark-purple) var(--slide-fill-mix), var(--surface));
+  --slide-fill-coral: color-mix(in srgb, var(--mark-red) var(--slide-fill-mix), var(--surface));
+  --slide-fill-orange: color-mix(in srgb, var(--mark-orange) var(--slide-fill-mix), var(--surface));
+  --slide-fill-amber: color-mix(in srgb, var(--mark-yellow) var(--slide-fill-mix), var(--surface));
+  --slide-fill-grey: color-mix(in srgb, var(--mark-grey) var(--slide-fill-mix), var(--surface));
+  --slide-ink-blue: color-mix(in srgb, var(--mark-blue) var(--slide-ink-mix), var(--ink));
+  --slide-ink-teal: color-mix(in srgb, var(--mark-teal) var(--slide-ink-mix), var(--ink));
+  --slide-ink-green: color-mix(in srgb, var(--mark-green) var(--slide-ink-mix), var(--ink));
+  --slide-ink-purple: color-mix(in srgb, var(--mark-purple) var(--slide-ink-mix), var(--ink));
+  --slide-ink-coral: color-mix(in srgb, var(--mark-red) var(--slide-ink-mix), var(--ink));
+  --slide-ink-orange: color-mix(in srgb, var(--mark-orange) var(--slide-ink-mix), var(--ink));
+  --slide-ink-amber: color-mix(in srgb, var(--mark-yellow) var(--slide-ink-amber-mix), var(--ink));
+  --slide-ink-grey: color-mix(in srgb, var(--mark-grey) var(--slide-ink-mix), var(--ink));
+}
+/* Clinic: cool and clear, for bright teaching rooms. */
+.slide-theme-clinic { --surface: #f5f9fc; --ink: #0d2132; --ink-muted: #36495a; --line: #c2d2de; --quiet: #e3edf5;
+  --slide-fill-mix: 14%; --slide-ink-mix: 50%; --slide-ink-amber-mix: 30%;
+  --petrol: #0f5566; --petrol-deep: #0a4150; --on-petrol: #ffffff; --petrol-tint: #e1eeef; --petrol-ink: #0d4a58; --focus: #0f5566; }
+/* Night: a dark slide for dim rooms and bright projectors. */
+.slide-theme-night { --surface: #121820; --ink: #eef3f7; --ink-muted: #b8c4cf; --line: #33404c; --quiet: #1e2731;
+  --slide-fill-mix: 24%; --slide-ink-mix: 42%; --slide-ink-amber-mix: 55%;
+  --petrol: #6cc2cf; --petrol-deep: #8fd3dd; --on-petrol: #062228; --petrol-tint: #193a41; --petrol-ink: #a9e0e8; --focus: #8fd3dd; }
+/* Print: black on white, like a handout. */
+.slide-theme-print { --surface: #ffffff; --ink: #111111; --ink-muted: #404040; --line: #bdbdbd; --quiet: #f0f0f0;
+  --slide-fill-mix: 10%; --slide-ink-mix: 55%; --slide-ink-amber-mix: 32%;
+  --petrol: #0f5566; --petrol-deep: #0a4150; --on-petrol: #ffffff; --petrol-tint: #e1eeef; --petrol-ink: #0d4a58; --focus: #0f5566; }
+
+/* ── base ── */
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--ground); color: var(--ink); font: var(--w-regular) var(--t-md)/var(--lh) var(--sans); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { font-weight: var(--w-semibold); line-height: var(--lh-tight); letter-spacing: -.01em; }
+b, strong { font-weight: var(--w-semibold); }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: 1; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+a { color: var(--petrol-ink); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.muted { color: var(--ink-muted); }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+svg.ic { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── controls: one primary, secondary tinted, tertiary text, destructive coral outline ── */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2); min-height: 44px; padding: var(--sp-2) var(--sp-4); border: 1px solid transparent; border-radius: var(--radius-sm); background: var(--petrol-tint); color: var(--petrol-ink); font-size: var(--t-sm); font-weight: var(--w-semibold); line-height: 1.2; text-align: center; text-decoration: none; }
+.btn.primary { background: var(--petrol); color: var(--on-petrol); }
+.btn.primary:hover:not(:disabled) { background: var(--petrol-deep); }
+.btn.tertiary { background: transparent; color: var(--petrol-ink); padding-inline: var(--sp-2); }
+.btn.tertiary:hover:not(:disabled) { background: var(--petrol-tint); }
+.btn.danger { background: transparent; border-color: var(--alert); color: var(--alert-ink); }
+.btn.icon { padding: 0; width: 44px; }
+.btn.block { width: 100%; }
+.btn.lg { min-height: 52px; padding: var(--sp-3) var(--sp-5); font-size: var(--t-md); }
+
+/* Disabled controls use explicit colours, not group opacity (CASE-125: at least 4.5:1). */
+.btn:disabled { color: var(--ink-muted); background: var(--sunken); border-color: var(--field-line); }
+
+/* ── phase pill: the one place the phase accent fills (plus the card rail) ── */
+.pill { display: inline-flex; align-items: center; gap: var(--sp-2); padding: var(--sp-1) var(--sp-3); border-radius: var(--radius-pill); background: var(--ph, var(--ph-reveal)); color: var(--on-phase); font-size: var(--t-xs); font-weight: var(--w-semibold); letter-spacing: .02em; white-space: nowrap; }
+[data-phase="open"] { --ph: var(--ph-open); --ph-tint: var(--ph-open-tint); --ph-ink: var(--ph-open-ink); }
+[data-phase="locked"] { --ph: var(--ph-locked); --ph-tint: var(--ph-locked-tint); --ph-ink: var(--ph-locked-ink); }
+[data-phase="reveal"] { --ph: var(--ph-reveal); --ph-tint: var(--ph-reveal-tint); --ph-ink: var(--ph-reveal-ink); }
+[data-phase="consequence"] { --ph: var(--ph-consequence); --ph-tint: var(--ph-consequence-tint); --ph-ink: var(--ph-consequence-ink); }
+[data-phase="paused"] { --ph: var(--ph-paused); --ph-tint: var(--ph-paused-tint); --ph-ink: var(--ph-paused-ink); }
+
+/* ── neutral chips and tags (status, never phase) ── */
+.tag { display: inline-flex; align-items: center; gap: var(--sp-1); padding: 2px var(--sp-2); border-radius: var(--radius-pill); background: var(--sunken); color: var(--ink); font-size: var(--t-xs); font-weight: var(--w-medium); white-space: nowrap; }
+.tag.ok { background: var(--ok-tint); color: var(--ok-ink); }
+.tag.warn { background: var(--manual-tint); color: var(--manual-ink); }
+.tag.bad { background: var(--alert-tint); color: var(--alert-ink); }
+.tag.sel { background: var(--petrol-tint); color: var(--petrol-ink); }
+
+/* ── banners (layers and connection), icon + text ── */
+.banner { display: flex; gap: var(--sp-3); align-items: center; padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-sm); font-weight: var(--w-medium); }
+.banner.manual { background: var(--manual-tint); color: var(--manual-ink); }
+.banner.pause { background: var(--ph-paused-tint); color: var(--ph-paused-ink); }
+.banner.alert { background: var(--alert-tint); color: var(--alert-ink); }
+.banner.info { background: var(--petrol-tint); color: var(--petrol-ink); }
+
+/* ── cards and tiles (bento) ── */
+.card, .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-1); }
+.eyebrow { margin: 0; color: var(--ink-muted); font-size: var(--t-xs); font-weight: var(--w-semibold); letter-spacing: .08em; text-transform: uppercase; }
+
+/* Option tile (CASE-088/089): the decision column carries the option colours. --mk is the mark fill. */
+.opt-tile { --mk: var(--ink-muted); background: color-mix(in srgb, var(--mk) var(--tile-tint), var(--surface)); border: 1px solid color-mix(in srgb, var(--mk) 35%, var(--line)); border-radius: var(--radius); }
+
+/* ── avatars ── */
+img.avatar { display: block; flex: none; border-radius: 50%; background: var(--sunken); }
+
+/* ── info disclosure: explanations live behind it, never inline paragraphs (CASE-118) ── */
+details.info { display: inline-block; vertical-align: middle; }
+details.info > summary { list-style: none; display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; color: var(--petrol-ink); cursor: pointer; }
+details.info > summary::-webkit-details-marker { display: none; }
+details.info > summary:hover, details.info[open] > summary { background: var(--petrol-tint); }
+details.info .info-body { margin: var(--sp-2) 0 0; padding: var(--sp-3); max-width: 52ch; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-2); font-size: var(--t-sm); font-weight: var(--w-regular); color: var(--ink); }
+
+@media (forced-colors: active) {
+  .btn, .tag, .pill, .card, .opt-tile, .banner { border: 1px solid CanvasText; }
+  .btn.primary, .pill { forced-color-adjust: auto; background: ButtonFace; color: ButtonText; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+.nomodule { margin: var(--sp-4); padding: var(--sp-3) var(--sp-4); border: 2px solid var(--alert); border-radius: var(--radius-sm); background: var(--alert-tint); color: var(--alert-ink); font-weight: var(--w-semibold); }
+.avatar-none { display: inline-grid; place-items: center; flex: none; border-radius: 50%; background: var(--sunken); color: var(--ink-muted); font-weight: var(--w-semibold); }

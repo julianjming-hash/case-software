@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case design system</title>
+<meta name="description" content="Canonical Case design system v2: shipped tokens, component specimens, mosaic artwork grammar, responsive and accessibility rules. Reference specimens are not production verification.">
+<link rel="stylesheet" href="design/tokens.css">
+<link rel="stylesheet" href="design/case-ui.css">
+<script type="module" src="design/mosaic.mjs"></script>
+<style>
+  /* Reference-page layout only. Product components come from design/case-ui.css. */
+  .ds { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 100vh; }
+  .ds-nav { position: sticky; top: 0; align-self: start; height: 100vh; overflow: auto; padding: var(--sp-5) var(--sp-4); border-right: 1px solid var(--line); background: var(--nav-bg); }
+  .ds-nav a { display: flex; align-items: center; min-height: 44px; padding: 6px var(--sp-2); border-radius: 6px; color: var(--ink-muted); font-size: var(--t-sm); font-weight: var(--w-medium); text-decoration: none; }
+  .ds-nav a:hover { background: var(--quiet); color: var(--ink); }
+  .ds-nav .label-caps { margin: var(--sp-5) var(--sp-2) var(--sp-2); }
+  .ds-main { min-width: 0; padding: var(--sp-7) var(--sp-7) var(--sp-9); max-width: 1180px; }
+  .ds-main > section { padding-top: var(--sp-8); scroll-margin-top: var(--sp-5); }
+  .ds-main > section > h2 { font-size: var(--t-2xl); margin-bottom: var(--sp-3); }
+  .ds-main > section > p.lede { color: var(--ink-muted); max-width: var(--measure); margin-bottom: var(--sp-6); }
+  .ds-main > section > h3 { margin: var(--sp-6) 0 var(--sp-3); }
+  .spec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--sp-5); }
+  .specimen { display: flex; flex-direction: column; gap: var(--sp-3); }
+  .specimen .stage { padding: var(--sp-5); border: 1px solid var(--line); border-radius: var(--radius); background: var(--ground); display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+  .specimen .stage.surface-bg { background: var(--surface); }
+  .specimen figcaption, .caption { font-size: var(--t-sm); color: var(--ink-muted); }
+  .rules { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: var(--sp-2); max-width: var(--measure); }
+  .do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); }
+  .do-dont > div { padding: var(--sp-5); border-radius: var(--radius-lg); background: var(--ok-tint); --tc: var(--ok); --tg: var(--ok-tint); }
+  .do-dont > div.dont { background: var(--alert-tint); --tc: var(--alert); --tg: var(--alert-tint); }
+  .do-dont h4 { display: flex; align-items: center; gap: var(--sp-2); }
+  .do-dont h4::before { content: ""; width: 12px; height: 12px; border-radius: 2px; background: linear-gradient(var(--tg) 0 0) center / 12px 2px no-repeat, linear-gradient(var(--tg) 0 0) center / 2px 12px no-repeat, var(--tc); }
+  .do-dont h4 { margin-bottom: var(--sp-2); }
+  .tok-table td.sw { width: 44px; }
+  .tok-table .chip { width: 32px; height: 24px; border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(127,127,127,.35); }
+  .tok-table code, code { font-family: var(--mono); font-size: .88em; }
+  .ratio.pass { color: var(--ok-ink); } .ratio.fail { color: var(--alert-ink); font-weight: var(--w-semibold); }
+  .type-row { display: grid; grid-template-columns: 160px 1fr; gap: var(--sp-5); align-items: baseline; padding: var(--sp-3) 0; border-bottom: 1px solid var(--line); }
+  .type-row .caption { font-family: var(--mono); font-size: var(--t-xs); }
+  .space-row { display: flex; align-items: center; gap: var(--sp-4); font-size: var(--t-sm); }
+  .space-row i { display: block; height: 16px; background: var(--petrol); border-radius: 2px; }
+  .art-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--sp-5); }
+  .art-grid figure { margin: 0; display: flex; flex-direction: column; gap: var(--sp-2); }
+  .art-tile { aspect-ratio: 1; border-radius: var(--radius-sm); overflow: hidden; position: relative; }
+  .art-tile > [data-mosaic] { position: absolute; inset: 0; }
+  .zoom { aspect-ratio: 1; border-radius: var(--radius-sm); overflow: hidden; position: relative; }
+  .zoom > [data-mosaic] { position: absolute; inset: -60%; }
+  .status-card { display: grid; grid-template-columns: auto 1fr; gap: var(--sp-4); align-items: start; }
+  .approval { background: var(--ph-open-tint); border: 0; }
+  .sizes { display: flex; gap: var(--sp-5); align-items: end; flex-wrap: wrap; }
+  .sizes figure { margin: 0; }
+  .bp { display: grid; grid-template-columns: 120px 1fr; gap: var(--sp-3) var(--sp-5); font-size: var(--t-sm); }
+  .bp dt { font-family: var(--mono); font-weight: 600; }
+  .bp dd { margin: 0; }
+  .usage-map { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); }
+  .usage-map > div { padding: var(--sp-4); border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface); }
+  .usage-map h4 { margin-bottom: var(--sp-2); }
+  .mini-splash { height: 220px; border-radius: var(--radius); }
+  .mini-splash .splash-panel { position: absolute; left: var(--sp-5); top: 50%; transform: translateY(-50%); padding: var(--sp-4); width: 220px; }
+  @media (max-width: 900px) {
+    .ds { grid-template-columns: 1fr; }
+    .ds-nav { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+    .ds-main { padding: var(--sp-5) var(--sp-4) var(--sp-8); }
+    .do-dont, .usage-map { grid-template-columns: 1fr; }
+    .type-row { grid-template-columns: 1fr; gap: var(--sp-1); }
+  }
+</style>
+</head>
+<body>
+<div class="ds">
+  <nav class="ds-nav" aria-label="Design system sections">
+    <span class="wordmark"><svg class="tessera" viewBox="0 0 16 16" aria-hidden="true"><rect x="0" y="0" width="7" height="7" rx="1"/><rect class="t2" x="9" y="0" width="7" height="7" rx="1"/><rect class="t3" x="0" y="9" width="7" height="7" rx="1"/><rect x="9" y="9" width="7" height="7" rx="1"/></svg>CASE</span>
+    <p class="xs muted" style="margin:var(--sp-2) var(--sp-2) 0">Design system · canonical v2</p>
+    <div class="segmented" role="group" aria-label="Appearance" style="margin:var(--sp-4) 0 0">
+      <button data-set-theme="light">Light</button><button data-set-theme="dark">Dark</button><button data-set-theme="auto">Auto</button>
+    </div>
+    <p class="label-caps">Foundations</p>
+    <a href="#status">Status & sources</a><a href="#principles">Principles</a><a href="#colour">Colour roles</a><a href="#themes">Light, dark, auto</a><a href="#type">Typography</a><a href="#space">Space, shape, layers</a><a href="#radius">Corner radius</a>
+    <p class="label-caps">Components</p>
+    <a href="#actions">Actions</a><a href="#fields">Fields & session code</a><a href="#state">State & feedback</a><a href="#room">Session components</a><a href="#catalogue">Catalogue</a><a href="#containers">Containers</a>
+    <p class="label-caps">Artwork</p>
+    <a href="#art-grammar">Mosaic grammar</a><a href="#art-structure">Structure & identity</a><a href="#art-motion">Living mosaic</a><a href="#art-use">Where art appears</a>
+    <p class="label-caps">Patterns</p>
+    <a href="#private-navigation">Private navigation</a><a href="#responsive">Responsive</a><a href="#a11y">Accessibility</a><a href="#sync">Keeping in sync</a><a href="#open">Recorded decisions</a>
+    <p class="xs muted" style="margin:var(--sp-5) var(--sp-2) 0"><a href="surface-design.html">Surface mockups →</a></p>
+  </nav>
+
+  <main class="ds-main">
+    <header>
+      <p class="label-caps">Case · design system</p>
+      <h1 style="font-size:var(--t-3xl);margin-top:var(--sp-2)">An open forum, laid tile by tile.</h1>
+      <p class="muted" style="max-width:var(--measure);margin-top:var(--sp-4)">Case is a facilitator-led decision theatre: everyone contributes, difference is welcome, and the facilitator decides which authored path the session follows. The system is quiet and neutral where people read and decide, and expressive where they arrive and gather. Its signature is the mosaic: individual tesserae laid into the case's decision paths.</p>
+    </header>
+
+    <!-- ───────────────────────── STATUS ───────────────────────── -->
+    <section id="status">
+      <h2>Status and sources</h2>
+      <div class="surface approval status-card">
+        <span class="pill" data-phase="open">Approved · Julian, 2026-10-06</span>
+        <div class="stack stack-sm">
+          <p><strong>This page is the approved v2 contract for Case's tokens, components, artwork and motion</strong> (Julian, 2026-10-06). The token foundation and shared component roles are implemented in <code>src/client</code>. This reference page does not itself change runtime behaviour, data or access, and its specimens do not prove that every surface implements the contract. The 2026-10-09 facilitator/admin audit records remaining parity gaps.</p>
+          <p class="small muted">Reaffirmed by Julian on 2026-10-09. <code>src/client/tokens.css</code> owns numeric token values; the prototype imports it. Later product decisions and permission/privacy rules govern interaction behavior where an older specimen differs. See the <a href="../docs/plans/FACILITATOR-DESIGN-AUDIT.md">facilitator/admin parity audit</a> and the <a href="../docs/HANDOFF.md">current behavior contract</a>.</p>
+        </div>
+      </div>
+      <h3>Single sources</h3>
+      <table class="table">
+        <thead><tr><th>Domain</th><th>Source of truth</th><th>Used by</th></tr></thead>
+        <tbody>
+          <tr><td>UI tokens</td><td><code>src/client/tokens.css</code>, imported by <code>prototypes/design/tokens.css</code></td><td>Shipped clients, this page (values read back live), surface mockups</td></tr>
+          <tr><td>Component specimens</td><td><code>prototypes/design/case-ui.css</code>; shipped implementations in <code>src/client/*.css</code></td><td>This page and surface mockups demonstrate the contract; inspect each shipped component separately</td></tr>
+          <tr><td>Artwork grammar, pigments, group tints</td><td><code>prototypes/design/mosaic.mjs</code></td><td>Every mosaic on both pages</td></tr>
+          <tr><td>Studio task surfaces · 4 November 2026</td><td><code>src/client/case-tile.mjs</code>, <code>surface-controls.mjs</code>, <code>dialog-behaviour.mjs</code>, <code>surface-notice.mjs</code>; token styling in <code>site.css</code> and <code>admin.css</code></td><td>Runtime Present/Create/Sessions, Account and Administration; the Studio remains the owner-review specimen</td></tr>
+          <tr><td>Beta issue surfaces · integration pending</td><td><code>src/client/issues-ui.mjs</code>, <code>issue-reporter.mjs</code>, <code>admin-issues.mjs</code>; the same <code>dialog-behaviour.mjs</code>, <code>surface-notice.mjs</code> and <code>ui-icons.mjs</code> adapters</td><td>One-field reporting, private evidence preview and Admin Issues; release and physical-device evidence are tracked separately</td></tr>
+          <tr><td>Shared Studio icons and permission comparison</td><td><code>src/client/ui-icons.mjs</code>, <code>permission-comparison.mjs</code>; permission cells from <code>src/shared/permissions.mjs</code></td><td>Runtime and Studio re-exports; numeric tokens and permission authority are unchanged</td></tr>
+          <tr><td>Option marks</td><td><code>src/client/projector-marks.mjs</code> (shipped, imported directly)</td><td>Option, result and recap specimens</td></tr>
+          <tr><td>Code normalisation</td><td><code>src/shared/ids.mjs</code> (shipped, imported directly)</td><td>Session-code specimens</td></tr>
+          <tr><td>Fonts</td><td><code>public/fonts/</code> (shipped, OFL)</td><td>Both pages</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin-top:var(--sp-3)">Serve the repository root to view these pages (<code>npx serve .</code>), because the ES-module imports do not load from <code>file://</code>.</p>
+    </section>
+
+    <!-- ───────────────────────── PRINCIPLES ───────────────────────── -->
+    <section id="principles">
+      <h2>Principles</h2>
+      <p class="lede">Ten owner-approved principles · 3 November 2026 (CASE-353). These supersede the earlier six-rule summary on this living page; the dated decision log preserves that history. Numeric tokens and the source mapping above remain authoritative.</p>
+      <p class="small muted">Preferred terms and exact meanings: <a href="../docs/HANDOFF.md#product-lexicon">product lexicon</a>. Layout decisions: <a href="../docs/plans/FACILITATOR-ADMIN-EXPERIENCE.md">current surface specification</a>. Access and retention remain governed by their existing contracts.</p>
+      <div class="spec-grid">
+        <div class="stack stack-sm"><h4>1 · Use precise vocabulary</h4><p class="small muted">Present opens Lobby; Start case reveals the opening slide (CASE-358, 4 November 2026). Labels introduce no new runtime prerequisites. The product lexicon lives in HANDOFF, not in a parallel glossary.</p></div>
+        <div class="stack stack-sm"><h4>2 · Preserve Case’s visual meaning</h4><p class="small muted">Use existing tokens, typography and mosaic grammar: expressive arrival, calm work. Art represents structure, never participants, votes or clinical correctness. Colour always has a textual or symbolic cue; private styling supplements enforced boundaries.</p></div>
+        <div class="stack stack-sm"><h4>3 · One primary per active task</h4><p class="small muted">Keep teaching controls stable. In horizontal actions, cancel/back goes left and accept right. Destructive placement never makes the destructive action the keyboard default.</p></div>
+        <div class="stack stack-sm"><h4>4 · Reuse anatomy and behaviour; arrange by task</h4><p class="small muted">Share cards, controls and modal frames; use whitespace before extra boxes. Follow the current surface specification’s detail reading order rather than inventing a competing layout per page.</p></div>
+        <div class="stack stack-sm"><h4>5 · Keep useful information</h4><p class="small muted">Remove filler without removing orientation, accessible headings or recovery help. Unknown creator says Not recorded; summaries and status reflect evidence, not decoration.</p></div>
+        <div class="stack stack-sm"><h4>6 · Report confirmed outcomes</h4><p class="small muted">Retain failed-form inputs. Reconcile uncertain results before retrying; a timeout never proves that nothing changed. Success/failure notices use accessible non-reflowing toasts; input validation remains associated with its field.</p></div>
+        <div class="stack stack-sm"><h4>7 · Distinguish modal states</h4><p class="small muted">Clean modals dismiss. Dirty forms show a discard overlay with Keep editing focused. Pending/uncertain writes retain safeguards. Escape affects the top layer; restore focus to the initiating control or its replacement.</p></div>
+        <div class="stack stack-sm"><h4>8 · Explicit accessible disclosure</h4><p class="small muted">Use named Show/Hide actions, keyboard operation and expanded state, without chevrons. Retain the established Create Outline branch-chip exception as an internal implementation name; its product destination is Create.</p></div>
+        <div class="stack stack-sm"><h4>9 · Measure accessibility</h4><p class="small muted">Verify existing 44-pixel targets, contrast, keyboard order/focus, reduced motion, 200% enlargement and applicable 400% / 320-CSS-pixel reflow. Keep focused controls unobscured. A title over artwork needs a quiet text layer and a measured fallback for long titles.</p></div>
+        <div class="stack stack-sm"><h4>10 · Make scope/privacy truthful</h4><p class="small muted">Role is self-described attribution and grants no Access. Removing a case grant may leave workspace access. Your recap, Participant record and retained Session record have distinct meanings and existing retention/access rules.</p></div>
+      </div>
+    </section>
+
+    <section id="tool-glyphs">
+      <h2>Compact tool glyphs</h2>
+      <p class="lede">Owner refinement · 4 November 2026 (CASE-359). Declared toolbar and pagination tools share 44px square targets, 8px corners and 18px glyphs. Preserve full accessible names, native hover descriptions, selected values and active-filter cues. Rich choices remain in the themed popup without up/down chevrons; native selects remain the fallback. Expanded Search opens below the tool row so adjacent commands remain reachable (CASE-366, 4 November 2026).</p>
+      <div class="surface"><table><thead><tr><th>Purpose</th><th>Lucide glyph</th><th>Meaning</th></tr></thead><tbody>
+      <tr><td>Search</td><td>search</td><td>Expand the bounded search control.</td></tr><tr><td>Refresh</td><td>refresh-cw</td><td>Read current scoped information.</td></tr><tr><td>Workspace</td><td>folders</td><td>Choose scope; expose its full name accessibly.</td></tr><tr><td>Status</td><td>circle-check</td><td>Choose state; selected colour is never the only cue.</td></tr><tr><td>Filters / sort / dates</td><td>sliders-horizontal / list-filter / calendar-days</td><td>Open choices or apply the named filter action.</td></tr><tr><td>Previous / next / clear</td><td>arrow-left / arrow-right / x</td><td>Navigate a bounded collection or clear its filters.</td></tr><tr><td>Music / participants</td><td>list-music / users</td><td>Local audition / distinct join evidence.</td></tr>
+      </tbody></table></div>
+      <p class="small muted">The code mapping lives in ui-icons.mjs. Never infer a command from a person or case title. Main accept/cancel actions retain text; the four case-preparation actions retain equal 52px geometry. Music is a separate local modal; Settings itself remains inline. No parallel manifesto or saved-icon keys are introduced.</p>
+    </section>
+
+    <section id="supporting-information">
+      <h2>Supporting information and action groups</h2>
+      <p class="lede">Owner refinement · 4 November 2026 (CASE-358). Standalone scope, help and empty-state explanations sit inside an aligned surface; field hints stay inside their form. Avoid loose paragraphs between controls and cards.</p>
+      <p class="supporting-note">Example: search returns one bounded page at a time. Continue to the next page for further results.</p>
+      <p class="small muted">In Present this case, Briefing, Sessions, Preview and Present use equal-width columns, a 52-pixel height and the same corner and padding tokens. Share retains its 44-pixel icon target. Metadata actions use transparent text treatment with a 44-pixel target and align with non-interactive facts. A value such as Not recorded never becomes a fake button.</p>
+    </section>
+
+    <!-- ───────────────────────── COLOUR ───────────────────────── -->
+    <section id="colour">
+      <h2>Colour roles</h2>
+      <p class="lede">Every value in these tables is read live from <code>tokens.css</code> in both themes, and the contrast column is calculated in your browser. The page cannot show a stale value. A failing pair is flagged in red.</p>
+      <div id="token-tables"></div>
+      <h3>Current v2 foundation and historical comparison</h3>
+      <div class="do-dont">
+        <div><h4>v2</h4><ul class="rules small"><li>Neutral ground <code>#f3f5f5</code> and white surfaces; charcoal <code>#12181b</code> in dark.</li><li>Near-neutral charcoal ink, so petrol stands out where it means something.</li><li>A neutral header bar with a hairline.</li><li>Shared roles: <code>--quiet</code> for dense secondary controls, a <code>--private</code> tint for facilitator-only material, a radius scale with concentric nesting, the tessera marker, palette-harmonised option marks, layout widths, display type steps and mosaic motion.</li></ul></div>
+        <div class="dont"><h4>Historical pre-v2 foundation</h4><ul class="rules small"><li>Cream ground <code>#f5f1e8</code> and cream surfaces.</li><li>Petrol ink <code>#0f3b47</code> for all text, a petrol-tinted header, and petrol-tinted dark surfaces.</li><li>Petrol on page, panels and buttons at once, so nothing stands out (review finding 4).</li></ul></div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── THEMES ───────────────────────── -->
+    <section id="themes">
+      <h2>Light, dark and auto</h2>
+      <p class="lede">The roles are the same in both themes; only values change. Auto follows the operating system and switches live. Light and Dark pin the theme with <code>data-theme</code> on the root element, a mechanism the shipped tokens already support.</p>
+      <div class="split">
+        <div class="stack">
+          <fieldset class="stack stack-sm" style="border:0;padding:0;margin:0">
+            <legend class="field-label" style="font-weight:600;font-size:var(--t-sm);margin-bottom:var(--sp-2)">Appearance</legend>
+            <div class="choice-cards">
+              <label><input type="radio" name="appearance" value="light"><span class="theme-swatch light"></span>Light</label>
+              <label><input type="radio" name="appearance" value="dark"><span class="theme-swatch dark"></span>Dark</label>
+              <label><input type="radio" name="appearance" value="auto"><span class="theme-swatch"></span>Auto</label>
+            </div>
+          </fieldset>
+          <ul class="rules small">
+            <li>Appearance is a labelled radio group in the menu, available before sign-in on every role's screen.</li>
+            <li>Only the choice is stored: one local preference, with no account or server write. Clearing browser data returns it to Auto.</li>
+            <li>An inline script in <code>&lt;head&gt;</code> applies the stored choice before first paint, so the theme never flashes.</li>
+            <li>The projector follows its own device. The facilitator's choice never changes the projector.</li>
+            <li>Artwork keeps identical geometry in both themes. Only ground, grout and pigment lightness change.</li>
+            <li><strong>PDF and print exports are always light</strong>, whatever the screen theme.</li>
+          </ul>
+        </div>
+        <figure class="specimen" style="margin:0">
+          <div class="art-tile" style="border-radius:var(--radius)"><div data-mosaic='{"descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"mvc","group":"petrol"}'></div></div>
+          <figcaption>The same seed in the current theme. Switch the theme: the geometry stays, only lightness changes.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── TYPE ───────────────────────── -->
+    <section id="type">
+      <h2>Typography</h2>
+      <p class="lede">Montserrat for everything; JetBrains Mono only for codes and vital-sign numerals. Both are already self-hosted under the OFL, so <code>font-src 'self'</code> holds. There is no serif face anywhere (CASE-112). Weights are 400, 500 and 600, with 700 reserved for codes and the wordmark.</p>
+      <div>
+        <div class="type-row"><span class="caption">--t-3xl 44 / 600</span><span style="font-size:var(--t-3xl);font-weight:600;letter-spacing:-.02em;line-height:1.1">Join the Case</span></div>
+        <div class="type-row"><span class="caption">--t-2xl 32 / 600</span><span style="font-size:var(--t-2xl);font-weight:600;letter-spacing:-.015em">Present</span></div>
+        <div class="type-row"><span class="caption">--t-xl 24 / 600</span><span style="font-size:var(--t-xl);font-weight:600">Synthetic workshop prompt 275. Record a</span></div>
+        <div class="type-row"><span class="caption">--t-lg 20 / 600</span><span style="font-size:var(--t-lg);font-weight:600">Primary survey</span></div>
+        <div class="type-row"><span class="caption">--t-md 16 / 400 / 1.5</span><span>He talks, but only in short phrases. His right chest barely moves and is silent to the stethoscope.</span></div>
+        <div class="type-row"><span class="caption">--t-sm 14 / 500</span><span class="small" style="font-weight:500">Answer saved · you can change it until responses lock</span></div>
+        <div class="type-row"><span class="caption">--t-xs 12 / 600 caps</span><span class="label-caps">Only you</span></div>
+        <div class="type-row"><span class="caption">mono 32 / 700</span><span class="room-code" style="font-size:var(--t-code)">A7K<span class="gap"></span>2M9</span></div>
+        <div class="type-row"><span class="caption">mono 20 / 600 vitals</span><span class="mono" style="font-size:var(--t-lg);font-weight:600">134 · 78/50 · 38 · 86%</span></div>
+        <div class="type-row"><span class="caption">projector body 24</span><span style="font-size:var(--projector-body)">Choose on your phone</span></div>
+      </div>
+      <h3>Code legibility</h3>
+      <div class="split">
+        <div class="stack">
+          <p class="room-code" style="font-size:28px;letter-spacing:.18em;white-space:normal;word-break:break-all" id="crockford"></p>
+          <p class="small muted">Session and pairing codes use the Crockford alphabet, which has no I, L, O or U. Typing O becomes 0, and I or L becomes 1 (<code>normalizeCode</code>). JetBrains Mono gives 0 a dot and keeps 1, 7, 2 and Z distinct at projector size.</p>
+        </div>
+        <div class="stack stack-sm small">
+          <p><strong>Session code</strong>: 6 characters, shown 3 + 3 (<span class="mono" id="fmt6"></span>).</p>
+          <p><strong>Shared-computer code</strong>: 8 characters, shown 4 + 4 (<span class="mono" id="fmt8"></span>), expires in 5 minutes.</p>
+          <p><strong>Sign-in code</strong>: 6 digits from email. It is a different component with a different label, so it is never confused with a session code.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── SPACE ───────────────────────── -->
+    <section id="space">
+      <h2>Space, shape and layers</h2>
+      <p class="lede">A 4-based scale. Use small steps inside a group and large steps between tasks. The supplied screenshot's "Start room" ran into the next heading because both used the same gap.</p>
+      <div class="split">
+        <div class="stack stack-sm" id="space-scale"></div>
+        <div class="stack">
+          <table class="table"><thead><tr><th>Token</th><th>Use</th></tr></thead><tbody>
+            <tr><td><code data-token-value="--radius-xs">--radius-xs 3px</code></td><td>Small tesserae and minimum nested radius</td></tr>
+            <tr><td><code data-token-value="--radius-sm">--radius-sm 8px</code></td><td>Buttons, fields, small nested covers</td></tr>
+            <tr><td><code data-token-value="--radius">--radius 12px</code></td><td>Surfaces, options</td></tr>
+            <tr><td><code data-token-value="--radius-lg">--radius-lg 20px</code></td><td>Splash panels, dialogs</td></tr>
+            <tr><td><code data-token-value="--radius-chip">--radius-chip 6px</code></td><td>Status chips, tags</td></tr>
+            <tr><td><code data-token-value="--radius-xl">--radius-xl 28px</code></td><td>Large sheets</td></tr>
+            <tr><td><code data-token-value="--form-w">--form-w 26rem</code></td><td>Join, sign-in, dialogs</td></tr>
+            <tr><td><code data-token-value="--measure">--measure 68ch</code></td><td>Prose</td></tr>
+            <tr><td><code data-token-value="--page-w">--page-w 1200px</code></td><td>Library, admin</td></tr>
+            <tr><td><code>--z-sticky / dock / toast / overlay</code></td><td>Header, action dock, toasts, projector check. Never a raw number.</td></tr>
+            <tr><td><code>--dur-1 120 / --dur-2 240</code></td><td>State change / cover lift. Off under reduced motion.</td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── RADIUS ───────────────────────── -->
+    <section id="radius">
+      <h2>Corner radius</h2>
+      <p class="lede">Radius scales with size, as in Apple's interfaces: small things are nearly square, large surfaces are soft. Nested corners are concentric. Where the browser supports continuous corners (<code>corner-shape: squircle</code>) they are used; otherwise the same radii apply.</p>
+      <div class="split">
+        <div class="row" style="--gap:var(--sp-5);align-items:end" id="radius-scale"></div>
+        <ul class="rules small">
+          <li><strong>Concentric rule:</strong> inner radius = outer radius − padding, never below <code>--radius-xs</code>. A 20 px panel with 12 px padding holds 8 px controls.</li>
+          <li><strong>No capsules</strong> except avatars and switches. Phase and status are small chips (<code>--radius-chip</code> 6 px) led by a tessera.</li>
+          <li><strong>One radius per element type</strong>, whatever the screen. Projector chips scale their padding, not their roundness.</li>
+          <li>Covers use <code>--radius</code>. Inside a card or board item they drop to the concentric value.</li>
+        </ul>
+      </div>
+      <div class="row" style="margin-top:var(--sp-5);--gap:var(--sp-4)">
+        <div class="surface" style="padding:12px;border-radius:20px;background:var(--quiet);border:0"><div style="padding:12px 16px;border-radius:8px;background:var(--surface);font-size:var(--t-sm)">20 outer − 12 padding = 8 inner</div></div>
+        <span class="pill" data-phase="open">Team decision</span><span class="pill" data-phase="locked">Voting locked</span><span class="tag ok">Published · v3</span><span class="flag small" style="--tc:var(--petrol)">Tessera marker</span>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── ACTIONS ───────────────────────── -->
+    <section id="actions">
+      <h2>Actions</h2>
+      <p class="lede">The shipped roles, plus <code>quiet</code> for dense surfaces where a row of tinted petrol buttons would turn the whole screen petrol.</p>
+      <div class="spec-grid">
+        <figure class="specimen" style="margin:0"><div class="stage surface-bg"><button class="btn primary">Lock responses &amp; review</button></div><figcaption><strong>Primary.</strong> One per active task: its next step.</figcaption></figure>
+        <figure class="specimen" style="margin:0"><div class="stage surface-bg"><button class="btn">Pause for discussion</button></div><figcaption><strong>Secondary.</strong> A peer action that stays visible.</figcaption></figure>
+        <figure class="specimen" style="margin:0"><div class="stage surface-bg"><button class="btn quiet">Rename</button><button class="btn quiet">Remove</button></div><figcaption><strong>Quiet.</strong> Rows of actions in tables and Session setup.</figcaption></figure>
+        <figure class="specimen" style="margin:0"><div class="stage surface-bg"><button class="btn tertiary">Privacy</button></div><figcaption><strong>Tertiary.</strong> Navigation-like and low commitment.</figcaption></figure>
+        <figure class="specimen" style="margin:0"><div class="stage surface-bg"><button class="record-row"><span class="record-title">Diving Deeper</span><span class="record-meta">v3 · 17 Oct 2026, 20:13 · ended · 31 min · complete</span></button></div><figcaption><strong>Record row.</strong> One compact control per record in Sessions and Administration: the title names it, the version, date and state sit beside it. Card 68.</figcaption></figure>
+        <figure class="specimen" style="margin:0"><div class="stage surface-bg"><button class="btn danger">End case</button></div><figcaption><strong>Destructive.</strong> A coral outline that never fills by default.</figcaption></figure>
+        <figure class="specimen" style="margin:0"><div class="stage surface-bg"><button class="btn primary" disabled>Publish</button></div><figcaption><strong>Disabled.</strong> Uses explicit colours, never opacity (CASE-125). The reason appears beside it: "Save the draft before publishing".</figcaption></figure>
+        <figure class="specimen" style="margin:0"><div class="stage surface-bg"><button class="btn armed">Show to participants?</button></div><figcaption><strong>Armed reveal.</strong> The existing two-step reveal: the second press within 3 seconds confirms.</figcaption></figure>
+        <figure class="specimen" style="margin:0"><div class="stage surface-bg"><button class="btn primary" aria-busy="true">Sending to the session…</button></div><figcaption><strong>Busy.</strong> The label changes and repeat presses are ignored. It never shows success early.</figcaption></figure>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── FIELDS ───────────────────────── -->
+    <section id="fields">
+      <h2>Fields and the session code</h2>
+      <div class="split">
+        <div class="stack stack-lg">
+          <div class="field">
+            <label for="ds-code">Session code</label>
+            <input id="ds-code" class="code-input" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="9" aria-describedby="ds-code-hint ds-code-norm" placeholder="A7K2M9">
+            <p class="hint" id="ds-code-hint">Six characters from the projector. Spaces and hyphens are fine.</p>
+            <p class="small mono" id="ds-code-norm" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="ds-name">Your name</label>
+            <input id="ds-name" class="input" value="Ro" aria-invalid="true" aria-describedby="ds-name-err">
+            <div class="row between"><p class="error" id="ds-name-err">Use at least 3 characters</p><span class="counter">2 of 20</span></div>
+          </div>
+        </div>
+        <ul class="rules small">
+          <li>The session code is <strong>one native input</strong> drawn as six cells. Selection, paste, Backspace, caret movement and screen readers all treat it as a single field.</li>
+          <li>Typed values are normalised by the shipped <code>normalizeCode</code>. Try "a7k-2m9" or "o1l": the preview line shows the canonical form.</li>
+          <li>Nothing is sent when the sixth character arrives. The person presses <strong>Continue</strong>, or Enter.</li>
+          <li>Errors appear inline, are linked with <code>aria-describedby</code>, and keep what the person typed. Copy comes from the shipped strings, e.g. "That code isn't right · check it against the projector".</li>
+          <li>The <strong>sign-in code</strong> is a plain six-digit numeric field labelled "One-time code", deliberately different from the session code.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── STATE ───────────────────────── -->
+    <section id="state">
+      <h2>State and feedback</h2>
+      <p class="lede">The phase pill is the only place a phase colour fills. Status uses tags and banners with an icon and words. Receipt and connection copy below is the shipped copy (<code>src/client/phone.mjs</code>), restyled but not rewritten.</p>
+      <h3>Phase pills</h3>
+      <div class="row"><span class="pill" data-phase="reveal">Live surface</span><span class="pill" data-phase="open">Team decision</span><span class="pill" data-phase="locked">Voting locked</span><span class="pill" data-phase="consequence">Teaching point</span><span class="pill" data-phase="paused">Discussion pause</span></div>
+      <h3>Answer receipts (phone)</h3>
+      <div class="stack stack-sm">
+        <p class="receipt ok"><svg class="ic" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Answer saved · you can change it until responses lock</p>
+        <p class="receipt wait"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>Waiting for connection · your answer will send automatically</p>
+        <p class="receipt neutral"><svg class="ic" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="9" rx="2"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>Voting locked · no answer was recorded from this phone</p>
+        <p class="receipt neutral"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></svg>Paused · your answer is held</p>
+        <p class="receipt bad"><svg class="ic" viewBox="0 0 24 24"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg>Answer not saved · check your choice and try again</p>
+      </div>
+      <h3>Connection and layers</h3>
+      <div class="row"><span class="conn">Live</span><span class="conn wait">Reconnecting…</span><span class="conn lost">Connection lost · follow the room</span></div>
+      <div class="stack stack-sm" style="margin-top:var(--sp-4);max-width:560px">
+        <div class="banner manual"><svg class="ic" viewBox="0 0 24 24"><path d="M4 12h16M12 4v16"/></svg>Manual session mode · facilitator-led discussion</div>
+        <div class="banner pause"><svg class="ic" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></svg>Paused · the facilitator will resume the session</div>
+        <div class="banner info"><svg class="ic" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/></svg>Earlier material · read-only</div>
+      </div>
+      <h3>Tags</h3>
+      <div class="row"><span class="tag">Draft</span><span class="tag ok">Published · v3</span><span class="tag warn">Pilot version not verified</span><span class="tag bad">Withdrawn</span><span class="tag sel">Selected</span><span class="tag priv">Only you</span></div>
+    </section>
+
+    <!-- ───────────────────────── ROOM ───────────────────────── -->
+    <section id="room">
+      <h2>Session components</h2>
+      <p class="lede">Option marks come from the shipped module with their shapes, names and positions unchanged: "the blue diamond" means the same option on every screen. v2 recolours them from <code>--mark-*</code> tokens into the Case palette (coral-red, periwinkle-blue, ochre-yellow, sage-green). Each fill is solved to keep 3:1 on every ground, on its own tile and under its white glyph, and yellow keeps its CASE-115 edge. Results bars are laid as tesserae.</p>
+      <div class="split">
+        <div class="stack stack-sm" role="radiogroup" aria-label="Single-choice option specimen">
+          <label class="option" style="--mk:var(--mark-red)"><input type="radio" name="ds-opt"><span data-mark="0" data-size="28"></span>Synthetic workshop label 276. Re<span class="check"></span></label>
+          <label class="option" style="--mk:var(--mark-blue)"><input type="radio" name="ds-opt"><span data-mark="1" data-size="28"></span>Synthetic workshop label 277. Record <span class="check"></span></label>
+          <label class="option" style="--mk:var(--mark-yellow)"><input type="radio" name="ds-opt" checked><span data-mark="2" data-size="28"></span>Synthetic workshop label 278. Rec<span class="check"></span></label>
+          <label class="option" style="--mk:var(--mark-green)"><input type="radio" name="ds-opt"><span data-mark="3" data-size="28"></span>Synthetic workshop label 279. Re<span class="check"></span></label>
+          <p class="caption">The tile tint is the mark colour mixed into the surface at <code>--tile-tint</code>. Selection is an ink ring plus a filled check, never colour alone.</p>
+        </div>
+        <div class="stack">
+          <div class="results" aria-label="Anonymous results specimen">
+            <div class="result" style="--mk:var(--mark-red)"><span data-mark="0" data-size="24"></span><span class="small">Synthetic workshop label 276. Re</span><span class="n">1</span><span class="bar"><i style="width:50%"></i></span></div>
+            <div class="result" style="--mk:var(--mark-blue)"><span data-mark="1" data-size="24"></span><span class="small">Synthetic workshop label 277. Record </span><span class="n">1</span><span class="bar"><i style="width:50%"></i></span></div>
+            <div class="result" style="--mk:var(--mark-yellow)"><span data-mark="2" data-size="24"></span><span class="small">Synthetic workshop label 278. Rec</span><span class="n">0</span><span class="bar"><i style="width:0"></i></span></div>
+          </div>
+          <p class="caption">The label sits above its bar, so long options wrap without breaking the alignment between option and result (review finding on projector wrap).</p>
+          <div class="vitals"><div><span>HR</span><strong>134</strong></div><div><span>BP</span><strong>78/50</strong><span class="chg">↓</span></div><div><span>RR</span><strong>38</strong></div><div><span>SpO₂</span><strong>86%</strong></div></div>
+          <p class="caption">Vitals form one ruled strip instead of six tinted boxes. The change indicator is an arrow plus colour.</p>
+        </div>
+      </div>
+      <h3>Timeline, roster, QR and code</h3>
+      <div class="split">
+        <div class="stack">
+          <div class="timeline" aria-label="Shared material"><button><span>Earlier</span>Arrival</button><button><span>Earlier</span>Primary survey</button><button aria-current="step"><span>Live</span>Decisive intervention</button></div>
+          <div class="roster"><span class="who"><img src="../public/avatars/shadows-05-teal.svg" width="28" height="28" alt="">Robin</span><span class="who"><img src="../public/avatars/shadows-11-blue.svg" width="28" height="28" alt="">Kai</span><span class="who anon"><img src="../public/avatars/shadows-03-wine.svg" width="28" height="28" alt="Participant"></span><span class="who anon"><img src="../public/avatars/shadows-14-olive.svg" width="28" height="28" alt="Participant"></span></div>
+          <p class="caption">Names show only in the lobby, or when the facilitator chooses Show names. Otherwise the roster is avatar-only.</p>
+        </div>
+        <div class="row" style="--gap:var(--sp-5);align-items:center">
+          <div class="qr" data-qr style="width:132px"></div>
+          <div class="stack stack-sm"><span class="small muted">case.iatrogenic.app</span><span class="room-code" style="font-size:var(--t-code)">A7K<span class="gap"></span>2M9</span><span class="caption">Mockup QRs are illustrative and never scannable. Production keeps the shipped quiet zone on a white card.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── CATALOGUE ───────────────────────── -->
+    <section id="catalogue">
+      <h2>Catalogue</h2>
+      <p class="lede">The cover is a square, clipped viewport onto the case's artwork, tinted by its group. The whole card is one link, named by the title. There is no separate "View case" button to compete with it.</p>
+      <div class="case-grid" style="max-width:760px">
+        <article class="case-card">
+          <div class="cover"><div data-mosaic='{"format":"canvas","descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"mvc","group":"petrol","base":300}'></div></div>
+          <div class="stack stack-sm">
+            <span class="group-chip" style="--g:hsl(186 30% 70%)"><i></i>Emergency</span>
+            <h3><a href="#catalogue">Workshop sensor fault simulation</a></h3>
+            <p class="desc">A trauma team must recognise and decompress a tension pneumothorax before imaging.</p>
+            <div class="meta"><span>15 min</span><span>Junior doctors</span></div>
+          </div>
+        </article>
+        <article class="case-card">
+          <div class="cover"><div data-mosaic='{"format":"canvas","descriptor":{"v":1,"stops":8,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0},{"stop":4,"strands":[{"rejoin":5},{"rejoin":5}],"resets":1,"ends":0},{"stop":5,"strands":[{"rejoin":6},{"rejoin":6}],"resets":0,"ends":0},{"stop":6,"strands":[{"rejoin":7},{"rejoin":7}],"resets":0,"ends":0}]},"seed":"sepsis","group":"coral","base":300}'></div></div>
+          <div class="stack stack-sm">
+            <span class="group-chip" style="--g:hsl(12 40% 72%)"><i></i>Critical care</span>
+            <h3><a href="#catalogue">Septic shock on the ward</a></h3>
+            <p class="desc">Fluids, vasopressors and escalation when the first response falls short.</p>
+            <div class="meta"><span>45 min</span><span>Registrars</span><span class="tag warn">Pilot not verified</span></div>
+          </div>
+        </article>
+        <article class="case-card">
+          <div class="cover unavailable"><span>Artwork unavailable for this version<br><span class="xs">The structure could not be drawn legibly at cover size.</span></span></div>
+          <div class="stack stack-sm">
+            <span class="group-chip"><i></i>Ungrouped</span>
+            <h3><a href="#catalogue">Untitled draft</a></h3>
+            <p class="desc muted">No description</p>
+            <div class="meta"><span>Duration not set</span></div>
+          </div>
+        </article>
+      </div>
+      <h3>Board card and table row</h3>
+      <div class="split">
+        <div class="board-col" style="max-width:340px">
+          <header>Emergency <span class="muted">2</span></header>
+          <article class="board-card"><div class="cover"><div data-mosaic='{"format":"canvas","descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"mvc","group":"petrol","base":160}'></div></div><div class="stack stack-sm"><h3><a href="#catalogue">Workshop sensor fault simulation</a></h3><div class="meta"><span>15 min</span><span>Junior doctors</span></div></div></article>
+        </div>
+        <table class="table"><thead><tr><th aria-sort="ascending"><button>Title ↑</button></th><th><button>Group</button></th><th class="num"><button>Length</button></th></tr></thead>
+          <tbody><tr><td><strong>Workshop sensor fault simulation</strong></td><td><span class="group-chip" style="--g:hsl(186 30% 70%)"><i></i>Emergency</span></td><td class="num">15 min</td></tr></tbody></table>
+      </div>
+      <p class="caption" style="margin-top:var(--sp-3)">Duration is the authored <code>duration_min</code>, with 15 and 45 minutes shown here as examples. Audience is the authored free-text <code>audience</code>. The catalogue RPC exposes these authored fields. Missing values show as "not set", never as a guess.</p>
+    </section>
+
+    <!-- ───────────────────────── CONTAINERS ───────────────────────── -->
+    <section id="containers">
+      <h2>Containers</h2>
+      <div class="split">
+        <div class="stack">
+          <div class="zone"><span class="zone-label label-caps row" style="--gap:var(--sp-2)">Projector preview</span><h3 style="margin:0">Primary survey</h3><p class="small">He talks, but only in short phrases. His right chest barely moves.</p></div>
+          <hr>
+          <div class="private zone"><span class="zone-label label-caps row" style="color:inherit;--gap:var(--sp-2)">Only you</span><p class="small">Invite contrasting reasoning before reviewing the authored paths.</p></div>
+          <p class="caption">Public material sits on plain ground. Private material sits on a violet-tinted surface with the "Only you" tesserae label. The label can be read aloud, and the tint plus glyph survives greyscale. No accent rails anywhere in the system.</p>
+        </div>
+        <div class="stack">
+          <div class="dock" style="position:relative;border:1px solid var(--line);border-radius:var(--radius)"><span class="dock-hint">Hide responses on projector before showing the next case context.</span><button class="btn primary">Reveal: Partial response</button></div>
+          <p class="caption">The dock holds the single primary action and a one-line gate reason. It is sticky, and the page reserves its height so it never covers content.</p>
+          <details class="disclose"><summary>Private note · not shown to participants</summary><p class="small" style="padding:0 0 var(--sp-3) var(--sp-5)">Authored teaching note in full.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── ART GRAMMAR ───────────────────────── -->
+    <section id="art-grammar">
+      <h2>Mosaic grammar: the braid</h2>
+      <p class="lede">A case's art is drawn from its authored graph. The petrol spine is the default route (each decision's recommended path). Every decision is one plaited arch whose rows are its alternative routes, rejoining the spine where the case does. The renderer, not an illustrator, enforces these rules (<code>design/mosaic.mjs</code>).</p>
+      <div class="art-grid">
+        <figure><div class="zoom"><div data-mosaic='{"descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"grammar-1","group":"petrol"}'></div></div><figcaption class="caption"><strong>Laid, not drawn.</strong> A tessellated ground (opus tessellatum), with paths laid as rows of near-square tesserae along the curve (opus vermiculatum). An outline row in the ground tone hugs every path.</figcaption></figure>
+        <figure><div class="art-tile"><div data-mosaic='{"descriptor":{"v":1,"stops":3,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2},{"rejoin":2}],"resets":0,"ends":0}]},"seed":"grammar-2","group":"neutral"}'></div></div><figcaption class="caption"><strong>A decision is a plait.</strong> One arch per decision. Each row is one authored alternative, in that decision's pigment at its own shade. Every route is always drawn (Julian, 2026-10-06).</figcaption></figure>
+        <figure><div class="zoom"><div data-mosaic='{"descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"grammar-3","group":"periwinkle"}'></div></div><figcaption class="caption"><strong>Rejoins share a seam.</strong> A plait leaves and lands on the spine's edge on one grout line. Fills are opaque; nothing is translucent.</figcaption></figure>
+        <figure><div class="art-tile"><div data-mosaic='{"descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3}],"resets":1,"ends":0},{"stop":3,"strands":[{"rejoin":4}],"resets":0,"ends":0}]},"seed":"grammar-4","group":"ochre"}'></div></div><figcaption class="caption"><strong>Resets are short.</strong> A terminal route that returns to its checkpoint is drawn as a small loop back upstream or a short blunt notch, on the side away from its decision's plait.</figcaption></figure>
+        <figure><div class="art-tile"><div data-mosaic='{"descriptor":{"v":1,"stops":6,"decisions":[{"stop":1,"strands":[{"rejoin":3}],"resets":0,"ends":0},{"stop":2,"strands":[{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":5},{"rejoin":4}],"resets":0,"ends":0},{"stop":4,"strands":[{"rejoin":5}],"resets":0,"ends":0}]},"seed":"grammar-5","group":"coral"}'></div></div><figcaption class="caption"><strong>Over and under.</strong> Plaits alternate sides decision by decision. A route that skips ahead arches over the decisions it passes, so nesting shows reach.</figcaption></figure>
+        <figure><div class="art-tile"><div data-mosaic='{"descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"grammar-6","group":"sage"}'></div></div><figcaption class="caption"><strong>The spine runs off-frame.</strong> The default route enters and leaves beyond opposite edges (one of eight compass directions), so the case reads as a passage through the frame.</figcaption></figure>
+        <figure><div class="art-tile"><div data-mosaic='{"descriptor":{"v":1,"stops":12,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4},{"rejoin":4}],"resets":1,"ends":0},{"stop":4,"strands":[{"rejoin":5},{"rejoin":5},{"rejoin":5}],"resets":0,"ends":0},{"stop":5,"strands":[{"rejoin":6},{"rejoin":6},{"rejoin":6}],"resets":1,"ends":0},{"stop":6,"strands":[{"rejoin":7},{"rejoin":7},{"rejoin":7}],"resets":0,"ends":0},{"stop":7,"strands":[{"rejoin":8},{"rejoin":8},{"rejoin":8}],"resets":1,"ends":0},{"stop":8,"strands":[{"rejoin":9},{"rejoin":9},{"rejoin":9}],"resets":0,"ends":0},{"stop":9,"strands":[{"rejoin":10},{"rejoin":10},{"rejoin":10}],"resets":1,"ends":0},{"stop":10,"strands":[{"rejoin":11},{"rejoin":11},{"rejoin":11}],"resets":0,"ends":0}]},"seed":"grammar-7","group":"sky"}'></div></div><figcaption class="caption"><strong>Summarised covers count what they hide.</strong> Beyond capacity, each decision becomes a single-row arch and every route not drawn becomes one tally tessera at its apex. No text label: the tiles say it.</figcaption></figure>
+      </div>
+      <div class="do-dont" style="margin-top:var(--sp-6)">
+        <div><h4>Do</h4><ul class="rules small"><li>Colour a plait by its decision, rotating coral → ochre → periwinkle along the case.</li><li>Keep tile size constant within a rendition; let case density choose tile size (finer for bigger cases).</li><li>Use the same composition for participants and facilitators.</li></ul></div>
+        <div class="dont"><h4>Don't</h4><ul class="rules small"><li>Encode classification, safety, correctness or the recommended answer in colour, row order or shape.</li><li>Drop or merge a route to tidy a cover; flag the version instead.</li><li>Overlay translucent ribbons, gradients, gloss, glass or grain, or put text and controls on tesserae.</li></ul></div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── ART STRUCTURE ───────────────────────── -->
+    <section id="art-structure">
+      <h2>Structure and identity</h2>
+      <p class="lede">Each layer of input drives one visual layer, so edits behave predictably. The MVC specimens come from the real fixture <code>src/fixtures/synthetic-workshop.case.json</code>; the others are synthetic descriptors with real-case shapes.</p>
+      <h3>From an authored case to its art</h3>
+      <div class="split" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr)">
+        <div class="stack">
+          <ol class="rules small">
+            <li><strong>Publish (Create).</strong> <code>describeCase(document)</code> walks the default route and classifies every other path: a <em>strand</em> rejoins a later stop, a <em>reset</em> returns to its checkpoint, an <em>end</em> never returns. The builder then solves the layout (0.1–2.5 s) and adds the chosen attempt.</li>
+            <li><strong>Verify (Worker).</strong> The Worker re-derives the descriptor from the published document. A mismatch refuses the publish. The descriptor is stored with the immutable version.</li>
+            <li><strong>Render (clients).</strong> Clients receive only the descriptor. Covers draw once to a cached canvas; splash art draws as SVG so tiles can move.</li>
+          </ol>
+          <p class="caption">The descriptor is numbers only: no ids, labels, classifications, flags or text. Real MVC fixture:</p>
+          <pre class="mono small" style="white-space:pre-wrap;background:var(--quiet);padding:var(--sp-3);border-radius:var(--radius-sm);margin:0">{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]}</pre>
+        </div>
+        <figure class="specimen" style="margin:0"><div class="art-tile" style="border-radius:var(--radius)"><div data-mosaic='{"descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"mvc","group":"petrol","label":"Abstract branching mosaic artwork"}'></div></div><figcaption>Workshop sensor fault simulation: three decisions of two alternatives each, plus one reset at the first decision.</figcaption></figure>
+      </div>
+      <h3>Case size → composition</h3>
+      <div class="art-grid" id="structures"></div>
+      <h3>Eight compass anchors</h3>
+      <p class="caption">The spine enters from one of N, NE, E, SE, S, SW, W and NW and leaves through the opposite edge. These renders force each entry for the same MVC descriptor.</p>
+      <div class="art-grid" id="compass" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))"></div>
+      <h3>Content edits evolve gently; group sets the ground</h3>
+      <div class="art-grid" id="evolution" style="grid-template-columns:repeat(7,minmax(0,1fr))"></div>
+      <p class="caption">Left three: the same structure with three content seeds, as for a title or description edit. Shade varies; geometry and tile indices do not. Right four: one artwork in four group tints.</p>
+      <h3>Curated group tints</h3>
+      <p class="caption">Ten tints. An administrator picks one per group; there is no free colour picker. Every path pigment, including its per-tile shade wobble and its plait-row shades, keeps at least 3:1 against every tint in both themes, calculated below from <code>mosaic.mjs</code>.</p>
+      <div class="art-grid" id="tints" style="grid-template-columns:repeat(auto-fill,minmax(96px,1fr))"></div>
+      <table class="table" style="margin-top:var(--sp-4)"><thead><tr><th>Pigment</th><th>Worst case, light</th><th>Worst case, dark</th></tr></thead><tbody id="tint-check"></tbody></table>
+      <h3>Rendition sizes</h3>
+      <div class="sizes" id="sizes"></div>
+      <p class="caption">Tile density follows the rendition. Small sizes use fewer, larger tesserae, so the structure still reads at 88 px. The geometry is identical at every size.</p>
+      <h3>Renderer contract (summary)</h3>
+      <table class="table">
+        <thead><tr><th>Input layer</th><th>Drives</th><th>Must not drive</th></tr></thead>
+        <tbody>
+          <tr><td>Structure: normalised authored graph, default-route markers, divergences, rejoins, terminals, renderer version</td><td>Anchors, path geometry, junctions, endings</td><td>Colour of meaning; anything from clinical prose</td></tr>
+          <tr><td>Content: public title, description, designated metadata (canonical hash)</td><td>Per-tile shade and accent balance</td><td>Layout, tile subdivision, branch count</td></tr>
+          <tr><td>Group: primary group's approved tint</td><td>Ground hue</td><td>Path pigments</td></tr>
+          <tr><td>Rendition: size, density, theme</td><td>Tile density, lightness transform</td><td>Geometry, seed, mirroring</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin-top:var(--sp-3)"><strong>Failure is explicit.</strong> The study tries up to 16 deterministic layouts. If no layout shows every branch legibly, the result is flagged unavailable and the cover shows the unavailable state above. A branch is never dropped silently.</p>
+      <p class="caption" style="margin-top:var(--sp-2)"><strong>Measured capacity (braid with plaits, 10 seeds per row, Node):</strong> every case up to 8 decisions × 2 alternatives with resets, and up to 6 × 3, renders on every seed. 7 × 3 and 9 or more decisions are flagged unavailable. The layout search takes 0.1–2.5 s per case (run once, in the builder at publish). A solved layout renders in about 70–160 ms.</p>
+    </section>
+
+    <!-- ───────────────────────── MOTION ───────────────────────── -->
+    <section id="art-motion">
+      <h2>Living mosaic</h2>
+      <p class="lede">The art moves the way a mosaic catches light: tiles settle, a wave passes, a few tesserae glint. Geometry, colour and tile identity never change. Tap the specimen.</p>
+      <div class="split">
+        <div class="splash" style="height:340px;border-radius:var(--radius-lg)" id="motion-demo"><div class="splash-art"><div id="motion-art" data-mosaic='{"descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"motion","group":"sky","aspect":1.6,"motion":["assemble"]}'></div></div></div>
+        <div class="stack">
+          <div class="row"><button class="btn" id="m-assemble">Assemble</button><button class="btn" id="m-ripple">Ripple</button><button class="btn quiet" id="m-shimmer" aria-pressed="false">Shimmer: off</button></div>
+          <table class="table"><thead><tr><th>Behaviour</th><th>When</th><th>Timing</th></tr></thead><tbody>
+            <tr><td colspan="3"><strong>Superseded 2026-10-10 (CASE-202):</strong> the shipped motion is the per-tessera set in <a href="motion-lab.html">motion-lab.html</a> (flip, wiggle, lift, twinkle, route current, branch trace, laid arrival, lay-the-route typing, projector join), timed by <code>--art-arrival-*</code>, <code>--art-current</code>, <code>--art-lay</code> and <code>--art-join-*</code>, with Motion on/off in Appearance. The specimen below is the earlier study.</td></tr>
+            <tr><td><strong>Assemble</strong></td><td>First paint of an arrival or lobby surface. The main path settles first, then branches, then the ground.</td><td><code>--art-assemble</code> 1.4 s, once</td></tr>
+            <tr><td><strong>Ripple</strong></td><td>A tap on arrival art, pressing Continue or Join case, a person joining (projector lobby). Covers are canvas and stay still.</td><td><code>--art-ripple</code> 0.9 s</td></tr>
+            <tr><td><strong>Shimmer</strong></td><td>Idle on arrival and lobby only: six tiles every 1.3 s</td><td><code>--art-shimmer</code> 2.4 s per tile</td></tr>
+          </tbody></table>
+          <ul class="rules small">
+            <li>Motion is off unless the device allows it (<code>prefers-reduced-motion: no-preference</code>). It pauses while the page is hidden or the art is off-screen.</li>
+            <li>It never runs on decision, results, recap or console working surfaces, where it would compete with reading.</li>
+            <li>Motion never encodes data. A ripple on join marks an event the roster already shows; no tile stands for a person.</li>
+            <li>Only <code>transform</code> and <code>opacity</code> are animated, per tile, through the Web Animations API, so no layout work happens on the main thread.</li>
+            <li>The projector runs motion only in the lobby and on the end screen.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── ART USE ───────────────────────── -->
+    <section id="art-use">
+      <h2>Where art appears</h2>
+      <div class="usage-map">
+        <div><h4>Full splash</h4><p class="small muted">Participant home, join, waiting lobby, projector lobby. The art is the environment. Forms, codes, QR and the roster sit on opaque surfaces.</p>
+          <div class="splash mini-splash" style="margin-top:var(--sp-3)"><div class="splash-art"><div data-mosaic='{"descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"splash-demo","group":"petrol","aspect":1.6,"focus":[0.45,0,1,1]}'></div></div><div class="splash-panel"><p class="small" style="font-weight:600">Join the Case</p><div class="input" style="margin-top:8px"></div></div></div></div>
+        <div><h4>Cover</h4><p class="small muted">Library grid, board and table thumbnail, case detail, session setup, participant recap header (small). Always square and clipped.</p>
+          <div style="display:flex;gap:var(--sp-2);margin-top:var(--sp-3)"><div class="cover" style="width:88px"><div data-mosaic='{"format":"canvas","descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"use-1","group":"coral","base":120}'></div></div><div class="cover" style="width:56px"><div data-mosaic='{"format":"canvas","descriptor":{"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]},"seed":"use-1","group":"coral","base":90}'></div></div></div></div>
+        <div><h4>Never</h4><p class="small muted">Decision and results screens, console working areas, the private zone, admin tables, forms that are not on arrival screens, PDF body text. The console shows a 32 px cover in its header only.</p></div>
+      </div>
+    </section>
+
+    <section id="private-navigation">
+      <h2>Private navigation and case collections</h2>
+      <p class="lede">One shared header places the breadcrumb beside CASE. The menu shows a verified account profile beside its email and a destructive Sign out action at the footer, with an explicit confirmation. During account checking, show a checking state instead of claiming the user is signed out.</p>
+      <p class="small muted">3 November 2026 · CASE-356: Settings expands within the existing menu; it never opens a separate modal. Theme, motion and audio preferences apply immediately on this device. Keep Help and Privacy on their own footer rows. The Studio and runtime use the same pinned icon nodes and readable permission comparison; the canonical permission matrix remains authoritative.</p>
+      <p class="small muted">4 November 2026 · CASE-364, owner-approved completion: card copy uses 24px desktop/16px narrow padding. Detail uses 7:5 columns, 24px gap and 16:9 artwork with a readable title layer/fallback; overview stays full width and precedes Present on narrow screens. Sessions uses factual two-line rows, minimum 76px, with aligned states. Create may show authorised current numbers-only graph art and summary facts, with publication comparison and current review evidence bound to revision/paired intent; review approval is not readiness. This supersedes the limited CASE-366 summary specimen. Administration shares the private document, with fresh admission and complete disposal; existing capability/dirty guards stay. Private controls share motion-safe hover, pressed, loading and keyboard focus treatment. This HTML remains the design authority; the sole Studio is its interactive specimen.</p>
+      <p class="small muted">4 November 2026 · CASE-365: Account stacks Profile before Your access. Access entries have two compact text lines and right-aligned actions. Case Workspace and author Feedback are metadata facts with text buttons; Workspace opens the existing permission-aware group tools, and Feedback opens an almost-full-screen, version-scoped reader. Feedback uses neutral count/percentage distributions, explicit sample sizes, grouped comments with the existing names warning, and monthly raw counts. Private section cards have a shared gap, one outer rounded border and square internal dividers. Breadcrumbs remain a single keyboard-scrollable row. Existing scopes, privacy, retention and compatibility are unchanged.</p>
+      <p class="small muted">4 November 2026 · CASE-367: full-page Groups uses the shared discard confirmation for actual field changes, including tint-only edits. Pending writes block departure; Keep editing, Escape and failures preserve input. Guard menu, tab, workspace, Back and browser-history navigation and retire guards with the screen. The sole Studio now uses the runtime 16px/24px base type, 64px header and 16px top content spacing. Explicit private-menu opens reread verified account access; later-page edit discovery is only a hint for a fresh scoped read. Sessions Back uses its existing history controller and restores row focus. Release preparation remains separate from merge, migration and deployment approval.</p>
+      <p class="small muted">4 November 2026 · CASE-366: Present and Preview require confirmation before their effects. Session profile appears directly inside Present’s confirmation, with Cancel left and Present right. Workspace Share invites into the selected workspace under existing policy. Keep the authorised frame inert and dimmed during private navigation; replace it only when the next view is ready, and clear it on failed access or sign-out. Music belongs under Sound in inline Settings; Reduce motion is an accessible native switch. Draft inventories use verified Saved/Revision facts without empty artwork or invented check states.</p>
+      <p class="small muted">5 November 2026 · Release verification: live console controls remain still during room updates; their standalone stylesheet disables inherited button transitions. Catalogue interaction motion and the player’s existing timer/switch motion remain separate. This clarifies the broad private-control treatment above without changing runtime or reduced-motion rules.</p>
+      <p class="small muted">5 November 2026 · CASE-370: collection breadcrumbs retain the verified Workspace when returning from Groups or a published case. Create follows that selected context. Workspace selection and navigation grant no Access; generic bookmarks keep their existing defaults.</p>
+      <p class="small muted">5 November 2026 · CASE-371: a settled surface retires its loading placeholder; pending draft reads retain Loading evidence. Search names follow the active task. Workspace creation uses the shared discard dialog for in-app Cancel/navigation and native unload protection for browser departure. Keep editing preserves fields; confirmed discard resets them and resumes one destination.</p>
+      <p class="small muted">5 November 2026 · CASE-372: Administration’s workbench is a declared shared toolbar. Recorded state uses the themed status picker; date disclosure, Apply and Clear retain their existing glyphs, full accessible names and 44px targets. Date fields extend below the aligned tool row and are hidden for deployment-wide Activity, where dates do not apply. Keep native fallback, selected values, explicit Apply/Clear and tab-specific filter semantics unchanged.</p>
+      <p class="small muted">5 November 2026 · CASE-373–375: Admin records open shared guarded dialogs, retaining the filtered list behind them, with equal 44px Previous/Next/Close tools and focus return to the originating row. A table row with one action extends pointer activation across the row while preserving its native named button and keyboard behavior; never nest controls. Account names the source and scope of access, distinguishing Administrator from workspace Can manage. Sessions labels historical own-record scopes as Past sessions, distinct from membership; loading more scopes uses the same 44px tool anatomy and hidden semantics. Workspace placement separates home, additional run/edit access and the consequential Move action; retain entries after refusal and use explicit confirmations, existing card spacing and non-reflowing outcome notices.</p>
+      <p class="small muted">5 November 2026 · CASE-376: beta reporting inherits this contract. The native picker precedes the report form; one unfiltered still remains local until Send. Reporter and Issues dialogs reuse the shared guarded header/footer, Cancel left and the primary action right. Confirmed/uncertain outcomes use non-reflowing accessible notices; retain draft fields and protect pending writes. Admin Issues uses the existing glyph tools and hidden navigation-duplicate heading. Privacy, incident designation and evidence expiry remain governed by the permission and data contracts; this source mapping does not claim release.</p>
+      <div class="grid-2"><div><h3>Present and Create</h3><p>Present browses published cases; Create holds editable cases. They are separate destinations, without a Published/Drafts toggle. Preserve Grid, Table and Board task variants and explicit workspace context. A verified case-only editor gets Create for that case without New case; navigation itself grants no Access.</p><p>Use the current surface specification for card anatomy, the readable art/title layer, case-scoped Sessions, the Versions link and compact publication/check metadata. Unknown loading, empty, refused and failed states remain distinguishable and recoverable.</p></div><div><h3>Safe continuity</h3><p>Normal navigation uses the same tab. Warn before leaving an active session, private Preview or unsaved work in Create; Cancel keeps state. Existing editing deep links and restored sessions use verified identity. No draft body or session credential crosses a workspace or role boundary.</p><p>Account owns identity, Role and memberships; Sessions owns bounded Session records. Inspection is separate from fresh Rejoin and ended sessions remain immutable. Privacy, retention and recovery stay with their existing authorities. Older navigation specimens are superseded on 2026-11-03 (CASE-353/354); rollout status is separate from this contract.</p></div></div>
+    </section>
+
+    <!-- ───────────────────────── RESPONSIVE ───────────────────────── -->
+    <section id="responsive">
+      <h2>Responsive patterns</h2>
+      <p class="lede">Breakpoints follow content. Verify each changed surface at 320, 390, 768, 1366 and 1920 px and at actual 200% browser/text zoom. This is a required observation matrix, not a claim that every specimen or shipped surface has passed it.</p>
+      <dl class="bp">
+        <dt>Arrival</dt><dd>Phone: header, then the form panel at the top, with art around and below it. The code field and Continue are in the first viewport at 320×568. Desktop: the form panel sits left and the structure is composed into the right two-thirds (<code>focus</code> region).</dd>
+        <dt>Participant session</dt><dd>One column: header (identity, phase pill, menu), situation disclosure, task, receipt, timeline. There is no horizontal scrolling except the timeline itself.</dd>
+        <dt>Console</dt><dd>≥ 1100 px: room-sees column and decision column side by side, private notes in the decision column, dock across the bottom. Narrower: single column in reading order (Projector preview → Only you → decision), with the dock still at the bottom.</dd>
+        <dt>Projector</dt><dd>Fixed 16:9 composition that scales with the viewport. It never scrolls. Findings step down to 18 px, then "+N more on your phone". Body text stays at least 24 px.</dd>
+        <dt>Library</dt><dd>Auto-fill grid with a 216 px preferred minimum, bounded by available content width. Column count follows the page width, padding and gaps: one column at 320/390, additional columns only when they fit. Never force two 216 px cards into 390 px. The table becomes a stacked list under 640 px. The board scrolls horizontally, column by column, with an accessible list alternative.</dd>
+        <dt>Admin</dt><dd>5 November 2026 · CASE-373 supersedes the earlier split-pane/detail-view rule: records use guarded dialogs at every width, retaining the filtered table behind them. Previous/Next/Close remain 44px targets; the dialog body scrolls within the viewport. Narrow destructive dialogs fill the width under 480 px.</dd>
+      </dl>
+    </section>
+
+    <!-- ───────────────────────── A11Y ───────────────────────── -->
+    <section id="a11y">
+      <h2>Accessibility</h2>
+      <ul class="rules">
+        <li>Contrast is at least 4.5:1 for text, 3:1 for large text and non-text in both themes. The colour tables above calculate it live, and the shipped <code>tests/contrast.test.mjs</code> remains the gate.</li>
+        <li>Targets are at least 44×44 px. Ranking uses named Move up, Move down and Remove buttons; drag is never the only way.</li>
+        <li>Focus is a 3 px <code>--focus</code> ring with 2 px offset. Dialogs and the menu trap focus, close on Escape and return focus to their trigger.</li>
+        <li>Status changes (receipts, connection, normalised code) use <code>role="status"</code>. Blocking errors use <code>role="alert"</code>.</li>
+        <li>Artwork is decorative (<code>aria-hidden</code>) on splash surfaces. On covers it is "Abstract branching mosaic artwork", with no description of outcomes. Forced-colours mode hides splash art.</li>
+        <li>Reduced motion removes the cover lift and all transitions. Nothing essential animates.</li>
+        <li>Text only: case content and names render as text, never HTML (hard rule 14). The mosaic SVG is generated from numbers alone.</li>
+      </ul>
+    </section>
+
+    <!-- ───────────────────────── SYNC ───────────────────────── -->
+    <section id="sync">
+      <h2>Keeping this document in sync</h2>
+      <p class="lede">Token swatches, spacing, radius and layout values read the shipped stylesheet. Component specimens still have separate CSS and must be reviewed against shipped components. Existing checks below protect their stated boundaries; they do not establish live visual parity.</p>
+      <table class="table">
+        <thead><tr><th>Mechanism</th><th>Current mechanism</th><th>Boundary / maintenance requirement</th></tr></thead>
+        <tbody>
+          <tr><td>Token values</td><td><code>prototypes/design/tokens.css</code> already imports <code>src/client/tokens.css</code>. Values and specimen contrast read back live.</td><td>Edit the shipped token source, not a second palette. <code>tests/contrast.test.mjs</code> checks declared pairs in both themes.</td></tr>
+          <tr><td>Components</td><td>Both reference pages load <code>design/case-ui.css</code>; clients have their own component stylesheets.</td><td>Keep specimen states and shipped components aligned. Shared tokens do not guarantee identical layout, targets or behavior.</td></tr>
+          <tr><td>Artwork</td><td>Both reference pages use <code>design/mosaic.mjs</code>, the study renderer.</td><td>Shipped covers use the reviewed production pipeline. Do not equate the study output with production geometry or public disclosure; preserve the numbers-only art contract.</td></tr>
+          <tr><td>Marks, codes, fonts</td><td>Imported from shipped modules and files</td><td>No change</td></tr>
+          <tr><td>Existing design gates</td><td><code>tests/helpers/design-gates.mjs</code> classifies the token shim as an import and scans <code>design/case-ui.css</code> against shipped tokens. CASE-163 already distinguishes decorative hairlines from control boundaries.</td><td>Preserve contrast, focus and stacking assertions. Controls and fields retain perceptible boundaries; decorative hairlines are not control outlines.</td></tr>
+          <tr><td>Drift check (implemented)</td><td><code>npm run check</code> includes <code>PROTO_DRIFT</code> in <code>scripts/check-case.mjs</code> (CASE-163).</td><td>It requires the exact token import and rejects new prototype colour literals outside the explicitly owned art/token sources and recorded historical literal baseline. Do not add a duplicate gate or broaden the baseline to bypass drift.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ───────────────────────── OPEN ───────────────────────── -->
+    <section id="open">
+      <h2>Recorded decisions and current implementation notes</h2>
+      <table class="table">
+        <thead><tr><th>Decision</th><th>Proposal</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Typeface</td><td>Keep Montserrat + JetBrains Mono</td><td><span class="tag ok">Julian, 2026-10-06</span></td></tr>
+          <tr><td>Groups</td><td>One group per case or Ungrouped. That group tints the art and drives the board.</td><td><span class="tag ok">Julian, 2026-10-06</span></td></tr>
+          <tr><td>Mosaic grammar</td><td>True mosaic: tessellated ground, row-laid paths, shared seams</td><td><span class="tag ok">Julian, 2026-10-06</span></td></tr>
+          <tr><td>Sync tooling</td><td>Shared token import and <code>PROTO_DRIFT</code> implemented (CASE-163); component parity still needs surface review</td><td><span class="tag ok">Julian, 2026-10-06</span></td></tr>
+          <tr><td>This design system</td><td>v2 tokens, components, art and motion rules on this page</td><td><span class="tag ok">Approved · Julian, 2026-10-06</span></td></tr>
+          <tr><td>Large-case artwork (R1)</td><td>Braid: every decision is one plaited arch (always plait), one pigment per decision; beyond capacity a summarised cover with tally tesserae (one per hidden route) plus a readiness warning</td><td><span class="tag ok">Julian, 2026-10-06</span></td></tr>
+          <tr><td>Disclosure</td><td>Full art everywhere: the numbers-only descriptor reaches participants and the projector (recorded decision in card 28)</td><td><span class="tag ok">Julian, 2026-10-06</span></td></tr>
+          <tr><td>Rendering pipeline</td><td>Descriptor derived at publish; builder solves the layout; Worker verifies; canvas covers, SVG splash</td><td><span class="tag ok">Julian, 2026-10-06</span></td></tr>
+          <tr><td>Private-material colour</td><td>New <code>--private</code> violet, now a tinted surface with the tesserae label (rails removed, Julian 2026-10-06)</td><td><span class="tag ok">Julian, 2026-10-06</span></td></tr>
+          <tr><td>Group tint palette</td><td>A larger curated set: ten pre-validated tints, never a free picker</td><td><span class="tag ok">Julian, 2026-10-06</span></td></tr>
+          <tr><td>Decorative hairlines</td><td>CASE-163 implements the approved decorative-only <code>--line</code> role. It is never the sole boundary of a control or field; fields retain <code>--field-line</code> at 3:1. The design gates enforce this distinction. Decorative separators do not replace control outlines.</td><td><span class="tag ok">Julian, 2026-10-06</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+
+<script type="module">
+import { hydrateMarks, hydrateQr, initTheme, setTheme, resolve, contrast, toHex, normalizeCode, formatCode, CROCKFORD } from './design/kit.mjs';
+
+initTheme();
+hydrateMarks(); hydrateQr();
+
+// Crockford + code formats from the shipped module
+document.getElementById('crockford').textContent = CROCKFORD.split('').join(' ');
+document.getElementById('fmt6').textContent = formatCode('A7K2M9');
+document.getElementById('fmt8').textContent = formatCode('P8K4R2M7');
+const code = document.getElementById('ds-code'), norm = document.getElementById('ds-code-norm');
+const showNorm = () => { const v = code.value; if (!v) { norm.textContent = ''; return; } const n = normalizeCode(v, 6); norm.textContent = n ? 'Reads as ' + formatCode(n) : (v.replace(/[\s-]/g, '').length < 6 ? 'Keep typing: ' + v.replace(/[\s-]/g, '').length + ' of 6' : 'Not a room code'); };
+code.addEventListener('input', showNorm);
+
+// Numeric labels use the imported shipped source, rather than a second handwritten scale.
+for (const label of document.querySelectorAll("[data-token-value]")) {
+  const token = label.dataset.tokenValue;
+  label.textContent = token + " " + getComputedStyle(document.documentElement).getPropertyValue(token).trim();
+}
+
+// Spacing scale from tokens
+const sp = document.getElementById('space-scale');
+for (let i = 1; i <= 9; i++) { const v = getComputedStyle(document.documentElement).getPropertyValue('--sp-' + i).trim(); const r = document.createElement('div'); r.className = 'space-row'; const bar = document.createElement('i'); bar.style.width = v; const lab = document.createElement('code'); lab.textContent = '--sp-' + i + ' ' + v; r.append(lab, bar); sp.append(r); }
+
+// Colour tables: values read live in BOTH themes, contrast computed here.
+const GROUPS = [
+  ['Foundations', [['--ground', 'Page ground'], ['--surface', 'Cards, panels, fields'], ['--sunken', 'Wells, disabled, empty'], ['--line', 'Hairlines (decorative)'], ['--field-line', 'Control borders', 'ground', 3], ['--ink', 'Text', 'surface', 7], ['--ink-muted', 'Secondary text', 'surface', 4.5]]],
+  ['Action & selection', [['--petrol', 'Primary action, selection, main path', 'surface', 3], ['--on-petrol', 'Text on primary', 'petrol', 4.5], ['--petrol-tint', 'Secondary action'], ['--petrol-ink', 'Text on secondary', 'petrol-tint', 4.5], ['--quiet', 'Quiet action (new)'], ['--focus', 'Focus ring', 'ground', 3]]],
+  ['Phase (pill fill only)', [['--ph-open', 'Responses open', 'surface', 3], ['--ph-locked', 'Locked / reviewing', 'surface', 3], ['--ph-reveal', 'Live / revealed', 'surface', 3], ['--ph-consequence', 'Consequence / teaching', 'surface', 3], ['--ph-paused', 'Paused', 'surface', 3]]],
+  ['Status & privacy', [['--ok-ink', 'Saved / ready', 'ok-tint', 4.5], ['--manual-ink', 'Waiting / manual', 'manual-tint', 4.5], ['--alert-ink', 'Error / destructive', 'alert-tint', 4.5], ['--private-ink', 'Only you', 'private-tint', 4.5], ['--private', 'Only-you glyph', 'private-tint', 3]]],
+];
+function readAll(mode) {
+  const prev = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', mode);
+  const probe = document.createElement('span'); document.body.append(probe);
+  const out = {};
+  for (const [, rows] of GROUPS) for (const [t, , bg] of rows) { out[t] = resolve(t, probe); if (bg) out['--' + bg] = resolve('--' + bg, probe); }
+  probe.remove();
+  if (prev) document.documentElement.setAttribute('data-theme', prev); else document.documentElement.removeAttribute('data-theme');
+  return out;
+}
+const L = readAll('light'), D = readAll('dark');
+const host = document.getElementById('token-tables');
+for (const [title, rows] of GROUPS) {
+  const h = document.createElement('h3'); h.textContent = title; host.append(h);
+  const table = document.createElement('table'); table.className = 'table tok-table';
+  table.innerHTML = '<thead><tr><th></th><th>Token</th><th>Role</th><th>Light</th><th></th><th>Dark</th><th>Contrast (L / D)</th></tr></thead>';
+  const tb = document.createElement('tbody');
+  for (const [t, role, bg, min] of rows) {
+    const tr = document.createElement('tr');
+    const cell = (txt, cls) => { const td = document.createElement('td'); if (cls) td.className = cls; if (txt instanceof Node) td.append(txt); else td.textContent = txt; return td; };
+    const chip = (c) => { const s = document.createElement('div'); s.className = 'chip'; s.style.background = c; return s; };
+    const codeEl = document.createElement('code'); codeEl.textContent = t;
+    let ratio = '—', cls = '';
+    if (bg) { const rl = contrast(L[t], L['--' + bg]), rd = contrast(D[t], D['--' + bg]); ratio = rl.toFixed(1) + ' / ' + rd.toFixed(1) + ' on ' + bg + ' (≥' + min + ')'; cls = (rl >= min && rd >= min) ? 'ratio pass' : 'ratio fail'; }
+    tr.append(cell(chip(L[t]), 'sw'), cell(codeEl), cell(role), cell(toHex(L[t]), 'mono'), cell(chip(D[t]), 'sw'), cell(toHex(D[t]), 'mono'), cell(ratio, cls));
+    tb.append(tr);
+  }
+  table.append(tb); host.append(table);
+}
+
+// Artwork specimens rendered through the shared renderer.
+const mk = (cfg, cap, cls = 'art-tile') => { const f = document.createElement('figure'); const t = document.createElement('div'); t.className = cls; const m = document.createElement('div'); m.setAttribute('data-mosaic', JSON.stringify(cfg)); t.append(m); f.append(t); if (cap) { const c = document.createElement('figcaption'); c.className = 'caption'; c.textContent = cap; f.append(c); } return f; };
+const MVCD = {"v":1,"stops":5,"decisions":[{"stop":1,"strands":[{"rejoin":2},{"rejoin":2}],"resets":1,"ends":0},{"stop":2,"strands":[{"rejoin":3},{"rejoin":3}],"resets":0,"ends":0},{"stop":3,"strands":[{"rejoin":4},{"rejoin":4}],"resets":0,"ends":0}]};
+const S = document.getElementById('structures');
+const syn = (nd, alts, re) => ({ v: 1, stops: nd + 2, decisions: Array.from({ length: nd }, (_, i) => ({ stop: i + 1, strands: Array.from({ length: alts }, () => ({ rejoin: i + 2 })), resets: re && i % re === 0 ? 1 : 0, ends: 0 })) });
+[[syn(2, 1, 0), '2 decisions, 1 alternative each'], [syn(3, 2, 1), '3 × 2, resets'], [syn(5, 2, 2), '5 × 2, resets'], [syn(4, 3, 0), '4 × 3'], [syn(8, 2, 2), '8 × 2, resets'], [syn(6, 3, 2), '6 × 3, resets']].forEach(([d, c], i) => S.append(mk({ descriptor: d, seed: 'size-' + i, group: ['petrol', 'coral', 'ochre', 'periwinkle', 'sky', 'sage'][i] }, c)));
+const C = document.getElementById('compass');
+['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'].forEach((d) => C.append(mk({ descriptor: MVCD, entry: d, seed: 'mvc', group: 'neutral', base: 240 }, 'Enters ' + d)));
+const E = document.getElementById('evolution');
+['', 'title edit', 'description edit'].forEach((c, i) => E.append(mk({ descriptor: MVCD, seed: 'mvc', content: c, group: 'petrol', base: 260 }, i ? 'After ' + c : 'Original')));
+['coral', 'ochre', 'periwinkle', 'neutral'].forEach((g) => E.append(mk({ descriptor: MVCD, seed: 'mvc', group: g, base: 260 }, 'Group: ' + g)));
+const Z = document.getElementById('sizes');
+[[88, 150], [128, 200], [240, 300], [360, 420]].forEach(([px, base]) => { const f = mk({ descriptor: MVCD, seed: 'mvc', group: 'periwinkle', base, format: 'canvas' }, px + ' px', 'cover'); f.querySelector('.cover').style.width = px + 'px'; Z.append(f); });
+const TI = document.getElementById('tints');
+for (const [k, g] of Object.entries(CaseMosaic.GROUPS)) TI.append(mk({ descriptor: MVCD, seed: 'mvc', group: k, base: 200, format: 'canvas' }, g.name));
+const probe = document.createElement('span'); document.body.append(probe);
+const rgbOf = (c) => { probe.style.color = c; return getComputedStyle(probe).color; };
+const TC = document.getElementById('tint-check');
+for (const [pn, pv] of Object.entries(CaseMosaic.PIGMENTS)) {
+  const cells = ['light', 'dark'].map((th) => { const T = CaseMosaic.THEME[th]; let worst = 99, at = '';
+    for (const [gk, g] of Object.entries(CaseMosaic.GROUPS)) { const gs = th === 'dark' ? g.s * 0.55 : g.s; const [h, sat, l] = pv[th];
+      for (const row of [0, 11, 20, 6]) for (const dl of [-2.5, 2.5]) for (const gl of [-T.groundVar, T.groundVar]) { const L = l + row * (th === 'light' ? -1 : 1) + dl; const c = contrast(rgbOf(CaseMosaic.hsl(h, sat, L)), rgbOf(CaseMosaic.hsl(g.h, gs, T.groundL + gl))); if (c < worst) { worst = c; at = g.name; } } }
+    const td = document.createElement('td'); td.className = worst >= 3 ? 'ratio pass' : 'ratio fail'; td.textContent = worst.toFixed(2) + ':1 on ' + at; return td; });
+  const tr = document.createElement('tr'); const n = document.createElement('td'); n.textContent = pn; tr.append(n, ...cells); TC.append(tr);
+}
+probe.remove();
+const RS = document.getElementById('radius-scale');
+for (const [t, w, label] of [['--radius-xs', 24, 'xs · tesserae'], ['--radius-chip', 40, 'chip · chips, tags'], ['--radius-sm', 64, 'sm · controls'], ['--radius', 88, 'base · cards, covers'], ['--radius-lg', 112, 'lg · panels, dialogs'], ['--radius-xl', 136, 'xl · sheets']]) {
+  const v = getComputedStyle(document.documentElement).getPropertyValue(t).trim();
+  const f = document.createElement('figure'); f.style.margin = '0';
+  const b = document.createElement('div'); b.style.cssText = `width:${w}px;height:${w}px;border-radius:var(${t});background:var(--petrol-tint);border:1px solid var(--field-line)`;
+  const c = document.createElement('figcaption'); c.className = 'caption'; c.textContent = label + ' · ' + v;
+  f.append(b, c); RS.append(f);
+}
+const demo = document.getElementById('motion-demo'), art = document.getElementById('motion-art');
+demo.addEventListener('pointerdown', (e) => CaseMosaic.ripple(art, e.clientX, e.clientY));
+document.getElementById('m-ripple').addEventListener('click', () => CaseMosaic.ripple(art));
+document.getElementById('m-assemble').addEventListener('click', () => CaseMosaic.assemble(art));
+document.getElementById('m-shimmer').addEventListener('click', (e) => { const on = e.currentTarget.getAttribute('aria-pressed') !== 'true'; e.currentTarget.setAttribute('aria-pressed', String(on)); e.currentTarget.textContent = 'Shimmer: ' + (on ? 'on' : 'off'); on ? CaseMosaic.shimmer(art) : CaseMosaic.stop(art); });
+if (!CaseMosaic.motionOK()) { const n = document.createElement('p'); n.className = 'caption'; n.textContent = 'Your device asks for reduced motion, so these demos stay still, which is the intended behaviour.'; demo.after(n); }
+CaseMosaic.paintAll();
+// Flag unavailable studies (no silent drops)
+requestAnimationFrame(() => document.querySelectorAll('[data-mosaic-unavailable="true"]').forEach((el) => { const fig = el.closest('figure'); const cap = fig && fig.querySelector('figcaption'); if (cap) cap.textContent += ' · flagged unavailable under the current layout budget'; }));
+</script>
+</body>
+</html>

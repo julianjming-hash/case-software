@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case</title><link rel="manifest" href="/manifest.webmanifest"><link rel="icon" type="image/svg+xml" href="../public/icons/case.svg">
+<script src="../src/client/appearance-boot.mjs"></script><link rel="stylesheet" href="../src/client/tokens.css"><link rel="stylesheet" href="../src/client/shell.css"><link rel="stylesheet" href="../src/client/check.css"></head>
+<body>
+
+<main class="panel" aria-labelledby="checkH">
+  <p class="eyebrow">Before your first session</p>
+  <h1 id="checkH">Network check</h1>
+  <p class="lead">Run this on the computer that will drive the projector, and on a phone using the hospital Wi-Fi. It takes about 90 seconds. It does not join a room and sends no personal data.</p>
+  <button type="button" class="btn primary" id="run">Run the check</button>
+  <ol class="checks" id="checks" aria-live="polite"></ol>
+  <p class="summary" id="summary" role="status"></p>
+  <p class="muted">If live updates are blocked, Case still works through a slower fallback. To ask your IT team for a fix, send them the Case IT note.</p>
+</main>
+
+<dialog id="updateDialog" aria-labelledby="updateTitle">
+<h2 id="updateTitle">A new version of Case is available</h2>
+<p>Reload when you are ready. Reloading clears the case held in memory.</p>
+<button type="button" class="btn primary" id="updateAccept">Reload Case</button>
+<button type="button" class="btn" id="updateLater">Later</button>
+</dialog>
+<script type="module" src="../src/client/check.mjs"></script></body></html>

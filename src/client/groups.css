@@ -1,0 +1,69 @@
+/* Card 30: the Groups screen (owners at /cases, Administration -> Groups) and Change group. Tokens only; no
+   rails, no pills; nested corners are concentric (inner = outer - padding). Names are always written beside a
+   tint, so colour is never the only identifier. */
+.groups-screen { display: grid; gap: var(--sp-5); }
+.groups-screen[hidden] { display: none; }
+.groups-head { display: grid; gap: var(--sp-2); max-width: var(--measure, 65ch); }
+.groups-head h1 { font-size: var(--t-2xl); }
+.groups-back { justify-self: start; }
+.groups-status { color: var(--ink-muted); font-size: var(--t-sm); }
+.groups-status:empty { display: none; }
+.groups-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 360px); gap: var(--sp-5); align-items: start; }
+.groups-list { min-width: 0; }
+.groups-layout.single { grid-template-columns: minmax(0, 1fr); }
+.groups-list > .btn { margin-block-end: var(--sp-3); }
+.groups-new[hidden] { display: none; }
+.groups-table { width: 100%; border-collapse: collapse; font-size: var(--t-sm); }
+.groups-table th, .groups-table td { padding: var(--sp-2) var(--sp-3); text-align: left; vertical-align: middle; border-bottom: 1px solid var(--line); }
+.groups-table td:first-child { width: 56px; }
+.groups-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.group-name { display: block; font-weight: var(--w-semibold); }
+.group-description { display: block; color: var(--ink-muted); font-size: var(--t-xs); max-width: 48ch; }
+.groups-new { display: grid; gap: var(--sp-3); padding: var(--sp-4); border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+.groups-new h2, .groups-edit h2 { font-size: var(--t-lg); }
+.groups-form { display: grid; gap: var(--sp-4); }
+.groups-screen .field, .case-group .field { display: grid; gap: var(--sp-1); font-size: var(--t-sm); font-weight: var(--w-semibold); }
+.groups-screen .hint, .case-group .hint { margin: 0; color: var(--ink-muted); font-size: var(--t-sm); font-weight: var(--w-regular); }
+.groups-screen .input, .case-group .input { width: 100%; min-height: 44px; padding: var(--sp-2) var(--sp-3); border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font: inherit; font-weight: var(--w-regular); }
+.groups-screen .cover, .case-group .cover { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: var(--radius); background: var(--sunken); }
+.groups-screen .cover canvas { display: block; width: 100%; height: 100%; }
+.groups-screen .cover.small { width: 40px; border-radius: var(--radius-xs); }
+.tint-choices { display: grid; gap: var(--sp-2); margin: 0; padding: 0; border: 0; min-width: 0; }
+.tint-choices legend { padding: 0; margin-bottom: var(--sp-2); font-size: var(--t-sm); font-weight: var(--w-semibold); }
+.tint-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: var(--sp-2); }
+/* A radio card: radius 12 around padding 8 holds a cover at radius 4. */
+.tint-choice { position: relative; display: grid; gap: var(--sp-1); padding: var(--sp-2); border: 1px solid var(--field-line); border-radius: var(--radius); background: var(--surface); color: var(--ink); font-size: var(--t-xs); font-weight: var(--w-semibold); cursor: pointer; }
+.tint-choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.tint-choice .cover { border-radius: 4px; }
+.tint-choice:has(input:checked) { border-color: var(--petrol); box-shadow: inset 0 0 0 1px var(--petrol); }
+.tint-choice:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+.groups-actions, .groups-screen .dialog-actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.groups-screen .dialog-actions { justify-content: flex-end; }
+.groups-edit { display: grid; gap: var(--sp-4); }
+.groups-edit > .btn { justify-self: start; }
+.groups-edit-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 420px); gap: var(--sp-6); align-items: start; }
+.tint-preview { display: grid; gap: var(--sp-2); }
+.tint-preview-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+.tint-preview figure { display: grid; gap: var(--sp-1); margin: 0; }
+.groups-screen .small, .case-group .small { font-size: var(--t-sm); }
+dialog.groups-dialog { display: none; gap: var(--sp-4); max-width: min(520px, 100vw - 32px); }
+dialog.groups-dialog[open] { display: grid; }
+dialog.groups-dialog h2 { font-size: var(--t-lg); }
+dialog.groups-dialog form { display: grid; gap: var(--sp-4); }
+.groups-dialog-status { color: var(--ink); font-size: var(--t-sm); }
+.groups-dialog-status:empty { display: none; }
+.case-group { display: grid; gap: var(--sp-2); }
+.case-group h2 { font-size: var(--t-md); }
+.case-group-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--sp-2); }
+.case-group-form .field { flex: 1 1 220px; }
+.groups-screen [hidden], .case-group [hidden] { display: none; }
+@media (max-width: 860px) {
+  .groups-layout, .groups-edit-layout { grid-template-columns: minmax(0, 1fr); }
+}
+@media (forced-colors: active) {
+  .tint-choice:has(input:checked) { border: 2px solid Highlight; }
+}
+
+/* The visible card is the radio target, including its decorative artwork. */
+.tint-choice input{inset:0;width:100%;height:100%;margin:0;z-index:var(--z-raised);cursor:pointer}
+.tint-choice .cover{pointer-events:none}

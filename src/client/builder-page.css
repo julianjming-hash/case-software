@@ -1,0 +1,32 @@
+/* Standalone authoring and private workflow controls use the shared Case tokens. */
+main.builder-page { max-width: none; margin: 0; padding: var(--sp-4); }
+.builder-page *, :is(.builder-workflows-view, .builder-transfer-body) * { box-sizing: border-box; }
+.builder-page-account { margin-bottom: var(--sp-4); }
+.builder-page-content, .builder-page-editor { min-width: 0; }
+.builder-new-case-form { display: grid; gap: var(--sp-4); max-width: 38rem; }
+.builder-new-case-form label { display: grid; gap: var(--sp-2); }
+.builder-new-case-form input, .builder-new-case-form select,
+:is(.builder-workflows-view, .builder-transfer-body) select, :is(.builder-workflows-view, .builder-transfer-body) textarea, :is(.builder-workflows-view, .builder-transfer-body) input:not([type="checkbox"]) {
+  width: 100%; min-width: 0; min-height: 32px; padding: var(--sp-2); font: inherit;
+  color: var(--ink); background: var(--surface); border: 1px solid var(--field-line); border-radius: var(--radius-sm);
+}
+.builder-route-header { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+.builder-workflows-view { max-width: 60rem; overflow-wrap: anywhere; }
+.builder-transfer-body { overflow-wrap: anywhere; }
+:is(.builder-workflows-view, .builder-transfer-body) section { margin-block: var(--sp-4); }
+:is(.builder-workflows-view, .builder-transfer-body) label:has(input[type="checkbox"]) { display: flex; align-items: center; gap: var(--sp-2); min-height: 32px; cursor: pointer; }
+:is(.builder-workflows-view, .builder-transfer-body) button { min-height: 32px; max-width: 100%; margin: var(--sp-1); padding: var(--sp-2) var(--sp-3); font: inherit; color: var(--petrol-ink); background: var(--petrol-tint); border: 1px solid var(--field-line); border-radius: var(--radius-sm); }
+:is(.builder-workflows-view, .builder-transfer-body) button:disabled { color: var(--ink-muted); background: var(--sunken); }
+:is(.builder-workflows-view, .builder-transfer-body) textarea { min-height: 10rem; resize: vertical; }
+:is(.builder-workflows-view, .builder-transfer-body) pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 30rem; overflow: auto; padding: var(--sp-3); background: var(--ground); }
+:is(.builder-workflows-view, .builder-transfer-body) select { margin-bottom: var(--sp-3); }
+.builder-page :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+@media (max-width: 25rem) { main.builder-page { padding: var(--sp-2); } }
+.builder-page [hidden] { display: none; }
+
+.builder-page .builder-danger { color: var(--alert-ink); background: transparent; border-color: var(--alert); }
+
+/* Session recovery uses the same neutral content frame as Library and Administration. */
+main.builder-page:has(.auth-form:not(.is-signed-in)) {
+  max-width: var(--page-w); width: calc(100% - var(--sp-6)); margin: var(--sp-4) auto; padding: 0; background: transparent;
+}

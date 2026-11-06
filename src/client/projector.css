@@ -1,0 +1,373 @@
+/* Approved projector prototype port (CASE-083, CASE-113–117), scoped to the served display.
+   Existing field-line/ink tokens satisfy the shipped contrast gate; QR SVG owns its white quiet zone. */
+
+body.projector {
+    --p-label: max(18px, calc(1.05vw * var(--s, 1)));
+    --p-body: max(var(--projector-body), calc(1.3vw * var(--s, 1)));
+    --p-scene: max(var(--projector-body), calc(1.46vw * var(--s, 1)));
+    --p-h1: max(var(--projector-body), calc(1.9vw * var(--s, 1)));
+    --p-h2: max(var(--projector-body), calc(1.56vw * var(--s, 1)));
+    --p-vital: max(var(--projector-body), calc(1.88vw * var(--s, 1)));
+    --p-gap: max(8px, calc(1.25vw * var(--sp, 1)));
+    --p-pad: max(10px, calc(1.05vw * var(--sp, 1)));
+    --edge: 2.5vw;
+  }
+html:has(body.projector), body.projector { height: 100%; overflow: hidden; }
+body.projector { font-size: var(--p-body); line-height: 1.35; }
+body.projector .screen { height: 100vh; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+body.projector svg.ic { width: 1em; height: 1em; stroke-width: 2; }
+body.projector .eyebrow { font-size: var(--p-label); letter-spacing: .1em; }
+body.projector .top { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 2vw; align-items: center; padding: 1.4vh var(--edge); background: var(--nav-bg); border-bottom: 1px solid var(--nav-line); color: var(--nav-ink); }
+body.projector .top .title { min-width: 0; display: grid; gap: .1em; }
+body.projector .top .title .case { margin: 0; font-size: var(--p-body); font-weight: var(--w-semibold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+body.projector #banners { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5em; align-items: center; }
+body.projector .top .pill { font-size: var(--p-label); padding: .3em .85em; }
+body.projector .layer { display: inline-flex; align-items: center; gap: .45em; padding: .3em .8em; border-radius: var(--radius-chip); font-size: var(--p-label); font-weight: var(--w-semibold); }
+body.projector .layer.manual { background: var(--manual-tint); color: var(--manual-ink); }
+body.projector .layer.replay { background: var(--quiet); color: var(--quiet-ink); border: 1px dashed var(--field-line); }
+body.projector .layer.lost { background: var(--alert-tint); color: var(--alert-ink); }
+body.projector .meta { display: flex; gap: 1.6vw; align-items: center; font-size: var(--p-body); white-space: nowrap; }
+body.projector .meta .count, body.projector .meta .timer { display: inline-flex; gap: .4em; align-items: center; font-weight: var(--w-medium); }
+body.projector .meta .num { font-family: var(--mono); font-weight: var(--w-semibold); font-variant-numeric: tabular-nums; }
+/* CASE-335: the countdown is digits only, top right: a ring of the time left, a pulse at 60 s and 30 s, a pop on each of the
+   final ten seconds in the open phase's ink, and a `Time up` chip at zero. Never flashing; reduced motion keeps it still. */
+body.projector .meta .timer { display: inline-flex; align-items: center; gap: .45em; padding: .15em .6em .15em .2em; border-radius: var(--radius-chip); transform-origin: center; }
+body.projector .meta .timer-ring { width: 1.7em; height: 1.7em; transform: rotate(-90deg); }
+body.projector .meta .timer-ring circle { fill: none; stroke-width: 3.6; }
+body.projector .meta .timer-ring .ring-track { stroke: var(--field-line); }
+body.projector .meta .timer-ring .ring-fill { stroke: var(--ph-open); stroke-linecap: round; stroke-dasharray: var(--fill, 100) 100; transition: stroke-dasharray .25s linear; }
+body.projector .meta .timer-digits { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: var(--w-semibold); font-size: 1.35em; line-height: 1; min-width: 3.6ch; }
+body.projector .meta .timer[data-state="final"] .timer-digits { color: var(--ph-open-ink); font-size: 1.9em; min-width: 3ch; }
+body.projector .meta .timer[data-state="final"] .ring-fill { stroke: var(--ph-open-ink); }
+body.projector .meta .timer[data-state="up"] { background: var(--ph-open-tint); color: var(--ph-open-ink); padding: .3em .85em; }
+body.projector .meta .timer[data-state="up"] .timer-ring { display: none; }
+body.projector .meta .timer[data-state="up"] .timer-digits { font-family: var(--sans); font-size: 1em; min-width: 0; display: inline-flex; align-items: center; gap: .45em; }
+body.projector .meta .timer[data-state="up"] .timer-digits::before { content: ""; width: var(--tessera); height: var(--tessera); border-radius: 2px; background: var(--ph-open); }
+@keyframes case-timer-pulse-a { 0% { transform: scale(1); } 35% { transform: scale(1.14); } 100% { transform: scale(1); } }
+@keyframes case-timer-pulse-b { 0% { transform: scale(1); } 35% { transform: scale(1.14); } 100% { transform: scale(1); } }
+@keyframes case-timer-pop-a { 0% { transform: scale(1.3); } 100% { transform: scale(1); } }
+@keyframes case-timer-pop-b { 0% { transform: scale(1.3); } 100% { transform: scale(1); } }
+@keyframes case-timer-up { 0% { transform: scale(.85); opacity: .4; } 100% { transform: scale(1); opacity: 1; } }
+body.projector .meta .timer[data-pulse="a"] { animation: case-timer-pulse-a .7s ease-out; }
+body.projector .meta .timer[data-pulse="b"] { animation: case-timer-pulse-b .7s ease-out; }
+body.projector .meta .timer[data-state="final"][data-tick="a"] .timer-digits { display: inline-block; animation: case-timer-pop-a .35s ease-out; }
+body.projector .meta .timer[data-state="final"][data-tick="b"] .timer-digits { display: inline-block; animation: case-timer-pop-b .35s ease-out; }
+body.projector .meta .timer[data-state="up"] { animation: case-timer-up .4s ease-out; }
+@media (prefers-reduced-motion: reduce) { body.projector .meta .timer[data-state], body.projector .meta .timer[data-state] .timer-digits, body.projector .meta .timer-ring .ring-fill { animation: none; transition: none; } }
+:root[data-motion="false"] body.projector .meta .timer[data-state], :root[data-motion="false"] body.projector .meta .timer[data-state] .timer-digits, :root[data-motion="false"] body.projector .meta .timer-ring .ring-fill { animation: none; transition: none; }
+body.projector .meta:empty { display: none; }
+body.projector main { --s: 1; --sp: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(0, 1fr); gap: var(--p-gap); padding: var(--p-gap) var(--edge); }
+body.projector main.single { grid-template-columns: minmax(0, 1fr); }
+body.projector .col { min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: var(--p-gap); }
+body.projector .card { padding: var(--p-pad) calc(var(--p-pad) * 1.3); border-radius: var(--radius-lg); }
+body.projector .card > .eyebrow { margin-bottom: .35em; }
+body.projector .scene h1 { margin: 0; font-size: var(--p-h1); font-weight: var(--w-semibold); }
+body.projector .scene .prose { margin: calc(.45em * var(--sp)) 0 0; font-size: var(--p-scene); line-height: calc(1.3 + .12 * var(--sp)); max-width: 62ch; text-wrap: pretty; }
+/* consequence and terminal scenes: a coral-tinted card and a leading tessera on the eyebrow; no rail (CASE-163) */
+body.projector .scene[data-kind="consequence"], body.projector .scene[data-kind="terminal"] { background: var(--ph-consequence-tint); }
+body.projector .scene[data-kind="consequence"] > .eyebrow::before, body.projector .scene[data-kind="terminal"] > .eyebrow::before { content: ""; display: inline-block; width: calc(var(--tessera) * 1.5); height: calc(var(--tessera) * 1.5); margin-right: .5em; border-radius: 2px; background: var(--ph-consequence); }
+body.projector ul.vitals { margin: 0; padding: calc(var(--p-pad) * .7) calc(var(--p-pad) * 1.3); list-style: none; display: flex; flex-wrap: wrap; gap: calc(var(--p-pad) * .5) calc(var(--p-pad) * 1.9); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-1); }
+body.projector ul.vitals li { display: grid; gap: .05em; align-content: start; min-width: 0; }
+body.projector ul.vitals .vl { font-size: var(--p-label); font-weight: var(--w-semibold); color: var(--ink-muted); white-space: nowrap; }
+body.projector ul.vitals .vrow { display: flex; align-items: baseline; gap: .25em; white-space: nowrap; }
+/* Longhands, not `font:` + a font longhand: Chrome serialises that pair with empty longhands, which adopted copies (the
+   console's Room sees, the Builder's fit check and Run preview, CASE-327) then drop. tests/css-font-shorthand.test.mjs */
+body.projector ul.vitals .vv { font-weight: var(--w-semibold); font-size: var(--p-vital); line-height: 1.1; font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+body.projector ul.vitals .vu { font-size: var(--p-label); color: var(--ink-muted); }
+body.projector ul.vitals .va { font: var(--w-medium) var(--p-label)/1.2 var(--mono); color: var(--ink); white-space: nowrap; }
+body.projector .tiles2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22vw), 1fr)); gap: calc(var(--p-gap) * .6); align-items: start; }
+body.projector .find ul { margin: 0; padding: 0 0 0 1.1em; display: grid; gap: calc(.3em * var(--sp)); font-size: var(--p-body); line-height: 1.3; }
+body.projector .findings ul { font-size: var(--p-find, var(--p-body)); }
+body.projector .findings li.more { list-style: none; margin-left: -1.1em; font-weight: var(--w-semibold); color: var(--petrol-ink); }
+body.projector .find li { text-wrap: pretty; }
+body.projector .find li::marker { color: var(--petrol-ink); }
+body.projector .find.cols2 ul { display: block; columns: 2; column-gap: 2vw; }
+body.projector .find.cols2 li { break-inside: avoid; margin-bottom: calc(.3em * var(--sp)); }
+body.projector .decision { display: flex; flex-direction: column; gap: calc(var(--p-gap) * .7); min-height: 0; position: relative; }
+/* CASE-313: the branch badge sits in the question card's top-right corner, sized with the card's own type. */
+body.projector .decision > .branch-badge { position: absolute; top: .45em; right: .55em; display: inline-flex; color: var(--ink-muted); font-size: 1.3em; line-height: 1; }
+body.projector .decision:has(> .branch-badge) > :is(.call, h2) { padding-inline-end: 1.8em; }
+body.projector .decision .call { display: flex; flex-wrap: wrap; align-items: center; gap: .4em .6em; margin: 0; font-size: var(--p-label); font-weight: var(--w-semibold); color: var(--ph-ink, var(--ink)); }
+body.projector .decision h2 { margin: 0; font-size: var(--p-h2); font-weight: var(--w-semibold); line-height: 1.25; text-wrap: pretty; }
+body.projector ol.tiles { margin: 0; padding: 0; list-style: none; display: grid; gap: calc(var(--p-gap) * .5); }
+body.projector .tile { display: flex; align-items: center; gap: .7em; min-width: 0; padding: calc(var(--p-pad) * .65) calc(var(--p-pad) * .9); font-size: max(var(--projector-body), calc(1.46vw * var(--s))); font-weight: var(--w-medium); line-height: 1.25; }
+body.projector .tile svg.mark { width: 1.75em; height: 1.75em; flex: none; }
+body.projector .tile .lbl { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+body.projector .tile .tag { font-size: var(--p-label); padding: .15em .7em; }
+body.projector .tile.dim { background: var(--sunken); border-style: dashed; color: var(--ink-muted); }
+body.projector .tile.dim svg.mark { opacity: .5; }
+body.projector .result ul { margin: 0; padding: 0; list-style: none; display: grid; gap: calc(.35em * var(--sp)); font-size: var(--p-body); }
+/* The count column fits its words ("selected by 5", D19) instead of wrapping in a fixed 2.4em. */
+body.projector .result li { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(2em, 4em) max-content; gap: .6em; align-items: center; line-height: 1.2; }
+body.projector .result li.ranking-result { grid-template-columns: auto minmax(0, 1fr); }
+body.projector .result ul.positions { grid-column: 2; display: flex; flex-wrap: wrap; gap: .25em .7em; font-size: var(--p-body); }
+body.projector .result .positions li { display: block; font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); background: var(--surface); }
+body.projector .result svg.mark { width: 1.3em; height: 1.3em; }
+/* results are laid as tesserae: the bar is a row of tiles with grout gaps, the same grammar as the art (CASE-163) */
+body.projector .result .bar { --tile: .8em; display: block; height: .6em; border-radius: 2px; background-image: repeating-linear-gradient(90deg, var(--sunken) 0 calc(var(--tile) - 2px), transparent calc(var(--tile) - 2px) var(--tile)); overflow: hidden; }
+body.projector .result .bar i { display: block; height: 100%; background-image: repeating-linear-gradient(90deg, var(--mk, var(--petrol)) 0 calc(var(--tile) - 2px), transparent calc(var(--tile) - 2px) var(--tile)); }
+body.projector .result .n { font-family: var(--mono); font-weight: var(--w-semibold); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+body.projector .result p { margin: .5em 0 0; font-size: var(--p-label); color: var(--ink-muted); font-weight: var(--w-medium); }
+/* card 36b: lobby and ended sit on full-splash art; reading surfaces are opaque panels over it */
+body.projector .screen { position: relative; isolation: isolate; }
+body.projector .screen > .top, body.projector .screen > main, body.projector .screen > footer { position: relative; z-index: var(--z-raised); }
+body.projector .projector-splash { position: absolute; inset: 0; pointer-events: none; }
+body.projector .projector-splash[hidden] { display: none; }
+body.projector main.splash-main { background: transparent; align-items: center; justify-items: start; }
+/* the slim lobby card (Julian's motion lab, 2026-10-10): about a third wide on the left, everything centred and stacked;
+   the art composes into the free region on the right (splash.mjs, freeRegion) */
+/* the opaque reading panels over the splash: the lobby's join panel and the ended card */
+body.projector .joinpanel, body.projector .endcard { background: var(--surface); border-color: var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-2); }
+body.projector .joinpanel { box-sizing: border-box; width: 33vw; max-width: calc(100% - 3vw); margin-left: 3vw; align-self: stretch; margin-block: 2vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .5em; padding: 3vh 2.2vw; text-align: center; overflow: hidden; }
+body.projector .joinpanel .check { margin: 0; font-size: var(--p-label); font-weight: var(--w-semibold); letter-spacing: .04em; color: var(--ink-muted); }
+body.projector .joinpanel h1 { margin: 0 0 1vh; max-width: 100%; font-size: max(var(--projector-title), 3.33vw); font-weight: var(--w-semibold); line-height: 1.12; letter-spacing: -.015em; overflow-wrap: anywhere; text-wrap: balance; }
+/* a title past two lines steps down before anything else shrinks; past the card it steps to body size (stepTitle in splash.mjs) */
+body.projector .joinpanel h1.long { font-size: var(--projector-title); }
+body.projector .joinpanel h1.longer { font-size: var(--projector-body); }
+body.projector .joinpanel h2 { margin: 0; font-size: var(--p-h2); font-weight: var(--w-semibold); }
+/* the QR SVG carries its own white quiet zone, so the card is the code itself: on white in both themes */
+body.projector .joinpanel .qrcard { flex: none; margin-block: .4em; border-radius: var(--radius-sm); overflow: hidden; line-height: 0; }
+body.projector .joinpanel .qrcard svg { display: block; width: var(--projector-qr); height: auto; }
+body.projector .joinpanel .url { max-width: 100%; font: var(--w-medium) var(--p-body) var(--mono); overflow-wrap: anywhere; }
+/* the room code: the token size, one line, mono; it never wraps and never shrinks below the token */
+body.projector .joinpanel .code { margin-top: .2em; font: var(--w-semibold) var(--projector-code)/1 var(--mono); letter-spacing: .04em; white-space: nowrap; }
+body.projector .endcard { box-sizing: border-box; width: 33vw; max-width: calc(100% - 3vw); margin-left: 3vw; padding: 4vh 2.2vw; text-align: center; }
+body.projector main .endcard h2 { font-size: var(--p-h1); }
+/* card 40d: the ended column (the feedback QR card above Session ended) and, while the room has a debrief, its panel on
+   the right; the art composes into what they leave free (splash.mjs covers) */
+body.projector .endcol { box-sizing: border-box; width: 33vw; max-width: calc(100% - 3vw); margin-left: 3vw; display: flex; flex-direction: column; gap: 2vh; }
+body.projector .endcol .endcard { width: auto; max-width: none; margin-left: 0; }
+body.projector main.ended-debrief { grid-template-columns: minmax(0, 36vw) minmax(0, 1fr); align-items: end; }
+body.projector main.ended-debrief .endcol { align-self: end; margin-bottom: 2vh; }
+body.projector .fbcard { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-2); padding: 2.4vh 2.2vw; display: flex; flex-direction: column; align-items: center; gap: .5em; }
+body.projector .fbcard .qrcard { flex: none; border-radius: var(--radius-sm); overflow: hidden; line-height: 0; }
+body.projector .fbcard .qrcard svg { display: block; width: min(var(--projector-qr), 26vh); height: auto; }
+body.projector .fbcard h2 { margin: 0; font-size: var(--p-h2); font-weight: var(--w-semibold); }
+body.projector .debrief-panel { position: relative; box-sizing: border-box; align-self: stretch; justify-self: stretch; margin: 2vh 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 1.8vh;
+  padding: 4vh 3vw 3vh; background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-2); }
+body.projector .debrief-panel h2 { margin: 0; font-size: max(var(--projector-title), 2.9vw); font-weight: var(--w-semibold); line-height: 1.1; letter-spacing: -.015em; text-wrap: balance; }
+body.projector .debrief-panel .eyebrow { margin: 0; font-weight: var(--w-semibold); text-transform: uppercase; color: var(--ink-muted); }
+body.projector .debrief-panel ol { margin: 0; }
+body.projector .debrief-panel ol.route { list-style: none; padding: 0; display: grid; gap: .3em; font-size: var(--p-h2); }
+body.projector .debrief-panel ol.route li { display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: .5em; align-items: baseline; }
+body.projector .debrief-panel ol.route .k { font: var(--w-medium) var(--p-label) var(--mono); color: var(--ink-muted); }
+body.projector .debrief-panel ol.objectives { padding-left: 1.3em; display: grid; gap: .25em; font-size: var(--p-body); line-height: 1.3; }
+body.projector .debrief-panel .q { margin: 0; font-size: var(--p-h1); font-weight: var(--w-semibold); line-height: 1.2; text-wrap: pretty; }
+body.projector .debrief-panel ul.pres { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(6em, 30%) 2.5em; gap: 1.4vh 1vw; align-items: center; font-size: var(--p-h2); }
+body.projector .debrief-panel ul.pres li { display: contents; }
+/* the live result's grammar: tesserae bars in each option's mark colour */
+body.projector .debrief-panel ul.pres .bar { --tile: .8em; display: block; height: .6em; border-radius: 2px; background-image: repeating-linear-gradient(90deg, var(--sunken) 0 calc(var(--tile) - 2px), transparent calc(var(--tile) - 2px) var(--tile)); overflow: hidden; }
+body.projector .debrief-panel ul.pres .bar i { display: block; height: 100%; background-image: repeating-linear-gradient(90deg, var(--mk, var(--petrol)) 0 calc(var(--tile) - 2px), transparent calc(var(--tile) - 2px) var(--tile)); }
+body.projector .debrief-panel ul.pres svg.mark { width: 1.3em; height: 1.3em; }
+body.projector .debrief-panel ul.pres .n { font-family: var(--mono); font-weight: var(--w-semibold); text-align: right; font-variant-numeric: tabular-nums; }
+body.projector .debrief-panel.dense { gap: 1.1vh; }
+body.projector .debrief-panel.dense { padding-block: 3vh 2vh; }
+body.projector .debrief-panel.dense h2 { font-size: var(--p-h2); }
+body.projector .debrief-panel.dense ol.route { display: flex; flex-wrap: wrap; gap: .4vh 1.6vw; }
+body.projector .debrief-panel.dense ol.route li { display: inline-flex; gap: .4em; }
+body.projector .debrief-panel.dense ul.pres { font-size: var(--p-body); gap: .9vh 1vw; }
+body.projector .debrief-panel.dense ol.route { font-size: var(--p-body); }
+body.projector .debrief-panel.dense ol.objectives { font-size: calc((var(--p-body) + var(--p-label)) / 2); }
+/* the page position sits in the panel's corner, so it never takes a line from the content */
+body.projector .debrief-panel .pos { position: absolute; top: 2.4vh; right: 2.4vw; margin: 0; font: var(--w-medium) var(--p-label) var(--mono); color: var(--ink-muted); }
+/* an open decision or its shown responses: the context column condensed (spec §5.3); options at 40 px with 72 px marks */
+body.projector main:not(.single):has(> .col > .decision, > .col > .result) { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); }
+body.projector .decision .tile { font-size: max(var(--projector-body), calc(2.08vw * var(--s))); }
+body.projector .decision .tile svg.mark { width: 72px; height: 72px; }
+@media (forced-colors: active) { body.projector .projector-splash { display: none; } }
+/* the end card is a plain card: its heading says what it is, so no top rail (CASE-163) */
+body.projector .endcard h2 { margin: 0; font-size: var(--p-h2); font-weight: var(--w-semibold); }
+body.projector .endcard p { margin: .4em 0 0; color: var(--ink-muted); }
+body.projector .waiting-note { margin: auto; color: var(--ink-muted); font-size: var(--p-h2); font-weight: var(--w-medium); }
+body.projector footer { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 1.6vw; align-items: center; padding: 1.1vh var(--edge); background: var(--nav-bg); border-top: 1px solid var(--nav-line); color: var(--nav-ink); min-height: 6vh; }
+body.projector footer .qrcell { padding: 6px;  border-radius: var(--radius-sm); box-shadow: var(--shadow-1); line-height: 0; }
+body.projector footer .qrcell svg { display: block; width: clamp(80px, 6.2vw, 132px); height: auto; }
+/* CASE-249: the Run preview and the Builder's fit check have no room, so no QR: the empty cell keeps the QR's square, and
+   the footer, the slide band and the slide come out the size the room draws them (a live room always fills the cell). */
+body.projector footer .qrcell:empty { box-sizing: content-box; width: clamp(80px, 6.2vw, 132px); aspect-ratio: 1;
+  box-shadow: none; outline: 1px dashed var(--nav-ink); outline-offset: -1px; } /* an empty slot, not a missing image (CASE-251) */
+body.projector footer .route { display: grid; gap: .15em; }
+body.projector footer .route .url { font: var(--w-medium) var(--p-body)/1.2 var(--mono); white-space: nowrap; }
+body.projector footer .route .code { display: flex; align-items: baseline; gap: .45em; white-space: nowrap; }
+body.projector footer .route .code .k { font-size: var(--p-label); font-weight: var(--w-semibold); color: var(--ink-muted); letter-spacing: .08em; text-transform: uppercase; }
+body.projector footer .route .code b { font: var(--w-semibold) max(28px, 1.9vw)/1.1 var(--mono); letter-spacing: .08em; }
+body.projector footer .closed { font-weight: var(--w-medium); color: var(--ink-muted); white-space: nowrap; }
+body.projector footer.noroute { grid-template-columns: auto minmax(0, 1fr) auto; }
+body.projector .names { min-width: 0; display: flex; align-items: center; gap: .8em; }
+body.projector .names h2 { flex: none; margin: 0; font-size: var(--p-label); font-weight: var(--w-semibold); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); white-space: nowrap; }
+body.projector .names ul { flex: 1; min-width: 0; margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: nowrap; gap: .5em; overflow: hidden; }
+body.projector .chip { flex: none; display: inline-flex; align-items: center; gap: .4em; max-width: 12em; padding: 4px .8em 4px 4px; border-radius: var(--radius-sm); background: var(--quiet); border: 1px solid var(--line); font-size: var(--p-label); font-weight: var(--w-medium); }
+body.projector .chip[hidden] { display: none; }
+body.projector .chip .nm { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+body.projector .chip.anonymous { padding-right: 4px; }
+body.projector .chip.more { padding: 4px .8em; font-family: var(--mono); font-weight: var(--w-semibold); min-height: 42px; }
+body.projector .names .count { font-weight: var(--w-medium); white-space: nowrap; }
+body.projector .sound { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; border-radius: var(--radius-sm); border: 1px solid var(--field-line); background: var(--surface); color: var(--nav-ink); }
+body.projector .sound-cell { display: flex; align-items: center; gap: var(--sp-2); }
+body.projector .sound svg.ic { width: 22px; height: 22px; }
+body.projector .sound[aria-pressed="true"] { background: var(--petrol-tint); color: var(--petrol-ink); border-color: var(--petrol); }
+body.projector .conn { display: inline-flex; align-items: center; gap: .4em; font-size: var(--p-label); font-weight: var(--w-semibold); }
+
+body.projector main { max-width: none; margin: 0; background: var(--ground); padding: var(--p-gap) var(--edge); }
+body.projector #projectorCheck { position: fixed; inset: 0; z-index: var(--z-overlay); display: grid; place-items: center; background: var(--surface); color: var(--ink); font: 600 clamp(64px,14vw,220px)/1 var(--sans); }
+body.projector #projectorCheck[hidden] { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-motion="false"]) body.projector .presentation-new-group { animation: presentation-share 240ms ease-out both; }
+  @keyframes presentation-share { from { opacity: .72; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+}
+
+/* a lobby arrival's chip waits, unseen but holding its place, until its avatar lands from the art (projectorJoin) */
+body.projector .chip.arrival-pending { visibility: hidden; }
+/* the arriving avatar, large over the art; fixed above the bars so its flight into "In the room" stays visible */
+.splash-join-avatar { position: fixed; z-index: var(--z-toast); overflow: hidden; border-radius: 50%; box-shadow: 0 0 0 4px var(--surface), var(--shadow-2); pointer-events: none; }
+.splash-join-avatar img { display: block; width: 100%; height: 100%; }
+
+.arrival-note { font-size: var(--p-label); font-weight: var(--w-semibold); white-space: nowrap; }
+
+body.projector .rank-table-card h2 { margin: .2em 0; font-size: var(--p-body); line-height: 1.1; }
+body.projector .rank-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: var(--p-body); line-height: 1.1; }
+body.projector .rank-table th, body.projector .rank-table td { padding: 3px 4px; border-bottom: 1px solid var(--line); color: var(--ink); background: var(--surface); }
+body.projector .rank-table th:first-child { width: 62%; text-align: left; overflow-wrap: anywhere; font-weight: var(--w-medium); }
+body.projector .rank-table th:not(:first-child) { font-size: var(--p-label); font-weight: var(--w-semibold); }
+body.projector .rank-table td { text-align: center; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* CASE-145: complete response columns supersede the option pager for new closures. */
+body.projector .ranked-result { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: max(2px, calc(8px * var(--sp, 1))); }
+body.projector .ranked-result > * { flex-shrink: 0; }
+body.projector .ranked-result h2 { margin: 0; font-size: max(24px, calc(26px * var(--s, 1))); line-height: 1.15; overflow-wrap: anywhere; }
+/* CASE-327: rows take their own height (no stretch to fill the slide); one footer sits at the bottom. */
+body.projector .ranked-columns { display: grid; grid-template-columns: repeat(var(--ranked-columns), minmax(0, 1fr)); align-items: start; gap: 16px 24px; }
+body.projector .ranked-column { min-width: 0; display: grid; align-content: start; gap: 8px; }
+body.projector .ranked-order { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+body.projector .result li.ranked-tile { min-width: 0; display: grid; grid-template-columns: 32px 40px minmax(0, 1fr); gap: 12px; padding: 10px; align-items: center; line-height: 1.15; }
+body.projector .ranked-label, .ranked-rank { font-size: max(24px, calc(26px * var(--s, 1))); font-weight: var(--w-medium); }
+body.projector .ranked-label { min-width: 0; overflow-wrap: anywhere; }
+body.projector .ranked-rank { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: center; }
+body.projector .result .ranked-tile svg.mark { width: 40px; height: 40px; }
+body.projector .result p.ranked-total { margin: 0; font-size: 24px; line-height: 1.15; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+body.projector .ranked-foot { margin-top: auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 24px; }
+body.projector .result p.ranked-overall, .result p.ranked-empty { margin: 0; font-size: 24px; line-height: 1.15; color: var(--ink); }
+body.projector .result p.ranked-meaning, .result p.ranked-continuation, .result p.ranked-group-page, .result p.ranked-residual { margin: 0; line-height: 1.15; }
+
+/* Local sound remains a quiet footer utility; native ranges retain keyboard/touch behavior. */
+/* CASE-335: only this display's sound button remains; the room's music and effects levels live on the console's player. */
+body.projector .sound-cell { display: grid; grid-template-columns: 44px; justify-items: end; gap: var(--sp-1); align-items: center; }
+body.projector .sound { width: 44px; height: 44px; min-height: 44px; padding: 0; grid-column: 1; grid-row: 1 / 3; }
+body.projector .sound:hover { background: var(--quiet); }
+body.projector .sound[aria-pressed="true"]:hover { background: var(--petrol-tint); }
+body.projector .sound-status { grid-column: 1 / -1; max-width: 18em; text-align: end; font-size: var(--p-label); color: var(--ink-muted); }
+body.projector .sound-status:empty { display: none; }
+@media (max-width: 600px) {
+  body.projector footer .sound-cell { grid-column: 1 / -1; justify-self: start; }
+}
+body.projector .sound-reload[hidden] { display: none; }
+
+/* Card 57 served slides (CASE-211): a 16:9 slide fitted inside the main band; text sizes live on the blocks, so their
+   cqw resolve against the slide's content box. Reference: prototypes/design/slide-stage.css (G07 probe). */
+/* The slide band drops the main's vertical padding so body text reaches the CASE-211 floor (2.75cqw ≥ 24 px at 1280×720
+   inside the real top bar and footer); the slide carries its own border and padding. */
+body.projector main.slide-band { display: grid; place-items: center; grid-template-columns: minmax(0, 1fr); container-type: size; padding-block: 0; }
+body.projector main.slide-band.slide-with-side { grid-template-columns: minmax(0, 1fr) minmax(0, 32%); container-type: normal; }
+body.projector .slide-canvas { --slide-w: min(100cqw, calc(100cqh * 16 / 9)); box-sizing: border-box; aspect-ratio: 16 / 9; width: var(--slide-w); container-type: inline-size;
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: repeat(12, minmax(0, 1fr)); gap: calc(var(--slide-w) * .012); padding: calc(var(--slide-w) * .03);
+  color: var(--ink); background: var(--slide-ground, var(--surface)); border: 1px solid var(--line); border-radius: var(--radius); line-height: 1.35; }
+body.projector main.slide-with-side .slide-canvas { --slide-w: 100%; }
+body.projector .slide-canvas p, body.projector .slide-canvas ul, body.projector .slide-canvas ol, body.projector .slide-canvas dl,
+body.projector .slide-canvas h2, body.projector .slide-canvas h3, body.projector .slide-canvas h4, body.projector .slide-canvas h5 { margin: 0; }
+body.projector .slide-block { min-width: 0; min-height: 0; overflow: hidden; display: grid; align-content: start; gap: .4em; padding: .3em .5em; font-size: calc(2.75cqw * var(--fit, 1)); }
+body.projector .slide-h1 { font-size: calc(4.8cqw * var(--fit, 1)); line-height: 1.15; }
+body.projector .slide-h2 { font-size: calc(3.9cqw * var(--fit, 1)); line-height: 1.2; }
+body.projector .slide-h3 { font-size: calc(3.3cqw * var(--fit, 1)); line-height: 1.25; }
+body.projector .slide-h4 { font-size: calc(3cqw * var(--fit, 1)); line-height: 1.3; }
+body.projector .slide-callout aside { padding: .6em .8em; border-radius: var(--radius-sm); color: var(--ink); background: var(--quiet); }
+/* CASE-344: a callout with an icon field is centred in its area, the icon (em-sized, so the fit pass scales it) beside its text. */
+body.projector .slide-centred { align-content: stretch; }
+body.projector .slide-centred > aside { display: flex; align-items: center; gap: .8em; }
+body.projector .slide-centred .slide-icon { flex: none; width: 1.6em; height: 1.6em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+body.projector .slide-callout-text { flex: 1; min-width: 0; }
+body.projector .slide-tone-soft aside, body.projector .slide-tone-soft:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-soft); }
+body.projector .slide-tone-blue aside, body.projector .slide-tone-blue:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-blue); }
+body.projector .slide-tone-teal aside, body.projector .slide-tone-teal:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-teal); }
+body.projector .slide-tone-green aside, body.projector .slide-tone-green:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-green); }
+body.projector .slide-tone-purple aside, body.projector .slide-tone-purple:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-purple); }
+body.projector .slide-tone-coral aside, body.projector .slide-tone-coral:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-coral); }
+body.projector .slide-tone-orange aside, body.projector .slide-tone-orange:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-orange); }
+body.projector .slide-tone-amber aside, body.projector .slide-tone-amber:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-amber); }
+body.projector .slide-tone-grey aside, body.projector .slide-tone-grey:not(.slide-callout) { color: var(--ink); background: var(--slide-fill-grey); }
+/* CASE-225: text colour from the slide palette, deepened toward the theme's ink so it reads in light and dark. */
+body.projector .slide-ink-blue { color: var(--slide-ink-blue); }
+body.projector .slide-ink-teal { color: var(--slide-ink-teal); }
+body.projector .slide-ink-green { color: var(--slide-ink-green); }
+body.projector .slide-ink-purple { color: var(--slide-ink-purple); }
+body.projector .slide-ink-coral { color: var(--slide-ink-coral); }
+body.projector .slide-ink-orange { color: var(--slide-ink-orange); }
+body.projector .slide-ink-amber { color: var(--slide-ink-amber); }
+body.projector .slide-ink-grey { color: var(--slide-ink-grey); }
+body.projector .slide-values dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .25em 1em; }
+body.projector .slide-values dt, body.projector .slide-unit { color: var(--ink-muted); }
+body.projector .slide-unit { margin-left: .3em; }
+/* A table inherits the slide's ink and type even in a quirks-mode document (the Run preview's frames are about:blank), where
+   the browser would otherwise give it the room's root colour and 16 px: room ink on a theme's light ground (r24 P1). */
+/* CASE-327: authored widths are preferences; a column never narrows past its longest word, and columns sit 1.5em apart. */
+body.projector .slide-table-grid { color: inherit; font: inherit; line-height: inherit; white-space: inherit; border-collapse: collapse; width: 100%; table-layout: auto; font-variant-numeric: tabular-nums; }
+body.projector .slide-table-grid caption { text-align: left; font-weight: var(--w-semibold); padding-bottom: .3em; }
+body.projector .slide-table-grid th, body.projector .slide-table-grid td { padding: .15em .75em; border-bottom: 1px solid var(--line); text-align: left; }
+body.projector .slide-table-grid :is(th, td):first-child { padding-inline-start: 0; }
+body.projector .slide-table-grid :is(th, td):last-child { padding-inline-end: 0; }
+body.projector .slide-table-grid .slide-end { text-align: right; }
+body.projector .slide-timeline-list { display: grid; gap: .3em; margin: 0; padding-left: 1.2em; }
+/* CASE-211 B: a question shrinks to fit its slot. Every part sizes from the slot's font size, which the fit pass steps
+   down from body size to the 24 px projector floor; below the floor the slide reports overflow. */
+body.projector .slide-question { display: block; }
+/* A block that cannot fit at the ruled size keeps its text in place and says the rest is on phones (never silent). */
+body.projector .slide-clipped { position: relative; }
+body.projector .slide-more { position: absolute; inset-inline: 0; inset-block-end: 0; margin: 0; padding: .3em .6em; font-size: max(18px, .7em); font-weight: var(--w-semibold);
+  color: var(--ink); background: var(--surface); border-top: 1px solid var(--line); }
+body.projector .slide-question .card { padding: .4em .6em; border-radius: var(--radius); }
+body.projector .slide-question .decision { gap: .35em; }
+body.projector .slide-question .decision .call, body.projector .slide-question .decision h2, body.projector .slide-question .decision .tile,
+body.projector .slide-question .result ul, body.projector .slide-question .result p, body.projector .slide-question .result h2, body.projector .slide-question .eyebrow { font-size: inherit; }
+body.projector .slide-question ol.tiles { gap: .25em; }
+body.projector .slide-question .decision .tile { padding: .15em .4em; min-height: 0; }
+body.projector .slide-question .decision .tile svg.mark { width: 1.4em; height: 1.4em; }
+body.projector .slide-question .result svg.mark { width: 1.1em; height: 1.1em; }
+/* Question slot fit (Julian, 2026-10-31; prototypes/question-slot-fit.html). Options sit tight, and a slot at least
+   600 px wide lays 6 or more of them in two columns. A result row leads with its label across the whole row; a thin
+   bar and the count sit beneath it, so a label never wraps word by word beside them. The prompt heads the results. */
+body.projector .slide-question { container-type: inline-size; }
+body.projector .slide-question .decision { gap: .25em; }
+body.projector .slide-question .decision .call { font-size: .75em; }
+body.projector .slide-question ol.tiles { gap: .2em; }
+body.projector .slide-question .decision .tile { padding: .05em .35em; gap: .4em; line-height: 1.15; }
+body.projector .slide-question .decision .tile svg.mark, body.projector .slide-question .decision .tile > :first-child { width: 1.1em; height: 1.1em; }
+body.projector .slide-question .result > .eyebrow:first-child { display: none; }
+body.projector .slide-question .result ul { gap: .2em; }
+body.projector .slide-question .result li { grid-template-columns: auto minmax(0, 1fr) max-content; grid-template-areas: "m l l" "m b n"; gap: .1em .45em; align-items: center; line-height: 1.15; }
+body.projector .slide-question .result li > svg.mark { grid-area: m; align-self: start; }
+body.projector .slide-question .result li > span:not(.bar, .n) { grid-area: l; }
+body.projector .slide-question .result li > .bar { grid-area: b; height: .3em; }
+body.projector .slide-question .result li > .n { grid-area: n; font-size: .8em; color: var(--ink-muted); }
+@container (min-width: 600px) {
+  body.projector .slide-question ol.tiles:has(> li:nth-child(6)), body.projector .slide-question .result ul:has(> li:nth-child(4)) { grid-template-columns: 1fr 1fr; column-gap: .8em; }
+}
+/* Closed responses that cannot fit beside the slide's other blocks take their room (projector-slides.mjs fitSlide). */
+body.projector .slide-yielded { display: none; }
+
+/* Block alignment and spacing (card 56 styles; set in the Builder Block tab). */
+body.projector .slide-align-center { text-align: center; } body.projector .slide-align-end { text-align: end; } body.projector .slide-pad-normal { padding: .6em .8em; } body.projector .slide-pad-roomy { padding: 1em 1.2em; }
+
+/* Block background and table presentation (CASE-220). */
+body.projector .slide-bg-soft { background: var(--quiet); border-radius: var(--radius-sm); } body.projector .slide-bg-outline { border: 1px solid var(--line); border-radius: var(--radius-sm); } body.projector .slide-banded tbody tr:nth-child(even) { background: var(--quiet); } body.projector .slide-density-compact :is(th, td) { padding-block: .05em; } body.projector .slide-density-roomy :is(th, td) { padding-block: .4em; } body.projector .slide-text-large { font-size: 1.15em; }
+
+/* Card 59 M3: when the browser will not start a video with sound, the projector says so; a click on it turns sound on. */
+body.projector main.slide-band { position: relative; }
+body.projector .video-sound-off { position: absolute; right: 16px; bottom: 16px; font: inherit; font-size: 1rem; padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+
+/* CASE-276: each contribution has its own enclosed chip, with stable reading order. */
+body.projector .text-result { border: 0; background: transparent; box-shadow: none; padding: 0; }
+/* CASE-318: answers flow down the columns and fill the band; fitTextAnswers() sets --text-size (24px floor, CASE-211). */
+body.projector .text-chips { columns: var(--response-columns); column-gap: clamp(16px, 1.6vw, 32px); column-fill: auto; margin-block: .5em; overflow: hidden; font-size: var(--text-size, max(24px, var(--p-body))); }
+body.projector .text-answer { break-inside: avoid; margin: 0 0 max(16px, .5em); padding: .3em .55em; border: 1px solid var(--field-line); border-radius: calc(var(--radius-lg) * .8); background: var(--petrol-tint); color: var(--ink); font-size: 1em; line-height: 1.28; overflow-wrap: anywhere; white-space: normal; }
+body.projector .text-result h2 { font-size: var(--p-h2); line-height: 1.2; margin: .25em 0; }
+
+body.projector .slide-question .decision .call { font-size: var(--p-label); flex-wrap: nowrap; }

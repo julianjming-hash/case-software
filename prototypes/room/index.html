@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case room lab</title>
+<link rel="stylesheet" href="lib/tokens.css">
+<style>
+  body { background: linear-gradient(135deg, #e5dfd3, #f2eee6 55%, #ded8ca); min-height: 100vh; }
+  header { display: flex; align-items: center; gap: 14px; padding: 12px 20px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  header h1 { margin: 0; font: 500 22px/1 var(--sans); letter-spacing: -.02em; }
+  header p { margin: 0; color: var(--ink-muted); font-size: 13px; }
+  header .right { margin-left: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  main { display: grid; grid-template-columns: 340px 1fr; gap: 16px; padding: 16px 20px; align-items: start; }
+  @media (max-width: 1000px) { main { grid-template-columns: 1fr; } }
+  aside { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow: auto; }
+  aside section { padding: 12px 14px; min-width: 0; }
+  aside h2 { margin: 0 0 8px; font-size: 13px; }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 13px; }
+  .kv dt { color: var(--ink-muted); }
+  .kv dd { margin: 0; font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; }
+  .clients { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .clients li { display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: center; font-size: 13px; }
+  .clients select { padding: 4px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); }
+  .row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .row .btn { min-height: 32px; padding: 5px 9px; font-size: 13px; }
+  #journal { font: 11px/1.35 var(--mono); max-height: 260px; overflow: auto; margin: 0; padding: 0; list-style: none; }
+  #journal li { padding: 2px 0; border-bottom: 1px dotted var(--line); }
+  #log { font: 12px/1.35 var(--sans); max-height: 160px; overflow: auto; margin: 0; padding-left: 16px; }
+  .frames { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+  .frame { grid-column: span 12; display: flex; flex-direction: column; overflow: hidden; }
+  .frame.display { grid-column: span 7; }
+  .frame.phone { grid-column: span 4; }
+  @media (max-width: 1400px) { .frame.display { grid-column: span 12; } .frame.phone { grid-column: span 6; } }
+  .frame .bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--line); font-size: 13px; }
+  .frame .bar strong { font-size: 13px; }
+  .frame .bar .spacer { flex: 1; }
+  .frame .bar .btn { min-height: 28px; padding: 3px 8px; font-size: 12px; }
+  .viewport { position: relative; overflow: hidden; background: #fff; }
+  .viewport iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; background: var(--ground); }
+  .note { font-size: 12px; color: var(--ink-muted); margin: 6px 0 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Case room lab</h1>
+  <p>Stage C mockups. One simulated room server, separate windows for each role, and a fault panel.</p>
+  <div class="right">
+    <label>Case
+      <select id="casePick">
+        <option value="mvc">MVC tension pneumothorax (fixture)</option>
+        <option value="demo">Interaction types demo</option>
+      </select>
+    </label>
+    <button class="btn" id="resetRoom">New room</button>
+  </div>
+</header>
+<main>
+  <aside>
+    <section class="panel" aria-labelledby="h-room">
+      <h2 id="h-room">Room server (simulated Durable Object)</h2>
+      <dl class="kv" id="roomKv"></dl>
+    </section>
+    <section class="panel" aria-labelledby="h-faults">
+      <h2 id="h-faults">Fault panel</h2>
+      <div class="row">
+        <button class="btn" id="outage">Total outage</button>
+        <button class="btn" id="restore">Restore all links</button>
+        <button class="btn" id="evict">Evict server</button>
+      </div>
+      <p class="note">Per-window link: <b>up</b>, <b>down</b> (drops every frame both ways) or <b>flaky</b> (25% loss, 0.2–1.2 s latency, 10% duplicates).</p>
+      <ul class="clients" id="clients"></ul>
+    </section>
+    <section class="panel" aria-labelledby="h-add">
+      <h2 id="h-add">Windows</h2>
+      <div class="row">
+        <button class="btn" id="addPhone">Add phone</button>
+        <button class="btn" id="addSeparate">Add separate projector</button>
+        <button class="btn" id="addFac">Second facilitator tab</button>
+      </div>
+      <p class="note">Every frame also opens as a real window ("Pop out"), for a dual-display test. Keep this lab page open: it is the server.</p>
+    </section>
+    <section class="panel" aria-labelledby="h-log">
+      <h2 id="h-log">Lab log</h2>
+      <ol id="log"></ol>
+    </section>
+    <section class="panel" aria-labelledby="h-journal">
+      <h2 id="h-journal">Journal (ids and counts only)</h2>
+      <ul id="journal"></ul>
+    </section>
+  </aside>
+  <div class="frames" id="frames"></div>
+</main>
+
+<script type="module">
+import { SimRoom } from './lib/sim-do.mjs';
+import { CHANNEL } from './lib/bus.mjs';
+import { demoInteractionsCase } from './lib/demo-interactions.mjs';
+import { validateCaseDocument } from '../../src/shared/case-document.mjs';
+import { joinUrl } from '../../src/shared/urls.mjs';
+import { formatCode } from '../../src/shared/ids.mjs';
+
+const params = new URLSearchParams(location.search);
+const caseKey = params.get('case') === 'demo' ? 'demo' : 'mvc';
+document.getElementById('casePick').value = caseKey;
+document.getElementById('casePick').onchange = (e) => { location.search = `?case=${e.target.value}`; };
+document.getElementById('resetRoom').onclick = () => location.reload();
+
+const caseDoc = caseKey === 'demo' ? demoInteractionsCase() : await (await fetch('../../src/fixtures/synthetic-workshop.case.json')).json();
+const v = validateCaseDocument(caseDoc);
+if (!v.ok) throw new Error(`case invalid: ${JSON.stringify(v.errors)}`);
+// A new room invalidates every phone token from the previous one.
+try { for (const k of Object.keys(sessionStorage)) if (k.startsWith('case-lab:')) sessionStorage.removeItem(k); } catch {}
+
+const ch = new BroadcastChannel(CHANNEL);
+const clients = new Map(); // clientId → { role, label, slot, topology, mode, seen }
+const logEl = document.getElementById('log');
+const log = (msg) => { const li = document.createElement('li'); li.textContent = `${new Date().toLocaleTimeString()} ${msg}`; logEl.prepend(li); };
+let outage = false;
+
+const room = new SimRoom({
+  caseDoc,
+  send: (clientId, raw) => deliver('down', clientId, raw),
+  onChange: () => scheduleRender(),
+});
+
+// ── network with faults ──
+function linkOf(clientId) { return outage ? 'down' : (clients.get(clientId)?.mode ?? 'up'); }
+function deliver(dir, clientId, raw) {
+  const mode = linkOf(clientId);
+  if (mode === 'down') return;
+  const go = () => dir === 'up' ? room.receive(clientId, raw) : ch.postMessage({ k: 'down', clientId, raw });
+  if (mode === 'flaky') {
+    if (Math.random() < 0.25) return;
+    const delay = 200 + Math.random() * 1000;
+    setTimeout(go, delay);
+    if (Math.random() < 0.1) setTimeout(go, delay + 150); // duplicate
+    return;
+  }
+  setTimeout(go, 15);
+}
+ch.onmessage = async ({ data: m }) => {
+  if (m?.k === 'up') return deliver('up', m.clientId, m.raw);
+  if (m?.k === 'presence') {
+    const known = clients.get(m.clientId);
+    clients.set(m.clientId, { role: m.role, label: m.label, slot: m.slot, topology: m.topology, mode: known?.mode ?? 'up' });
+    // Facilitator sign-in and display pairing are out of scope here: the lab issues their credential.
+    if (m.role !== 'participant') ch.postMessage({ k: 'credential', clientId: m.clientId, token: await room.issueCredential(m.role) });
+    scheduleRender();
+  }
+  if (m?.k === 'bye') { clients.delete(m.clientId); scheduleRender(); }
+};
+ch.postMessage({ k: 'lab-hello' });
+
+// ── fault buttons ──
+document.getElementById('outage').onclick = () => { outage = true; log('Total outage: every link down.'); scheduleRender(); };
+document.getElementById('restore').onclick = () => { outage = false; for (const c of clients.values()) c.mode = 'up'; log('All links restored.'); scheduleRender(); };
+document.getElementById('evict').onclick = async () => {
+  log('Server evicted. Rebuilding from meta.state…');
+  const r = await room.evict();
+  log(r.identical ? 'Rebuilt from meta.state · every projection identical ✓' : 'Rebuilt, but projections DIFFER ✗');
+};
+
+// ── frames ──
+const framesEl = document.getElementById('frames');
+let phoneSlots = 0;
+const SIZES = { facilitator: [1366, 820], display: [1280, 720], phone: [390, 760] };
+function addFrame(kind, src, title) {
+  const [w, h] = SIZES[kind];
+  const el = document.createElement('section');
+  el.className = `frame panel ${kind}`;
+  el.innerHTML = `<div class="bar"><strong></strong><span class="spacer"></span><button class="btn pop">Pop out</button><button class="btn reload">Reload</button><button class="btn close">Close</button></div><div class="viewport"><iframe></iframe></div>`;
+  el.querySelector('strong').textContent = title;
+  const vp = el.querySelector('.viewport');
+  const fr = el.querySelector('iframe');
+  fr.title = title;
+  fr.width = w; fr.height = h; fr.style.width = `${w}px`; fr.style.height = `${h}px`;
+  fr.src = src;
+  new ResizeObserver(() => { const s = vp.clientWidth / w; fr.style.transform = `scale(${s})`; vp.style.height = `${h * s}px`; }).observe(vp);
+  el.querySelector('.pop').onclick = () => window.open(src, '_blank', `popup,width=${w},height=${h}`);
+  el.querySelector('.reload').onclick = () => { fr.src = 'about:blank'; setTimeout(() => { fr.src = src; }, 50); };
+  el.querySelector('.close').onclick = () => el.remove();
+  framesEl.append(el);
+}
+const addPhone = () => { const slot = String.fromCharCode(65 + phoneSlots++); addFrame('phone', `phone.html?slot=${slot}`, `Phone ${slot}`); };
+addFrame('facilitator', 'facilitator.html', 'Facilitator console (hospital PC, primary screen)');
+addFrame('display', 'display.html?topology=same-pc', 'Projector (same PC, second screen)');
+addPhone(); addPhone(); addPhone();
+document.getElementById('addPhone').onclick = addPhone;
+document.getElementById('addSeparate').onclick = () => addFrame('display', 'display.html?topology=separate', 'Projector (separate paired device)');
+let facTabs = 1;
+document.getElementById('addFac').onclick = () => addFrame('facilitator', `facilitator.html?tab=${++facTabs}`, `Facilitator console, tab ${facTabs}`);
+
+// ── state panel ──
+let queued = false;
+function scheduleRender() { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; render(); }); } }
+function render() {
+  const kv = document.getElementById('roomKv');
+  const s = room.state;
+  const rows = s ? [
+    ['case', caseKey], ['join code', `${formatCode(s.joinCode)} · ${joinUrl(s.joinCode)}`], ['phase', s.phase + (s.manual ? ' (manual)' : '') + (s.resumePhase ? ` ← ${s.resumePhase}` : '')],
+    ['revision', s.revision], ['epoch', s.epoch], ['display rev', s.display.revision], ['participants', Object.values(s.participants).filter((p) => !p.removedAt).length],
+    ['round', s.round ? `#${s.round.no} ${s.round.status} · ${Object.keys(s.round.responses).length} answers` : '–'],
+    ['receipts ledger', room.storage.receipts.size], ['rebuilds', room.rebuilds],
+  ] : [['state', 'EVICTED · rebuilding…']];
+  kv.replaceChildren(...rows.flatMap(([k, val]) => { const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = String(val); return [dt, dd]; }));
+
+  const ul = document.getElementById('clients');
+  ul.replaceChildren(...[...clients].map(([id, c]) => {
+    const li = document.createElement('li');
+    const name = document.createElement('span');
+    const connected = room.conns?.has(id);
+    name.textContent = `${c.label}${c.topology ? ` (${c.topology})` : ''} · ${connected ? 'connected' : 'not connected'}`;
+    const sel = document.createElement('select');
+    sel.setAttribute('aria-label', `Link for ${c.label}`);
+    for (const m of ['up', 'down', 'flaky']) sel.append(new Option(m, m, false, c.mode === m));
+    sel.onchange = () => { c.mode = sel.value; log(`${c.label}: link ${sel.value}.`); };
+    if (outage) sel.disabled = true;
+    li.append(name, sel);
+    return li;
+  }));
+
+  const j = document.getElementById('journal');
+  j.replaceChildren(...room.storage.journal.slice(-40).reverse().map((e) => {
+    const li = document.createElement('li');
+    li.textContent = `${e.seq} · e${e.epoch} · ${e.kind} ${JSON.stringify(e.payload)}`;
+    return li;
+  }));
+}
+render();
+window.caseLab = { room, clients, log }; // for scripted checks (tests/e2e) and the console
+</script>
+</body>
+</html>

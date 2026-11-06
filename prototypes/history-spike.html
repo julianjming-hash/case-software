@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Case Builder | history spike</title>
+<link rel="stylesheet" href="../src/client/tokens.css"><link rel="stylesheet" href="./design/case-ui.css"></head>
+<body class="document">
+<main class="page">
+<h1>Unified Undo spike (G09)</h1>
+<p>Local engineering probe for card 58. It uses the real <code>src/client/builder-history.mjs</code>; nothing is saved.</p>
+<div id="editor">
+<label>Stage name <input id="title" autocomplete="off"></label>
+<label>Learner scene <textarea id="scene" rows="3"></textarea></label>
+<p id="notes-label">Private notes</p>
+<div id="notes" contenteditable="true" role="textbox" aria-multiline="true" aria-labelledby="notes-label"></div>
+<button type="button" class="btn" id="add">Add finding</button>
+<ul id="findings" aria-label="Findings"></ul>
+<button type="button" class="btn" id="undo">Undo</button> <button type="button" class="btn" id="redo">Redo</button>
+</div>
+<p id="status" role="status" aria-live="polite"></p>
+</main>
+<script type="module" src="./design/history-spike.mjs"></script>
+</body></html>

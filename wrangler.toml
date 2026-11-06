@@ -1,0 +1,285 @@
+# Case Worker: owner deployment uses scripts/predeploy.mjs; direct Wrangler commands bypass its guards.
+# npm deploy hooks protect the supported entrypoints. Never deploy from an agent session.
+name = "case"
+main = "src/worker/index.mjs"
+compatibility_date = "2026-08-22"
+
+[build]
+command = "node scripts/build-client.mjs"
+
+[assets]
+directory = "dist"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/join", "/J/*", "/j/*", "/F/*", "/f/*"]
+html_handling = "none"
+not_found_handling = "none"
+
+# Workers Logs for every invocation (spec red team 2, P1-8). Logs never carry tokens or names.
+[observability]
+enabled = true
+
+[vars]
+CASE_ENV = ""
+BUILD_SHA = ""
+BROADCAST_COALESCE_MS = "250"
+LOCK_GRACE_MS = "2000"
+AUTO_LOCK_MS = "3000"
+# ALERT_EMAIL_TO and the send-only RESEND_ALERT_API_KEY are secrets, so a deploy never blanks them (2026-10-17).
+# RESEND_INVITE_API_KEY (CASE-340) is a secret too; without it invitations are saved and Admin offers Resend.
+# Public widget key: owner configures this selected environment; no default secret is inherited.
+TURNSTILE_SITE_KEY = ""
+# Dev and tests only: allows POST /api/v1/sessions with an inline case document.
+CASE_DEV_INLINE_CASES = "0"
+# Owner-returned published MVC version and digest; blank until approved per environment.
+CASE_PILOT_VERSION_ID = ""
+CASE_PILOT_CONTENT_SHA256 = ""
+# Deployed bindings: SUPABASE_URL, SUPABASE_JWT_ISSUER, SUPABASE_JWKS_URL, CASE_ENV.
+# See docs/SETUP-SECRETS.md. No key material belongs in this file.
+# Local tests only: CASE_ALLOW_HS256=1 with a throwaway SUPABASE_JWT_SECRET.
+# Secret, optional: DEPLOY_GUARD_TOKEN enables GET /api/v1/ops/live-rooms for scripts/deploy-guard.mjs.
+
+[triggers]
+crons = ["37 3 * * 1", "17 * * * *", "47 * * * *"]
+
+# Visual evidence images (card 59 M2, CASE-268): a private bucket the Worker alone reads. Local runs simulate it.
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "case-media-local"
+
+[[durable_objects.bindings]]
+name = "ROOM"
+class_name = "RoomDO"
+
+[[durable_objects.bindings]]
+name = "DIRECTORY"
+class_name = "DirectoryDO"
+
+[[durable_objects.bindings]]
+name = "ALERTS"
+class_name = "AlertDO"
+
+# Floods are cut before any Durable Object (runtime red team P1-1). Keys are a client's IPv6 /64 or
+# IPv4 address. This coarse limit counts EVERY join attempt, so it is set far above any real room:
+# a whole hospital can share one egress address, and CASE-074 limits only FAILED lookups (the
+# Directory's 20 a minute). 600 a minute is two full 300-person rooms joining at once behind one
+# NAT (spec red team 2, P2; CASE-108). Three failed codes in ten minutes require Turnstile on configured environments;
+# successful codes bypass challenge state. Provider/config outages retain the legacy failed-code limit.
+# Rate-limit namespace_ids are scoped to the Cloudflare ACCOUNT, and Case shares iatrogenic's account:
+# 1xxx is reserved for iatrogenic (it uses 1001-1005), so Case's ids live in 2000-2999 and never share a
+# counter with an iatrogenic limiter (CASE-111; tests/wrangler-config.test.mjs enforces the range).
+[[ratelimits]]
+name = "JOIN_ATTEMPTS"
+namespace_id = "2001"
+simple = { limit = 600, period = 60 }
+
+[[ratelimits]]
+name = "PAIR_CREATE"
+namespace_id = "2002"
+simple = { limit = 10, period = 60 }
+
+# The network self-test (prototypes/room/check.html): stateless, but a socket held open costs.
+[[ratelimits]]
+name = "CHECK_ATTEMPTS"
+namespace_id = "2003"
+simple = { limit = 30, period = 60 }
+
+[[ratelimits]]
+name = "TELEMETRY_RATE_LIMITER"
+namespace_id = "2005"
+simple = { limit = 120, period = 60 }
+
+# The invitation page's reference peek (CASE-341, P-46): a per-address limit on guessing references.
+[[ratelimits]]
+name = "INVITE_PEEK"
+namespace_id = "2006"
+simple = { limit = 30, period = 60 }
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RoomDO", "DirectoryDO"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["AlertDO"]
+
+[[rules]]
+type = "Text"
+globs = ["db/durable-object/*.sql"]
+fallthrough = true
+
+[env.production]
+name = "case"
+routes = [{ pattern = "software.example.invalid", custom_domain = true }]
+
+[env.production.build]
+command = "node scripts/build-client.mjs --env production"
+
+[env.production.assets]
+directory = "dist"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/join", "/J/*", "/j/*", "/F/*", "/f/*"]
+html_handling = "none"
+not_found_handling = "none"
+
+[env.production.vars]
+CASE_ENV = "production"
+BUILD_SHA = ""
+BROADCAST_COALESCE_MS = "250"
+LOCK_GRACE_MS = "2000"
+AUTO_LOCK_MS = "3000"
+# ALERT_EMAIL_TO and the send-only RESEND_ALERT_API_KEY are secrets, so a deploy never blanks them (2026-10-17).
+# RESEND_INVITE_API_KEY (CASE-340) is a secret too; without it invitations are saved and Admin offers Resend.
+# Public widget key: owner configures this selected environment; no default secret is inherited.
+TURNSTILE_SITE_KEY = ""
+CASE_DEV_INLINE_CASES = "0"
+# Owner-returned published MVC version and digest; blank until approved for production.
+CASE_PILOT_VERSION_ID = ""
+CASE_PILOT_CONTENT_SHA256 = ""
+# AS-100 (CASE-160): the staging-only Load testing workspace may not start rooms on production.
+CASE_REFUSED_ROOM_WORKSPACES = "01a1aafa-0fcb-7606-9dd5-f96dd402c399"
+SUPABASE_URL = "https://auth.example.invalid"
+# Public client key (SETUP-SECRETS §1); browsers use it for Supabase Auth sign-in. Never the sb_secret_ key.
+SUPABASE_PUBLISHABLE_KEY = "sb_publishable_PUBLIC_EXAMPLE_NOT_A_REAL_KEY"
+SUPABASE_JWT_ISSUER = "https://auth.example.invalid/auth/v1"
+SUPABASE_JWKS_URL = "https://auth.example.invalid/auth/v1/.well-known/jwks.json"
+# Admin identity (CASE-137): exact lowercase verified emails, comma-separated. Production only; staging
+# stays unset until Julian chooses its admins deliberately. STEPUP_SECRET is a separate per-env secret.
+ADMIN_EMAILS = "owner@example.invalid"
+# Incident designation must intersect the current deployment administrator allowlist.
+INCIDENT_ADMIN_EMAILS = "owner@example.invalid"
+# The one origin admin writes accept (checkAdminWrite) and the base of admin-sent auth links.
+CASE_PUBLIC_ORIGIN = "https://software.example.invalid"
+
+[env.production.triggers]
+crons = ["37 3 * * 1", "17 * * * *", "47 * * * *"]
+
+# Julian creates it before the first deploy that carries this binding (docs/SETUP-SECRETS.md §Media bucket).
+[[env.production.r2_buckets]]
+binding = "MEDIA"
+bucket_name = "case-media"
+
+[[env.production.durable_objects.bindings]]
+name = "ROOM"
+class_name = "RoomDO"
+
+[[env.production.durable_objects.bindings]]
+name = "DIRECTORY"
+class_name = "DirectoryDO"
+
+[[env.production.durable_objects.bindings]]
+name = "ALERTS"
+class_name = "AlertDO"
+
+[[env.production.ratelimits]]
+name = "JOIN_ATTEMPTS"
+namespace_id = "2001"
+simple = { limit = 600, period = 60 }
+
+[[env.production.ratelimits]]
+name = "PAIR_CREATE"
+namespace_id = "2002"
+simple = { limit = 10, period = 60 }
+
+[[env.production.ratelimits]]
+name = "CHECK_ATTEMPTS"
+namespace_id = "2003"
+simple = { limit = 30, period = 60 }
+
+[[env.production.ratelimits]]
+name = "TELEMETRY_RATE_LIMITER"
+namespace_id = "2005"
+simple = { limit = 120, period = 60 }
+
+[[env.production.ratelimits]]
+name = "INVITE_PEEK"
+namespace_id = "2006"
+simple = { limit = 30, period = 60 }
+
+[[env.production.analytics_engine_datasets]]
+binding = "METRICS"
+dataset = "case_metrics"
+
+[env.staging]
+name = "case-staging"
+routes = [{ pattern = "staging.example.invalid", custom_domain = true }]
+
+[env.staging.build]
+command = "node scripts/build-client.mjs --env staging"
+
+[env.staging.assets]
+directory = "dist"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/join", "/J/*", "/j/*", "/F/*", "/f/*"]
+html_handling = "none"
+not_found_handling = "none"
+
+[env.staging.vars]
+CASE_PUBLIC_ORIGIN = "https://staging.example.invalid"
+CASE_ENV = "staging"
+BUILD_SHA = ""
+BROADCAST_COALESCE_MS = "250"
+LOCK_GRACE_MS = "2000"
+AUTO_LOCK_MS = "3000"
+# ALERT_EMAIL_TO and the send-only RESEND_ALERT_API_KEY are secrets, so a deploy never blanks them (2026-10-17).
+# RESEND_INVITE_API_KEY (CASE-340) is a secret too; without it invitations are saved and Admin offers Resend.
+# Public widget key: owner configures this selected environment; no default secret is inherited.
+TURNSTILE_SITE_KEY = ""
+CASE_DEV_INLINE_CASES = "0"
+# Staging has its own published version; never inherit the production pin.
+CASE_PILOT_VERSION_ID = ""
+CASE_PILOT_CONTENT_SHA256 = ""
+# CASE-159 (Julian, 2026-10-05): a second Supabase project exceeds the budget, so staging shares the
+# production project, isolated by its own test workspace, its own sb_secret_ key (worker_staging) and
+# its own Durable Objects/rate counters. Room runtime never touches Supabase per vote.
+SUPABASE_URL = "https://auth.example.invalid"
+SUPABASE_PUBLISHABLE_KEY = "sb_publishable_PUBLIC_EXAMPLE_NOT_A_REAL_KEY"
+SUPABASE_JWT_ISSUER = "https://auth.example.invalid/auth/v1"
+SUPABASE_JWKS_URL = "https://auth.example.invalid/auth/v1/.well-known/jwks.json"
+
+[env.staging.triggers]
+crons = ["37 3 * * 1", "17 * * * *", "47 * * * *"]
+
+[[env.staging.r2_buckets]]
+binding = "MEDIA"
+bucket_name = "case-media-staging"
+
+[[env.staging.durable_objects.bindings]]
+name = "ROOM"
+class_name = "RoomDO"
+
+[[env.staging.durable_objects.bindings]]
+name = "DIRECTORY"
+class_name = "DirectoryDO"
+
+[[env.staging.durable_objects.bindings]]
+name = "ALERTS"
+class_name = "AlertDO"
+
+[[env.staging.ratelimits]]
+name = "JOIN_ATTEMPTS"
+namespace_id = "2011"
+simple = { limit = 600, period = 60 }
+
+[[env.staging.ratelimits]]
+name = "PAIR_CREATE"
+namespace_id = "2012"
+simple = { limit = 10, period = 60 }
+
+[[env.staging.ratelimits]]
+name = "CHECK_ATTEMPTS"
+namespace_id = "2013"
+simple = { limit = 30, period = 60 }
+
+[[env.staging.ratelimits]]
+name = "TELEMETRY_RATE_LIMITER"
+namespace_id = "2015"
+simple = { limit = 120, period = 60 }
+
+[[env.staging.ratelimits]]
+name = "INVITE_PEEK"
+namespace_id = "2016"
+simple = { limit = 30, period = 60 }
+
+[[env.staging.analytics_engine_datasets]]
+binding = "METRICS"
+dataset = "case_metrics_staging"

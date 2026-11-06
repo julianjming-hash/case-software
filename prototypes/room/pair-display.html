@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case · Pair this display</title>
+<link rel="stylesheet" href="lib/tokens.css">
+<style>
+  main { max-width: 760px; margin: 10vh auto; padding: 32px 36px; display: grid; gap: 18px; }
+  h1, p { margin: 0; }
+  h1 { font: 500 34px/1.1 var(--sans); letter-spacing: -.03em; }
+  .code { font: 700 88px/1 var(--mono); letter-spacing: .08em; }
+  .lead { font-size: 20px; line-height: 1.45; }
+  .muted { color: var(--ink-muted); }
+  .nomodule { margin: 16px; padding: 12px 14px; border: 2px solid var(--alert); border-radius: var(--radius-sm); background: var(--alert-tint); color: var(--alert); font-weight: 700; }
+</style>
+<script nomodule>document.addEventListener('DOMContentLoaded', function () { var p = document.createElement('p'); p.className = 'nomodule'; p.textContent = 'Case needs a current browser. Open this page in Microsoft Edge or Google Chrome.'; document.body.insertBefore(p, document.body.firstChild); });</script>
+</head>
+<body>
+<main class="panel" aria-labelledby="pairH">
+  <p class="eyebrow">Separate display</p>
+  <h1 id="pairH">Pair this display</h1>
+  <p class="lead">On the facilitator console, open the Room tab, then type this code under Displays.</p>
+  <p class="code" id="code" aria-live="polite">········</p>
+  <p class="muted" id="status" role="status" aria-live="polite">Asking the room for a code…</p>
+</main>
+<script type="module">
+// The display side of number-matched pairing (ARCHITECTURE §7, plan §API contract):
+//   POST /display-pairs → show the code → poll GET /display-pairs/:pairId with the secret as bearer
+//   → once the console approves, store {sessionId, token} in this tab's sessionStorage and open the
+//   display. The secret and the token never appear on screen or in a URL. Text only.
+import { requestDisplayPair, storeCredential } from '../../src/client/transport.mjs';
+import { formatCode } from '../../src/shared/ids.mjs';
+import { realRoom, roomUrl } from './lib/link.mjs';
+
+const room = realRoom();
+const $code = document.getElementById('code');
+const $status = document.getElementById('status');
+const say = (t) => { $status.textContent = t; };
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const POLL_MS = Math.max(250, Math.round(2000 * (room?.scale ?? 1)));
+
+async function run() {
+  if (!room) { say('This page needs ?api=<room server origin>.'); return; }
+  for (;;) {
+    const pair = await requestDisplayPair({ api: room.api });
+    if (pair.error) { say('Could not reach the room server · retrying'); await sleep(POLL_MS * 2); continue; }
+    $code.textContent = formatCode(pair.code);
+    $code.setAttribute('aria-label', `Pair code ${pair.code.split('').join(' ')}`);
+    say('Waiting for the facilitator to enter the code');
+    for (;;) {
+      await sleep(POLL_MS);
+      const r = await pair.poll();
+      if (r.pending) continue;
+      if (r.token) {
+        storeCredential('display', null, { sessionId: r.sessionId, token: r.token });
+        say('Paired · opening the room');
+        const topology = new URLSearchParams(location.search).get('topology');
+        location.replace(roomUrl('display.html', { ...room, sessionId: r.sessionId }, topology ? { topology } : {}));
+        return;
+      }
+      if (r.error === 'network') { say('Connection interrupted · still waiting'); continue; }
+      say('That code expired · here is a new one');
+      break; // expired or already used: ask for a fresh code
+    }
+  }
+}
+run();
+</script>
+</body>
+</html>

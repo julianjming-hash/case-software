@@ -1,0 +1,275 @@
+name: verify
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 3 * * *' # nightly browser suite on main
+    - cron: '0 4 * * 1' # weekly blocking dependency audit
+
+permissions: {}
+
+
+concurrency:
+  group: verify-${{ github.event_name == 'schedule' && github.event.schedule || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    timeout-minutes: 5
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: read
+      checks: read
+    outputs:
+      browser: ${{ steps.filter.outputs.browser }}
+      audit: ${{ steps.filter.outputs.audit }}
+      macos: ${{ steps.filter.outputs.macos }}
+      workflows: ${{ steps.filter.outputs.workflows }}
+      nightly: ${{ steps.nightly.outputs.nightly }}
+      draft: ${{ steps.draft.outputs.draft || 'false' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Is the pull request a draft now?
+        id: draft
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          draft=$(gh api "repos/$REPO/pulls/$PR" --jq .draft 2>/dev/null) || draft=false
+          case "$draft" in true) ;; *) draft=false ;; esac
+          echo "draft=$draft" >> "$GITHUB_OUTPUT"
+      - name: Nightly browsers already green on this exact SHA?
+        id: nightly
+        if: github.event_name == 'schedule' && github.event.schedule == '0 3 * * *'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          CASE_BROWSER_SHARDS: '11'
+          CASE_NIGHTLY_HOSTED_ONLY: 'true'
+        run: node scripts/ci-nightly-fresh.mjs
+      - uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3
+        id: filter
+        if: github.event_name != 'schedule'
+        with:
+          filters: |
+            audit:
+              - 'package*.json'
+            workflows:
+              - '.github/workflows/**'
+            macos:
+              - '**/*.sh'
+              - 'scripts/**/*.sh'
+              - 'db/**'
+            browser:
+              - 'src/worker/**'
+              - '**'
+      - name: Validate change-filter outputs
+        if: github.event_name != 'schedule'
+        env:
+          CASE_CI_BROWSER: ${{ steps.filter.outputs.browser }}
+          CASE_CI_AUDIT: ${{ steps.filter.outputs.audit }}
+          CASE_CI_MACOS: ${{ steps.filter.outputs.macos }}
+          CASE_CI_WORKFLOWS: ${{ steps.filter.outputs.workflows }}
+        run: |
+          for flag in "$CASE_CI_BROWSER" "$CASE_CI_AUDIT" "$CASE_CI_MACOS" "$CASE_CI_WORKFLOWS"; do
+            case "$flag" in
+              true|false) ;;
+              *) echo 'Invalid change-filter output' >&2; exit 1 ;;
+            esac
+          done
+
+  load-gates:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Keep local Worker storage off the runner disk
+        run: if [ -d /dev/shm ] && [ -w /dev/shm ]; then echo "TMPDIR=/dev/shm" >> "$GITHUB_ENV"; fi
+      - run: npm run test:load-gates
+        env:
+          CASE_WORKER_LOG_DIR: ${{ runner.temp }}/worker-logs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: failure()
+        with:
+          name: load-gate-worker-logs
+          path: ${{ runner.temp }}/worker-logs/
+          retention-days: 7
+
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+    name: verify (${{ matrix.os }})
+    needs: load-gates
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Verify the bundled legacy baseline
+        timeout-minutes: 9
+        run: bash scripts/fetch-legacy-source.sh
+      - run: npm run verify
+        env:
+          CASE_REQUIRE_DB: '1'
+
+  macos-bash32:
+    needs: changes
+    if: github.event_name != 'schedule' && needs.changes.outputs.macos == 'true'
+    runs-on: macos-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - name: Install pinned test dependencies
+        run: npm ci
+      - name: Verify the bundled legacy baseline
+        timeout-minutes: 9
+        run: /bin/bash scripts/fetch-legacy-source.sh
+      - name: Install Postgres
+        run: brew list postgresql@16 >/dev/null 2>&1 || brew install postgresql@16
+      - name: check + test + test:db under /bin/bash 3.2
+        env:
+          CASE_REQUIRE_DB: '1'
+        run: |
+          /bin/bash --version | head -1
+          npm run check
+          npm test
+          npm run test:do
+          /bin/bash scripts/test-db.sh
+
+  browser-harness:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    needs: [changes, load-gates]
+    if: >-
+      ${{ !cancelled() && needs.changes.result == 'success' &&
+          ((github.event_name == 'schedule' && github.event.schedule == '0 3 * * *' && needs.changes.outputs.nightly != 'false') ||
+           (github.event_name != 'schedule' && needs.changes.outputs.draft != 'true' && needs.load-gates.result == 'success' && needs.changes.outputs.browser == 'true')) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Verify the bundled legacy baseline
+        timeout-minutes: 9
+        run: bash scripts/fetch-legacy-source.sh
+      - name: Playwright port
+        run: echo "PW_PORT=${PW_PORT:-4317}" >> "$GITHUB_ENV"
+      - name: Install pinned Playwright browsers and system deps
+        run: npx playwright install --with-deps chromium ${{ matrix.shard == 1 && 'webkit' || '' }}
+      - run: npm run test:e2e:shard -- --workers=1 ${{ matrix.shard == 11 && '--perf' || format('--shard={0}/10', matrix.shard) }}
+        env:
+          CI: 'true'
+      - name: Device recovery on WebKit and Chromium
+        if: matrix.shard == 1
+        run: npm run test:devices
+        env:
+          CI: 'true'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: failure()
+        with:
+          name: playwright-traces-${{ matrix.shard }}
+          path: test-results/
+          retention-days: 7
+
+  audit:
+    needs: changes
+    if: github.event_name != 'schedule' || github.event.schedule == '0 4 * * 1'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Audit high and critical dependencies
+        id: dependencies
+        continue-on-error: ${{ github.event_name == 'pull_request' && needs.changes.outputs.audit != 'true' }}
+        run: npm run audit:deps
+      - name: Report informational audit failure
+        if: steps.dependencies.outcome == 'failure' && steps.dependencies.conclusion == 'success'
+        run: echo 'Dependency audit failed; this PR did not change package files.' >> "$GITHUB_STEP_SUMMARY"
+
+  actionlint:
+    needs: changes
+    if: needs.changes.outputs.workflows == 'true' || (github.event_name == 'schedule' && github.event.schedule == '0 4 * * 1')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 .github/workflows/*.yml
+
+  public-software-required:
+    name: public-software-required
+    if: always()
+    needs: [changes, load-gates, verify, macos-bash32, browser-harness, audit, actionlint]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - name: Require every selected gate
+        run: node scripts/public-ci-result.mjs
+        env:
+          CASE_EVENT: ${{ github.event_name }}
+          CASE_SCHEDULE: ${{ github.event.schedule }}
+          CASE_NEEDS: ${{ toJSON(needs) }}

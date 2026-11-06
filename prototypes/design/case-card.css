@@ -1,0 +1,61 @@
+/* Case card study: full design-gate coverage; not yet a runtime catalogue replacement. */
+.case-tile { position: relative; min-width: 0; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-1); overflow: hidden; display: flex; flex-direction: column; }
+.case-tile-open { display: flex; flex-direction: column; flex: 1; min-width: 0; color: var(--ink); text-decoration: none; }
+.case-tile-open:hover { color: var(--ink); }
+.case-tile-open:focus-visible { outline: 3px solid var(--focus); outline-offset: -4px; border-radius: var(--radius); }
+.case-tile-media { position: relative; overflow: hidden; aspect-ratio: 16 / 10; background: var(--quiet); display: grid; place-items: center; }
+.case-tile-media > div { width: 100%; height: 100%; }
+.case-tile-media canvas, .case-tile-media svg { display: block; width: 100%; height: 100%; object-fit: cover; }
+.case-tile-placeholder { color: var(--ink-muted); font-weight: var(--w-semibold); letter-spacing: .2em; }
+.case-tile-copy { min-width: 0; display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-5); }
+.case-tile-title { margin: 0; font-size: var(--t-lg); font-weight: var(--w-semibold); line-height: 1.35; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.case-tile-summary { margin: 0; color: var(--ink-muted); font-size: var(--t-sm); line-height: 1.65; overflow-wrap: anywhere; }
+.case-tile-meta { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-3); margin: 0; padding: 0; list-style: none; color: var(--ink-muted); font-size: var(--t-xs); line-height: 1.5; }
+.case-tile-meta li { max-width: 100%; overflow-wrap: anywhere; }
+.case-tile-states { display: flex; flex-wrap: wrap; gap: var(--sp-2); padding: 0 var(--sp-5) var(--sp-4); }
+.case-tile-state { display: inline-flex; align-items: center; gap: var(--sp-2); color: var(--ink-muted); font-size: var(--t-xs); line-height: 1.5; }
+.case-tile-state::before { content: ''; width: 6px; height: 6px; flex: none; border-radius: var(--radius-xs); background: currentColor; }
+.case-tile-state[data-tone="ok"] { color: var(--ok-ink); }
+.case-tile-state[data-tone="warn"] { color: var(--manual-ink); }
+.case-tile-state[data-tone="private"] { color: var(--private-ink); }
+.case-tile-context { margin: 0 var(--sp-5); padding: var(--sp-3) 0; border-top: 1px solid var(--line); color: var(--ink-muted); font-size: var(--t-xs); }
+.case-tile-context p { margin: 0; }
+.case-tile-selection { position: absolute; top: var(--sp-2); left: var(--sp-2); width: 44px; height: 44px; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--field-line); border-radius: var(--radius-sm); }
+.case-tile-selection input { margin: 0; width: 20px; height: 20px; accent-color: var(--petrol); }
+.case-tile-selection:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+.case-tile[data-selected="true"] { outline: 2px solid var(--petrol); outline-offset: -2px; }
+.case-tile-horizontal .case-tile-open { display: grid; grid-template-columns: minmax(100px, 28%) minmax(0, 1fr); align-items: stretch; }
+.case-tile-horizontal .case-tile-media { aspect-ratio: auto; min-height: 150px; }
+.case-tile-horizontal .case-tile-copy { padding: var(--sp-4); }
+.case-tile-horizontal .case-tile-title { font-size: var(--t-md); }
+.case-tile-panorama .case-tile-open { position: relative; min-height: 280px; }
+.case-tile-panorama .case-tile-media { position: absolute; inset: 0; aspect-ratio: auto; }
+.case-tile-panorama .case-tile-copy { position: relative; width: 58%; margin: var(--sp-4); background: var(--surface); border-radius: var(--radius-sm); padding: var(--sp-5); }
+.case-tile-panorama .case-tile-states, .case-tile-panorama .case-tile-context { position: relative; background: var(--surface); }
+/* Drafts share the catalogue shell; saved-state facts and actions occupy its context slot. */
+.case-tile[data-purpose="draft"] .case-tile-states { padding: 0; }
+.case-tile[data-purpose="draft"] .case-tile-context { display: flex; flex: 1; }
+.draft-record { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.draft-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-3); margin: 0 0 var(--sp-4); }
+.draft-facts > div { min-width: 0; }
+.draft-facts dt { color: var(--ink-muted); font-size: var(--t-xs); }
+.draft-facts dd { margin: var(--sp-1) 0 0; color: var(--ink); font-size: var(--t-sm); overflow-wrap: anywhere; }
+
+.draft-actions { display: flex; justify-content: flex-end; margin-top: auto; padding-top: var(--sp-3); border-top: 1px solid var(--line); }
+@media (hover: hover) {
+  .case-tile:has(.case-tile-open:hover) { box-shadow: var(--shadow-2); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .case-tile { transition: box-shadow 150ms ease; }
+}
+@media (max-width: 600px) {
+  .case-tile-copy { padding: var(--sp-4); }
+  .case-tile-states { padding-inline: var(--sp-4); }
+  .case-tile-context { margin-inline: var(--sp-4); }
+  .case-tile-horizontal .case-tile-open { grid-template-columns: 88px minmax(0, 1fr); }
+  .case-tile-horizontal .case-tile-media { min-height: 120px; }
+  .case-tile-horizontal .case-tile-copy { padding: var(--sp-3); }
+  .case-tile-panorama .case-tile-copy { width: auto; margin: 0; border-radius: 0; }
+  .case-tile-panorama .case-tile-media { position: relative; aspect-ratio: 2 / 1; }
+  .case-tile-panorama .case-tile-open { min-height: 0; }
+}

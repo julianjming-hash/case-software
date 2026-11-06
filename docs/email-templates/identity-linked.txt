@@ -1,0 +1,9 @@
+A sign-in method was linked
+
+A {{ .Provider }} sign-in method was linked to your Case account {{ .Email }}.
+
+Review your account security if this change was unexpected.
+
+If you didn’t make this change, contact your Case administrator immediately.
+
+Case · case.iatrogenic.app

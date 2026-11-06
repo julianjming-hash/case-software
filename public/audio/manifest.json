@@ -1,0 +1,36 @@
+{
+  "source": "CASE-139 original forest-wood v1 tones, ported from feat/audio-library (PR 30); mono 24 kHz s16le PCM; permission in LICENSE.txt",
+  "files": [
+    {
+      "file": "decision-opened.wav",
+      "event": "decision_open",
+      "bytes": 13484,
+      "sha256": "afc9ea3560a98873eb41fd0e4c28354c673af4ec51196b9d212a35c79295c280"
+    },
+    {
+      "file": "material-revealed.wav",
+      "event": "reveal",
+      "bytes": 19244,
+      "sha256": "a64063043adfdd4e1f6c48f7c1c33a00e4c9c2ab697904bdb6a0e58f592e852f"
+    },
+    {
+      "file": "ui-press.wav",
+      "event": "console control press",
+      "bytes": 4844,
+      "sha256": "daa12e923ec93808e91b48de4b55697d0bfe7ad92d6f9b0685bdfdda7d5ce71a"
+    },
+    {
+      "file": "ui-open.wav",
+      "event": "console control open",
+      "bytes": 9644,
+      "sha256": "f693b0889a8137d6b79fe4dd9c3412b2532ebada82287eee2b7dd740c34179d3"
+    },
+    {
+      "file": "ui-close.wav",
+      "event": "console control close",
+      "bytes": 7724,
+      "sha256": "c12c4dbdb3c965ba3ea3e4327e63b933a92b9f92aed98489e244cf60c5a558c4"
+    }
+  ],
+  "note": "Event cues are projector-only. ui-* tones are facilitator-console-only (CASE-171). Soft variants and beds stay on feat/audio-library."
+}

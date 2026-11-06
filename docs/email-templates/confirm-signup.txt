@@ -1,0 +1,14 @@
+Confirm your email
+
+Use this code to confirm your email address for Case.
+
+Your verification code is:
+{{ .Token }}
+
+Confirm email address: {{ .ConfirmationURL }}
+
+If you didn’t request this email, you can ignore it. Never share a verification code. If the code or link has expired, request a new one.
+
+Case · case.iatrogenic.app
+
+@case.iatrogenic.app #{{ .Token }}

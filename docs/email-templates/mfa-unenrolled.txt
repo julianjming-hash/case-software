@@ -1,0 +1,9 @@
+A verification method was removed
+
+A {{ .FactorType }} verification method was removed from your Case account {{ .Email }}.
+
+Review your account security if this change was unexpected.
+
+If you didn’t make this change, contact your Case administrator immediately.
+
+Case · case.iatrogenic.app

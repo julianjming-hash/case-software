@@ -1,0 +1,9 @@
+Your phone number was changed
+
+Your Case phone number was changed from {{ .OldPhone }} to {{ .Phone }}.
+
+Review your account security if this change was unexpected.
+
+If you didn’t make this change, contact your Case administrator immediately.
+
+Case · case.iatrogenic.app

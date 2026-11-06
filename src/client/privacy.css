@@ -1,0 +1,13 @@
+/* Approved notice-page typography, scoped to its served route. */
+.privacy-page { max-width:760px; margin:0 auto; padding:var(--sp-4); color:var(--ink); background:var(--ground); }
+.privacy-page header { display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3); padding:var(--sp-2) 0 var(--sp-4); border-bottom:1px solid var(--line); }
+.privacy-page .brand, .privacy-page .kicker { margin:0; color:var(--petrol-ink); font-size:var(--t-sm); font-weight:var(--w-semibold); letter-spacing:.08em; text-transform:uppercase; }
+.privacy-page .back { display:inline-flex; align-items:center; min-height:44px; padding:0 var(--sp-3); color:var(--petrol-ink); font-size:var(--t-sm); font-weight:var(--w-medium); }
+.privacy-page main { padding:var(--sp-5) 0; }
+.privacy-page h1 { margin:var(--sp-2) 0 var(--sp-3); font-size:var(--t-xl); }
+.privacy-page .lede { margin:0 0 var(--sp-5); color:var(--ink-muted); line-height:1.6; }
+.privacy-page section { padding:var(--sp-4) 0; border-top:1px solid var(--line); }
+.privacy-page section h2 { margin:0 0 var(--sp-3); font-size:var(--t-lg); }
+.privacy-page section p { line-height:1.6; margin:0 0 var(--sp-2); }
+.privacy-page section p:last-child { margin-bottom:0; }
+.privacy-page footer { border-top:1px solid var(--line); padding:var(--sp-4) 0; color:var(--ink-muted); font-size:var(--t-sm); }

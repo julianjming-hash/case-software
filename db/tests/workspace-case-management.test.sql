@@ -1,0 +1,93 @@
+-- CASE-373: real local Postgres scope, CAS, canonical identity and move compatibility assertions.
+\set QUIET on
+begin;
+create function pg_temp.ok(v boolean,label text) returns void language plpgsql as $$begin if v is distinct from true then raise exception 'workspace management: %',label;end if;end$$;
+create function pg_temp.refused(sql text,code text) returns void language plpgsql as $$begin
+ begin execute sql;exception when others then if sqlstate=code then return;end if;raise;end;
+ raise exception 'expected refusal %: %',code,sql;end$$;
+insert into auth.users(id,email) values ('0199a000-0000-7000-8000-00000000b001','manager@placement.test'),('0199a000-0000-7000-8000-00000000b002','destination@placement.test'),('0199a000-0000-7000-8000-00000000b003','runner@placement.test'),('0199a000-0000-7000-8000-00000000b004','editor@placement.test'),('0199a000-0000-7000-8000-00000000b005','outsider@placement.test'),('0199a000-0000-7000-8000-00000000b006','admin@placement.test');
+select case_api.ensure_profile('0199a000-0000-7000-8000-00000000b001','manager');
+select case_api.ensure_profile('0199a000-0000-7000-8000-00000000b002','destination');
+select case_api.ensure_profile('0199a000-0000-7000-8000-00000000b003','runner');
+select case_api.ensure_profile('0199a000-0000-7000-8000-00000000b004','editor');
+select case_api.ensure_profile('0199a000-0000-7000-8000-00000000b005','outsider');
+select case_api.ensure_profile('0199a000-0000-7000-8000-00000000b006','admin');
+insert into case_app.workspaces(id,slug,name) values('0199a000-0000-7000-8000-00000000b010','placement-home','Home'),('0199a000-0000-7000-8000-00000000b011','placement-other','Destination');
+insert into case_app.workspace_members(workspace_id,user_id,role) values('0199a000-0000-7000-8000-00000000b010','0199a000-0000-7000-8000-00000000b001','owner'),('0199a000-0000-7000-8000-00000000b011','0199a000-0000-7000-8000-00000000b001','author'),('0199a000-0000-7000-8000-00000000b011','0199a000-0000-7000-8000-00000000b002','owner'),('0199a000-0000-7000-8000-00000000b011','0199a000-0000-7000-8000-00000000b003','facilitator'),('0199a000-0000-7000-8000-00000000b011','0199a000-0000-7000-8000-00000000b004','author');
+insert into case_app.cases(id,workspace_id,owner_id,title) values('0199a000-0000-7000-8000-00000000b020','0199a000-0000-7000-8000-00000000b010','0199a000-0000-7000-8000-00000000b001','Canonical shared case'),('0199a000-0000-7000-8000-00000000b021','0199a000-0000-7000-8000-00000000b010','0199a000-0000-7000-8000-00000000b001','Private case');
+insert into case_app.case_versions(id,case_id,version_no,schema_version,document,content_sha256,published_by) select '0199a000-0000-7000-8000-00000000b030','0199a000-0000-7000-8000-00000000b020',1,1,d,sha256(convert_to(d::text,'UTF8')),'0199a000-0000-7000-8000-00000000b001' from (select '{"schema_version":1,"case_title":"Canonical shared case","start_beat_id":"a","beats":[{"id":"a","kind":"debrief"}],"decisions":[]}'::jsonb d)x;
+select pg_temp.ok((case_api.update_workspace_details('0199a000-0000-7000-8000-00000000b001','0199a000-0000-7000-8000-00000000b010',0,'Renamed home',false,null)->>'revision')='1','owner can rename');
+select pg_temp.ok((select slug='placement-home' from case_app.workspaces where id='0199a000-0000-7000-8000-00000000b010'),'rename preserves slug');
+select pg_temp.refused($q$select case_api.update_workspace_details('0199a000-0000-7000-8000-00000000b001','0199a000-0000-7000-8000-00000000b010',0,'Stale',false,null)$q$,'40001');
+select pg_temp.refused($q$select case_api.update_workspace_details('0199a000-0000-7000-8000-00000000b004','0199a000-0000-7000-8000-00000000b011',0,'Unauthorized',false,null)$q$,'42501');
+select pg_temp.refused($q$select case_api.update_workspace_details('0199a000-0000-7000-8000-00000000b005','0199a000-0000-7000-8000-00000000b010',1,'Unauthorized',false,null)$q$,'42501');
+select pg_temp.refused($q$select case_api.set_case_workspace_access('0199a000-0000-7000-8000-00000000b002','0199a000-0000-7000-8000-00000000b020','0199a000-0000-7000-8000-00000000b011','run',0,false,null)$q$,'42501');
+select case_api.set_case_workspace_access('0199a000-0000-7000-8000-00000000b001','0199a000-0000-7000-8000-00000000b020','0199a000-0000-7000-8000-00000000b011','run',0,false,null);
+select pg_temp.ok((case_api.case_workspace_access('0199a000-0000-7000-8000-00000000b003','0199a000-0000-7000-8000-00000000b020',false,null)->>'canManage')='false','shared runner receives a non-management inventory');
+select pg_temp.ok(case_app.grant_role('0199a000-0000-7000-8000-00000000b004','0199a000-0000-7000-8000-00000000b020')='facilitator','workspace edit capped by run share');
+select pg_temp.ok(case_app.authorize_case('0199a000-0000-7000-8000-00000000b003','0199a000-0000-7000-8000-00000000b020','P-11',false,null)='facilitator','destination runner can read canonical case');
+select pg_temp.refused($q$select case_app.authorize_case('0199a000-0000-7000-8000-00000000b003','0199a000-0000-7000-8000-00000000b020','P-14',false,null)$q$,'42501');
+select pg_temp.refused($q$select case_app.authorize('0199a000-0000-7000-8000-00000000b002','0199a000-0000-7000-8000-00000000b010','P-17',false,null)$q$,'42501');
+select pg_temp.refused($q$select case_app.authorize_case('0199a000-0000-7000-8000-00000000b002','0199a000-0000-7000-8000-00000000b021','P-11',false,null)$q$,'42501');
+select pg_temp.ok((select count(*)=1 from case_api.list_case_catalogue_current('0199a000-0000-7000-8000-00000000b003','0199a000-0000-7000-8000-00000000b011','title',false,null,null,null,24,0,null,false,false,null)),'destination catalogue includes canonical published case only');
+select pg_temp.ok((select grant_level='run' and member_role is null and scope='case' from case_api.get_access('0199a000-0000-7000-8000-00000000b003',null,'0199a000-0000-7000-8000-00000000b020',false,null)),'Worker case facts stay case scoped');
+select pg_temp.ok((select jsonb_array_length(grants)=1 and grants->0->>'level'='run' and grants->0->>'access_source'='workspace' and grants->0->>'source_workspace_name'='Destination' from case_api.get_me('0199a000-0000-7000-8000-00000000b003',100,null,'0199a000-0000-7000-8000-00000000b010',false,null)),'get_me supplies canonical home case grant for start');
+select pg_temp.ok(case_app.authorize_records('0199a000-0000-7000-8000-00000000b003','0199a000-0000-7000-8000-00000000b010','P-21',false,null)='facilitator','start preflight accepts workspace sharing');
+select pg_temp.ok(not case_app.record_visible('0199a000-0000-7000-8000-00000000b003',false,false,'0199a000-0000-7000-8000-00000000b001','0199a000-0000-7000-8000-00000000b020'),'workspace sharing does not expose another starter records');
+select case_api.set_case_workspace_access('0199a000-0000-7000-8000-00000000b001','0199a000-0000-7000-8000-00000000b020','0199a000-0000-7000-8000-00000000b011','edit',1,false,null);
+select pg_temp.ok(case_app.grant_role('0199a000-0000-7000-8000-00000000b004','0199a000-0000-7000-8000-00000000b020')='author','destination editor receives explicit edit');
+select pg_temp.ok(case_app.grant_role('0199a000-0000-7000-8000-00000000b003','0199a000-0000-7000-8000-00000000b020')='facilitator','destination run membership caps edit share');
+select pg_temp.ok(case_app.authorize_case('0199a000-0000-7000-8000-00000000b004','0199a000-0000-7000-8000-00000000b020','P-14',false,null)='author','shared editor can author canonical draft');
+select pg_temp.refused($q$select case_app.authorize_case('0199a000-0000-7000-8000-00000000b004','0199a000-0000-7000-8000-00000000b020','P-15',false,null)$q$,'42501');
+select pg_temp.refused($q$select case_api.move_case_workspace('0199a000-0000-7000-8000-00000000b001','0199a000-0000-7000-8000-00000000b020','0199a000-0000-7000-8000-00000000b011',2,false,null)$q$,'42501');
+insert into case_app.case_grants(id,case_id,workspace_id,user_id,level) values('0199a000-0000-7000-8000-00000000b040','0199a000-0000-7000-8000-00000000b020','0199a000-0000-7000-8000-00000000b010','0199a000-0000-7000-8000-00000000b005','edit');
+insert into case_app.invitations(id,workspace_id,case_id,level,email,ref_hash,invited_by,inviter_kind,expires_at) values('0199a000-0000-7000-8000-00000000b041','0199a000-0000-7000-8000-00000000b010','0199a000-0000-7000-8000-00000000b020','run','invite@placement.test',sha256('stable invitation reference'::bytea),'0199a000-0000-7000-8000-00000000b001','owner',clock_timestamp()+interval '30 days');
+select case_api.create_session('0199a000-0000-7000-8000-00000000b050','0199a000-0000-7000-8000-00000000b030','0199a000-0000-7000-8000-00000000b010','0199a000-0000-7000-8000-00000000b003','2M7PQR',interval '12 hours',false,null);
+update case_app.workspace_members set role='owner' where workspace_id='0199a000-0000-7000-8000-00000000b011' and user_id='0199a000-0000-7000-8000-00000000b001';
+select pg_temp.refused($q$select case_api.move_case_workspace('0199a000-0000-7000-8000-00000000b001','0199a000-0000-7000-8000-00000000b020','0199a000-0000-7000-8000-00000000b011',2,false,null)$q$,'55006');
+update case_app.sessions set started_at=created_at where id='0199a000-0000-7000-8000-00000000b050';
+select case_api.end_session('0199a000-0000-7000-8000-00000000b050',0,0);
+create temp table placement_media as select case_api.builder_create_case_asset('0199a000-0000-7000-8000-00000000b020','0199a000-0000-7000-8000-00000000b001',false,null,
+ jsonb_build_object('bytes',4000,'width',1200,'height',800,'sha256',repeat('a',64)),jsonb_build_object('bytes',4000,'width',1200,'height',800,'sha256',repeat('b',64)), '{"alt_text":"Local fixture","attested":true}',null) as asset;
+select case_api.move_case_workspace('0199a000-0000-7000-8000-00000000b001','0199a000-0000-7000-8000-00000000b020','0199a000-0000-7000-8000-00000000b011',2,false,null);
+
+-- New-home sessions still export the original version's pinned image, whose storage ownership did not move.
+insert into case_app.case_version_assets(case_version_id,asset_id) select '0199a000-0000-7000-8000-00000000b030',(asset->>'asset_id')::uuid from placement_media;
+select case_api.create_session('0199a000-0000-7000-8000-00000000b051','0199a000-0000-7000-8000-00000000b030','0199a000-0000-7000-8000-00000000b011','0199a000-0000-7000-8000-00000000b003','2M7PRS',interval '12 hours',false,null);
+select pg_temp.ok((select count(*)=1 from case_api.session_media_rendition('0199a000-0000-7000-8000-00000000b003','0199a000-0000-7000-8000-00000000b051',(select (asset->>'asset_id')::uuid from placement_media),false,null)),'new-home session retains its old-storage pinned media');
+select pg_temp.refused($q$select * from case_api.session_media_rendition('0199a000-0000-7000-8000-00000000b005','0199a000-0000-7000-8000-00000000b051',(select (asset->>'asset_id')::uuid from placement_media),false,null)$q$,'42501');
+select case_api.end_session('0199a000-0000-7000-8000-00000000b051',0,0);
+-- CASE-375 owner ruling: own historical records survive a home move while current case access remains.
+select pg_temp.ok(case_api.read_session_portfolio('0199a000-0000-7000-8000-00000000b003','0199a000-0000-7000-8000-00000000b050',0,null,false,null)->'session'->>'workspaceId'='0199a000-0000-7000-8000-00000000b010','starter reads own original-workspace record through new home membership');
+select pg_temp.ok((case_api.personal_record_workspace_access('0199a000-0000-7000-8000-00000000b003','0199a000-0000-7000-8000-00000000b010')->>'ownOnly')::boolean,'past workspace admission stays own only');
+select pg_temp.ok(case_api.personal_record_workspaces('0199a000-0000-7000-8000-00000000b003',null)->'workspaces'->0->>'id'='0199a000-0000-7000-8000-00000000b010','past workspace remains discoverable without membership');
+update case_app.workspace_policies set managers_see_records=true where workspace_id in ('0199a000-0000-7000-8000-00000000b010','0199a000-0000-7000-8000-00000000b011');
+select pg_temp.refused($q$select case_api.read_session_portfolio('0199a000-0000-7000-8000-00000000b002','0199a000-0000-7000-8000-00000000b050',0,null,false,null)$q$,'42501');
+select pg_temp.refused($q$select case_api.session_feedback_summary('0199a000-0000-7000-8000-00000000b002','0199a000-0000-7000-8000-00000000b050',false,null)$q$,'42501');
+select pg_temp.refused($q$select case_api.personal_record_workspace_access('0199a000-0000-7000-8000-00000000b002','0199a000-0000-7000-8000-00000000b010')$q$,'42501');
+select pg_temp.ok((case_api.session_feedback_summary('0199a000-0000-7000-8000-00000000b003','0199a000-0000-7000-8000-00000000b050',false,null)->'session'->>'own')::boolean,'starter retains own feedback without widening destination management');
+delete from case_app.workspace_members where workspace_id='0199a000-0000-7000-8000-00000000b011' and user_id='0199a000-0000-7000-8000-00000000b003';
+select pg_temp.refused($q$select case_api.read_session_portfolio('0199a000-0000-7000-8000-00000000b003','0199a000-0000-7000-8000-00000000b050',0,null,false,null)$q$,'42501');
+select pg_temp.ok(jsonb_array_length(case_api.personal_record_workspaces('0199a000-0000-7000-8000-00000000b003',null)->'workspaces')=0,'case-access loss removes historical discovery');
+insert into case_app.workspace_members(workspace_id,user_id,role) values('0199a000-0000-7000-8000-00000000b011','0199a000-0000-7000-8000-00000000b003','facilitator');
+select pg_temp.ok((select workspace_id='0199a000-0000-7000-8000-00000000b011' and placement_revision=3 from case_app.cases where id='0199a000-0000-7000-8000-00000000b020'),'move changes home once');
+select pg_temp.ok((select workspace_id='0199a000-0000-7000-8000-00000000b010' from case_app.sessions where id='0199a000-0000-7000-8000-00000000b050'),'historical session remains in original workspace');
+select pg_temp.ok((select case_id='0199a000-0000-7000-8000-00000000b020' and version_no=1 from case_app.case_versions where id='0199a000-0000-7000-8000-00000000b030'),'published ID and history preserved');
+select pg_temp.ok((select workspace_id='0199a000-0000-7000-8000-00000000b011' and revoked_at is null from case_app.case_grants where id='0199a000-0000-7000-8000-00000000b040'),'individual grant ID preserved and binding follows home');
+select pg_temp.ok((select workspace_id='0199a000-0000-7000-8000-00000000b011' and ref_hash=sha256('stable invitation reference'::bytea) and status='pending' from case_app.invitations where id='0199a000-0000-7000-8000-00000000b041'),'pending invitation link and lifetime preserved');
+select pg_temp.ok((select count(*)=0 from case_app.case_workspace_access where case_id='0199a000-0000-7000-8000-00000000b020' and workspace_id='0199a000-0000-7000-8000-00000000b011'),'new home is not duplicated as extra share');
+select pg_temp.ok(case_app.grant_role('0199a000-0000-7000-8000-00000000b005','0199a000-0000-7000-8000-00000000b020')='author','individual edit remains after move');
+select pg_temp.ok((select count(*)=0 from case_api.list_case_catalogue_current('0199a000-0000-7000-8000-00000000b001','0199a000-0000-7000-8000-00000000b010','title',false,null,null,null,24,0,null,false,false,null)),'old home stops listing moved case');
+select pg_temp.ok((select count(*)=2 from case_app.workspace_audit where action='case_workspace_move' and target_id='0199a000-0000-7000-8000-00000000b020'),'both workspaces receive move audit');
+select pg_temp.ok(not has_table_privilege('authenticated','case_app.case_workspace_access','SELECT'),'new relation stays private');
+select pg_temp.ok(not has_function_privilege('anon','case_api.personal_record_workspaces(uuid,uuid)','EXECUTE'),'historical inventory is service only');
+select pg_temp.ok(not has_function_privilege('authenticated','case_api.personal_record_workspace_access(uuid,uuid)','EXECUTE'),'historical scope is service only');
+select pg_temp.ok(not has_function_privilege('anon','case_api.move_case_workspace(uuid,uuid,uuid,bigint,boolean,text)','EXECUTE'),'move RPC not public');
+
+select pg_temp.ok(case_app.case_sees_asset('0199a000-0000-7000-8000-00000000b005','author','0199a000-0000-7000-8000-00000000b020',(select (asset->>'asset_id')::uuid from placement_media)),'moved case retains access to its original pinned image');
+select pg_temp.ok((select count(*)=1 from case_api.builder_case_asset_rendition('0199a000-0000-7000-8000-00000000b020',(select (asset->>'asset_id')::uuid from placement_media),'display','0199a000-0000-7000-8000-00000000b005',false,null)),'original rendition remains readable after move');
+select pg_temp.ok(jsonb_array_length(case_api.builder_list_case_assets('0199a000-0000-7000-8000-00000000b020','0199a000-0000-7000-8000-00000000b005',false,null,null))=1,'moved case lists its linked image without broadening old workspace access');
+select pg_temp.ok((case_api.update_workspace_details('0199a000-0000-7000-8000-00000000b006','0199a000-0000-7000-8000-00000000b011',0,'Admin renamed',true,'admin@placement.test')->>'revision')='1','global admin can rename without membership');
+select case_api.move_case_workspace('0199a000-0000-7000-8000-00000000b006','0199a000-0000-7000-8000-00000000b020','0199a000-0000-7000-8000-00000000b010',3,true,'admin@placement.test');
+select pg_temp.ok((select workspace_id='0199a000-0000-7000-8000-00000000b010' from case_app.cases where id='0199a000-0000-7000-8000-00000000b020'),'global admin can move without membership');
+rollback;

@@ -1,0 +1,11 @@
+You’re invited to Case
+
+You have been invited to create a Case account.
+
+Continue using the link below.
+
+Accept invitation: {{ .ConfirmationURL }}
+
+If you didn’t request this email, you can ignore it. Never share a verification code. If the code or link has expired, request a new one.
+
+Case · case.iatrogenic.app

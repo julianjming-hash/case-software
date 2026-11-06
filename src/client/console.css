@@ -1,0 +1,494 @@
+/* Facilitator room: the orientation band, phase detail and fixed action dock. */
+main.facilitator-console { max-width: 1360px; width: min(100% - 32px, 1360px); margin: var(--sp-4) auto; padding: var(--sp-4); }
+.facilitator-console .case-catalog { min-width: 0; }
+.facilitator-console .auth-form [hidden] { display: none; }
+.facilitator-console:not(.room-active) .auth-form:not(.is-signed-in) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-3); max-width: min(100%, 560px); }
+.facilitator-console:not(.room-active) .auth-form:not(.is-signed-in) > label,
+.facilitator-console:not(.room-active) .auth-form:not(.is-signed-in) > .auth-status { grid-column: 1 / -1; }
+.facilitator-console:not(.room-active) .auth-form:not(.is-signed-in) > label > input[type="email"],
+.facilitator-console:not(.room-active) .auth-form:not(.is-signed-in) > label > input[type="text"] { display: block; width: 100%; min-height: 44px; margin-top: var(--sp-2); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); }
+.facilitator-console:not(.room-active) .auth-form:not(.is-signed-in) > .btn { width: 100%; }
+.facilitator-console:not(.room-active) .auth-form:not(.is-signed-in) > .auth-status { margin: 0; color: var(--ink-muted); }
+.facilitator-console.room-active > .case-catalog-eyebrow,
+.facilitator-console.room-active > .case-catalog-heading,
+.facilitator-console.room-active .case-catalog-status { display: none; }
+.facilitator-console.room-active .auth-form { display: flex; justify-content: flex-end; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-3); }
+html:has(.console-room) { scroll-padding-bottom: 180px; }
+.console-room button { scroll-margin-bottom: 160px; }
+/* card 36b: one bar line (cover, case title, audio chip, console sounds, connection), then the beat line */
+.console-bar { display: flex; align-items: center; gap: var(--sp-3); min-width: 0; }
+.console-cover-slot { display: inline-flex; flex: none; width: 32px; height: 32px; }
+.console-cover-slot[hidden] { display: none; }
+.console-cover { flex: none; width: 32px; height: 32px; border-radius: var(--radius-xs); }
+/* the lobby screen toggle (CASE-176): pressed while the projector shows the join screen */
+.console-lobby-toggle { flex: none; }
+.console-lobby-toggle[aria-pressed="true"] { border-color: var(--petrol); background: var(--petrol-tint); color: var(--petrol-ink); }
+.console-case-title { flex: 1; min-width: 0; font-weight: var(--w-semibold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.console-bar .btn { min-height: 44px; flex: none; }
+.console-audio-chip::before { content: "♪" / ""; }
+.console-audio-chip { gap: var(--sp-2); padding: var(--sp-1) var(--sp-3); border-color: var(--field-line); background: var(--surface); color: var(--ink); font-size: var(--t-xs); }
+.console-connection { flex: none; white-space: nowrap; }
+.console-sound-line { display: flex; flex-wrap: wrap; gap: var(--sp-1) var(--sp-4); }
+.console-sound-line .console-sound-status:empty { display: none; }
+/* phase and manual chips: tinted with a leading tessera, no capsule (CASE-163) */
+.console-phase-pill, .console-manual-pill { display: inline-flex; align-items: center; gap: 6px; border-radius: var(--radius-chip); padding: 3px 8px 3px 6px; font-size: var(--t-sm); font-weight: var(--w-semibold); background: var(--ph-reveal-tint); color: var(--ph-reveal-ink); }
+.console-phase-pill::before, .console-manual-pill::before { content: ""; flex: none; width: var(--tessera); height: var(--tessera); border-radius: 2px; background: var(--ph-reveal); }
+.console-manual-pill { background: var(--manual-tint); color: var(--manual-ink); }
+.console-projector-pill { display: inline-flex; align-items: center; justify-self: start; margin: 0; border-radius: var(--radius-chip); padding: 3px 8px; font-size: var(--t-sm); font-weight: var(--w-semibold); background: var(--petrol-tint); color: var(--petrol-ink); }
+/* Card 37: options as phones show them (the shared .opt-tile, mark and order), private callouts in the violet zone */
+.console-option-list { display: grid; gap: var(--sp-2); margin: 0; padding: 0; list-style: none; }
+.console-col .console-option-list { padding: 0; }
+.console-option { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-3); min-height: 52px; padding: var(--sp-2) var(--sp-3); }
+.console-option .lbl { flex: 1; min-width: 0; overflow-wrap: anywhere; line-height: 1.35; font-weight: var(--w-medium); }
+.console-option-count { max-width: 100%; min-width: 0; font-weight: var(--w-semibold); font-variant-numeric: tabular-nums; white-space: normal; overflow-wrap: anywhere; }
+.console-option.locked { background: var(--sunken); border-style: dashed; color: var(--ink-muted); }
+.console-option.locked svg.mark { opacity: .45; }
+.console-option .tag { flex: none; font-size: var(--t-xs); font-weight: var(--w-semibold); }
+.console-callout { margin-top: var(--sp-2); padding: var(--sp-3); }
+.console-route-marks { display: inline-flex; align-items: center; gap: var(--sp-1); }
+.console-lobby-arrivals { margin: 0; padding-inline-start: var(--sp-5); }
+.console-manual-pill::before { background: var(--manual); }
+.console-connection, .console-timer { font-size: var(--t-sm); }
+.console-sound-status, .console-sound-hint { font-size: var(--t-sm); }
+.console-sound-hint { color: var(--nav-ink); }
+/* tabs: a hairline under the row, the selected tab marked by ink and a petrol bar (concentric top radii) */
+.console-zone-label::before { content: ""; flex: none; width: 12px; height: 12px; border-radius: 2px; background-color: var(--tc, var(--ink-muted)); background-image: linear-gradient(var(--surface) 0 0), linear-gradient(var(--surface) 0 0); background-position: center; background-size: 12px 2px, 2px 12px; background-repeat: no-repeat; }
+.console-only-you .console-zone-label { color: var(--private-ink); --tc: var(--private); }
+.console-shared-slot { display: contents; }
+.console-scene { display: grid; gap: var(--sp-3); }
+.console-scene h3 { font-size: var(--t-xl); margin: 0; }
+.console-scene p { margin: 0; }
+.console-tile h2 { font-size: var(--t-sm); }
+.console-scene-text { max-width: 70ch; }
+.console-scene .console-scene-text > * + * { margin-block-start: var(--sp-3); }
+.console-tile { background: var(--sunken); border-radius: var(--radius-sm); padding: var(--sp-3); }
+.console-tile ul, .console-col ul { margin: 0; padding-inline-start: var(--sp-4); }
+/* the phase card is a plain card; its phase colour appears as a tessera before the heading, beside the words (CASE-163) */
+.console-phase { --ph: var(--ph-reveal); }
+.console-phase[data-phase="responses_open"] { --ph: var(--ph-open); }
+.console-phase[data-phase="responses_locked"], .console-phase[data-phase="path_selected"] { --ph: var(--ph-locked); }
+.console-phase[data-phase="consequence_revealed"], .console-phase[data-phase="terminal_teaching"] { --ph: var(--ph-consequence); }
+.console-phase[data-phase="discussion_paused"], .console-phase[data-phase="debrief"] { --ph: var(--ph-paused); }
+.console-phase > h2::before { content: ""; display: inline-block; width: var(--tessera); height: var(--tessera); margin-right: var(--sp-2); vertical-align: .1em; border-radius: 2px; background: var(--ph); }
+.console-code { font-size: var(--t-xl); font-weight: var(--w-semibold); letter-spacing: .06em; }
+.console-person { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-3); border-top: 1px solid var(--line); padding-top: var(--sp-3); }
+.console-route { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2) var(--sp-3); padding: var(--sp-3) 0; }
+.console-person-identity { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-2); }
+.console-person-identity small { color: var(--ink-muted); }
+.console-route p { flex-basis: 100%; margin: 0; }
+.console-presentation { display: grid; gap: var(--sp-3); }
+.console-presentation-controls .btn, .console-presentation-rows .btn { min-height: 44px; }
+.console-presentation-unavailable { display: flex; align-items: center; justify-content: center; min-height: 44px; color: var(--ink); }
+.console-presentation-rows { display: grid; gap: var(--sp-2); margin: 0; padding-inline-start: var(--sp-4); }
+.console-presentation-rows .btn { width: 100%; justify-content: flex-start; text-align: start; }
+.console-presentation-rows [aria-current="step"] { border-color: var(--petrol); background: var(--petrol-tint); color: var(--petrol-ink); }
+.console-replay-notice { margin: 0; color: var(--ph-paused-ink); font-weight: var(--w-semibold); }
+.console-presentation-help { margin: 0; color: var(--ink); font-size: var(--t-sm); }
+/* private facilitator material: the violet zone with tesserae-marked labels. No rail, no flood (CASE-163). */
+.console-private { display: grid; gap: var(--sp-2); padding: var(--sp-4); border-radius: var(--radius); background: var(--private-tint); color: var(--ink); }
+.console-private p { margin: 0; overflow-wrap: anywhere; }
+.console-private .eyebrow { display: flex; align-items: center; gap: var(--sp-2); color: var(--private-ink); }
+.console-private .eyebrow::before { content: ""; flex: none; width: var(--tessera); height: var(--tessera); border-radius: 2px; background: var(--private); }
+.console-secondary { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.console-status { min-height: 1.5em; color: var(--ink-muted); }
+.console-action-dock { position: fixed; z-index: var(--z-dock); inset: auto 0 0; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(2.8em, auto) auto minmax(80px, auto); justify-items: center; gap: var(--sp-1); min-height: 84px; padding: var(--sp-3) var(--sp-4); border-top: 1px solid var(--nav-line); background: var(--nav-bg); box-shadow: var(--shadow-2); }
+.console-primary { grid-row: 3; width: min(320px, 100%); height: 100%; font-size: var(--t-md); }
+/* CASE-249 G: the dock's other controls have their own row, so Undo and the main action never move when one appears. */
+.console-dock-extra { grid-row: 2; grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-2); max-width: 100%; }
+.console-dock-extra:empty { display: none; }
+.console-action-dock > span { grid-row: 1; max-width: 100%; text-align: center; overflow-wrap: anywhere; font-size: var(--t-sm); line-height: 1.4; }
+.console-primary:disabled { background: var(--sunken); color: var(--ink-muted); border: 1px solid var(--field-line); }
+.console-room .btn.danger { background: transparent; border: 1px solid var(--alert); color: var(--alert-ink); }
+/* below 1100 px the columns stack, Room sees first; the rule turns horizontal */
+@media (max-width: 820px) {
+  .console-bar { flex-wrap: wrap; }
+}
+@media (max-width: 520px) {
+  .facilitator-console:not(.room-active) .auth-form:not(.is-signed-in) { grid-template-columns: minmax(0, 1fr); }
+}
+@media (forced-colors: active) {
+  .console-orientation, .console-phase-pill, .console-manual-pill, .console-projector-pill, .console-private, .console-card, .console-col { border: 1px solid CanvasText; }
+  .console-phase-pill::before, .console-manual-pill::before, .console-private .eyebrow::before, .console-phase > h2::before, .console-phase .console-card-head h2::before { background: CanvasText; }
+  .console-zone-label::before { background: CanvasText; }
+}
+/* Card 37: no entrance motion on the console. Its working surface is reconciled in place, so nothing replays. */
+
+.ranked-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); align-items: end; gap: var(--sp-2); width: 100%; min-width: 0; }
+.ranked-controls label { display: grid; gap: var(--sp-1); min-width: 0; font-weight: var(--w-medium); overflow-wrap: anywhere; }
+.ranked-controls select { width: 100%; min-width: 0; min-height: 44px; padding: var(--sp-2); background: var(--surface); color: var(--ink); border: 1px solid var(--field-line); border-radius: var(--radius-sm); font: inherit; overflow-wrap: anywhere; }
+.ranked-controls p { width: 100%; margin: 0; }
+.console-room table { width: 100%; max-width: 100%; table-layout: fixed; border-collapse: collapse; }
+.console-room th, .console-room td { max-width: 100%; padding: var(--sp-2); text-align: start; vertical-align: top; overflow-wrap: anywhere; }
+.console-room .console-route { min-width: 0; }
+.console-room .console-route-pick { max-width: 100%; line-height: var(--lh); }
+/* Card 38: the Rejoin room panel tops /cases. */
+.console-rejoin { display: grid; gap: var(--sp-3); justify-items: start; margin-bottom: var(--sp-4); }
+.console-rejoin > h2 { margin: 0; }
+
+.console-projector-options { display: flex; flex-wrap: wrap; align-items: start; gap: var(--sp-3); width: 100%; min-width: 0; }
+.console-projector-options > p, .console-projector-options > label { flex-basis: 100%; margin: 0; min-width: 0; }
+.console-projector-options input { display: block; width: 100%; max-width: 320px; min-height: 44px; margin-top: var(--sp-2); }
+
+/* Local route previews and the authority teaching-action dock. */
+.console-route-choices { display: grid; gap: var(--sp-3); }
+.console-route { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; align-items: stretch; gap: var(--sp-2); border-bottom: 1px solid var(--field-line); }
+.console-route-pick { min-width: 0; overflow-wrap: anywhere; display: flex; flex-wrap: wrap; justify-content: flex-start; gap: var(--sp-2); min-height: 44px; padding: var(--sp-3); text-align: left; }
+.console-route-pick[aria-checked="true"] { border-color: var(--petrol); box-shadow: inset 0 0 0 1px var(--petrol); }
+.console-route-state { margin-inline-start: auto; font-size: var(--t-sm); }
+/* CASE-249 F: the route choice is one glyph, a square that takes a check when chosen (inner radius inside the row's). */
+.console-route-glyph { flex: none; display: inline-grid; place-items: center; width: 24px; height: 24px; margin-inline-start: auto; box-sizing: border-box; border: 2px solid var(--petrol); border-radius: var(--radius-xs); font-size: var(--t-sm); font-weight: var(--w-semibold); line-height: 1; }
+.console-route-glyph.is-chosen { color: var(--on-petrol); background: var(--petrol); }
+.console-route-detail summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); padding-block: var(--sp-2); }
+.console-route-detail summary:hover .disclosure-action { text-decoration: underline; text-underline-offset: .2em; }
+.console-live-responses ol { display: grid; gap: var(--sp-2); padding-inline-start: var(--sp-4); }
+.console-live-responses p { margin: 0; overflow-wrap: anywhere; }
+.console-action-dock { grid-template-columns: minmax(0, 1fr) minmax(0, 320px) minmax(0, 1fr); }
+.console-primary { grid-column: 2; }
+.console-action-dock > span { grid-column: 1 / -1; }
+.console-undo { grid-row: 3; grid-column: 1; justify-self: start; min-height: 44px; }
+.console-primary-route { display: inline-flex; justify-content: center; align-items: center; gap: var(--sp-2); border-color: var(--field-line); }
+/* CASE-255: Room sound has the dock's third slot, opposite Undo; the main action keeps the middle. */
+.console-room-sound { grid-row: 3; grid-column: 3; justify-self: end; align-self: center; display: inline-flex; align-items: center; gap: var(--sp-2); min-height: 44px; }
+.console-room-sound svg.ic { width: 20px; height: 20px; stroke-width: 2; }
+.console-room-sound[aria-pressed="false"] { color: var(--ink-muted); }
+@media (max-width: 40rem) {
+  .console-action-dock { grid-template-columns: 7rem minmax(0, 1fr) 44px; padding-inline: var(--sp-3); }
+  .console-primary { width: 100%; }
+  .console-undo { width: 100%; height: 100%; min-width: 0; white-space: normal; overflow-wrap: anywhere; font-size: var(--t-sm); }
+  .console-room-sound { justify-self: stretch; justify-content: center; min-width: 44px; padding-inline: 0; }
+  .console-room-sound-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+}
+
+
+.facilitator-console .auth-form.is-signed-in { display:none; }
+
+.console-breadcrumbs { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-2); flex: 1; min-width: 0; overflow-wrap: anywhere; font-size: var(--t-sm); }
+.console-breadcrumbs > a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; }
+.console-breadcrumbs > span::before { content: '/'; margin-right: var(--sp-2); color: var(--ink-muted); }
+@media (max-width: 639px) { .console-bar { flex-wrap: wrap; } .console-breadcrumbs { flex-basis: calc(100% - 100px); } }
+
+/* Run preview (CASE-226, rebuilt by CASE-249): the projector and one phone side by side at their real target sizes,
+   scaled, with the controls and private notes below them (Julian, 2026-10-14), under one control row in three groups.
+   Narrower, the phone takes the projector's place on demand. It opens from the Builder and from the library, so its
+   layout ships with the console styles every page has. */
+.run-preview { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-3); padding: var(--sp-3) var(--sp-4) 0; }
+.run-preview [hidden] { display: none; }
+.run-preview-head { display: grid; gap: var(--sp-2); }
+.run-preview-titles { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-1) var(--sp-3); }
+.run-preview-titles h1 { margin: 0; font-size: var(--t-lg); overflow-wrap: anywhere; }
+.run-preview-status { margin: 0; color: var(--ink-muted); font-size: var(--t-sm); }
+.run-preview-tools { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-5); }
+.run-preview-group, .run-preview-field, .run-preview-stepper { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); min-width: 0; }
+.run-preview-field { font-size: var(--t-sm); color: var(--ink-muted); }
+.run-preview-restart { margin-inline-start: auto; }
+.run-preview .btn { min-height: 32px; padding: 0 var(--sp-3); font-size: var(--t-sm); }
+.run-preview .console-route-pick { min-height: 44px; } /* a route row keeps the console's 44 px target (CASE-251) */
+.run-preview .shared-select-trigger { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: start; line-height: 30px; gap: var(--sp-2); width: clamp(12rem, 24vw, 22rem); min-width: 0; max-width: min(22rem, 100%); min-height: 32px; padding: 0 var(--sp-2); border-radius: var(--radius-sm); font-size: var(--t-sm); color: var(--ink); }
+.run-preview .shared-select-trigger::after { content: none; }
+/* CASE-249: changing stage labels or the current-stage shortcut must not resize the toolbar and dock. */
+.run-preview .run-preview-editor-jump[hidden] { display: inline-flex; visibility: hidden; pointer-events: none; }
+.run-preview-options [role="option"] { min-height: 32px; padding: 4px 10px; font-size: var(--t-sm); }
+.run-preview-stepper > .btn { width: 32px; padding: 0; }
+.run-preview-count { min-width: 6.5em; text-align: center; font-size: var(--t-sm); font-variant-numeric: tabular-nums; }
+.run-preview-segments { display: inline-flex; padding: 2px; gap: 2px; border: 1px solid var(--field-line); border-radius: var(--radius-sm); background: var(--surface); }
+.run-preview-segments > .btn { min-height: 26px; border: 0; border-radius: var(--radius-chip); background: transparent; }
+.run-preview-segments > [aria-pressed="true"] { background: var(--petrol-tint); color: var(--petrol-ink); }
+.run-preview-short { display: none; }
+@media (max-width: 74.9375rem) { .run-preview-long { display: none; } .run-preview-short { display: inline; } }
+@media (max-width: 37.5rem) { .run-preview-tools > :not(.run-preview-restart) { flex-basis: 100%; } .run-preview-restart { margin-inline-start: 0; } }
+.run-preview-body { display: grid; gap: var(--sp-3) var(--sp-4); grid-template-columns: minmax(0, 1fr); align-items: start; }
+.run-preview[data-layout="side"] .run-preview-body { grid-template-columns: var(--run-stage) var(--run-phone); grid-template-areas: "stage phone" "chips chips" "rail notes"; }
+.run-preview[data-layout="side"] .run-preview-stage { grid-area: stage; } .run-preview[data-layout="side"] .run-preview-phones { grid-area: phone; }
+.run-preview[data-layout="side"] .run-preview-learners { grid-area: chips; } .run-preview[data-layout="side"] .run-preview-rail { grid-area: rail; } .run-preview[data-layout="side"] .run-preview-notes { grid-area: notes; }
+.run-preview-stage, .run-preview-phones { display: grid; gap: var(--sp-2); justify-items: start; min-width: 0; }
+.run-preview-frame { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.run-preview-frame iframe { display: block; border: 0; }
+.run-preview-phone { border-radius: var(--radius); }
+.run-preview-learners { display: flex; gap: var(--sp-2); min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.run-preview-chip { flex: none; display: inline-flex; align-items: baseline; gap: var(--sp-2); border: 1px solid var(--line); }
+.run-preview-chip small { font-size: var(--t-xs); color: var(--ink-muted); }
+.run-preview-chip[aria-pressed="true"] { border-color: var(--petrol); background: var(--petrol-tint); color: var(--petrol-ink); }
+.run-preview-rail { display: grid; gap: var(--sp-3); align-content: start; min-width: 0; font-size: var(--t-sm); }
+.run-preview-rail :is(p, li, dd) { font-size: var(--t-sm); }
+.run-preview-rail h2 { margin: 0; font-size: var(--t-md); }
+.run-preview-rail .console-col { display: grid; gap: var(--sp-3); min-width: 0; } .run-preview-rail .console-col > .btn { justify-self: start; }
+.run-preview-phase { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1) var(--sp-3); }
+.run-preview-phase h2 { padding: 2px var(--sp-2); border-radius: var(--radius-chip); background: var(--quiet); }
+.run-preview-phase[data-tone="open"] h2 { background: var(--ph-open-tint); color: var(--ph-open-ink); }
+.run-preview-phase[data-tone="locked"] h2 { background: var(--ph-locked-tint); color: var(--ph-locked-ink); }
+.run-preview-phase p { margin: 0; color: var(--ink-muted); }
+.run-preview-replay { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-inline-start: auto; }
+.run-preview-done, .run-preview-phase .run-preview-done { margin: 0; color: var(--ok-ink); font-weight: var(--w-semibold); }
+.run-preview-actions-head { margin: 0; font-size: var(--t-xs); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--ink-muted); }
+.run-preview-actions { display: grid; gap: 0; padding-top: var(--sp-1); border-top: 1px solid var(--line); }
+.run-preview-actions > .btn { display: grid; justify-content: start; justify-items: start; height: auto; min-height: 44px; padding: var(--sp-1) 2px; border: 0; border-radius: 0; background: transparent; color: var(--ink); text-align: start; }
+.run-preview-actions > .btn small { font-size: var(--t-sm); font-weight: var(--w-regular); color: var(--ink-muted); }
+.run-preview-actions > [data-action="void_round"] { color: var(--alert-ink); }
+.run-preview-actions > p { margin: var(--sp-2) 0 0; color: var(--ink-muted); }
+.run-preview-notes { display: grid; gap: var(--sp-1); min-width: 0; padding: var(--sp-2) var(--sp-3) var(--sp-3); border-radius: var(--radius); background: var(--private-tint); }
+.run-preview-notes-head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); }
+.run-preview-notes-head h2 { margin: 0; font-size: var(--t-xs); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--private-ink); }
+.run-preview-notes-head .btn { min-height: 32px; padding: 0 var(--sp-2); background: transparent; color: var(--private-ink); }
+.run-preview-notes .console-private { padding: 0; font-size: var(--t-sm); }
+/* Folded (R5a): the notes' first two lines; the eyebrows are the heading's, so they wait for Show all. */
+.run-preview-notes .console-private[data-folded] { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; color: var(--ink-muted); }
+.run-preview-notes .console-private[data-folded] .eyebrow { display: none; }
+/* CASE-249 G: the dock is anchored to the window's foot under the controls, with a fixed slot for Undo, so the main
+   action keeps its place as labels, counts and Undo come and go. The page keeps room for it. */
+.run-preview { padding-bottom: 7.5rem; }
+.run-preview-dock { position: fixed; bottom: 0; left: var(--sp-4); right: var(--sp-4); z-index: var(--z-raised); padding-block: var(--sp-2) var(--sp-3); border-top: 1px solid var(--line); background: var(--ground); }
+.run-preview[data-layout="side"] .run-preview-dock { right: auto; width: var(--run-stage); }
+/* Shown inline in the Builder, the frame's foot can sit below the page's fold: there the dock rides in its column. */
+.run-preview[data-inline] { padding-bottom: 0; } .run-preview[data-inline] .run-preview-dock { position: sticky; z-index: var(--z-raised); width: auto; }
+.run-preview-rail .console-action-dock { position: static; display: grid; grid-template-columns: minmax(0, 9rem) minmax(0, 1fr); grid-template-rows: auto auto minmax(44px, auto); gap: var(--sp-2); min-height: 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
+.run-preview-rail .console-action-dock > span { grid-row: 1; grid-column: 1 / -1; text-align: start; }
+.run-preview-rail .console-undo { grid-row: 3; grid-column: 1; width: 100%; min-height: 44px; }
+.run-preview-rail .console-primary { grid-row: 3; grid-column: 2; width: 100%; min-height: 44px; }
+.run-preview-blocked { margin: 0; padding: var(--sp-6) var(--sp-4); max-width: 44rem; font-size: var(--t-md); line-height: var(--lh); border: 1px dashed var(--line); border-radius: var(--radius); color: var(--ink); background: var(--surface); }
+/* The Run preview shown inline when pop-ups are blocked: in the Builder and in the library (CASE-226). */
+.builder-inline-preview { max-width: calc((100dvh - var(--header-h) - 230px) * 16 / 9); margin: var(--sp-4) auto 0; border: 1px solid var(--private); border-radius: var(--radius); background: var(--private-tint); }
+.builder-inline-preview-head { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; padding: var(--sp-2) var(--sp-3); color: var(--private-ink); font-size: var(--t-sm); }
+.builder-inline-preview-head p { flex: 1; margin: 0; min-width: 12rem; }
+.builder-inline-preview-frame { display: block; width: 100%; height: min(80dvh, 54rem); border: 0; border-top: 1px solid var(--private); background: var(--surface); }
+/* CASE-249: the in-page confirmation (End room, Restart) and the keyboard sheet, shared by the Builder, the Run preview
+   and the live console. The confirming button is the system's red destructive button. */
+dialog.case-confirm, dialog.case-keys { box-sizing: border-box; width: min(30rem, calc(100vw - 2 * var(--sp-4))); padding: var(--sp-5); border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); background: var(--surface); box-shadow: var(--shadow-2); }
+:is(.case-confirm, .case-keys) h2 { margin: 0 0 var(--sp-2); font-size: var(--t-lg); }
+.case-confirm p { margin: 0; color: var(--ink-muted); overflow-wrap: anywhere; }
+.case-confirm-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--sp-2); margin-top: var(--sp-4); }
+:is(.case-confirm, .case-keys) .btn { min-height: 44px; }
+.case-keys dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--sp-2) var(--sp-4); margin: var(--sp-3) 0 var(--sp-4); font-size: var(--t-sm); }
+.case-keys dt { font-family: var(--mono); font-weight: var(--w-semibold); }
+.case-keys dd { margin: 0; color: var(--ink-muted); }
+
+/* ── Console layout v2 (Julian, 2026-10-18): one header row, the main area beside a fixed rail, the bottom bar. ──
+   Wide and tall enough (a laptop at 1440 × 900 or larger), it is one screen that never scrolls; below that it stacks. */
+.console-room { display: grid; gap: var(--sp-3); padding-bottom: 180px; scroll-padding-bottom: 180px; }
+.console-orientation { display: flex; align-items: center; gap: var(--sp-3); min-width: 0; padding: var(--sp-2) var(--sp-4); background: var(--nav-bg); color: var(--nav-ink); border-bottom: 1px solid var(--nav-line); }
+.console-beat { display: flex; align-items: center; gap: var(--sp-3); flex: 1; min-width: 0; }
+.console-beat h1 { margin: 0; font-size: var(--t-lg); min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.console-orientation .console-sound-status:empty { display: none; }
+.console-status:empty { display: none; }
+.console-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); padding: 0 var(--sp-4); min-width: 0; }
+.console-main { position: relative; display: grid; gap: var(--sp-3); min-width: 0; min-height: 0; }
+.console-stage, .console-stage-left { display: grid; gap: var(--sp-3); min-width: 0; min-height: 0; }
+.console-main .console-col { display: flex; flex-direction: column; gap: var(--sp-3); min-width: 0; min-height: 0; padding: var(--sp-4); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.console-col > .console-zone-label, .console-zone-label { display: flex; align-items: center; gap: var(--sp-2); margin: 0; font-size: var(--t-xs); font-weight: var(--w-semibold); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--ink-muted); }
+.console-zone-label::before { content: ""; flex: none; width: 12px; height: 12px; border-radius: 2px; background-color: var(--tc, var(--ink-muted)); background-image: linear-gradient(var(--surface) 0 0), linear-gradient(var(--surface) 0 0); background-position: center; background-size: 12px 2px, 2px 12px; background-repeat: no-repeat; }
+.console-room-sees .console-zone-label { --tc: var(--petrol); }
+.console-main .console-only-you { background: var(--private-tint); border-color: transparent; }
+.console-only-you .console-zone-label { color: var(--private-ink); --tc: var(--private); }
+.console-only-you .console-private { padding: 0; background: transparent; }
+.console-main .console-col h2 { font-size: var(--t-lg); margin: 0; }
+.console-col > :is(.console-zone-label, .console-panel-toggle, .console-private-inspection) { flex: none; }
+.console-room-sees, .console-only-you { position: relative; }
+.console-room-sees > .console-panel-toggle, .console-only-you > .console-panel-toggle, .console-only-you > .console-private-inspection { position: absolute; top: var(--sp-2); right: var(--sp-2); display: flex; gap: var(--sp-1); }
+.console-room-sees > .console-panel-toggle + .console-panel-toggle { right: 5.5rem; }
+.console-panel-toggle, .console-private-inspection .btn, .console-panel-close { min-height: 32px; }
+.console-room-sees.is-folded { padding-block: var(--sp-2); }
+/* CASE-327: Room sees as the projector draws it, a 1280 x 720 frame scaled to the panel (console-mirror.mjs). */
+.console-mirror-slot { display: block; min-width: 0; }
+.console-mirror { position: relative; width: 100%; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--sunken); }
+.console-mirror iframe { position: absolute; inset: 0 auto auto 0; border: 0; pointer-events: none; }
+.console-panel-body { display: grid; gap: var(--sp-3); align-content: start; min-height: 0; }
+.console-decision > .console-panel-body > section { display: grid; gap: var(--sp-3); align-content: start; }
+.console-phase .console-card-head h2 { font-size: var(--t-lg); }
+.console-phase .console-card-head h2::before { content: ""; display: inline-block; width: var(--tessera); height: var(--tessera); margin-right: var(--sp-2); vertical-align: .1em; border-radius: 2px; background: var(--ph); }
+.console-panel-close { margin-inline-start: auto; padding: 0 var(--sp-2); font-size: var(--t-lg); line-height: 1; }
+.console-prompt { font-weight: var(--w-semibold); }
+/* CASE-335: the player (console-player.mjs): one widget for the round timer and the room's music, no native select or checkbox. */
+.console-player { display: grid; gap: var(--sp-3); padding: var(--sp-3); border: 1px solid var(--field-line); border-radius: var(--radius-lg); background: var(--surface); }
+.player-icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.player-btn { display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: var(--sunken); color: var(--ink); cursor: pointer; }
+.player-btn:hover { background: var(--quiet); }
+.player-btn[aria-disabled="true"] { color: var(--ink-muted); cursor: default; }
+.player-go { background: var(--petrol); color: var(--on-petrol); }
+.player-go:hover { background: var(--petrol-deep); color: var(--on-petrol); }
+.player-go .player-icon { fill: currentColor; stroke: none; }
+.player-go[data-timer-start="Restart"] .player-icon { fill: none; stroke: currentColor; }
+.player-quiet { background: transparent; color: var(--ink-muted); }
+.player-quiet[aria-pressed="true"] { color: var(--petrol-ink); background: var(--petrol-tint); }
+.player-timer { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.player-clock { display: flex; align-items: center; gap: var(--sp-2); margin-inline-end: auto; }
+.player-ring { width: 48px; height: 48px; transform: rotate(-90deg); flex: none; }
+.player-ring circle { fill: none; stroke-width: 3.4; }
+.player-ring .ring-track { stroke: var(--field-line); }
+.player-ring .ring-fill { stroke: var(--ph-open); stroke-linecap: round; stroke-dasharray: var(--fill, 100) 100; transition: stroke-dasharray .25s linear; }
+.player-clock-text { display: grid; line-height: 1.1; }
+.player-digits { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: var(--t-xl); font-weight: var(--w-semibold); }
+.player-digits[data-up] { font-family: var(--sans); font-size: var(--t-md); color: var(--ph-open-ink); }
+.player-sub { font-size: var(--t-xs); color: var(--ink-muted); }
+.player-pick { display: inline-flex; align-items: center; gap: var(--sp-1); }
+.player-pick .player-btn { width: 36px; height: 36px; }
+.player-pick-value { font-family: var(--mono); font-variant-numeric: tabular-nums; min-width: 4ch; text-align: center; font-size: var(--t-sm); }
+.player-switch { position: relative; display: flex; align-items: center; gap: var(--sp-2); min-height: 44px; padding: 0 48px 0 0; border: 0; background: transparent; color: var(--ink); font: inherit; font-size: var(--t-sm); text-align: start; cursor: pointer; }
+.player-switch::before { content: ""; position: absolute; right: 0; top: 50%; width: 36px; height: 20px; margin-top: -10px; border-radius: 10px; background: var(--field-line); }
+.player-switch::after { content: ""; position: absolute; right: 18px; top: 50%; width: 16px; height: 16px; margin-top: -8px; border-radius: 50%; background: var(--surface); transition: transform .15s ease; }
+.player-switch[aria-checked="true"]::before { background: var(--petrol); }
+.player-switch[aria-checked="true"]::after { transform: translateX(16px); }
+.player-music { display: grid; gap: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--line); }
+.player-now { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: var(--sp-3); align-items: center; }
+.player-cover { display: block; width: 100%; aspect-ratio: 1; border-radius: var(--radius-sm); }
+.player-cover .cover-ground { fill: var(--petrol); }
+.player-cover .cover-atlas-current, .cover-atlas-current .cover-ground { fill: var(--mark-orange); }
+.player-cover .cover-atlas-crossing, .cover-atlas-crossing .cover-ground { fill: var(--mark-purple); }
+.player-cover .cover-side-street-developed, .cover-side-street-developed .cover-ground { fill: var(--mark-teal); }
+.player-cover .cover-night-platform-developed, .cover-night-platform-developed .cover-ground { fill: var(--mark-blue); }
+.cover-atlas-arrival .cover-ground { fill: var(--mark-green); }
+.cover-side-street-afterglow .cover-ground { fill: var(--petrol-deep); }
+.player-cover .cover-motif { fill: none; stroke: var(--ink); stroke-opacity: .34; stroke-width: 2.6; stroke-linecap: round; }
+.player-cover .cover-motif .cover-dot { fill: var(--ink); fill-opacity: .4; stroke: none; }
+.player-now-text { display: grid; min-width: 0; }
+.player-title { font-weight: var(--w-semibold); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.player-detail { font-size: var(--t-xs); color: var(--ink-muted); }
+.player-levels, .player-build { display: flex; align-items: center; gap: var(--sp-2); color: var(--ink-muted); }
+.player-build { flex-wrap: wrap; }
+.player-build-label { font-size: var(--t-sm); font-weight: var(--w-medium); color: var(--ink); }
+.player-build-value { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: var(--t-sm); font-weight: var(--w-semibold); color: var(--ink); min-width: 4ch; text-align: end; }
+.player-hint { flex-basis: 100%; font-size: var(--t-xs); color: var(--ink-muted); }
+/* Styled ranges: a thin rounded track and a round thumb (the projector's slider style), 44 px tall for touch. */
+.console-player input[type="range"] { flex: 1 1 8rem; min-width: 0; height: 44px; margin: 0; appearance: none; background: transparent; cursor: pointer; }
+.console-player input[type="range"]::-webkit-slider-runnable-track { height: 6px; box-sizing: border-box; border: 1px solid var(--field-line); border-radius: 3px; background: var(--sunken); }
+.console-player input[type="range"]::-moz-range-track { height: 6px; box-sizing: border-box; border: 1px solid var(--field-line); border-radius: 3px; background: var(--sunken); }
+.console-player input[type="range"]::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--petrol); color: var(--on-petrol); }
+.console-player input[type="range"]::-webkit-slider-thumb { appearance: none; width: 16px; height: 16px; margin-top: -6px; border: 2px solid var(--surface); border-radius: 50%; background: var(--petrol); color: var(--on-petrol); }
+.console-player input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border: 2px solid var(--surface); border-radius: 50%; background: var(--petrol); color: var(--on-petrol); }
+/* The album row: a single scrolling strip of covers (never a grid). */
+.player-covers { display: flex; gap: var(--sp-2); overflow-x: auto; padding-bottom: var(--sp-1); scroll-snap-type: x proximity; }
+.player-tile { flex: none; width: 72px; display: grid; gap: var(--sp-1); padding: 4px; border: 0; border-radius: var(--radius); background: transparent; color: var(--ink); font: inherit; text-align: start; cursor: pointer; scroll-snap-align: start; }
+.player-tile-art { position: relative; display: block; }
+.player-tile-glyph { position: absolute; right: 6px; bottom: 6px; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--surface); }
+.player-tile-glyph .player-icon { width: 16px; height: 16px; }
+.player-tile-name { font-size: var(--t-xs); line-height: 1.2; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.player-tile[aria-pressed="true"] .player-cover { outline: 2px solid var(--ink); outline-offset: 2px; }
+.player-now .player-cover { width: 56px; }
+.player-tile[aria-pressed="true"] .player-tile-name { font-weight: var(--w-semibold); }
+@media (prefers-reduced-motion: reduce) { .player-ring .ring-fill, .player-switch::after { transition: none; } }
+/* CASE-319: the closing window's status line with Keep open, and the room's auto-lock setting. */
+.console-closing { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2); padding: var(--sp-2) var(--sp-3); border-radius: var(--radius-sm); background: var(--ph-locked-tint); color: var(--ph-locked-ink); font-weight: 600; }
+.console-gutter { display: none; }
+.console-join-screen { display: grid; gap: var(--sp-2); }
+.console-private-view { min-height: 0; overflow: auto; }
+
+/* rail cards */
+.console-rail { display: flex; flex-direction: column; gap: var(--sp-3); min-width: 0; min-height: 0; }
+.console-rail-grow { flex: 1; }
+.console-card { display: grid; gap: var(--sp-2); align-content: start; min-width: 0; padding: var(--sp-4); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.console-card > h2, .console-card-head h2 { font-size: var(--t-md); margin: 0; }
+.console-card-head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); }
+.console-card-actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.console-card-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr)); }
+.console-card-actions > .btn { min-height: 40px; padding-inline: var(--sp-2); }
+.console-card .field-hint { margin: 0; font-size: var(--t-sm); color: var(--ink-muted); }
+.console-projector { background: var(--petrol-tint); border-color: var(--petrol); }
+.console-projector h2, .console-projector .field-hint, .console-projector .btn.tertiary { color: var(--petrol-ink); }
+.console-projector.is-off { background: var(--alert-tint); border-color: var(--alert); }
+.console-projector.is-off h2, .console-projector-warning { color: var(--alert-ink); }
+.console-projector-thumb { display: grid; place-items: center; gap: var(--sp-1); aspect-ratio: 16 / 7; border-radius: var(--radius-sm); background: var(--ground); border: 1px solid var(--line); color: var(--ink); font-weight: var(--w-semibold); }
+.console-projector-thumb .mono { font-size: var(--t-lg); letter-spacing: .06em; }
+.console-projector-warning { margin: 0; font-size: var(--t-sm); font-weight: var(--w-semibold); }
+.console-projector-open { min-height: 48px; background: var(--surface); border: 1px solid var(--alert); color: var(--alert-ink); }
+.console-backup, .console-backup > .console-card, .console-backup > section { background: var(--manual-tint); border-color: transparent; }
+.console-backup h2, .console-backup .field-hint { color: var(--manual-ink); }
+.console-people-count { margin: 0; color: var(--ink-muted); }
+.console-people-count strong { font-size: var(--t-xl); color: var(--ink); font-variant-numeric: tabular-nums; margin-inline-end: var(--sp-1); }
+.console-people .eyebrow { margin: 0; }
+.console-people .console-code { margin: 0; }
+.console-faces { display: flex; flex-wrap: wrap; gap: 2px; max-height: 56px; overflow: hidden; }
+.console-faces > * { flex: none; }
+.console-faces-more { display: grid; place-items: center; min-width: 26px; height: 26px; padding: 0 6px; border-radius: 13px; background: var(--quiet); font-size: var(--t-xs); font-weight: var(--w-semibold); }
+.console-rail-foot { display: flex; gap: var(--sp-2); }
+.console-rail-foot > .btn { flex: 1; }
+.console-room .btn.is-armed { background: var(--alert); border-color: var(--alert); color: var(--on-phase); }
+.console-action-dock > span.is-warning { color: var(--alert-ink); font-weight: var(--w-semibold); }
+
+/* Room setup sheet: three columns of cards; in the lobby it is the main area, later it covers the main area only */
+.console-sheet { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: var(--sp-3); min-height: 0; background: var(--ground); }
+.console-sheet.is-lobby { background: transparent; }
+.console-sheet-head { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.console-sheet-head h2 { font-size: var(--t-lg); margin: 0; }
+.console-sheet-head .field-hint { margin: 0; font-size: var(--t-sm); color: var(--ink-muted); }
+.console-sheet-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-3); min-height: 0; }
+.console-sheet-col { display: flex; flex-direction: column; gap: var(--sp-3); min-width: 0; min-height: 0; }
+.console-setup-people { min-height: 0; grid-template-rows: auto auto minmax(0, 1fr); }
+.console-people-list { display: grid; align-content: start; min-height: 0; overflow: auto; }
+.console-shared-slot { display: block; }
+.console-shared-slot > section { display: grid; gap: var(--sp-2); padding: var(--sp-4); border-radius: var(--radius); background: var(--manual-tint); }
+.console-shared-slot h2 { font-size: var(--t-md); margin: 0; color: var(--manual-ink); }
+.console-shared-slot .field-hint { margin: 0; font-size: var(--t-sm); color: var(--manual-ink); }
+.console-shared-slot label { font-size: var(--t-sm); font-weight: var(--w-semibold); }
+.console-pairing input, .console-shared-slot input { display: block; width: 100%; max-width: 320px; min-height: 44px; margin-top: var(--sp-1); }
+.console-pairing { position: relative; }
+.console-pairing > [data-focus-key="pairing-cancel"] { position: absolute; top: var(--sp-2); right: var(--sp-2); min-height: 32px; }
+
+/* the strip: presentation replay as one cinema row, newest at the right */
+.console-strip { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1) var(--sp-2); min-width: 0; padding: var(--sp-2); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.console-presentation-controls { display: flex; align-items: center; gap: var(--sp-1); flex: none; }
+.console-strip-label { margin: 0 var(--sp-2); }
+.console-presentation-controls .btn { min-height: 36px; }
+.console-presentation-tiles { position: relative; display: flex; flex-direction: row; justify-content: flex-start; gap: var(--sp-1); flex: 1 1 0; min-width: 0; margin: 0; padding: 0; list-style: none; overflow-x: auto; scrollbar-width: none; }
+.console-presentation-tiles > li { flex: none; }
+.console-presentation-tile { min-height: 36px; max-width: 15rem; padding: 0 var(--sp-3); font-size: var(--t-xs); font-weight: var(--w-medium); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.console-presentation-tile .console-tile-title { overflow: hidden; text-overflow: ellipsis; }
+.console-presentation-tile[aria-current] { border-color: var(--petrol); box-shadow: inset 0 0 0 1px var(--petrol); background: var(--petrol-tint); color: var(--petrol-ink); }
+.console-strip .console-replay-notice { flex-basis: 100%; font-size: var(--t-sm); }
+
+/* one screen: a laptop at 1440 × 900 (about 1440 × 800 inside a browser) and up */
+@media (min-width: 1100px) and (min-height: 600px) {
+  main.facilitator-console.room-active { max-width: none; width: 100%; height: 100dvh; margin: 0; padding: 0; overflow: hidden; display: grid; grid-template-rows: minmax(0, 1fr); }
+  main.facilitator-console.room-active > :not(.case-catalog) { display: none; }
+  main.facilitator-console.room-active > .case-catalog { min-height: 0; height: 100%; }
+  .console-room { height: 100%; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 0; padding: 0; overflow: hidden; }
+  .console-body { grid-template-columns: minmax(0, 1fr) 320px; padding: var(--sp-4); min-height: 0; }
+  .console-main { grid-template-rows: minmax(0, 1fr) auto; }
+  .console-main:has(> .console-sheet.is-lobby) { grid-template-rows: minmax(0, 1fr); }
+  .console-stage { grid-template-columns: minmax(320px, 1.15fr) 10px minmax(320px, 1fr); gap: 0; }
+  .console-stage.is-solo { grid-template-columns: minmax(0, 1fr); }
+  .console-stage-left { grid-template-rows: minmax(120px, 1.2fr) 10px minmax(96px, 1fr); gap: 0; }
+  .console-stage-left.is-folded { grid-template-rows: auto minmax(0, 1fr); gap: var(--sp-3); }
+  .console-main .console-col { overflow: hidden; }
+  .console-panel-body { flex: 1; overflow: auto; }
+  .console-gutter { display: block; position: relative; touch-action: none; user-select: none; border-radius: 4px; }
+  .console-gutter::after { content: ""; position: absolute; border-radius: 2px; background: var(--line); }
+  .console-gutter.is-col { cursor: col-resize; }
+  .console-gutter.is-col::after { top: 50%; left: 3px; width: 4px; height: 40px; transform: translateY(-50%); }
+  .console-gutter.is-row { cursor: row-resize; }
+  .console-gutter.is-row::after { left: 50%; top: 3px; height: 4px; width: 40px; transform: translateX(-50%); }
+  .console-gutter:hover::after, .console-gutter.is-dragging::after, .console-gutter:focus-visible::after { background: var(--petrol); }
+  .console-rail { overflow: auto; }
+  .console-sheet:not(.is-lobby) { position: absolute; inset: 0; z-index: var(--z-raised); }
+  .console-setup-people { flex: 1; }
+  .console-action-dock { position: static; grid-template-rows: minmax(1.4em, auto) auto 48px; min-height: 0; padding: var(--sp-2) var(--sp-4); box-shadow: none; }
+}
+@media (min-width: 1800px) and (min-height: 600px) {
+  .console-body { grid-template-columns: minmax(0, 1fr) 360px; padding: var(--sp-5); }
+}
+/* Debrief (console layout v2): the review strip with its Questions row, the review panel, and End case beside Next. */
+.console-end-next { grid-row: 3; grid-column: 3; justify-self: start; align-self: center; min-height: 44px; margin-inline-start: var(--sp-3); }
+.console-debrief-strip { display: grid; gap: var(--sp-2); min-width: 0; }
+.console-debrief-questions { display: flex; align-items: center; gap: var(--sp-2); min-width: 0; overflow-x: auto; scrollbar-width: thin; padding-inline: var(--sp-2); }
+.console-debrief-questions .eyebrow { flex: none; margin: 0; }
+.console-chip { flex: none; min-height: 32px; padding: 0 var(--sp-3); border-radius: var(--radius-chip); font-size: var(--t-sm); }
+.console-chip[aria-current="step"] { border-color: var(--petrol); background: var(--petrol-tint); color: var(--petrol-ink); }
+.console-debrief-sees, .console-debrief-review, .console-debrief-routes { display: grid; gap: var(--sp-2); align-content: start; }
+.console-debrief-count { display: flex; align-items: center; gap: var(--sp-2); }
+.console-debrief-count strong { margin-inline-start: auto; font-variant-numeric: tabular-nums; }
+.console-debrief-route { margin: 0; padding: var(--sp-2) var(--sp-3); border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.console-debrief-route.is-taken { border-color: var(--petrol); background: var(--petrol-tint); color: var(--petrol-ink); }
+.console-debrief-route summary { display: flex; align-items: center; min-height: 32px; cursor: pointer; }
+.console-debrief-route p { margin: var(--sp-1) 0 0; color: var(--ink-muted); font-size: var(--t-sm); }
+@media (max-width: 1099px), (max-height: 599px) {
+  .console-end-next { grid-row: 2; grid-column: 1 / -1; justify-self: center; margin: 0; }
+  .console-sheet-grid { grid-template-columns: minmax(0, 1fr); }
+  .console-presentation-controls { flex-wrap: wrap; flex: 1 1 100%; }
+  .console-presentation-tiles { flex-basis: 100%; }
+  .console-room-sees > .console-panel-toggle, .console-only-you > .console-panel-toggle, .console-only-you > .console-private-inspection { position: static; }
+}
+@media (max-width: 820px) {
+  .console-orientation { flex-wrap: wrap; }
+  .console-beat { order: 3; flex: 1 1 100%; flex-wrap: wrap; }
+  .console-beat h1 { white-space: normal; }
+}
+
+/* Background room updates keep controls still; player timing has its own motion contract. */
+:root .private-shell.room-active .console-room .btn { transition: none; }

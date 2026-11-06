@@ -1,0 +1,9 @@
+Your email address was changed
+
+Your Case email address was changed from {{ .OldEmail }} to {{ .Email }}.
+
+Review your account security if this change was unexpected.
+
+If you didn’t make this change, contact your Case administrator immediately.
+
+Case · case.iatrogenic.app

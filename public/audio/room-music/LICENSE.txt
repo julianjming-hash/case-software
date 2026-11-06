@@ -1,0 +1,7 @@
+Case room music (CASE-334): the approved Card 69 round8 library (CASE-333), CC0 1.0 Universal (CC0-1.0).
+The author dedicates these original compositions and recordings to the public domain under CC0 1.0.
+Source recordings: Versilian Community Sample Library (Versilian Studios LLC), CC0-1.0;
+Karoryfer Shinyguitar and Swagbass (Karoryfer Samples), CC0-1.0.
+Pinned source revisions, individual paths, hashes and licensing evidence: prototypes/sound-stage/sources/manifest.json.
+Offline generators: scripts/sound/. Rendered and approved at 4b46526acb37a729160e213619d1d1ae1b5637bf.
+CC0 legal text: https://creativecommons.org/publicdomain/zero/1.0/legalcode

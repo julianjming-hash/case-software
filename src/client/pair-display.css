@@ -1,0 +1,7 @@
+body.display-pair main { margin: 10vh auto; text-align: center; }
+body.display-pair .pair-code { font: var(--w-semibold) max(64px, 5vw)/1.2 var(--mono); letter-spacing: .08em; color: var(--ink); background: var(--surface); }
+body.display-pair p { font-size: 24px; }
+
+/* Shared computer: keep its eight-character code distinct from room and email codes. */
+main.console-pair:has(.pair-code) { border-radius: var(--radius-lg); }
+.console-pair .pair-code { font: var(--w-semibold) clamp(24px, 6vw, 48px)/1.2 var(--mono); letter-spacing: .08em; }

@@ -1,0 +1,17 @@
+Case Original Audio Permission 1.0
+
+Scope: the WAV files in this directory's assets folder, synthesized by
+scripts/gen-audio.mjs for Case with Codex on 2026-10-02.
+No third-party recordings, samples, compositions or audio libraries were used.
+
+Permission is granted, without charge, to use, copy, edit, encode, distribute,
+sublicense and perform these original synthesized assets, including in
+commercial applications and redistributed app bundles. Attribution is optional:
+"Original audio created for Case with Codex."
+
+The assets are provided as-is, without warranty. This permission does not grant
+rights to Kahoot trademarks, recordings, music or other third-party material.
+Kahoot is an experience reference only; no Kahoot audio was copied.
+
+This is an explicit project asset permission, not a claim that an external
+licensor granted CC0 rights or that a human composed or performed this audio.
