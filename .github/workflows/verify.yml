@@ -44,8 +44,11 @@ jobs:
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number }}
         run: |
-          draft=$(gh api "repos/$REPO/pulls/$PR" --jq .draft 2>/dev/null) || draft=false
-          case "$draft" in true) ;; *) draft=false ;; esac
+          draft=$(gh api "repos/$REPO/pulls/$PR" --jq .draft 2>/dev/null) || { echo 'Cannot establish current draft state' >&2; exit 1; }
+          case "$draft" in
+            true|false) ;;
+            *) echo 'Invalid current draft state' >&2; exit 1 ;;
+          esac
           echo "draft=$draft" >> "$GITHUB_OUTPUT"
       - name: Nightly browsers already green on this exact SHA?
         id: nightly
